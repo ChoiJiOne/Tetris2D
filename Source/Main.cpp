@@ -1,10 +1,14 @@
+#include "GlobalProperty.h"
 #include "Logger.h"
 
 int main(int argc, char* argv[])
 {
-	Logger::Message("일반 메시지 출력");
-	Logger::Warning("경고 메시지 출력");
-	Logger::Error("에러 메시지 출력");
+#if defined(DEBUG) || defined(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+	GlobalProperty::Initialize();
+	GlobalProperty::Release();
 
 	return 0;
 }
