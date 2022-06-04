@@ -37,21 +37,20 @@ void Game::Setup()
 
 
 	GlobalTimer = std::make_unique<GameTimer>();
+
+	Input = std::make_unique<GameInput>();
+
+	Input->SetExitEventCallback(
+		[&]() {
+			bIsExit = true;
+		}
+	);
 }
 
 void Game::Run()
 {
-	bool bIsDone = false;
-	SDL_Event EventMessage;
-
-	while (!bIsDone)
+	while (!bIsExit)
 	{
-		while (SDL_PollEvent(&EventMessage))
-		{
-			if (EventMessage.type == SDL_QUIT)
-			{
-				bIsDone = true;
-			}
-		}
+		Input->Tick();
 	}
 }

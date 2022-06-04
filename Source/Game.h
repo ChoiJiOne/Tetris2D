@@ -1,5 +1,8 @@
 #pragma once
 
+// 게임 입력 처리를 수행하기 위한 헤더 선언을 추가합니다.
+#include "GameInput.h"
+
 // 게임 타이머를 사용하기 위한 헤더 선언을 추가합니다.
 #include "GameTimer.h"
 
@@ -34,10 +37,18 @@ public:
 
 
 private:
+	// 게임 종료 여부입니다.
+	bool bIsExit = false;
+
+
 	// 게임 내의 전역 타이머입니다.
 	std::unique_ptr<GameTimer> GlobalTimer = nullptr;
 
 
 	// 게임 윈도우입니다.
 	std::unique_ptr<GameWindow> Window = nullptr;
+
+
+	// 게임 입력 처리를 수행합니다.
+	std::unique_ptr<GameInput> Input = nullptr;
 };
