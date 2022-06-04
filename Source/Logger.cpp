@@ -8,28 +8,28 @@ void Logger::ClearConsole()
 void Logger::Message(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
-	std::cout << InMessage << '\n';
+	std::cout << "[MESSAGE] : " << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Logger::Success(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightGreen);
-	std::cout << InMessage << '\n';
+	std::cout << "[SUCCESS] : " << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Logger::Warning(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightYellow);
-	std::cout << InMessage << '\n';
+	std::cout << "[WARNING] : " << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Logger::Error(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightRed);
-	std::cout << InMessage << '\n';
+	std::cout << "[ERROR] : " << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
