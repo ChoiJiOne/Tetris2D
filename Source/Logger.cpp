@@ -12,6 +12,13 @@ void Logger::Message(const std::string& InMessage)
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
+void Logger::Success(const std::string& InMessage)
+{
+	SetConsoleTextColor(EConsoleTextColor::LightGreen);
+	std::cout << InMessage << '\n';
+	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
+}
+
 void Logger::Warning(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightYellow);

@@ -41,6 +41,12 @@ public:
 	static void Message(const std::string& InMessage);
 
 
+	// 콘솔 화면에 성공 메시지를 출력합니다.
+	//
+	// @param InMessage - 콘솔에 출력할 메시지입니다.
+	static void Success(const std::string& InMessage);
+
+
 	// 콘솔 화면에 경고 메시지를 출력합니다.
 	//
 	// @param InMessage - 콘솔에 출력할 메시지입니다.
