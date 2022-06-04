@@ -1,6 +1,4 @@
-#include "GameWindow.h"
-#include "GlobalProperty.h"
-#include "Logger.h"
+#include "Game.h"
 
 int main(int argc, char* argv[])
 {
@@ -10,19 +8,16 @@ int main(int argc, char* argv[])
 
 	GlobalProperty::Initialize();
 
-	GameWindow Window;
-	Window.CreateWindow(
-		"Tetris1.0",
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		1000,
-		800,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI
-	);
-
-	Sleep(3000);
-	Window.~GameWindow();
-
+	try
+	{
+		auto TetrisGame = std::make_shared<Game>();
+		TetrisGame->Setup();
+		TetrisGame->Run();
+	}
+	catch (const std::exception& Exception)
+	{
+		Logger::Error(Exception.what());
+	}
 
 	GlobalProperty::Release();
 
