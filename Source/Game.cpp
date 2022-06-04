@@ -2,6 +2,14 @@
 
 Game::~Game()
 {
+	Renderer.reset();
+	Renderer = nullptr;
+
+
+	Input.reset();
+	Input = nullptr;
+
+
 	Window.reset();
 	Window = nullptr;
 
@@ -51,12 +59,20 @@ void Game::Setup()
 			Logger::Message("Resize!");
 		}
 	);
+
+	Renderer = std::make_unique<GameRenderer>(Window->GetWindow());
 }
 
 void Game::Run()
 {
+	GlobalTimer->Reset();
+	
 	while (!bIsExit)
 	{
+		GlobalTimer->Tick();
 		Input->Tick();
+
+		Renderer->BeginFrame(0, 0, 255, 255);
+		Renderer->EndFrame();
 	}
 }

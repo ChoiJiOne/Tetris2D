@@ -3,6 +3,9 @@
 // 게임 입력 처리를 수행하기 위한 헤더 선언을 추가합니다.
 #include "GameInput.h"
 
+// 게임 렌더링을 수행하기 위한 헤더 선언을 추가합니다.
+#include "GameRenderer.h"
+
 // 게임 타이머를 사용하기 위한 헤더 선언을 추가합니다.
 #include "GameTimer.h"
 
@@ -51,4 +54,8 @@ private:
 
 	// 게임 입력 처리를 수행합니다.
 	std::unique_ptr<GameInput> Input = nullptr;
+
+
+	// 게임 렌더링 처리를 수행합니다.
+	std::unique_ptr<GameRenderer> Renderer = nullptr;
 };
