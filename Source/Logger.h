@@ -36,24 +36,28 @@ public:
 
 
 	// 콘솔 화면에 메시지를 출력합니다.
+	// 이때, 텍스트의 색상은 흰색입니다.
 	//
 	// @param InMessage - 콘솔에 출력할 메시지입니다.
 	static void Message(const std::string& InMessage);
 
 
 	// 콘솔 화면에 성공 메시지를 출력합니다.
+	// 이때, 텍스트의 색상은 초록색입니다.
 	//
 	// @param InMessage - 콘솔에 출력할 메시지입니다.
 	static void Success(const std::string& InMessage);
 
 
 	// 콘솔 화면에 경고 메시지를 출력합니다.
+	// 이때, 텍스트의 색상은 노란색입니다.
 	//
 	// @param InMessage - 콘솔에 출력할 메시지입니다.
 	static void Warning(const std::string& InMessage);
 
 
 	// 콘솔 화면에 에러 메시지를 출력합니다.
+	// 이때, 텍스트의 색상은 빨간색입니다.
 	//
 	// @param InMessage - 콘솔에 출력할 메시지입니다.
 	static void Error(const std::string& InMessage);
