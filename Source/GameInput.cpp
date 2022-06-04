@@ -37,6 +37,11 @@ void GameInput::SetExitEventCallback(const std::function<void()>& InExitEventCal
     ExitEventCallback = InExitEventCallback;
 }
 
+void GameInput::SetResizeEventCallback(const std::function<void(int32_t, int32_t)>& InResizeEventCallback)
+{
+    ResizeEventCallback = InResizeEventCallback;
+}
+
 void GameInput::Tick() noexcept
 {
     SDL_Event EventMessage = {};
@@ -46,6 +51,13 @@ void GameInput::Tick() noexcept
         if (EventMessage.type == SDL_QUIT)
         {
             ExitEventCallback();
+        }
+
+        if (EventMessage.type == SDL_WINDOWEVENT && EventMessage.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+        {
+            int32_t Width = EventMessage.window.data1;
+            int32_t Height = EventMessage.window.data1;
+            ResizeEventCallback(Width, Height);
         }
     }
 }

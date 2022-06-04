@@ -45,6 +45,12 @@ void Game::Setup()
 			bIsExit = true;
 		}
 	);
+
+	Input->SetResizeEventCallback(
+		[&](int32_t InWidth, int32_t InHeight) {
+			Logger::Message("Resize!");
+		}
+	);
 }
 
 void Game::Run()

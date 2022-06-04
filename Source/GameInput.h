@@ -32,6 +32,12 @@ public:
 	void SetExitEventCallback(const std::function<void()>& InExitEventCallback);
 
 
+	// 윈도우 크기 변경 콜백 함수를 설정합니다.
+	// 
+	// @param InResizeEventCallback - 윈도우 크기 변경 이벤트 발생 시 호출할 이벤트입니다.
+	void SetResizeEventCallback(const std::function<void(int32_t, int32_t)>& InResizeEventCallback);
+
+
 	// 키보드의 상태를 업데이트합니다.
 	// 이 메서드는 매 프레임 호출되어야 합니다.
 	// 
@@ -42,4 +48,8 @@ public:
 private:
 	// 종료 이벤트 콜벡 함수입니다.
 	std::function<void()> ExitEventCallback = nullptr;
+
+
+	// 윈도우 크기 변경 콜백 함수입니다.
+	std::function<void(int32_t, int32_t)> ResizeEventCallback = nullptr;
 };
