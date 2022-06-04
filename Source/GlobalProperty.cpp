@@ -20,7 +20,7 @@ void GlobalProperty::Initialize()
 		CHECK_SDL_FAILED((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0));
 
 #if defined(DEBUG) || defined(_DEBUG)
-		Logger::Success("Success Initialize GlobalProperty");
+		Logger::Success("Success Initialize Global Property");
 		Logger::Success(StringUtil::StringFormat("Project Root Directory : %s", ProjectRootDirectory.c_str()));
 		Logger::Success(StringUtil::StringFormat("Source Code Directoryy : %s", SourceCodeDirectory.c_str()));
 		Logger::Success(StringUtil::StringFormat("Resource Directory : %s", ResourceDirectory.c_str()));
@@ -37,7 +37,7 @@ void GlobalProperty::Release()
 		SDL_Quit();
 
 #if defined(DEBUG) || defined(_DEBUG)
-		Logger::Success("Success Release GlobalProperty");
+		Logger::Success("Success Release Global Property");
 #endif
 
 		bIsInitialize = false;
