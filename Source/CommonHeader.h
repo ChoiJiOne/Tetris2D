@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <functional>
 #include <queue>
 #include <chrono>
 #include <random>
