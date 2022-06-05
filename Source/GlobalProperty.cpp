@@ -21,9 +21,18 @@ void GlobalProperty::Initialize()
 
 #if defined(DEBUG) || defined(_DEBUG)
 		Logger::Success("Success Initialize Global Property");
-		Logger::Success(StringUtil::StringFormat("Project Root Directory : %s", ProjectRootDirectory.c_str()));
-		Logger::Success(StringUtil::StringFormat("Source Code Directoryy : %s", SourceCodeDirectory.c_str()));
-		Logger::Success(StringUtil::StringFormat("Resource Directory : %s", ResourceDirectory.c_str()));
+		Logger::Message(StringUtil::StringFormat("Project Root Directory : %s", ProjectRootDirectory.c_str()));
+		Logger::Message(StringUtil::StringFormat("Source Code Directoryy : %s", SourceCodeDirectory.c_str()));
+		Logger::Message(StringUtil::StringFormat("Resource Directory : %s", ResourceDirectory.c_str()));
+
+		SDL_version compiled;
+		SDL_version linked;
+
+		SDL_VERSION(&compiled);
+		SDL_GetVersion(&linked);
+
+		Logger::Message(StringUtil::StringFormat("compile SDL version %u.%u.%u ...", compiled.major, compiled.minor, compiled.patch));
+		Logger::Message(StringUtil::StringFormat("linking SDL version %u.%u.%u ...", linked.major, linked.minor, linked.patch));
 #endif
 
 		bIsInitialize = true;
