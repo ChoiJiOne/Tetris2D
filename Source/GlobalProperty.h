@@ -47,6 +47,15 @@ public:
 
 
 private:
+	// 게임 디렉토리를 초기화합니다.
+	static void SetupDirectory() noexcept;
+
+
+	// SDL2 및 SDL2 확장 라이브러리를 초기화합니다.
+	static void SetupSDL2System();
+
+
+private:
 	// GlobalProperty 초기화 여부입니다.
 	static bool bIsInitialize;
 
@@ -65,4 +74,12 @@ private:
 
 	// 게임 리소스 디렉토리입니다.
 	static std::string ResourceDirectory;
+
+
+	// SDL2의 컴파일 버전입니다.
+	static SDL_version Compiled;
+
+
+	// SDL2의 링크 버전입니다.
+	static SDL_version Linked;
 };
