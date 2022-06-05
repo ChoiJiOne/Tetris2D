@@ -94,7 +94,7 @@ void Game::Run()
 
 
 		// 프레임 렌더링을 시작합니다.
-		Renderer->BeginFrame(0, 0, 255, 255);
+		Renderer->BeginFrame(ColorUtil::Cyan);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
