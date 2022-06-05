@@ -674,3 +674,175 @@ Vec4f operator*(const Vec4f& InVec4f, const float& InScale);
 // @param InVec4f - Scale 연산을 수행할 벡터입니다.
 // @return - 두 벡터 각각의 원소에 크기 변환을 수행한 벡터를 반환합니다.
 Vec4f operator*(const float& InScale, const Vec4f& InVec4f);
+
+
+// 수학 관련 유틸리티 클래스입니다.
+class MathUtil
+{
+public:
+	// 임의의 정수를 생성합니다.
+	//
+	// @param InMinValue - 생성할 난수 범위의 최솟값입니다.
+	// @param InMaxValue - 생성할 난수 범위의 최댓값입니다.
+	// @return - 생성된 정수를 반환합니다.
+	template <typename T>
+	inline static int32_t GenerateRandomInt(T InMinValue, T InMaxValue)
+	{
+		if (InMinValue > InMaxValue)
+		{
+			std::swap(InMinValue, InMaxValue);
+		}
+
+		std::random_device RandomDevice;
+		std::mt19937 Generator(RandomDevice());
+		std::uniform_int_distribution<T> Distribution(InMinValue, InMaxValue);
+
+		return Distribution(Generator);
+	}
+
+
+	// 임의의 실수를 생성합니다.
+	//
+	// @param InMinValue - 생성할 난수 범위의 최솟값입니다.
+	// @param InMaxValue - 생성할 난수 범위의 최댓값입니다.
+	// @return - 생성된 난수를 반환합니다.
+	template <typename T>
+	inline static float GenerateRandomFloat(T InMinValue, T InMaxValue)
+	{
+		if (InMinValue > InMaxValue)
+		{
+			std::swap(InMinValue, InMaxValue);
+		}
+
+		std::random_device RandomDevice;
+		std::mt19937 Generator(RandomDevice());
+		std::uniform_real_distribution<T> Distribution(InMinValue, InMaxValue);
+
+		return Distribution(Generator);
+	}
+
+
+	// 입력 받은 값을 특정 범위의 값으로 자릅니다.
+	//
+	// @param InValue - 범위 내로 자르고자 하는 값입니다.
+	// @param InMinValue - 범위의 최솟값입니다.
+	// @param InMaxValue - 범위의 최댓값입니다.
+	// @return - 범위 내의 값으로 자른 값을 반환합니다.
+	template <typename T>
+	inline static T Clamp(T InValue, T InMinValue, T InMaxValue)
+	{
+		if (InMinValue > InMaxValue)
+		{
+			std::swap(InMinValue, InMaxValue);
+		}
+
+		if (InValue < InMinValue)
+		{
+			return InMinValue;
+		}
+		else if (InValue > InMaxValue)
+		{
+			return InMaxValue;
+		}
+		else
+		{
+			return InValue;
+		}
+	}
+
+
+	// 2차원 윈도우 float 좌표를 윈도우 pixel 좌표로 변환합니다.
+	// https://www.realtimerendering.com/blog/the-center-of-the-pixel-is-0-50-5/
+	// 
+	// @param InPosition - 윈도우 float 좌표입니다.
+	// @return - 변환된 윈도우 pixel 좌표입니다.
+	inline static Vec2i ConvertPixelCoordinate(const Vec2f& InPosition)
+	{
+		return Vec2i(
+			static_cast<int32_t>(InPosition.x + 0.5f),
+			static_cast<int32_t>(InPosition.y + 0.5f)
+		);
+	}
+
+
+	// 두 값을 선형 보간합니다.
+	// 
+	// @param InFirst - 보간을 수행할 두 값의 시작점입니다.
+	// @param InLast - 보간을 수행할 두 값의 끝점입니다.
+	// @param InAlpha - 두 값의 보간 비율입니다. 이때, 범위는 0 ~ 1입니다.
+	// @return - 입력받은 두 값의 선형 보간값을 반환합니다.
+	template<typename T>
+	inline static T Lerp(const T& InFirst, const T& InLast, float InAlpha)
+	{
+		InAlpha = Clamp<float>(InAlpha, 0.0f, 1.0f);
+		return (InFirst * (1.0f - InAlpha)) + (InLast * InAlpha);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static int32_t Dot(const Vec2i& InLhs, const Vec2i& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static float Dot(const Vec2f& InLhs, const Vec2f& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static int32_t Dot(const Vec3i& InLhs, const Vec3i& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y) + (InLhs.z * InRhs.z);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static float Dot(const Vec3f& InLhs, const Vec3f& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y) + (InLhs.z * InRhs.z);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static int32_t Dot(const Vec4i& InLhs, const Vec4i& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y) + (InLhs.z * InRhs.z) + (InLhs.w * InRhs.w);
+	}
+
+
+	// 두 벡터의 내적 연산을 수행합니다.
+	// 
+	// @param InLhs - 내적 연산을 수행할 때 왼쪽 피연산자입니다.
+	// @param InRhs - 내적 연산을 수행할 때 오른쪽 피연산자입니다.
+	// @return - 두 벡터 내적 결과를 반환합니다.
+	inline static float Dot(const Vec4f& InLhs, const Vec4f& InRhs)
+	{
+		return (InLhs.x * InRhs.x) + (InLhs.y * InRhs.y) + (InLhs.z * InRhs.z) + (InLhs.w * InRhs.w);
+	}
+};
+
+
