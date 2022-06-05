@@ -31,6 +31,10 @@
 // SDL 헤더 파일을 추가합니다.
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_net.h>
 
 
  // Windows Platform 인 경우 아래의 블록을 수행합니다.
