@@ -16,15 +16,22 @@ GameRenderer::~GameRenderer()
 	}
 }
 
-void GameRenderer::BeginFrame(uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
+void GameRenderer::BeginFrame(const LinearColor& InColor)
 {
-	SetDrawColor(InRed, InGreen, InBlue, InAlpha);
+	SetDrawColor(InColor);
 	CHECK_SDL_FAILED((SDL_RenderClear(Renderer) == 0));
 }
 
 void GameRenderer::EndFrame()
 {
 	SDL_RenderPresent(Renderer);
+}
+
+void GameRenderer::SetDrawColor(const LinearColor& InColor)
+{
+	uint8_t R = 0, G = 0, B = 0, A = 0;
+	ColorUtil::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
+	SetDrawColor(R, G, B, A);
 }
 
 void GameRenderer::SetDrawColor(uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
