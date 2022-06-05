@@ -846,3 +846,111 @@ public:
 };
 
 
+// 32bit 압축 RGBA 색상을 정의합니다.
+using RGBA32 = uint32_t;
+
+
+// 선형 색상을 정의합니다.
+using LinearColor = Vec4f;
+
+
+// 색상을 관리하는 클래스입니다.
+class ColorUtil
+{
+public:
+	static LinearColor Black;
+	static LinearColor Red;
+	static LinearColor Green;
+	static LinearColor Blue;
+	static LinearColor Yellow;
+	static LinearColor Magenta;
+	static LinearColor Cyan;
+	static LinearColor White;
+
+
+	// R8, G8, B8, A8 값을 RGBA32로 변환합니다.
+	// 
+	// @param InRed - 색상 변환을 수행할 R값입니다.
+	// @param InGreen - 색상 변환을 수행할 G값입니다.
+	// @param InBlue - 색상 변환을 수행할 B값입니다.
+	// @param InAlpha - 색상 변환을 수행할 A값입니다.
+	// @return - 변환된 RGBA32를 반환합니다.
+	inline static RGBA32 ConvertR8G8B8A8ToRGBA32(uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
+	{
+		return (InAlpha << 24) + (InBlue << 16) + (InGreen << 8) + (InRed << 0);
+	}
+
+
+	// R8, G8, B8, A8 값을 LinearColor로 변환합니다.
+	// 
+	// @param InRed - 색상 변환을 수행할 R값입니다.
+	// @param InGreen - 색상 변환을 수행할 G값입니다.
+	// @param InBlue - 색상 변환을 수행할 B값입니다.
+	// @param InAlpha - 색상 변환을 수행할 A값입니다.
+	// @return - 변환된 LinearColor를 반환합니다.
+	inline static LinearColor ConvertR8G8B8A8ToLinearColor(uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
+	{
+		return LinearColor(
+			MathUtil::Clamp<float>(static_cast<float>(InRed) / 255.0f, 0.0f, 1.0f),
+			MathUtil::Clamp<float>(static_cast<float>(InGreen) / 255.0f, 0.0f, 1.0f),
+			MathUtil::Clamp<float>(static_cast<float>(InBlue) / 255.0f, 0.0f, 1.0f),
+			MathUtil::Clamp<float>(static_cast<float>(InAlpha) / 255.0f, 0.0f, 1.0f)
+		);
+	}
+
+
+	// RGBA32 값을 R8G8B8A8 값으로 변환합니다.
+	// 
+	// @param InRGBA32 - 변환을 수행할 RGBA 값입니다.
+	// @param OutRed - 변환이 완료된 R값입니다.
+	// @param OutGreen - 변환이 완료된 G값입니다.
+	// @param OutBlue - 변환이 완료된 B값입니다.
+	// @param OutAlpha - 변환이 완료된 A값입니다.
+	inline static void ConvertRGBA32ToR8G8B8A8(const RGBA32& InRGBA32, uint8_t& OutRed, uint8_t& OutGreen, uint8_t& OutBlue, uint8_t& OutAlpha)
+	{
+		OutRed = (InRGBA32 >> 0) & 255;
+		OutGreen = (InRGBA32 >> 8) & 255;
+		OutBlue = (InRGBA32 >> 16) & 255;
+		OutAlpha = (InRGBA32 >> 24) & 255;
+	}
+
+
+	// RGBA32 값을 LinearColor 값으로 변환합니다.
+	// 
+	// @param InRGBA32 - 변환을 수행할 RGBA 값입니다.
+	// @return - 변환이 완료된 LinearColor 값입니다.
+	inline static LinearColor ConvertRGBA32ToLinearColor(const RGBA32& InRGBA32)
+	{
+		uint8_t R = 0, G = 0, B = 0, A = 0;
+		ConvertRGBA32ToR8G8B8A8(InRGBA32, R, G, B, A);
+		return ConvertR8G8B8A8ToLinearColor(R, G, B, A);
+	}
+
+
+	// LinearColor 값을 R8G8B8A8 값으로 변환합니다.
+	// 
+	// @param InColor - 변환을 수행할 LinearColor 입니다.
+	// @param OutRed - 변환이 완료된 R값입니다.
+	// @param OutGreen - 변환이 완료된 G값입니다.
+	// @param OutBlue - 변환이 완료된 B값입니다.
+	// @param OutAlpha - 변환이 완료된 A값입니다.
+	inline static void ConvertLinearColorToR8G8B8A8(const LinearColor& InColor, uint8_t& OutRed, uint8_t& OutGreen, uint8_t& OutBlue, uint8_t& OutAlpha)
+	{
+		OutRed = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.x, 0.0f, 1.0f) * 255.0f);
+		OutGreen = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.y, 0.0f, 1.0f) * 255.0f);
+		OutBlue = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.z, 0.0f, 1.0f) * 255.0f);
+		OutAlpha = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.w, 0.0f, 1.0f) * 255.0f);
+	}
+
+
+	// LinearColor 값을 RGBA32 값으로 변환합니다.
+	//
+	// @param InColor - 변환을 수행할 LinearColor 입니다.
+	// @return - 변환이 완료된 RGBA32 값입니다.
+	inline static RGBA32 ConvertLinearColorToRGBA32(const LinearColor& InColor)
+	{
+		uint8_t R = 0, G = 0, B = 0, A = 0;
+		ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
+		return ConvertR8G8B8A8ToRGBA32(R, G, B, A);
+	}
+};

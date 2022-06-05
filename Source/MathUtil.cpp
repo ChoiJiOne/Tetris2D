@@ -1,5 +1,14 @@
 #include "MathUtil.h"
 
+LinearColor ColorUtil::Black   = LinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+LinearColor ColorUtil::Red     = LinearColor(1.0f, 0.0f, 0.0f, 1.0f);
+LinearColor ColorUtil::Green   = LinearColor(0.0f, 1.0f, 0.0f, 1.0f);
+LinearColor ColorUtil::Blue    = LinearColor(0.0f, 0.0f, 1.0f, 1.0f);
+LinearColor ColorUtil::Yellow  = LinearColor(1.0f, 1.0f, 0.0f, 1.0f);
+LinearColor ColorUtil::Magenta = LinearColor(1.0f, 0.0f, 1.0f, 1.0f);
+LinearColor ColorUtil::Cyan    = LinearColor(0.0f, 1.0f, 1.0f, 1.0f);
+LinearColor ColorUtil::White   = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
 Vec2i operator+(const Vec2i& InLhs, const Vec2i& InRhs)
 {
 	return Vec2i(InLhs.x + InRhs.x, InLhs.y + InRhs.y);
