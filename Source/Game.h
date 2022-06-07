@@ -6,6 +6,9 @@
 // 게임 렌더링을 수행하기 위한 헤더 선언을 추가합니다.
 #include "GameRenderer.h"
 
+// 게임 텍스처를 사용하기 위한 헤더 선언을 추가합니다.
+#include "GameTexture2D.h"
+
 // 게임 타이머를 사용하기 위한 헤더 선언을 추가합니다.
 #include "GameTimer.h"
 
