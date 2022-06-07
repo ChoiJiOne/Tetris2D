@@ -1,4 +1,5 @@
 #include "Macro.h"
+#include "GameTexture2D.h"
 #include "GameRenderer.h"
 
 GameRenderer::GameRenderer(SDL_Window* InWindow)
@@ -91,6 +92,22 @@ void GameRenderer::DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidt
 	P1.y = static_cast<int32_t>(InCenterPosition.y + (InHeight / 2));
 
 	DrawRectangle2D(P0, P1, InColor);
+}
+
+void GameRenderer::DrawTexture2D(const Vec2i& InCenterPosition, const GameTexture2D& InTexture, float InWidthScaling, float InHeightScaling)
+{
+	float Width = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
+	float Height = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
+
+
+	SDL_Rect Rect = {
+		InCenterPosition.x - InTexture.GetWidth() / 2,
+		InCenterPosition.y - InTexture.GetHeight() / 2,
+		static_cast<int32_t>(Width),
+		static_cast<int32_t>(Height)
+	};
+
+	CHECK_SDL_FAILED((SDL_RenderCopy(Renderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
 }
 
 void GameRenderer::SetDrawColor(const LinearColor& InColor)

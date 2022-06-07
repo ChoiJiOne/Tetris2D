@@ -45,6 +45,12 @@ public:
 	void EndFrame();
 
 
+	// SDL_Renderer 포인터를 반환합니다.
+	//
+	// @return - SDL_Renderer 포인터를 반환합니다. 
+	SDL_Renderer* GetRenderer() noexcept { return Renderer; }
+
+
 	// 벡버퍼에 2D 점을 그립니다.
 	//
 	// @param InPosition - 점의 위치입니다.
@@ -98,6 +104,13 @@ public:
 	// @param InColor - 사각형의 색상입니다.
 	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
 	void DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor);
+
+
+	// 백버퍼에 텍스처를 그립니다.
+	// 
+	// @param InCenterPosition - 텍스처의 중심이 위치할 화면상의 좌표입니다.
+	// @param InTexture - 백버퍼에 그릴 텍스처입니다.
+	void DrawTexture2D(const Vec2i& InCenterPosition, const class GameTexture2D& InTexture, float InWidthScaling = 1.0f, float InHeightScaling = 1.0f);
 
 
 private:
