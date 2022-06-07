@@ -6,6 +6,7 @@ GameInput::~GameInput()
 
 GameInput::GameInput(GameInput&& InInstance) noexcept
     : ExitEventCallback(InInstance.ExitEventCallback)
+    , ResizeEventCallback(InInstance.ResizeEventCallback)
 {
 }
 
@@ -14,12 +15,14 @@ GameInput& GameInput::operator=(GameInput&& InInstance) noexcept
     if (this == &InInstance) return *this;
 
     ExitEventCallback = InInstance.ExitEventCallback;
+    ResizeEventCallback = InInstance.ResizeEventCallback;
 
     return *this;
 }
 
 GameInput::GameInput(const GameInput& InInstance) noexcept
     : ExitEventCallback(InInstance.ExitEventCallback)
+    , ResizeEventCallback(InInstance.ResizeEventCallback)
 {
 }
 
@@ -28,6 +31,7 @@ GameInput& GameInput::operator=(const GameInput& InInstance) noexcept
     if (this == &InInstance) return *this;
 
     ExitEventCallback = InInstance.ExitEventCallback;
+    ResizeEventCallback = InInstance.ResizeEventCallback;
 
     return *this;
 }
