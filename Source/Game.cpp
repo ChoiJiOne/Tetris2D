@@ -78,6 +78,7 @@ void Game::Setup()
 
 void Game::Run()
 {
+	// 텍스처 리소스 로딩
 	std::string ImagePath = GlobalProperty::GetResourceDirectory() + "awesomeface.png";
 	GameTexture2D Texture(Renderer->GetRenderer(), ImagePath);
 

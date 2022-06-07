@@ -99,7 +99,6 @@ void GameRenderer::DrawTexture2D(const Vec2i& InCenterPosition, const GameTextur
 	float Width = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
 	float Height = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
 
-
 	SDL_Rect Rect = {
 		InCenterPosition.x - InTexture.GetWidth() / 2,
 		InCenterPosition.y - InTexture.GetHeight() / 2,
