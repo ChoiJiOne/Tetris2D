@@ -77,9 +77,9 @@ private:
 
 
 	// SDL2의 컴파일 버전입니다.
-	static SDL_version Compiled;
+	static SDL_version CompiledVersion;
 
 
 	// SDL2의 링크 버전입니다.
-	static SDL_version Linked;
+	static SDL_version LinkedVersion;
 };

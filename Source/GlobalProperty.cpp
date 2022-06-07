@@ -7,8 +7,8 @@ std::string GlobalProperty::ExecuteDirectory;
 std::string GlobalProperty::ProjectRootDirectory;
 std::string GlobalProperty::SourceCodeDirectory;
 std::string GlobalProperty::ResourceDirectory;
-SDL_version GlobalProperty::Compiled;
-SDL_version GlobalProperty::Linked;
+SDL_version GlobalProperty::CompiledVersion;
+SDL_version GlobalProperty::LinkedVersion;
 
 void GlobalProperty::Initialize()
 {
@@ -22,8 +22,8 @@ void GlobalProperty::Initialize()
 		Logger::Message(StringUtil::StringFormat("Project Root Directory : %s", ProjectRootDirectory.c_str()));
 		Logger::Message(StringUtil::StringFormat("Source Code Directoryy : %s", SourceCodeDirectory.c_str()));
 		Logger::Message(StringUtil::StringFormat("Resource Directory : %s", ResourceDirectory.c_str()));
-		Logger::Message(StringUtil::StringFormat("Compile SDL version %u.%u.%u ...", Compiled.major, Compiled.minor, Compiled.patch));
-		Logger::Message(StringUtil::StringFormat("Linking SDL version %u.%u.%u ...", Linked.major, Linked.minor, Linked.patch));
+		Logger::Message(StringUtil::StringFormat("Compile SDL version %u.%u.%u ...", CompiledVersion.major, CompiledVersion.minor, CompiledVersion.patch));
+		Logger::Message(StringUtil::StringFormat("Linking SDL version %u.%u.%u ...", LinkedVersion.major, LinkedVersion.minor, LinkedVersion.patch));
 #endif
 
 		bIsInitialize = true;
@@ -66,6 +66,6 @@ void GlobalProperty::SetupSDL2System()
 	CHECK_SDL_FAILED((Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != -1));
 	CHECK_SDL_FAILED((SDLNet_Init() != -1));
 
-	SDL_VERSION(&Compiled);
-	SDL_GetVersion(&Linked);
+	SDL_VERSION(&CompiledVersion);
+	SDL_GetVersion(&LinkedVersion);
 }
