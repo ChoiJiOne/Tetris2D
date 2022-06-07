@@ -94,7 +94,19 @@ void Game::Run()
 
 
 		// 프레임 렌더링을 시작합니다.
-		Renderer->BeginFrame(ColorUtil::Cyan);
+		Renderer->BeginFrame(ColorUtil::Black);
+
+
+		// 선을 그립니다.
+		Renderer->DrawLine2D(Vec2i(10, 10), Vec2i(500, 12), ColorUtil::Red);
+
+
+		// 사각형을 그립니다.
+		Renderer->DrawWireframeRectangle2D(Vec2i(10, 100), Vec2i(600, 400), ColorUtil::Green);
+
+
+		// 채움 사각형을 그립니다.
+		Renderer->DrawRectangle2D(Vec2i(10, 500), Vec2i(600, 700), ColorUtil::Blue);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
