@@ -37,12 +37,67 @@ public:
 	// 프레임 렌더링을 시작합니다.
 	//
 	// @param InColor - 벡버퍼를 비울 색상입니다.
-	// @throws - C++ 표준 예외를 반환합니다.
+	// @throws - 백버퍼 초기화에 실패할 경우, C++ 표준 예외를 반환합니다.
 	void BeginFrame(const LinearColor& InColor);
 
 
 	// 프레임 렌더링을 종료하고, 벡버퍼를 화면에 표시합니다.
 	void EndFrame();
+
+
+	// 벡버퍼에 2D 점을 그립니다.
+	//
+	// @param InPosition - 점의 위치입니다.
+	// @param InColor - 점의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawPoint2D(const Vec2i& InPosition, const LinearColor& InColor);
+
+
+	// 벡버퍼에 2D 선을 그립니다.
+	// 
+	// @param InP0 - 선분의 한 끝점입니다.
+	// @param InP1 - 선분의 InP0이 아닌 한 끝점입니다.
+	// @param InColor - 선분의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawLine2D(const Vec2i& InP0, const Vec2i& InP1, const LinearColor& InColor);
+
+
+	// 벡버퍼에 2D 사각형을 그립니다.
+	// 
+	// @param InP0 - 사각형의 왼쪽 상단점입니다.
+	// @param InP1 - 사각형의 오른쪽 하단점입니다.
+	// @param InColor - 사각형의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawWireframeRectangle2D(const Vec2i& InP0, const Vec2i& InP1, const LinearColor& InColor);
+
+
+	// 벡버퍼에 2D 사각형을 그립니다.
+	// 
+	// @param InCenterPosition - 사각형의 중심이 위치할 화면상의 좌표입니다.
+	// @param InWidth - 사각형의 가로 길이입니다.
+	// @param InHeight - 사각형의 세로 길이입니다.
+	// @param InColor - 사각형의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawWireframeRectangle2D(const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor);
+
+
+	// 벡버퍼에 채움 2D 사각형을 그립니다.
+	// 
+	// @param InP0 - 채움 사각형의 왼쪽 상단점입니다.
+	// @param InP1 - 채움 사각형의 오른쪽 하단점입니다.
+	// @param InColor - 채움 사각형의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawRectangle2D(const Vec2i& InP0, const Vec2i& InP1, const LinearColor& InColor);
+
+
+	// 벡버퍼에 채움 2D 사각형을 그립니다.
+	// 
+	// @param InCenterPosition - 사각형의 중심이 위치할 화면상의 좌표입니다.
+	// @param InWidth - 사각형의 가로 길이입니다.
+	// @param InHeight - 사각형의 세로 길이입니다.
+	// @param InColor - 사각형의 색상입니다.
+	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+	void DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor);
 
 
 private:
