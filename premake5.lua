@@ -1,8 +1,12 @@
 function IncludeFiles()
    files {
       "%{source_path}/*",
+
+      "%{framework_path}/*",
+
       "%{third_party_path}/Include/Json/*",
       "%{third_party_path}/Include/SDL2/*",
+      "%{third_party_path}/Include/STB/*",
    }
 end
 
@@ -15,23 +19,15 @@ end
 
 function LinkStaticLibraryInDebug()
    links {
-      "%{third_party_path}/Debug/SDL2.lib",
-      "%{third_party_path}/Debug/SDL2_ttf.lib",
-      "%{third_party_path}/Debug/SDL2_image.lib",
-      "%{third_party_path}/Debug/SDL2main.lib",
-      "%{third_party_path}/Debug/SDL2_net.lib",
-      "%{third_party_path}/Debug/SDL2_mixer.lib",
+      "%{third_party_path}/Debug/SDL2d.lib",
+      "%{third_party_path}/Debug/SDL2maind.lib"
    }
 end
 
 function LinkStaticLibraryInRelease()
    links {
       "%{third_party_path}/Release/SDL2.lib",
-      "%{third_party_path}/Release/SDL2_ttf.lib",
-      "%{third_party_path}/Release/SDL2_image.lib",
-      "%{third_party_path}/Release/SDL2main.lib",
-      "%{third_party_path}/Release/SDL2_net.lib",
-      "%{third_party_path}/Release/SDL2_mixer.lib",
+      "%{third_party_path}/Release/SDL2main.lib"
    }
 end
 
@@ -45,6 +41,7 @@ workspace "Tetris1.0"
    
 
    source_path="%{wks.location}/../Source"
+   framework_path="%{wks.location}/../Framework"
    third_party_path="%{wks.location}/../ThirdParty"
 
    
