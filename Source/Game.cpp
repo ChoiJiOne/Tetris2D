@@ -2,37 +2,19 @@
 
 Game::~Game()
 {
-	// 렌더러 리소스를 할당 해제합니다.
-	Renderer.reset();
-	Renderer = nullptr;
-
-
-	// 입력 처리 리소스를 할당 해제합니다.
-	Input.reset();
-	Input = nullptr;
-
-
-	// 게임 윈도우 리소스를 할당 해제합니다.
-	Window.reset();
-	Window = nullptr;
-
-
-	// 게임 타이머 리소스를 할당 해제합니다.
-	GlobalTimer.reset();
-	GlobalTimer = nullptr;
 }
 
 void Game::Setup()
 {
-	// 게임 윈도우 인스턴스를 생성합니다.
-	Window = std::make_unique<GameWindow>();
+	// 게임 프레임워크를 초기화합니다.
+	GameFramework::Setup();
 
 
 	// 게임 윈도우를 생성합니다.
 	int32_t WindowWidth = 1000;
 	int32_t WindowHeight = 800;
 
-	Window->CreateWindow(
+	GetGameWindow().CreateWindow(
 		"Tetris1.0",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
@@ -44,9 +26,9 @@ void Game::Setup()
 
 	// 디버그 모드일 경우, 콘솔 창을 표시합니다.
 #if defined(DEBUG) || defined(_DEBUG)
-	Window->SetVisibleConsoleWindow(true);
+	GetGameWindow().SetVisibleConsoleWindow(true);
 #else
-	Window->SetVisibleConsoleWindow(false);
+	GetGameWindow().SetVisibleConsoleWindow(false);
 #endif
 
 
@@ -54,35 +36,26 @@ void Game::Setup()
 	GlobalTimer = std::make_unique<GameTimer>();
 
 
-	// 입력 처리 인스턴스를 생성합니다.
-	Input = std::make_unique<GameInput>();
-
-
 	// 입력 처리 인스턴스에 Callback 함수를 등록합니다.
-	Input->SetExitEventCallback(
+	GetGameInput().SetExitEventCallback(
 		[&]() {
 			bIsExit = true;
 		}
 	);
 
-	Input->SetResizeEventCallback(
+	GetGameInput().SetResizeEventCallback(
 		[&](int32_t InWidth, int32_t InHeight) {
 			// TODO : 윈도우 크기 변경 이벤트를 구현합니다.
 		}
 	);
 
 
-	// 렌더러 인스터스를 생성합니다.
-	Renderer = std::make_unique<GameRenderer>(Window->GetWindow());
+	// 렌더러를 초기화합니다.
+	GetGameRenderer().Init(GetGameWindow().GetWindow());
 }
 
 void Game::Run()
 {
-	// 텍스처 리소스 로딩
-	std::string ImagePath = GlobalProperty::GetResourceDirectory() + "awesomeface.png";
-	GameTexture2D Texture(Renderer->GetRenderer(), ImagePath);
-
-
 	// 게임 타이머를 초기화합니다.
 	GlobalTimer->Reset();
 	
@@ -95,18 +68,14 @@ void Game::Run()
 
 
 		// 입력 처리를 업데이트합니다.
-		Input->Tick();
+		GetGameInput().Tick();
 
 
 		// 프레임 렌더링을 시작합니다.
-		Renderer->BeginFrame(ColorUtil::White);
-
-
-		// 텍스처를 그립니다.
-		Renderer->DrawTexture2D(Vec2i(500, 400), Texture);
+		GetGameRenderer().BeginFrame(ColorUtil::Black);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
-		Renderer->EndFrame();
+		GetGameRenderer().EndFrame();
 	}
 }

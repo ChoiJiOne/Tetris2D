@@ -1,29 +1,11 @@
 #pragma once
 
-// 게임 입력 처리를 수행하기 위한 헤더 선언을 추가합니다.
-#include "GameInput.h"
-
-// 게임 렌더링을 수행하기 위한 헤더 선언을 추가합니다.
-#include "GameRenderer.h"
-
-// 게임 텍스처를 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameTexture2D.h"
-
-// 게임 타이머를 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameTimer.h"
-
-// 게임 윈도우를 생성 및 관리하기 위한 헤더 선언을 추가합니다.
-#include "GameWindow.h"
-
-// 전역 요소들을 사용하기 위한 헤더 선언을 추가합니다.
-#include "GlobalProperty.h"
-
-// 로그 기능을 사용하기 위한 헤더 선언을 추가합니다.
-#include "Logger.h"
+// 게임 프레임워크를 사용하기 위한 헤더 선언을 추가합니다.
+#include "GameFramework.h"
 
 
 // 게임 클래스입니다.
-class Game
+class Game : public GameFramework
 {
 public:
 	// 생성자입니다.
@@ -35,11 +17,11 @@ public:
 
 
 	// 게임 프레임워크 및 전체 게임을 초기화합니다.
-	void Setup();
+	virtual void Setup() override;
 
 
 	// 게임을 실행합니다.
-	void Run();
+	virtual void Run() override;
 
 
 private:
@@ -49,16 +31,4 @@ private:
 
 	// 게임 내의 전역 타이머입니다.
 	std::unique_ptr<GameTimer> GlobalTimer = nullptr;
-
-
-	// 게임 윈도우입니다.
-	std::unique_ptr<GameWindow> Window = nullptr;
-
-
-	// 게임 입력 처리를 수행합니다.
-	std::unique_ptr<GameInput> Input = nullptr;
-
-
-	// 게임 렌더링 처리를 수행합니다.
-	std::unique_ptr<GameRenderer> Renderer = nullptr;
 };
