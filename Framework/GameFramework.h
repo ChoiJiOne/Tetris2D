@@ -79,6 +79,30 @@ public:
 	const GameRenderer& GetGameRenderer() const { return Renderer; }
 
 
+	// 게임 실행 파일 경로를 반환합니다.
+	// 
+	// @return - 게임 실행 파일 경로를 반환합니다.
+	const std::string& GetExecuteDirectory() const { return ExecuteDirectory; }
+
+
+	// 게임 프로젝트의 루트 디렉토리 경로를 반환합니다.
+	//
+	// @return - 게임 프로젝트의 루트 디렉토리 경로를 반환합니다.
+	const std::string& GetProjectRootDirectory() const {return ProjectRootDirectory; }
+
+
+	// 게임 프레임워크 디렉토리 경로를 반환합니다.
+	//
+	// @return - 게임 프레임워크 디렉토리 경로를 반환합니다.
+	const std::string& GetFrameworkDirectory() const { return FrameworkDirectory; }
+
+
+	// 게임 리소스 디렉토리 경로를 반환합니다.
+	//
+	// @return - 게임 리소스 디렉토리 경로를 반환합니다.
+	const std::string& GetResourceDirectory() const { return ResourceDirectory; }
+
+
 	// 게임  프레임워크 및 전체 게임을 초기화합니다.
 	virtual void Setup();
 
