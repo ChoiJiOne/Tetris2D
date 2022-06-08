@@ -100,7 +100,7 @@ void GameRenderer::DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidt
 	DrawRectangle2D(P0, P1, InColor);
 }
 
-void GameRenderer::DrawTexture2D(const Vec2i& InCenterPosition, const GameTexture2D& InTexture, float InWidthScaling, float InHeightScaling)
+void GameRenderer::DrawTexture2D(const GameTexture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
 {
 	float Width = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
 	float Height = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
@@ -115,7 +115,7 @@ void GameRenderer::DrawTexture2D(const Vec2i& InCenterPosition, const GameTextur
 	CHECK_SDL_FAILED((SDL_RenderCopy(Renderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
 }
 
-void GameRenderer::DrawText2D(const Vec2i& InPosition, const GameFont& InFont, const std::wstring& InText, const LinearColor& InColor)
+void GameRenderer::DrawText2D(const GameFont& InFont, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
 {
 	int32_t x = InPosition.x;
 	int32_t y = InPosition.y;

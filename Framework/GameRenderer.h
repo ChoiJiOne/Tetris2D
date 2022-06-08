@@ -112,22 +112,22 @@ public:
 
 	// 백버퍼에 텍스처를 그립니다.
 	// 
-	// @param InCenterPosition - 텍스처의 중심이 위치할 화면상의 좌표입니다.
 	// @param InTexture - 백버퍼에 그릴 텍스처입니다.
+	// @param InCenterPosition - 텍스처의 중심이 위치할 화면상의 좌표입니다.
 	// @param InWidthScaling - 렌더링할 텍스처의 원본 텍스처 대비 가로 크기 비율입니다.
 	// @param InHeightScaling - 렌더링할 텍스처의 원본 텍스처 대비 세로 크기 비율입니다.
 	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void DrawTexture2D(const Vec2i& InCenterPosition, const class GameTexture2D& InTexture, float InWidthScaling = 1.0f, float InHeightScaling = 1.0f);
+	void DrawTexture2D(const class GameTexture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling = 1.0f, float InHeightScaling = 1.0f);
 
 
 	// 벡버퍼에 UTF-16 텍스트를 그립니다.
 	//
-	// @param InPosition - 렌더링 할 텍스트 영역의 왼쪽 상단 좌표입니다.
 	// @param InFont - 렌더링 시 참조할 폰트입니다.
+	// @param InPosition - 렌더링 할 텍스트 영역의 왼쪽 상단 좌표입니다.
 	// @param InText - 렌더링할 UTF-16 텍스트입니다.
 	// @param InColor - 렌더링할 텍스트의 색상입니다.
 	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void DrawText2D(const Vec2i& InPosition, const class GameFont& InFont, const std::wstring& InText, const LinearColor& InColor);
+	void DrawText2D(const class GameFont& InFont, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor);
 	
 
 private:
