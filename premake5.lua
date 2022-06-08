@@ -13,6 +13,7 @@ end
 function IncludeDirs()
    includedirs {
       "%{source_path}",
+      "%{framework_path}",
       "%{third_party_path}/Include",
    }
 end
