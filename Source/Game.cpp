@@ -57,14 +57,14 @@ void Game::Setup()
 void Game::Run()
 {
 	// 게임 타이머를 초기화합니다.
-	GlobalTimer.Reset();
+	Timer.Reset();
 	
 
 	// 루프를 수행합니다.
 	while (!bIsExit)
 	{
 		// 게임 타이머를 업데이트 합니다.
-		GlobalTimer.Tick();
+		Timer.Tick();
 
 
 		// 입력 처리를 업데이트합니다.

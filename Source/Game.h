@@ -29,8 +29,8 @@ private:
 	bool bIsExit = false;
 
 
-	// 게임 내의 전역 타이머입니다.
-	GameTimer GlobalTimer;
+	// 게임 내의 타이머입니다.
+	GameTimer Timer;
 
 
 	// 게임 폰트입니다.
