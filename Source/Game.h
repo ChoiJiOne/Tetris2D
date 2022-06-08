@@ -30,5 +30,9 @@ private:
 
 
 	// 게임 내의 전역 타이머입니다.
-	std::unique_ptr<GameTimer> GlobalTimer = nullptr;
+	GameTimer GlobalTimer;
+
+
+	// 게임 폰트입니다.
+	GameFont Font;
 };

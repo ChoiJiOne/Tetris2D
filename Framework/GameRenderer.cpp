@@ -115,9 +115,46 @@ void GameRenderer::DrawTexture2D(const Vec2i& InCenterPosition, const GameTextur
 	CHECK_SDL_FAILED((SDL_RenderCopy(Renderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
 }
 
-void GameRenderer::DrawText2D(const Vec2i& InCenterPosition, const GameFont& InFont, const std::wstring& InText, const LinearColor& InColor)
+void GameRenderer::DrawText2D(const Vec2i& InPosition, const GameFont& InFont, const std::wstring& InText, const LinearColor& InColor)
 {
+	int32_t x = InPosition.x;
+	int32_t y = InPosition.y;
 
+	uint8_t R = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.x, 0.0f, 1.0f) * 255.0f);
+	uint8_t G = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.y, 0.0f, 1.0f) * 255.0f);
+	uint8_t B = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.z, 0.0f, 1.0f) * 255.0f);
+	uint8_t A = static_cast<uint8_t>(MathUtil::Clamp<float>(InColor.w, 0.0f, 1.0f) * 255.0f);
+
+	for (const auto& Unicode : InText)
+	{
+		SDL_Texture* Texture = InFont.GetAtlas(Unicode);
+
+		if (!Texture) continue;
+
+		SDL_SetTextureColorMod(Texture, R, G, B);
+		SDL_SetTextureAlphaMod(Texture, A);
+
+		const stbtt_packedchar& Info = InFont.GetPackedchar(Unicode);
+
+		SDL_Rect Src =
+		{
+			Info.x0,
+			Info.y0,
+			Info.x1 - Info.x0,
+			Info.y1 - Info.y0
+		};
+
+		SDL_Rect Dst =
+		{
+			x + static_cast<int32_t>(Info.xoff),
+			y + static_cast<int32_t>(Info.yoff),
+			(Info.x1 - Info.x0),
+			(Info.y1 - Info.y0)
+		};
+
+		SDL_RenderCopy(Renderer, Texture, &Src, &Dst);
+		x += static_cast<int32_t>(Info.xadvance);
+	}
 }
 
 void GameRenderer::SetDrawColor(const LinearColor& InColor)

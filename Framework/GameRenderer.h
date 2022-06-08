@@ -122,12 +122,12 @@ public:
 
 	// 벡버퍼에 UTF-16 텍스트를 그립니다.
 	//
-	// @param InCenterPosition - 렌더링 할 텍스트의 중심 좌표입니다.
+	// @param InPosition - 렌더링 할 텍스트 영역의 왼쪽 상단 좌표입니다.
 	// @param InFont - 렌더링 시 참조할 폰트입니다.
 	// @param InText - 렌더링할 UTF-16 텍스트입니다.
 	// @param InColor - 렌더링할 텍스트의 색상입니다.
 	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void DrawText2D(const Vec2i& InCenterPosition, const class GameFont& InFont, const std::wstring& InText, const LinearColor& InColor);
+	void DrawText2D(const Vec2i& InPosition, const class GameFont& InFont, const std::wstring& InText, const LinearColor& InColor);
 	
 
 private:
