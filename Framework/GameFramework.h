@@ -1,5 +1,8 @@
 #pragma once
 
+// 게임 폰트를 사용하기 위한 헤더 선언을 추가합니다.
+#include "GameFont.h"
+
 // 게임 입력 처리를 수행하기 위한 헤더 선언을 추가합니다.
 #include "GameInput.h"
 
@@ -17,6 +20,9 @@
 
 // 로그 기능을 사용하기 위한 헤더 선언을 추가합니다.
 #include "Logger.h"
+
+// 문자열 기능을 사용하기 위한 헤더 선언을 추가합니다.
+#include "StringUtil.h"
 
 
 // 게임 진행에 필요한 요소들을 관리하는 클래스입니다.
