@@ -51,7 +51,8 @@ void Game::Setup()
 
 
 	// 게임 폰트를 생성합니다.
-	Font.CreateGameFont(GetGameRenderer().GetRenderer(), "D:\\Repository\\Tetris1.0\\Resource\\font\\Nanum.ttf", 32.0f);
+	std::string FontPath = GetResourceDirectory() + "/font/Nanum.ttf";
+	Font.CreateGameFont(GetGameRenderer().GetRenderer(), FontPath, 32.0f);
 }
 
 void Game::Run()
@@ -76,7 +77,7 @@ void Game::Run()
 
 
 		// 화면에 FPS를 표시합니다.
-		GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / GlobalTimer.DeltaTime()), ColorUtil::White);
+		GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
