@@ -51,7 +51,7 @@ void Game::Run()
 
 
 		// 테트리스 보드를 화면에 그립니다.
-		DrawBoard(Vec2i(400, 150), 0.25f);
+		DrawBoard(TetrisBoard, Vec2i(400, 150), 0.25f);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
@@ -131,18 +131,18 @@ void Game::SetupTetrisProperties()
 	TetrisBoard.Init(10, 16);
 }
 
-void Game::DrawBoard(const Vec2i& InPosition, float InScale)
+void Game::DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScale)
 {
-	for (int32_t Row = 0; Row < TetrisBoard.GetBoardHeight(); ++Row)
+	for (int32_t Row = 0; Row < InBoard.GetBoardHeight(); ++Row)
 	{
-		for (int32_t Col = 0; Col < TetrisBoard.GetBoardWidth(); ++Col)
+		for (int32_t Col = 0; Col < InBoard.GetBoardWidth(); ++Col)
 		{
-			if (TetrisBoard.GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
+			if (InBoard.GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
 			{
 				int32_t TextureWidth = 0, TextureHeight = 0;
 				std::size_t HashKey = 0;
 
-				switch (TetrisBoard.GetBlockColorInBoard(Row, Col))
+				switch (InBoard.GetBlockColorInBoard(Row, Col))
 				{
 				case EBlockColor::BLUE:
 					HashKey = StringUtil::ConvertUTF8ToHash("BlueBlock");

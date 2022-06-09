@@ -45,9 +45,10 @@ private:
 
 	// 테트리스 보드를 화면에 그립니다.
 	//
+	// @param InBoard - 렌더링할 테트리스 보드입니다.
 	// @param InPosition - 윈도우 좌표계를 기준으로 테트리스 보드의 왼쪽 상단점입니다.
 	// @param InScale - 렌더링 할 텍스처의 Scale 값입니다.
-	void DrawBoard(const Vec2i& InPosition, float InScale);
+	void DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScale);
 
 
 private:
