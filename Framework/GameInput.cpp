@@ -238,12 +238,37 @@ void MouseState::DeltaMousePosition(int32_t& OutDeltaX, int32_t& OutDeltaY) cons
     OutDeltaY = DeltaMousePositionY();
 }
 
-MouseState::ButtonState MouseState::GetPrevMouseButtonState() const
+bool MouseState::IsPrevPressMouseButton(MouseButton InButton) const
 {
-    return static_cast<ButtonState>(SDL_BUTTON(PrevMouseButtonState));
+    return IsPressMouseButton(InButton, CurrMouseButtonState);
 }
 
-MouseState::ButtonState MouseState::GetCurrMouseButtonState() const
+bool MouseState::IsCurrPressMouseButton(MouseButton InButton) const
 {
-    return static_cast<ButtonState>(SDL_BUTTON(CurrMouseButtonState));
+    return IsPressMouseButton(InButton, PrevMouseButtonState);
+}
+
+bool MouseState::IsPressMouseButton(MouseButton InButton, uint32_t InButtonState) const
+{
+    int32_t ButtonMask = 0;
+
+    switch (InButton)
+    {
+    case MouseButton::LEFT:
+        ButtonMask = SDL_BUTTON(SDL_BUTTON_LEFT);
+        break;
+
+    case MouseButton::RIGHT:
+        ButtonMask = SDL_BUTTON(SDL_BUTTON_RIGHT);
+        break;
+
+    case MouseButton::MIDDLE:
+        ButtonMask = SDL_BUTTON(SDL_BUTTON_MIDDLE);
+        break;
+
+    default:
+        Logger::Warning("not support mouse button");
+    }
+
+    return InButtonState & ButtonMask;
 }

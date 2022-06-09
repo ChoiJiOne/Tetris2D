@@ -118,24 +118,18 @@ void Game::Run()
 		GetGameInput().GetMouseState().GetCurrMousePosition(x, y);
 		GetGameRenderer().DrawText2D(Font, Vec2i(0, 400), StringUtil::StringFormat(L"Position : (%d, %d)", x, y), ColorUtil::White);
 
-		MouseState::ButtonState Button = GetGameInput().GetMouseState().GetCurrMouseButtonState();
 
-		if (Button == MouseState::ButtonState::NONE)
-		{
-			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : None"), ColorUtil::White);
-		}
-				
-		if (Button == MouseState::ButtonState::LEFT)
+		if (GetGameInput().GetMouseState().IsCurrPressMouseButton(MouseState::MouseButton::LEFT))
 		{
 			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Left"), ColorUtil::White);
 		}
 				
-		if (Button == MouseState::ButtonState::MIDDLE)
+		if (GetGameInput().GetMouseState().IsCurrPressMouseButton(MouseState::MouseButton::MIDDLE))
 		{
 			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Middle"), ColorUtil::White);
 		}
 				
-		if (Button == MouseState::ButtonState::RIGHT)
+		if (GetGameInput().GetMouseState().IsCurrPressMouseButton(MouseState::MouseButton::RIGHT))
 		{
 			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Right"), ColorUtil::White);
 		}

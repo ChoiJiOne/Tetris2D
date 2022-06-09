@@ -67,12 +67,11 @@ class MouseState
 {
 public:
 	// 마우스의 클릭 상태를 나타냅니다.
-	enum class ButtonState
+	enum class MouseButton
 	{
-		NONE = 0,
-		LEFT = 1,
-		MIDDLE = 2,
-		RIGHT = 3
+		LEFT   = 0,
+		MIDDLE = 1,
+		RIGHT  = 2
 	};
 
 
@@ -160,16 +159,27 @@ public:
 	void DeltaMousePosition(int32_t& OutDeltaX, int32_t& OutDeltaY) const;
 
 
-	// 업데이트 이전의 마우스 버튼 상태값을 반환합니다.
+	// 업데이트 이전에 마우스 버튼이 눌렸는지 확인합니다.
 	//
-	// @return - 업데이트 이전의 마우스 버튼 상태값을 반환합니다.
-	ButtonState GetPrevMouseButtonState() const;
+	// @param InButton - 확인할 마우스 버튼의 종류입니다.
+	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
+	bool IsPrevPressMouseButton(MouseButton InButton) const;
 
 
-	// 업데이트 이후의 마우스 버튼 상태값을 반환합니다.
+	// 업데이트 이전에 마우스 버튼이 눌렸는지 확인합니다.
 	//
-	// @return -업데이트 이후의 마우스 버튼 상태값을 반환합니다.
-	ButtonState GetCurrMouseButtonState() const;
+	// @param InButton - 확인할 마우스 버튼의 종류입니다.
+	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
+	bool IsCurrPressMouseButton(MouseButton InButton) const;
+
+
+private:
+	// 마우스 버튼이 눌렸는지 확인합니다.
+	//
+	// @param InButton - 확인할 마우스 버튼의 종류입니다.
+	// @param InButtonState - 확인할 마우스 버튼의 상태입니다.
+	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
+	bool IsPressMouseButton(MouseButton InButton, uint32_t InButtonState) const;
 
 
 private:
