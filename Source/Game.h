@@ -6,6 +6,9 @@
 // 테트리스 블럭을 사용하기 위한 헤더 선언을 추가합니다.
 #include "Block.h"
 
+// 테트리스 보드를 사용하기 위한 헤더 선언을 추가합니다.
+#include "Board.h"
+
 
 // 게임 클래스입니다.
 class Game : public GameFramework
@@ -69,13 +72,5 @@ private:
 
 
 	// 테트리스 보드입니다.
-	std::vector<Block> Board;
-
-
-	// 테트리스 보드의 가로 크기입니다.
-	int32_t BoardWidth = 10;
-
-
-	// 테트리스 보드의 세로 크기입니다.
-	int32_t BoardHeight = 16;
+	Board TetrisBoard;
 };

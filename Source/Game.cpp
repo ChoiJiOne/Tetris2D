@@ -128,43 +128,21 @@ void Game::SetupTetrisProperties()
 	}
 
 
-	Block WallState = Block(EBlockState::FIX, EBlockColor::GRAY);
-
-	Board.resize(BoardWidth * BoardHeight, Block(EBlockState::EMPTY, EBlockColor::GRAY));
-
-	for (int32_t Row = 0; Row < BoardHeight; ++Row)
-	{
-		if (Row == BoardHeight - 1)
-		{
-			for (int32_t Col = 0; Col < BoardWidth; ++Col)
-			{
-				int32_t Offset = Row * BoardWidth + Col;
-				Board[Offset] = WallState;
-			}
-		}
-		else
-		{
-			int32_t Offset = Row * BoardWidth;
-			Board[Offset + 0]              = WallState;
-			Board[Offset + BoardWidth - 1] = WallState;
-		}
-	}
+	TetrisBoard.Init(10, 16);
 }
 
 void Game::DrawBoard(const Vec2i& InPosition, float InScale)
 {
-	for (int32_t Row = 0; Row < BoardHeight; ++Row)
+	for (int32_t Row = 0; Row < TetrisBoard.GetBoardHeight(); ++Row)
 	{
-		for (int32_t Col = 0; Col < BoardWidth; ++Col)
+		for (int32_t Col = 0; Col < TetrisBoard.GetBoardWidth(); ++Col)
 		{
-			Block BlockState = Board[Row * BoardWidth + Col];
-
-			if (BlockState.first != EBlockState::EMPTY)
+			if (TetrisBoard.GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
 			{
 				int32_t TextureWidth = 0, TextureHeight = 0;
 				std::size_t HashKey = 0;
 
-				switch (BlockState.second)
+				switch (TetrisBoard.GetBlockColorInBoard(Row, Col))
 				{
 				case EBlockColor::BLUE:
 					HashKey = StringUtil::ConvertUTF8ToHash("BlueBlock");
