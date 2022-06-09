@@ -25,6 +25,14 @@ void GameFramework::Setup()
 		SDL_VERSION(&CompiledVersion);
 		SDL_GetVersion(&LinkedVersion);
 
+
+		// 디버그 모드일 경우, 콘솔 창을 표시합니다.
+#if defined(DEBUG) || defined(_DEBUG)
+		GetGameWindow().SetVisibleConsoleWindow(true);
+#else
+		GetGameWindow().SetVisibleConsoleWindow(false);
+#endif
+
 		bIsInitialize = true;
 	}
 }
