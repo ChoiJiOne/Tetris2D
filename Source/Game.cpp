@@ -24,26 +24,18 @@ void Game::Setup()
 	);
 
 
-	// 디버그 모드일 경우, 콘솔 창을 표시합니다.
-#if defined(DEBUG) || defined(_DEBUG)
-	GetGameWindow().SetVisibleConsoleWindow(true);
-#else
-	GetGameWindow().SetVisibleConsoleWindow(false);
-#endif
+	// GameInput을 초기화합니다.
+	GetGameInput().Init();
 
 
-	// 입력 처리 인스턴스에 Callback 함수를 등록합니다.
-	GetGameInput().SetExitEventCallback(
-		[&]() {
-			bIsExit = true;
-		}
-	);
-
-	GetGameInput().SetResizeEventCallback(
-		[&](int32_t InWidth, int32_t InHeight) {
-			// TODO : 윈도우 크기 변경 이벤트를 구현합니다.
-		}
-	);
+	// Callback 함수를 등록합니다.
+	GetGameInput().SetQuitEventCallback([&]() { bIsDone = true; });
+	GetGameInput().SetResizeEventCallback([&](int32_t InWidth, int32_t InHeight) { });
+	GetGameInput().SetMinimizeEventCallback([&]() { bIsPaused = true;  Timer.Stop(); });
+	GetGameInput().SetMaximizeEventCallback([&]() { bIsPaused = false; Timer.Start(); });
+	GetGameInput().SetActiveWindowCallback([&]() { bIsPaused = false; Timer.Start(); });
+	GetGameInput().SetInactiveWindowCallback([&]() { bIsPaused = true; Timer.Stop(); });
+	GetGameInput().SetExposeWindowCallback([&]() {});
 
 
 	// 렌더러를 초기화합니다.
@@ -62,7 +54,7 @@ void Game::Run()
 	
 
 	// 루프를 수행합니다.
-	while (!bIsExit)
+	while (!bIsDone)
 	{
 		// 게임 타이머를 업데이트 합니다.
 		Timer.Tick();
@@ -77,7 +69,10 @@ void Game::Run()
 
 
 		// 화면에 FPS를 표시합니다.
-		GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
+		if (!bIsPaused)
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
+		}
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.

@@ -25,8 +25,12 @@ public:
 
 
 private:
-	// 게임 종료 여부입니다.
-	bool bIsExit = false;
+	// 게임 루프 종료 여부입니다.
+	bool bIsDone = false;
+
+
+	// 게임 중단 여부입니다.
+	bool bIsPaused = false;
 
 
 	// 게임 내의 타이머입니다.
