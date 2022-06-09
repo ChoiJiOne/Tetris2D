@@ -25,6 +25,16 @@ public:
 	virtual ~GameTexture2D();
 
 
+	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+	GameTexture2D(GameTexture2D&& InInstance) = delete;
+	GameTexture2D(const GameTexture2D& InInstance) = delete;
+
+
+	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	GameTexture2D& operator=(GameTexture2D&& InInstance) = delete;
+	GameTexture2D& operator=(const GameTexture2D& InInstance) = delete;
+
+
 	// 이미지 파일로부터 텍스처를 생성합니다.
 	// 
 	// @param InRenderer - SDL_Renderer의 포인터입니다.
