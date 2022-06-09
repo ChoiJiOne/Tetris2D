@@ -65,6 +65,31 @@ void Game::Run()
 	Vec2i Position(200, 100);
 
 
+	int32_t BoardWidth = 10;
+	int32_t BoardHeight = 16;
+
+	std::vector<int32_t> Board(BoardWidth * BoardHeight, 0);
+
+	for (int32_t Row = 0; Row < BoardHeight; ++Row)
+	{
+		if (Row == BoardHeight - 1)
+		{
+			for (int32_t Col = 0; Col < BoardWidth; ++Col)
+			{
+				int32_t Offset = Row * BoardWidth + Col;
+				Board[Offset] = 1;
+			}
+		}
+		else
+		{
+			int32_t Offset = Row * BoardWidth;
+			Board[Offset + 0] = 1;
+			Board[Offset + BoardWidth - 1] = 1;
+		}
+	}
+
+
+
 	// 루프를 수행합니다.
 	while (!bIsDone)
 	{
@@ -84,13 +109,17 @@ void Game::Run()
 			GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
 		}
 
-
-		for (int32_t x = 0; x < 12; ++x)
+		for (int32_t x = 0; x < BoardWidth; ++x)
 		{
-			for (int32_t y = 0; y < 20; ++y)
+			for (int32_t y = 0; y < BoardHeight; ++y)
 			{
-				Vec2i MovePosition(x * Width, y * Height);
-				GetGameRenderer().DrawTexture2D(Gray, Position + MovePosition, 0.25f, 0.25f);
+				int32_t Offset = y * BoardWidth + x;
+
+				if (Board[Offset] == 1)
+				{
+					Vec2i MovePosition(x * Width, y * Height);
+					GetGameRenderer().DrawTexture2D(Gray, Position + MovePosition, 0.25f, 0.25f);
+				}
 			}
 		}
 
