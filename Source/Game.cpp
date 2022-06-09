@@ -114,6 +114,32 @@ void Game::Run()
 			GetGameRenderer().DrawText2D(Font, Vec2i(500, 400), L"Push Down", ColorUtil::White);
 		}
 
+		int32_t x, y;
+		GetGameInput().GetMouseState().GetCurrMousePosition(x, y);
+		GetGameRenderer().DrawText2D(Font, Vec2i(0, 400), StringUtil::StringFormat(L"Position : (%d, %d)", x, y), ColorUtil::White);
+
+		MouseState::ButtonState Button = GetGameInput().GetMouseState().GetCurrMouseButtonState();
+
+		if (Button == MouseState::ButtonState::NONE)
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : None"), ColorUtil::White);
+		}
+				
+		if (Button == MouseState::ButtonState::LEFT)
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Left"), ColorUtil::White);
+		}
+				
+		if (Button == MouseState::ButtonState::MIDDLE)
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Middle"), ColorUtil::White);
+		}
+				
+		if (Button == MouseState::ButtonState::RIGHT)
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(0, 450), StringUtil::StringFormat(L"Push : Right"), ColorUtil::White);
+		}
+
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GetGameRenderer().EndFrame();

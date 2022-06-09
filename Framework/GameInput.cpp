@@ -12,6 +12,7 @@ void GameInput::Init()
     if (!bIsInitialize)
     {
         GameKeyboardState.Init();
+        GameMouseState.Init();
 
         bIsInitialize = true;
     }
@@ -73,7 +74,7 @@ void GameInput::Tick() noexcept
     }
 
     GameKeyboardState.Update();
-    UpdateMouseState();
+    GameMouseState.Update();
 }
 
 void GameInput::ProcessWindowEvent(const SDL_WindowEvent& InWindowEvent)
@@ -152,15 +153,6 @@ void GameInput::ProcessWindowEvent(const SDL_WindowEvent& InWindowEvent)
     }
 }
 
-void GameInput::UpdateMouseState()
-{
-    PrevMousePositionX = CurrMousePositionX;
-    PrevMousePositionY = CurrMousePositionY;
-    PrevMouseState = CurrMouseState;
-
-    CurrMouseState = SDL_GetMouseState(&CurrMousePositionX, &CurrMousePositionY);
-}
-
 KeyboardState::~KeyboardState()
 {
 }
@@ -201,4 +193,57 @@ bool KeyboardState::IsPrevKeyPress(uint8_t InKeyCode) const noexcept
 bool KeyboardState::IsCurrKeyPress(uint8_t InKeyCode) const noexcept
 {
     return CurrKeyboardState[InKeyCode] == 0 ? false : true;
+}
+
+MouseState::~MouseState()
+{
+}
+
+void MouseState::Init()
+{
+    if (!bIsInitialize)
+    {
+        PrevMouseButtonState = SDL_GetMouseState(&PrevMousePositionX, &PrevMousePositionY);
+
+        CurrMousePositionX = PrevMousePositionX;
+        CurrMousePositionY = PrevMousePositionY;
+        CurrMouseButtonState = PrevMouseButtonState;
+
+        bIsInitialize = true;
+    }
+}
+
+void MouseState::Update()
+{
+    PrevMousePositionX = CurrMousePositionX;
+    PrevMousePositionY = CurrMousePositionY;
+    PrevMouseButtonState = CurrMouseButtonState;
+
+    CurrMouseButtonState = SDL_GetMouseState(&CurrMousePositionX, &CurrMousePositionY);
+}
+
+int32_t MouseState::DeltaMousePositionX() const
+{
+    return CurrMousePositionX - PrevMousePositionX;
+}
+
+int32_t MouseState::DeltaMousePositionY() const
+{
+    return CurrMousePositionY - PrevMousePositionY;
+}
+
+void MouseState::DeltaMousePosition(int32_t& OutDeltaX, int32_t& OutDeltaY) const
+{
+    OutDeltaX = DeltaMousePositionX();
+    OutDeltaY = DeltaMousePositionY();
+}
+
+MouseState::ButtonState MouseState::GetPrevMouseButtonState() const
+{
+    return static_cast<ButtonState>(SDL_BUTTON(PrevMouseButtonState));
+}
+
+MouseState::ButtonState MouseState::GetCurrMouseButtonState() const
+{
+    return static_cast<ButtonState>(SDL_BUTTON(CurrMouseButtonState));
 }

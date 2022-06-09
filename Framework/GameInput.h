@@ -62,19 +62,144 @@ private:
 };
 
 
-
 // 마우스 상태를 관리하는 클래스입니다.
 class MouseState
 {
 public:
+	// 마우스의 클릭 상태를 나타냅니다.
+	enum class ButtonState
+	{
+		NONE = 0,
+		LEFT = 1,
+		MIDDLE = 2,
+		RIGHT = 3
+	};
+
+
+public:
+	// 생성자입니다.
+	MouseState() = default;
+
+
+	// 가상 소멸자입니다.
+	virtual ~MouseState();
+
+
+	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+	MouseState(MouseState&& InInstance) = delete;
+	MouseState(const MouseState& InInstance) = delete;
+
+
+	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	MouseState& operator=(MouseState&& InInstance) = delete;
+	MouseState& operator=(const MouseState& InInstance) = delete;
+
+
+	// 마우스 상태를 초기화합니다.
+	void Init();
+
+
+	// 마우스 상태를 최신화합니다.
+	void Update();
+
+
+	// 업데이트 이전의 마우스 X좌표를 반환합니다.
+	//
+	// @return - 업데이트 이전의 마우스 X좌표를 반환합니다.
+	int32_t GetPrevMousePositionX() const { return PrevMousePositionX; }
+	
+	
+	// 업데이트 이전의 마우스 Y좌표를 반환합니다.
+	//
+	// @return - 업데이트 이전의 마우스 Y좌표를 반환합니다.
+	int32_t GetPrevMousePositionY() const { return PrevMousePositionY; }
+
+
+	// 업데이트 이전의 마우스 위치를 반환합니다.
+	//
+	// @param OutPositionX - 업데이트 이전의 마우스 X좌표입니다.
+	// @param OutPositionY - 업데이트 이전의 마우스 Y좌표입니다.
+	void GetPrevMousePosition(int32_t& OutPositionX, int32_t& OutPositionY) const { OutPositionX = PrevMousePositionX; OutPositionY = PrevMousePositionY; }
+	
+
+	// 업데이트 이후의 마우스 X좌표를 반환합니다.
+	//
+	// @return - 업데이트 이후의 마우스 X좌표를 반환합니다.
+	int32_t GetCurrMousePositionX() const { return CurrMousePositionX; }
+	
+	
+	// 업데이트 이후의 마우스 Y좌표를 반환합니다.
+	//
+	// @return - 업데이트 이후의 마우스 Y좌표를 반환합니다.
+	int32_t GetCurrMousePositionY() const { return CurrMousePositionY; }
+
+
+	// 업데이트 이후의 마우스 위치를 반환합니다.
+	//
+	// @param OutPositionX - 업데이트 이후의 마우스 X좌표입니다.
+	// @param OutPositionY - 업데이트 이후의 마우스 Y좌표입니다.
+	void GetCurrMousePosition(int32_t& OutPositionX, int32_t& OutPositionY) const { OutPositionX = CurrMousePositionX; OutPositionY = CurrMousePositionY; }
+
+
+	// 마우스 X좌표의 업데이트 이후와 이전의 차이값을 반환합니다.
+	//
+	// @return - 마우스 X좌표의 업데이트 이후와 이전의 차이값을 반환합니다.
+	int32_t DeltaMousePositionX() const;
+
+
+	// 마우스 Y좌표의 업데이트 이후와 이전의 차이값을 반환합니다.
+	//
+	// @return - 마우스 Y좌표의 업데이트 이후와 이전의 차이값을 반환합니다.
+	int32_t DeltaMousePositionY() const;
+
+
+	// 마우스 좌표의 업데이트 이후와 이전의 차이값을 반환합니다.
+	//
+	// @param OutDeltaX - 마우스 X좌표의 업데이트 이후와 이전의 차이값입니다.
+	// @param OutDeltaY - 마우스 Y좌표의 업데이트 이후와 이전의 차이값입니다.
+	void DeltaMousePosition(int32_t& OutDeltaX, int32_t& OutDeltaY) const;
+
+
+	// 업데이트 이전의 마우스 버튼 상태값을 반환합니다.
+	//
+	// @return - 업데이트 이전의 마우스 버튼 상태값을 반환합니다.
+	ButtonState GetPrevMouseButtonState() const;
+
+
+	// 업데이트 이후의 마우스 버튼 상태값을 반환합니다.
+	//
+	// @return -업데이트 이후의 마우스 버튼 상태값을 반환합니다.
+	ButtonState GetCurrMouseButtonState() const;
 
 
 private:
+	// 초기화 상태를 나타냅니다.
+	bool bIsInitialize = false;
 
+
+	// 업데이트 이전의 윈도우 마우스 X 좌표입니다.
+	int32_t PrevMousePositionX = 0;
+
+
+	// 업데이트 이전의 윈도우 마우스 Y 좌표입니다.
+	int32_t PrevMousePositionY = 0;
+
+
+	// 업데이트 이전의 윈도우 마우스 상태입니다.
+	uint32_t PrevMouseButtonState = 0;
+
+
+	// 업데이트 이후의 윈도우 마우스 X 좌표입니다.
+	int32_t CurrMousePositionX = 0;
+
+
+	// 업데이트 이후의 윈도우 마우스 Y 좌표입니다.
+	int32_t CurrMousePositionY = 0;
+
+
+	// 업데이트 이후의 윈도우 마우스 상태입니다.
+	uint32_t CurrMouseButtonState = 0;
 };
-
-
-
 
 
 // 입력 처리를 수행하고 관리하는 클래스입니다.
@@ -162,15 +287,17 @@ public:
 	const KeyboardState& GetKeyboardState() const { return GameKeyboardState; }
 
 
+	// 마우스의 상태를 반환합니다.
+	//
+	// @return MouseState의 상수 참조자를 반환합니다.
+	const MouseState& GetMouseState() const { return GameMouseState; }
+
+
 private:
 	// SDL2의 윈도우 이벤트를 처리합니다.
 	// 
 	// @param InEventCode - SDL2 윈도우 이벤트입니다.
 	void ProcessWindowEvent(const SDL_WindowEvent& InWindowEvent);
-
-
-	// SDL2 마우스 상태를 업데이트합니다.
-	void UpdateMouseState();
 
 
 private:
@@ -194,32 +321,12 @@ private:
 	bool bIsMinimized = false;
 
 
-	// Tick 호출 이전의 윈도우 마우스 X 좌표입니다.
-	int32_t PrevMousePositionX = 0;
-
-
-	// Tick 호출 이전의 윈도우 마우스 Y 좌표입니다.
-	int32_t PrevMousePositionY = 0;
-
-	
-	// Tick 호출 이전의 윈도우 마우스 상태입니다.
-	uint32_t PrevMouseState = 0;
-
-
-	// Tick 호출 이후의 윈도우 마우스 X 좌표입니다.
-	int32_t CurrMousePositionX = 0;
-
-
-	// Tick 호출 이후의 윈도우 마우스 Y 좌표입니다.
-	int32_t CurrMousePositionY = 0;
-
-
-	// Tick 호출 이후의 윈도우 마우스 상태입니다.
-	uint32_t CurrMouseState = 0;
-
-
 	// 키보드 상태입니다.
 	KeyboardState GameKeyboardState;
+
+
+	// 마우스의 상태입니다.
+	MouseState GameMouseState;
 
 
 	// 종료 이벤트의 콜벡 함수입니다.
