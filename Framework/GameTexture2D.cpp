@@ -53,7 +53,14 @@ SDL_Texture* GameTexture2D::CreateTextureFromBuffer(SDL_Renderer* InRenderer, ui
 	SDL_Texture* SDLTexture = SDL_CreateTexture(InRenderer, TextureFormat, SDL_TEXTUREACCESS_STATIC, InWidth, InHeight);
 
 	CHECK_SDL_FAILED((SDLTexture != nullptr));
-	CHECK_SDL_FAILED((SDL_UpdateTexture(SDLTexture, nullptr, InBuffer, InWidth * InFormat) == 0));
+
+	if (SDL_UpdateTexture(SDLTexture, nullptr, InBuffer, InWidth * InFormat) != 0)
+	{
+		SDL_DestroyTexture(SDLTexture);
+		SDLTexture = nullptr;
+
+		ENFORCE_THROW_EXCEPTION("failed to update texture");
+	}
 
 	return SDLTexture;
 }
