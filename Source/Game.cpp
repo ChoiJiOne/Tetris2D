@@ -75,6 +75,46 @@ void Game::Run()
 		}
 
 
+		if (GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_LEFT))
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 100), L"Push Left", ColorUtil::Red);
+		}
+		else
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 100), L"Push Left", ColorUtil::White);
+		}
+
+
+		if (GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_RIGHT))
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 200), L"Push Right", ColorUtil::Red);
+		}
+		else
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 200), L"Push Right", ColorUtil::White);
+		}
+
+
+		if (GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_UP))
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 300), L"Push Up", ColorUtil::Red);
+		}
+		else
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 300), L"Push Up", ColorUtil::White);
+		}
+
+
+		if (GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_DOWN))
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 400), L"Push Down", ColorUtil::Red);
+		}
+		else
+		{
+			GetGameRenderer().DrawText2D(Font, Vec2i(500, 400), L"Push Down", ColorUtil::White);
+		}
+
+
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GetGameRenderer().EndFrame();
 	}

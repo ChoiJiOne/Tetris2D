@@ -4,6 +4,79 @@
 #include "CommonHeader.h"
 
 
+// 키보드 상태를 관리하는 클래스입니다.
+class KeyboardState
+{
+public:
+	// 생성자입니다.
+	KeyboardState() = default;
+
+
+	// 가상 소멸자입니다.
+	virtual ~KeyboardState();
+
+
+	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+	KeyboardState(KeyboardState&& InInstance) = delete;
+	KeyboardState(const KeyboardState& InInstance) = delete;
+
+
+	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	KeyboardState& operator=(KeyboardState&& InInstance) = delete;
+	KeyboardState& operator=(const KeyboardState& InInstance) = delete;
+
+
+	// 키보드 상태를 초기화합니다.
+	void Init();
+
+
+	// 키보드 상태를 최신화합니다.
+	void Update();
+
+
+	// 업데이트 이전에 특정 키가 눌렸는지의 여부를 반환합니다.
+	//
+	// @param InKeyCode - 키코드 값입니다.
+	// @return - 키가 눌렸다면, true, 눌리지 않았다면 false를 반환합니다.
+	bool IsPrevKeyPress(uint8_t InKeyCode) const noexcept;
+
+
+	// 업데이트 이후에 특정 키가 눌렸는지의 여부를 반환합니다.
+	//
+	// @param InKeyCode - 키코드 값입니다.
+	// @return - 키가 눌렸다면, true, 눌리지 않았다면 false를 반환합니다.
+	bool IsCurrKeyPress(uint8_t InKeyCode) const noexcept;
+
+
+private:
+	// 초기화 상태를 나타냅니다.
+	bool bIsInitialize = false;
+
+
+	// 업데이트 이전의 키보드 상태를 나타내는 벡터입니다.
+	std::vector<uint8_t> PrevKeyboardState;
+
+
+	// 업데이트 이후의 키보드 상태를 나타내는 벡터입니다.
+	std::vector<uint8_t> CurrKeyboardState;
+};
+
+
+
+// 마우스 상태를 관리하는 클래스입니다.
+class MouseState
+{
+public:
+
+
+private:
+
+};
+
+
+
+
+
 // 입력 처리를 수행하고 관리하는 클래스입니다.
 class GameInput
 {
@@ -77,24 +150,16 @@ public:
 	void Tick() noexcept;
 
 
-	// Tick 호출 이전에 특정 키가 눌렸는지의 여부를 반환합니다.
-	//
-	// @param InKeyCode - 키코드 값입니다.
-	// @return - 키가 눌렸다면, true, 눌리지 않았다면 false를 반환합니다.
-	bool IsPrevKeyPress(uint8_t InKeyCode) noexcept;
-
-
-	// Tick 호출 이후에 특정 키가 눌렸는지의 여부를 반환합니다.
-	//
-	// @param InKeyCode - 키코드 값입니다.
-	// @return - 키가 눌렸다면, true, 눌리지 않았다면 false를 반환합니다.
-	bool IsCurrKeyPress(uint8_t InKeyCode) noexcept;
-
-
 	// 마우스가 윈도우 창 내부에 있는지 확인합니다.
 	//
 	// @return 마우스가 윈도우 창 내부에 있는지의 여부를 반환합니다.
 	bool IsMouseFocus() noexcept { return bIsMouseFocus; }
+
+
+	// 키보드 상태를 반환합니다.
+	//
+	// @return KeyboardState의 상수 참조자를 반환합니다.
+	const KeyboardState& GetKeyboardState() const { return GameKeyboardState; }
 
 
 private:
@@ -102,10 +167,6 @@ private:
 	// 
 	// @param InEventCode - SDL2 윈도우 이벤트입니다.
 	void ProcessWindowEvent(const SDL_WindowEvent& InWindowEvent);
-
-
-	// SDL2 키보드의 상태를 업데이트합니다.
-	void UpdateKeyboardState();
 
 
 	// SDL2 마우스 상태를 업데이트합니다.
@@ -157,6 +218,10 @@ private:
 	uint32_t CurrMouseState = 0;
 
 
+	// 키보드 상태입니다.
+	KeyboardState GameKeyboardState;
+
+
 	// 종료 이벤트의 콜벡 함수입니다.
 	std::function<void()> QuitEventCallback = nullptr;
 
@@ -183,12 +248,4 @@ private:
 
 	// 윈도우 출력 이벤트의 콜백 함수입니다.
 	std::function<void()> ExposeWindowCallback = nullptr;
-
-
-	// Tick 호출 이전의 키보드 상태를 나타내는 벡터입니다.
-	std::vector<uint8_t> PrevKeyboardState;
-
-
-	// Tick 호출 이후의 키보드 상태를 나타내는 벡터입니다.
-	std::vector<uint8_t> CurrKeyboardState;
 };

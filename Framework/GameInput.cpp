@@ -11,8 +11,7 @@ void GameInput::Init()
 {
     if (!bIsInitialize)
     {
-        PrevKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
-        CurrKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
+        GameKeyboardState.Init();
 
         bIsInitialize = true;
     }
@@ -73,7 +72,7 @@ void GameInput::Tick() noexcept
         }
     }
 
-    UpdateKeyboardState();
+    GameKeyboardState.Update();
     UpdateMouseState();
 }
 
@@ -153,7 +152,31 @@ void GameInput::ProcessWindowEvent(const SDL_WindowEvent& InWindowEvent)
     }
 }
 
-void GameInput::UpdateKeyboardState()
+void GameInput::UpdateMouseState()
+{
+    PrevMousePositionX = CurrMousePositionX;
+    PrevMousePositionY = CurrMousePositionY;
+    PrevMouseState = CurrMouseState;
+
+    CurrMouseState = SDL_GetMouseState(&CurrMousePositionX, &CurrMousePositionY);
+}
+
+KeyboardState::~KeyboardState()
+{
+}
+
+void KeyboardState::Init()
+{
+    if (!bIsInitialize)
+    {
+        PrevKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
+        CurrKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
+
+        bIsInitialize = true;
+    }
+}
+
+void KeyboardState::Update()
 {
     const uint8_t* KeyState = SDL_GetKeyboardState(NULL);
 
@@ -170,21 +193,12 @@ void GameInput::UpdateKeyboardState()
     );
 }
 
-void GameInput::UpdateMouseState()
-{
-    PrevMousePositionX = CurrMousePositionX;
-    PrevMousePositionY = CurrMousePositionY;
-    PrevMouseState = CurrMouseState;
-
-    CurrMouseState = SDL_GetMouseState(&CurrMousePositionX, &CurrMousePositionY);
-}
-
-bool GameInput::IsPrevKeyPress(uint8_t InKeyCode) noexcept
+bool KeyboardState::IsPrevKeyPress(uint8_t InKeyCode) const noexcept
 {
     return PrevKeyboardState[InKeyCode] == 0 ? false : true;
 }
 
-bool GameInput::IsCurrKeyPress(uint8_t InKeyCode) noexcept
+bool KeyboardState::IsCurrKeyPress(uint8_t InKeyCode) const noexcept
 {
     return CurrKeyboardState[InKeyCode] == 0 ? false : true;
 }
