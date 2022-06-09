@@ -67,7 +67,7 @@ class MouseState
 {
 public:
 	// 마우스의 클릭 상태를 나타냅니다.
-	enum class MouseButton
+	enum class EMouseButton
 	{
 		LEFT   = 0,
 		MIDDLE = 1,
@@ -163,14 +163,14 @@ public:
 	//
 	// @param InButton - 확인할 마우스 버튼의 종류입니다.
 	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
-	bool IsPrevPressMouseButton(MouseButton InButton) const;
+	bool IsPrevPressMouseButton(EMouseButton InButton) const;
 
 
 	// 업데이트 이전에 마우스 버튼이 눌렸는지 확인합니다.
 	//
 	// @param InButton - 확인할 마우스 버튼의 종류입니다.
 	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
-	bool IsCurrPressMouseButton(MouseButton InButton) const;
+	bool IsCurrPressMouseButton(EMouseButton InButton) const;
 
 
 private:
@@ -179,7 +179,7 @@ private:
 	// @param InButton - 확인할 마우스 버튼의 종류입니다.
 	// @param InButtonState - 확인할 마우스 버튼의 상태입니다.
 	// @return - 마우스 버튼이 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
-	bool IsPressMouseButton(MouseButton InButton, uint32_t InButtonState) const;
+	bool IsPressMouseButton(EMouseButton InButton, uint32_t InButtonState) const;
 
 
 private:
