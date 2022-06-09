@@ -51,7 +51,7 @@ void Game::Run()
 
 
 		// 테트리스 보드를 화면에 그립니다.
-		DrawBoard(Vec2i(400, 150));
+		DrawBoard(Vec2i(400, 150), 0.25f);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
@@ -151,7 +151,7 @@ void Game::SetupTetrisProperties()
 	}
 }
 
-void Game::DrawBoard(const Vec2i& InPosition)
+void Game::DrawBoard(const Vec2i& InPosition, float InScale)
 {
 	for (int32_t Row = 0; Row < BoardHeight; ++Row)
 	{
@@ -211,11 +211,11 @@ void Game::DrawBoard(const Vec2i& InPosition)
 					break;
 				}
 
-				TextureWidth = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * 0.25f);
-				TextureHeight = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * 0.25f);
+				TextureWidth = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * InScale);
+				TextureHeight = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * InScale);
 
 				Vec2i MovePosition(Col * TextureWidth, Row * TextureHeight);
-				GetGameRenderer().DrawTexture2D(*TextureCache[HashKey].get(), InPosition + MovePosition, 0.25f, 0.25f);
+				GetGameRenderer().DrawTexture2D(*TextureCache[HashKey].get(), InPosition + MovePosition, InScale, InScale);
 			}
 		}
 	}
