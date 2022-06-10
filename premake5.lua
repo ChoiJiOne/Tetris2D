@@ -21,14 +21,16 @@ end
 function LinkStaticLibraryInDebug()
    links {
       "%{third_party_path}/Debug/SDL2d.lib",
-      "%{third_party_path}/Debug/SDL2maind.lib"
+      "%{third_party_path}/Debug/SDL2maind.lib",
+      "Dbghelp.lib"
    }
 end
 
 function LinkStaticLibraryInRelease()
    links {
       "%{third_party_path}/Release/SDL2.lib",
-      "%{third_party_path}/Release/SDL2main.lib"
+      "%{third_party_path}/Release/SDL2main.lib",
+      "Dbghelp.lib"
    }
 end
 

@@ -44,6 +44,10 @@
 #include <crtdbg.h>
 
 
+// Windows 에서 덤프 파일 생성을 위한 헤더 파일 추가
+#include <Dbghelp.h>
+
+
 // Windows.h 내에 정의된 매크로 함수 삭제
 #undef CreateWindow
 #undef min
