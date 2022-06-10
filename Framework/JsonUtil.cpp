@@ -9,6 +9,7 @@ nlohmann::json JsonUtil::LoadJsonFile(const std::string& InPath)
 	nlohmann::json OutputJson;
 	Ifs >> OutputJson;
 
+	Ifs.close();
 	return OutputJson;
 }
 
@@ -20,5 +21,6 @@ nlohmann::json JsonUtil::LoadJsonFile(const std::wstring& InPath)
 	nlohmann::json OutputJson;
 	Ifs >> OutputJson;
 
+	Ifs.close();
 	return OutputJson;
 }
