@@ -1,0 +1,24 @@
+{
+  "window": {
+    "x": null,
+    "y": null,
+    "width": 1000,
+    "height": 800,
+    "title": "Tetris1.0",
+    "IsResize": "Yes"
+  },
+
+  "font": "Nanum",
+
+  "texture": [
+    "BlueBlock",
+    "CyanBlock",
+    "GrayBlock",
+    "GreenBlock",
+    "OrangeBlock",
+    "PinkBlock",
+    "PurpleBlock",
+    "RedBlock",
+    "YellowBlock"
+  ]
+}
