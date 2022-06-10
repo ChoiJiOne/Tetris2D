@@ -18,6 +18,9 @@
 // 게임 윈도우를 생성 및 관리하기 위한 헤더 선언을 추가합니다.
 #include "GameWindow.h"
 
+// Json 파일을 로드하고 사용하기 위한 헤더 선언을 추가합니다.
+#include "JsonUtil.h"
+
 // 로그 기능을 사용하기 위한 헤더 선언을 추가합니다.
 #include "Logger.h"
 
@@ -103,7 +106,13 @@ public:
 	const std::string& GetResourceDirectory() const { return ResourceDirectory; }
 
 
-	// 게임  프레임워크 및 전체 게임을 초기화합니다.
+	// 전체 게임의 설정이 포함된 Json을 반환합니다.
+	//
+	// @return - 전체 게임의 설정이 포함된 Json을 반환합니다.
+	const nlohmann::json& GetGameConfig() const { return GameConfig; }
+
+
+	// 게임 프레임워크 및 전체 게임을 초기화합니다.
 	virtual void Setup();
 
 
@@ -150,4 +159,8 @@ private:
 
 	// SDL2의 링크 버전입니다.
 	SDL_version LinkedVersion;
+
+
+	// 전체 게임의 설정이 포함된 Json입니다.
+	nlohmann::json GameConfig;
 };

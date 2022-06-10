@@ -33,6 +33,8 @@ void GameFramework::Setup()
 		GetGameWindow().SetVisibleConsoleWindow(false);
 #endif
 
+		GameConfig = JsonUtil::LoadJsonFile(ResourceDirectory + "Json/Config.json");
+
 		bIsInitialize = true;
 	}
 }
