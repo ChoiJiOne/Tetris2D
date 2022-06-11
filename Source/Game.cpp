@@ -71,7 +71,7 @@ void Game::SetupCommonProperties()
 	int32_t WindowHeight = 800;
 
 	GameEngine::GetGameWindow().CreateWindow(
-		"Tetris1.0",
+		"Tetris2D",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		WindowWidth,
