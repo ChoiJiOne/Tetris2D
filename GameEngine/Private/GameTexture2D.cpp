@@ -1,5 +1,7 @@
 #include "stb/stb_image.h"
 
+#include "../Public/GameEngine.h"
+#include "../Public/GameRenderer.h"
 #include "../Public/Macro.h"
 #include "../Public/GameTexture2D.h"
 
@@ -12,12 +14,12 @@ GameTexture2D::~GameTexture2D()
 	}
 }
 
-void GameTexture2D::CreateTextureFromFile(SDL_Renderer* InRenderer, const std::string& InPath)
+void GameTexture2D::CreateTextureFromFile(const std::string& InPath)
 {
 	uint8_t* Buffer = nullptr;
 
 	LoadTextureBufferFromFile(InPath, Buffer, Width, Height, PixelFormat);
-	Texture = CreateTextureFromBuffer(InRenderer, Buffer, Width, Height, PixelFormat);
+	Texture = CreateTextureFromBuffer(GameEngine::GetGameRenderer().GetRenderer(), Buffer, Width, Height, PixelFormat);
 
 	SDL_SetTextureBlendMode(Texture, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureAlphaMod(Texture, 0xFF);

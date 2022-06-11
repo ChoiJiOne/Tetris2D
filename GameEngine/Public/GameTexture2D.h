@@ -37,12 +37,11 @@ public:
 
 	// 이미지 파일로부터 텍스처를 생성합니다.
 	// 
-	// @param InRenderer - SDL_Renderer의 포인터입니다.
 	// @param InPath - 텍스처 이미지의 리소스 경로입니다.
 	// @throws 
 	// - 이미지 파일 로딩을 실패할 경우, C++ 표준 예외를 반환합니다.
 	// - 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void CreateTextureFromFile(SDL_Renderer* InRenderer, const std::string& InPath);
+	void CreateTextureFromFile(const std::string& InPath);
 
 
 	// 텍스처의 가로 크기를 반환합니다.
