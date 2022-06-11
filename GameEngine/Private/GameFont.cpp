@@ -7,7 +7,7 @@ GameFont::~GameFont()
 {
 }
 
-void GameFont::GenerateGameFont(const std::string& InPath, float InSize)
+void GameFont::CreateGameFont(const std::string& InPath, float InSize)
 {
 	if (!bIsInitialize)
 	{
@@ -16,8 +16,8 @@ void GameFont::GenerateGameFont(const std::string& InPath, float InSize)
 
 		LoadTrueTypeFont(InPath, Buffer, FontInfo);
 
-		AsciiTextureAtlas.GenerateCharacterTextureAtlas(Buffer, InSize, 0x20, 0x7E);
-		HangulTextureAtlas.GenerateCharacterTextureAtlas(Buffer, InSize, 0xAC00, 0xD7AF);
+		AsciiTextureAtlas.CreateCharacterTextureAtlas(Buffer, InSize, 0x20, 0x7E);
+		HangulTextureAtlas.CreateCharacterTextureAtlas(Buffer, InSize, 0xAC00, 0xD7AF);
 
 		bIsInitialize = true;
 	}
@@ -88,7 +88,7 @@ CharacterTextureAtlas::~CharacterTextureAtlas()
 	}
 }
 
-void CharacterTextureAtlas::GenerateCharacterTextureAtlas(const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode)
+void CharacterTextureAtlas::CreateCharacterTextureAtlas(const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode)
 {
 	if (TextureAtlas)
 	{

@@ -27,7 +27,7 @@ public:
 	// @param InStartUnicode - 생성할 폰트 텍스처 아틀라스의 시작 문자입니다. 
 	// @param InEndUnicode - 생성할 폰트 텍스처 아틀라스의 끝 문자입니다. 이때, 끝 문자를 포함합니다.
 	// @throws - 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void GenerateCharacterTextureAtlas(const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode);
+	void CreateCharacterTextureAtlas(const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode);
 
 
 	// 문자 집합의 정보를 반환합니다.
@@ -93,7 +93,7 @@ public:
 	// @throws 
 	// - 트루 타입 폰트 로드에 실패할 경우 C++ 표준 예외를 반환합니다
 	// - 폰트 정보 생성에 실패할 경우 C++ 표준 예외를 반환합니다.
-	void GenerateGameFont(const std::string& InPath, float InSize);
+	void CreateGameFont(const std::string& InPath, float InSize);
 
 
 	// 텍스처 아틀라스를 반환합니다.
