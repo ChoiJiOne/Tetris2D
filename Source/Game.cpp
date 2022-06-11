@@ -45,9 +45,8 @@ void Game::Run()
 			GameEngine::GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
 		}
 
-		int32_t x = 0, y = 0;
-		GameEngine::GetGameInput().GetMouseState().GetCurrMousePosition(x, y);
-		TetrisBoard.DrawBoard(Vec2i(x, y), 0.25f);
+		int32_t x = 350, y = 200;
+		TetrisBoard.DrawBoard(Vec2i(x, y), 0.3f);
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GameEngine::GetGameRenderer().EndFrame();
