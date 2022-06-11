@@ -3,12 +3,6 @@
 
 Game::~Game()
 {
-	for (auto& Texture : TextureCache)
-	{
-		Texture.second.reset();
-		Texture.second = nullptr;
-	}
-
 	GameEngine::Release();
 }
 
@@ -51,21 +45,9 @@ void Game::Run()
 			GameEngine::GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
 		}
 
-		Vec2i Position(200, 200);
-		float Scale = 0.5f;
-
-		for (const auto& Texture : TextureCache)
-		{
-			GameEngine::GetGameRenderer().DrawTexture2D(
-				*Texture.second.get(),
-				Position, 
-				Scale,
-				Scale
-			);
-
-			Position.x += static_cast<int32_t>(static_cast<float>(Texture.second.get()->GetWidth()) * Scale);
-		}
-
+		int32_t x = 0, y = 0;
+		GameEngine::GetGameInput().GetMouseState().GetCurrMousePosition(x, y);
+		TetrisBoard.DrawBoard(Vec2i(x, y), 0.25f);
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GameEngine::GetGameRenderer().EndFrame();
@@ -117,94 +99,6 @@ void Game::SetupTetrisProperties()
 	Font.CreateGameFont(FontPath, 32.0f);
 
 
-	// 테트리스 블럭 텍스처를 생성합니다.
-	std::vector<std::string> BlockTextureNames = {
-		"BlueBlock",
-		"CyanBlock",
-		"GrayBlock",
-		"GreenBlock",
-		"OrangeBlock",
-		"PinkBlock",
-		"PurpleBlock",
-		"RedBlock",
-		"YellowBlock"
-	};
-
-
-	for (const auto& BlockTextureName : BlockTextureNames)
-	{
-		std::size_t HashKey = StringUtil::ConvertUTF8ToHash(BlockTextureName);
-		std::string TexturePath = StringUtil::StringFormat("%stexture/%s.png", ResourceDirectory.c_str(), BlockTextureName.c_str());
-
-		TextureCache[HashKey] = std::make_unique<GameTexture2D>();
-		TextureCache[HashKey].get()->CreateTextureFromFile(TexturePath);
-	}
-}
-
-void Game::DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScale)
-{
-	for (int32_t Row = 0; Row < InBoard.GetBoardHeight(); ++Row)
-	{
-		for (int32_t Col = 0; Col < InBoard.GetBoardWidth(); ++Col)
-		{
-			if (InBoard.GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
-			{
-				int32_t TextureWidth = 0, TextureHeight = 0;
-				std::size_t HashKey = 0;
-
-				switch (InBoard.GetBlockColorInBoard(Row, Col))
-				{
-				case EBlockColor::BLUE:
-					HashKey = StringUtil::ConvertUTF8ToHash("BlueBlock");
-					break;
-
-
-				case EBlockColor::CYAN:
-					HashKey = StringUtil::ConvertUTF8ToHash("CyanBlock");
-					break;
-
-
-				case EBlockColor::GRAY:
-					HashKey = StringUtil::ConvertUTF8ToHash("GrayBlock");
-					break;
-
-
-				case EBlockColor::GREEN:
-					HashKey = StringUtil::ConvertUTF8ToHash("GreenBlock");
-					break;
-
-
-				case EBlockColor::ORANGE:
-					HashKey = StringUtil::ConvertUTF8ToHash("OrangeBlock");
-					break;
-
-
-				case EBlockColor::PINK:
-					HashKey = StringUtil::ConvertUTF8ToHash("PinkBlock");
-					break;
-
-
-				case EBlockColor::PURPLE:
-					HashKey = StringUtil::ConvertUTF8ToHash("PurpleBlock");
-					break;
-
-
-				case EBlockColor::RED:
-					HashKey = StringUtil::ConvertUTF8ToHash("RedBlock");
-					break;
-
-
-				case EBlockColor::YELLOW:
-					HashKey = StringUtil::ConvertUTF8ToHash("YellowBlock");
-					break;
-				}
-
-				TextureWidth = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * InScale);
-				TextureHeight = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * InScale);
-
-				Vec2i MovePosition(Col * TextureWidth, Row * TextureHeight);
-				GameEngine::GetGameRenderer().DrawTexture2D(*TextureCache[HashKey].get(), InPosition + MovePosition, InScale, InScale);
-			}
-		}
-	}
+	// 테트리스 보드를 초기화합니다.
+	TetrisBoard.Init();
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 // 게임 엔진을 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameEngine.h"
+#include "GameInterface.h"
 
+// 게임 보드를 사용하기 위한 헤더 선언을 추가합니다.
 #include "Board.h"
 
 
@@ -39,14 +40,6 @@ private:
 	void SetupTetrisProperties();
 
 
-	// 테트리스 보드를 화면에 그립니다.
-	//
-	// @param InBoard - 렌더링할 테트리스 보드입니다.
-	// @param InPosition - 윈도우 좌표계를 기준으로 테트리스 보드의 왼쪽 상단점입니다.
-	// @param InScale - 렌더링 할 텍스처의 Scale 값입니다.
-	void DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScale);
-
-
 private:
 	// 게임 루프 종료 여부입니다.
 	bool bIsDone = false;
@@ -64,6 +57,6 @@ private:
 	GameFont Font;
 
 
-	// 테트리스 게임 텍스처 리소스입니다.
-	std::unordered_map<std::size_t, std::unique_ptr<GameTexture2D>> TextureCache;
+	// 테트리스 보드입니다.
+	Board TetrisBoard;
 };
