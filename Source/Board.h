@@ -47,6 +47,10 @@ public:
 	void Init(int32_t InBoardWidth = 10, int32_t InBoardHeight = 16);
 
 
+	// Board의 상태를 최초의 상태로 설정합니다.
+	void Reset();
+
+
 	// Board의 가로 크기를 반환합니다.
 	//
 	// @return - Board의 가로 크기를 반환합니다.
@@ -110,6 +114,13 @@ public:
 	void SetBlockColorInBoard(int32_t InRow, int32_t InCol, const EBlockColor& InBlockColor);
 
 
+	// 테트리스 보드를 화면에 그립니다.
+	//
+	// @param InPosition - 윈도우 좌표계를 기준으로 테트리스 보드의 왼쪽 상단점입니다.
+	// @param InScale - 렌더링 할 텍스처의 Scale 값입니다.
+	void DrawBoard(const Vec2i& InPosition, float InScale);
+
+
 private:
 	// Board 좌표의 영역을 검사합니다.
 	//
@@ -127,6 +138,10 @@ private:
 	int32_t GetBoardOffset(int32_t InRow, int32_t InCol) const;
 
 
+	// 테트리스 블럭의 텍스처를 생성합니다.
+	void CreateBlockTexture();
+
+
 private:
 	// 테트리스 보드의 가로 크기입니다.
 	int32_t BoardWidth = 0;
@@ -138,4 +153,8 @@ private:
 
 	// 테트리스 보드의 상태입니다.
 	std::vector<Block> BoardState;
+
+
+	// 테트리스 블럭 텍스처입니다.
+	std::unordered_map<EBlockColor, std::unique_ptr<GameTexture2D>> BlockTextureCache;
 };
