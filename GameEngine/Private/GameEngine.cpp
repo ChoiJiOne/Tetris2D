@@ -83,3 +83,33 @@ void GameEngine::Release()
 		bIsInitialize = false;
 	}
 }
+
+GameWindow& GameEngine::GetGameWindow()
+{
+	if (Window == nullptr)
+	{
+		Window = std::make_unique<GameWindow>();
+	}
+
+	return *Window;
+}
+
+GameInput& GameEngine::GetGameInput()
+{
+	if (Input == nullptr)
+	{
+		Input = std::make_unique<GameInput>();
+	}
+
+	return *Input;
+}
+
+GameRenderer& GameEngine::GetGameRenderer()
+{
+	if (Renderer == nullptr)
+	{
+		Renderer = std::make_unique<GameRenderer>();
+	}
+
+	return *Renderer;
+}
