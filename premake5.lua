@@ -36,13 +36,13 @@ function LinkStaticLibraryInRelease()
    }
 end
 
-workspace "Tetris1.0"
+workspace "Tetris2D"
 
    configurations { "Debug", "Release" }
    platforms { "Win64" }
 
 
-   location "Tetris1.0"
+   location "Tetris2D"
    
 
    source_path="%{wks.location}/../Source"
@@ -50,7 +50,7 @@ workspace "Tetris1.0"
    third_party_path="%{wks.location}/../ThirdParty"
 
    
-   project "Tetris1.0"
+   project "Tetris2D"
       kind "ConsoleApp"
       language "C++"
 
