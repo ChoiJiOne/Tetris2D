@@ -1,17 +1,13 @@
 #pragma once
 
-// 게임 프레임워크를 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameFramework.h"
+// 게임 엔진을 사용하기 위한 헤더 선언을 추가합니다.
+#include "GameEngine.h"
 
-// 테트리스 블럭을 사용하기 위한 헤더 선언을 추가합니다.
-#include "Block.h"
-
-// 테트리스 보드를 사용하기 위한 헤더 선언을 추가합니다.
 #include "Board.h"
 
 
 // 게임 클래스입니다.
-class Game : public GameFramework
+class Game
 {
 public:
 	// 생성자입니다.
@@ -23,11 +19,11 @@ public:
 
 
 	// 게임 프레임워크 및 전체 게임을 초기화합니다.
-	virtual void Setup() override;
+	void Setup();
 
 
 	// 게임을 실행합니다.
-	virtual void Run() override;
+	void Run();
 
 
 private:

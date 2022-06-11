@@ -8,12 +8,14 @@ Game::~Game()
 		Texture.second.reset();
 		Texture.second = nullptr;
 	}
+
+	GameEngine::Release();
 }
 
 void Game::Setup()
 {
-	// 게임 프레임워크를 초기화합니다.
-	GameFramework::Setup();
+	// 게임 엔진을 초기화합니다.
+	GameEngine::Init();
 
 
 	// 전체 게임 관련 리소스를 초기화합니다.
@@ -38,20 +40,20 @@ void Game::Run()
 
 
 		// 입력 처리를 업데이트합니다.
-		GetGameInput().Tick();
+		GameEngine::GetGameInput().Tick();
 
 
 		// 프레임 렌더링을 시작합니다.
-		GetGameRenderer().BeginFrame(ColorUtil::Black);
+		GameEngine::GetGameRenderer().BeginFrame(ColorUtil::Black);
 
 		if (!bIsPaused)
 		{
-			GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
+			GameEngine::GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
 		}
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
-		GetGameRenderer().EndFrame();
+		GameEngine::GetGameRenderer().EndFrame();
 	}
 }
 
@@ -61,7 +63,7 @@ void Game::SetupCommonProperties()
 	int32_t WindowWidth = 1000;
 	int32_t WindowHeight = 800;
 
-	GetGameWindow().CreateWindow(
+	GameEngine::GetGameWindow().CreateWindow(
 		"Tetris1.0",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
@@ -72,32 +74,32 @@ void Game::SetupCommonProperties()
 
 
 	// GameInput을 초기화합니다.
-	GetGameInput().Init();
+	GameEngine::GetGameInput().Init();
 
 
 	// Callback 함수를 등록합니다.
-	GetGameInput().SetQuitEventCallback([&]() { bIsDone = true; });
-	GetGameInput().SetResizeEventCallback([&](int32_t InWidth, int32_t InHeight) {});
-	GetGameInput().SetMinimizeEventCallback([&]() { bIsPaused = true;  Timer.Stop(); });
-	GetGameInput().SetMaximizeEventCallback([&]() { bIsPaused = false; Timer.Start(); });
-	GetGameInput().SetActiveWindowCallback([&]() { bIsPaused = false; Timer.Start(); });
-	GetGameInput().SetInactiveWindowCallback([&]() { bIsPaused = true; Timer.Stop(); });
-	GetGameInput().SetExposeWindowCallback([&]() {});
+	GameEngine::GetGameInput().SetQuitEventCallback([&]() { bIsDone = true; });
+	GameEngine::GetGameInput().SetResizeEventCallback([&](int32_t InWidth, int32_t InHeight) {});
+	GameEngine::GetGameInput().SetMinimizeEventCallback([&]() { bIsPaused = true;  Timer.Stop(); });
+	GameEngine::GetGameInput().SetMaximizeEventCallback([&]() { bIsPaused = false; Timer.Start(); });
+	GameEngine::GetGameInput().SetActiveWindowCallback([&]() { bIsPaused = false; Timer.Start(); });
+	GameEngine::GetGameInput().SetInactiveWindowCallback([&]() { bIsPaused = true; Timer.Stop(); });
+	GameEngine::GetGameInput().SetExposeWindowCallback([&]() {});
 
 
 	// 렌더러를 초기화합니다.
-	GetGameRenderer().Init(GetGameWindow().GetWindow());
+	GameEngine::GetGameRenderer().Init(GameEngine::GetGameWindow().GetWindow());
 }
 
 void Game::SetupTetrisProperties()
 {
 	// 게임 리소스 경로입니다.
-	std::string ResourceDirectory = GetResourceDirectory();
+	std::string ResourceDirectory = GameEngine::GetResourceDirectory();
 
 
 	// 게임 폰트를 생성합니다.
 	std::string FontPath = ResourceDirectory + "font/Nanum.ttf";
-	Font.CreateGameFont(GetGameRenderer().GetRenderer(), FontPath, 32.0f);
+	Font.CreateGameFont(GameEngine::GetGameRenderer().GetRenderer(), FontPath, 32.0f);
 
 
 	// 테트리스 블럭 텍스처를 생성합니다.
@@ -120,7 +122,7 @@ void Game::SetupTetrisProperties()
 		std::string TexturePath = StringUtil::StringFormat("%stexture/%s.png", ResourceDirectory.c_str(), BlockTextureName.c_str());
 
 		TextureCache[HashKey] = std::make_unique<GameTexture2D>();
-		TextureCache[HashKey].get()->CreateTextureFromFile(GetGameRenderer().GetRenderer(), TexturePath);
+		TextureCache[HashKey].get()->CreateTextureFromFile(GameEngine::GetGameRenderer().GetRenderer(), TexturePath);
 	}
 }
 
@@ -186,7 +188,7 @@ void Game::DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScal
 				TextureHeight = static_cast<int32_t>(static_cast<float>(TextureCache[HashKey]->GetWidth()) * InScale);
 
 				Vec2i MovePosition(Col * TextureWidth, Row * TextureHeight);
-				GetGameRenderer().DrawTexture2D(*TextureCache[HashKey].get(), InPosition + MovePosition, InScale, InScale);
+				GameEngine::GetGameRenderer().DrawTexture2D(*TextureCache[HashKey].get(), InPosition + MovePosition, InScale, InScale);
 			}
 		}
 	}

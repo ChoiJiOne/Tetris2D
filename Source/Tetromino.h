@@ -1,8 +1,5 @@
 #pragma once
 
-// 벡터를 사용하기 위한 헤더 선언을 추가합니다.
-#include "MathUtil.h"
-
 // Block을 사용하기 위한 헤더 선언을 추가합니다.
 #include "Block.h"
 
