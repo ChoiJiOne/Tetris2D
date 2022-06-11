@@ -1,7 +1,7 @@
 #pragma once
 
 // 표준 라이브러리 및 SDL2를 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameEngine.h"
+#include "GameInterface.h"
 
 
 // 테트리스 블록의 색상 타입입니다.
