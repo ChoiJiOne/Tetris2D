@@ -1,11 +1,13 @@
 #include "../Public/Macro.h"
+#include "../Public/GameEngine.h"
+#include "../Public/GameRenderer.h"
 #include "../Public/GameFont.h"
 
 GameFont::~GameFont()
 {
 }
 
-void GameFont::CreateGameFont(SDL_Renderer* InRenderer, const std::string& InPath, float InSize)
+void GameFont::GenerateGameFont(const std::string& InPath, float InSize)
 {
 	if (!bIsInitialize)
 	{
@@ -14,8 +16,8 @@ void GameFont::CreateGameFont(SDL_Renderer* InRenderer, const std::string& InPat
 
 		LoadTrueTypeFont(InPath, Buffer, FontInfo);
 
-		AsciiTextureAtlas.CreateCharacterTextureAtlas(InRenderer, Buffer, InSize, 0x20, 0x7E);
-		HangulTextureAtlas.CreateCharacterTextureAtlas(InRenderer, Buffer, InSize, 0xAC00, 0xD7AF);
+		AsciiTextureAtlas.GenerateCharacterTextureAtlas(Buffer, InSize, 0x20, 0x7E);
+		HangulTextureAtlas.GenerateCharacterTextureAtlas(Buffer, InSize, 0xAC00, 0xD7AF);
 
 		bIsInitialize = true;
 	}
@@ -86,7 +88,7 @@ CharacterTextureAtlas::~CharacterTextureAtlas()
 	}
 }
 
-void CharacterTextureAtlas::CreateCharacterTextureAtlas(SDL_Renderer* InRenderer, const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode)
+void CharacterTextureAtlas::GenerateCharacterTextureAtlas(const std::vector<uint8_t>& InBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode)
 {
 	if (TextureAtlas)
 	{
@@ -99,7 +101,7 @@ void CharacterTextureAtlas::CreateCharacterTextureAtlas(SDL_Renderer* InRenderer
 
 	Packedchars.resize(InEndUnicode - InStartUnicode + 1);
 
-	CreateCharacterTextureAtlas(InRenderer, InBuffer, InSize);
+	CreateCharacterTextureAtlas(GameEngine::GetGameRenderer().GetRenderer(), InBuffer, InSize);
 }
 
 void CharacterTextureAtlas::CreateCharacterTextureAtlas(SDL_Renderer* InRenderer, const std::vector<uint8_t>& InBuffer, float InSize)

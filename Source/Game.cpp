@@ -99,7 +99,7 @@ void Game::SetupTetrisProperties()
 
 	// 게임 폰트를 생성합니다.
 	std::string FontPath = ResourceDirectory + "font/Nanum.ttf";
-	Font.CreateGameFont(GameEngine::GetGameRenderer().GetRenderer(), FontPath, 32.0f);
+	Font.GenerateGameFont(FontPath, 32.0f);
 
 
 	// 테트리스 블럭 텍스처를 생성합니다.
