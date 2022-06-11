@@ -2,7 +2,9 @@ function IncludeFiles()
    files {
       "%{source_path}/*",
 
-      "%{framework_path}/*",
+      "%{engine_path}/*",
+      "%{engine_path}/Public/*",
+      "%{engine_path}/Private/*",
 
       "%{third_party_path}/Include/Json/*",
       "%{third_party_path}/Include/SDL2/*",
@@ -13,7 +15,7 @@ end
 function IncludeDirs()
    includedirs {
       "%{source_path}",
-      "%{framework_path}",
+      "%{engine_path}",
       "%{third_party_path}/Include",
    }
 end
@@ -44,7 +46,7 @@ workspace "Tetris1.0"
    
 
    source_path="%{wks.location}/../Source"
-   framework_path="%{wks.location}/../Framework"
+   engine_path="%{wks.location}/../GameEngine"
    third_party_path="%{wks.location}/../ThirdParty"
 
    
