@@ -6,6 +6,9 @@
 // 게임 보드를 사용하기 위한 헤더 선언을 추가합니다.
 #include "Board.h"
 
+// 테트로미노를 사용하기 위한 헤더 선언을 추가합니다.
+#include "Tetromino.h"
+
 
 // 게임 클래스입니다.
 class Game
@@ -59,4 +62,12 @@ private:
 
 	// 테트리스 보드입니다.
 	Board TetrisBoard;
+
+
+	// 현재 보드 상에 위치한 테트로미노입니다.
+	std::shared_ptr<Tetromino> CurrTetromino = nullptr;
+
+
+	// 다음에 보드에 위치할 테트로미노입니다.
+	std::shared_ptr<Tetromino> NextTetromino = nullptr;
 };
