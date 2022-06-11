@@ -50,10 +50,6 @@ void Game::Run()
 		}
 
 
-		// 테트리스 보드를 화면에 그립니다.
-		DrawBoard(TetrisBoard, Vec2i(400, 150), 0.25f);
-
-
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GetGameRenderer().EndFrame();
 	}
@@ -126,9 +122,6 @@ void Game::SetupTetrisProperties()
 		TextureCache[HashKey] = std::make_unique<GameTexture2D>();
 		TextureCache[HashKey].get()->CreateTextureFromFile(GetGameRenderer().GetRenderer(), TexturePath);
 	}
-
-
-	TetrisBoard.Init(10, 16);
 }
 
 void Game::DrawBoard(const Board& InBoard, const Vec2i& InPosition, float InScale)

@@ -70,8 +70,4 @@ private:
 
 	// 테트리스 게임 텍스처 리소스입니다.
 	std::unordered_map<std::size_t, std::unique_ptr<GameTexture2D>> TextureCache;
-
-
-	// 테트리스 보드입니다.
-	Board TetrisBoard;
 };
