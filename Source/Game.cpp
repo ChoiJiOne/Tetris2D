@@ -39,25 +39,30 @@ void Game::Run()
 		// 입력 처리를 업데이트합니다.
 		GameEngine::GetGameInput().Tick();
 
-		if (GameEngine::GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_SCANCODE_UP) &&
-			!GameEngine::GetGameInput().GetKeyboardState().IsPrevKeyPress(SDL_SCANCODE_UP))
-		{
-			CurrTetromino->Spin(Tetromino::ESpin::CW);
-		}
-
 
 		// 프레임 렌더링을 시작합니다.
 		GameEngine::GetGameRenderer().BeginFrame(ColorUtil::Black);
 
-		if (!bIsPaused)
+		
+		// Grid 평면을 그립니다.
+		for (int32_t x = 10; x < 1000; x += 10)
 		{
-			GameEngine::GetGameRenderer().DrawText2D(Font, Vec2i(0, 35), StringUtil::StringFormat(L"FPS : %.f", 1.0f / Timer.DeltaTime()), ColorUtil::White);
+			GameEngine::GetGameRenderer().DrawLine2D(Vec2i(x, 0), Vec2i(x, 800), ColorUtil::White);
 		}
 
-		int32_t x = 250, y = 250;
-		TetrisBoard.DrawBoard(Vec2i(x, y), 0.3f);
+		for (int32_t y = 10; y < 800; y += 10)
+		{
+			GameEngine::GetGameRenderer().DrawLine2D(Vec2i(0, y), Vec2i(1000, y), ColorUtil::White);
+		}
 
-		NextTetromino->DrawTetromino(Vec2i(700, 400), 0.4f);
+		GameEngine::GetGameRenderer().DrawText2D(
+			Font, Vec2i(200, 200), L"Hello World한글?", ColorUtil::Green
+		);
+
+		GameEngine::GetGameRenderer().DrawWireframeRectangle2D(
+			Vec2i(200, 200), Vec2i(500, 500), ColorUtil::Red
+		);
+
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
 		GameEngine::GetGameRenderer().EndFrame();
