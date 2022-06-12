@@ -102,14 +102,14 @@ void GameRenderer::DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidt
 
 void GameRenderer::DrawTexture2D(const GameTexture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
 {
-	float Width = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
-	float Height = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
+	float ScaleWidth = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
+	float ScaleHeight = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
 
 	SDL_Rect Rect = {
-		InCenterPosition.x - InTexture.GetWidth() / 2,
-		InCenterPosition.y - InTexture.GetHeight() / 2,
-		static_cast<int32_t>(Width),
-		static_cast<int32_t>(Height)
+		InCenterPosition.x - static_cast<int32_t>(ScaleWidth / 2.0f),
+		InCenterPosition.y - static_cast<int32_t>(ScaleHeight / 2.0f),
+		static_cast<int32_t>(ScaleWidth),
+		static_cast<int32_t>(ScaleHeight)
 	};
 
 	CHECK_SDL_FAILED((SDL_RenderCopy(Renderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
