@@ -96,6 +96,12 @@ public:
 	void CreateGameFont(const std::string& InPath, float InSize);
 
 
+	// 폰트의 크기를 반환합니다.
+	//
+	// @return - 폰트의 크기를 반환합니다.
+	float GetFontSize() const { return FontSize; }
+
+
 	// 텍스처 아틀라스를 반환합니다.
 	// 
 	// @param InUnicode - 유니코드 문자입니다.
@@ -125,6 +131,10 @@ private:
 private:
 	// 게임 폰트 초기화여부입니다.
 	bool bIsInitialize = false;
+
+
+	// 게임 폰트의 크기입니다.
+	float FontSize = 0.0f;
 
 
 	// ASCII 문자의 텍스처 아틀라스입니다.

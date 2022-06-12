@@ -11,6 +11,8 @@ void GameFont::CreateGameFont(const std::string& InPath, float InSize)
 {
 	if (!bIsInitialize)
 	{
+		FontSize = InSize;
+
 		std::vector<uint8_t> Buffer;
 		stbtt_fontinfo FontInfo;
 
