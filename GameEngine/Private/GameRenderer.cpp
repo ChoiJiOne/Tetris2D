@@ -53,8 +53,8 @@ void GameRenderer::DrawWireframeRectangle2D(const Vec2i& InP0, const Vec2i& InP1
 	SDL_Rect Rect = {
 		std::min(InP0.x, InP1.x),
 		std::min(InP0.y, InP1.y),
-		std::abs(InP1.x - InP0.x),
-		std::abs(InP1.y - InP0.y)
+		std::abs(InP1.x - InP0.x + 1),
+		std::abs(InP1.y - InP0.y + 1)
 	};
 
 	CHECK_SDL_FAILED((SDL_RenderDrawRect(Renderer, &Rect) == 0));
