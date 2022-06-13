@@ -1,8 +1,9 @@
-#include "Block.h"
 #include "Game.h"
 
 Game::~Game()
 {
+	TetrisBoard.reset();
+
 	CurrTetromino.reset();
 	NextTetromino.reset();
 
@@ -57,7 +58,7 @@ void Game::Run()
 
 
 		int32_t x = 100, y = 100;
-		TetrisBoard.DrawBoard(Vec2i(x, y), 0.3f);
+		TetrisBoard->DrawBoard(Vec2i(x, y), 0.3f);
 
 		NextTetromino->DrawTetromino(Vec2i(700, 400), 0.4f);
 
@@ -114,10 +115,10 @@ void Game::SetupTetrisProperties()
 
 
 	// 테트리스 보드를 초기화합니다.
-	TetrisBoard.Init();
+	TetrisBoard = std::make_shared<Board>();
 
 
 	// 테트로미노를 생성합니다.
-	CurrTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard.GetBoardWidth() / 3, 0));
-	NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard.GetBoardWidth() / 3, 0));
+	CurrTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard->GetBoardWidth() / 3, 0));
+	NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard->GetBoardWidth() / 3, 0));
 }

@@ -61,7 +61,7 @@ private:
 
 
 	// 테트리스 보드입니다.
-	Board TetrisBoard;
+	std::shared_ptr<Board> TetrisBoard = nullptr;
 
 
 	// 현재 보드 상에 위치한 테트로미노입니다.
