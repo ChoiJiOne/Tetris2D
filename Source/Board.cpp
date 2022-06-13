@@ -2,61 +2,24 @@
 #include "Public/GameRenderer.h"
 #include "Board.h"
 
+Board::Board(int32_t InBoardWidth, int32_t InBoardHeight)
+	: BoardWidth(InBoardWidth)
+	, BoardHeight(InBoardHeight)
+{
+	Reset();
+
+	if (BlockTextureCache.empty())
+	{
+		CreateBlockTexture();
+	}
+}
+
 Board::~Board()
 {
 	for (auto& Texture : BlockTextureCache)
 	{
 		Texture.second.reset();
 		Texture.second = nullptr;
-	}
-}
-
-Board::Board(Board&& InInstance) noexcept
-	: BoardWidth(InInstance.BoardWidth)
-	, BoardHeight(InInstance.BoardHeight)
-	, BoardState(InInstance.BoardState)
-{
-}
-
-Board::Board(const Board& InInstance) noexcept
-	: BoardWidth(InInstance.BoardWidth)
-	, BoardHeight(InInstance.BoardHeight)
-	, BoardState(InInstance.BoardState)
-{
-}
-
-Board& Board::operator=(Board&& InInstance) noexcept
-{
-	if (this == &InInstance) return *this;
-
-	BoardWidth  = InInstance.BoardWidth;
-	BoardHeight = InInstance.BoardHeight;
-	BoardState  = InInstance.BoardState;
-
-	return *this;
-}
-
-Board& Board::operator=(const Board& InInstance) noexcept
-{
-	if (this == &InInstance) return *this;
-
-	BoardWidth  = InInstance.BoardWidth;
-	BoardHeight = InInstance.BoardHeight;
-	BoardState  = InInstance.BoardState;
-
-	return *this;
-}
-
-void Board::Init(int32_t InBoardWidth, int32_t InBoardHeight)
-{
-	BoardWidth  = InBoardWidth;
-	BoardHeight = InBoardHeight;
-
-	Reset();
-
-	if (BlockTextureCache.empty())
-	{
-		CreateBlockTexture();
 	}
 }
 
@@ -129,13 +92,11 @@ void Board::DrawBoard(const Vec2i& InPosition, float InScale)
 		{
 			if (GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
 			{
-				int32_t TextureWidth = 0, TextureHeight = 0;
-
-				TextureWidth = static_cast<int32_t>(static_cast<float>(
+				int32_t TextureWidth = static_cast<int32_t>(static_cast<float>(
 					BlockTextureCache[GetBlockColorInBoard(Row, Col)]->GetWidth()) * InScale
 					);
 
-				TextureHeight = static_cast<int32_t>(static_cast<float>(
+				int32_t TextureHeight = static_cast<int32_t>(static_cast<float>(
 					BlockTextureCache[GetBlockColorInBoard(Row, Col)]->GetWidth()) * InScale
 					);
 
