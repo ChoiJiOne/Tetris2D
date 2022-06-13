@@ -55,13 +55,12 @@ void Game::Run()
 			GameEngine::GetGameRenderer().DrawLine2D(Vec2i(0, y), Vec2i(1000, y), ColorUtil::White);
 		}
 
-		GameEngine::GetGameRenderer().DrawText2D(
-			Font, Vec2i(200, 200), L"Hello World한글?", ColorUtil::Green
-		);
 
-		GameEngine::GetGameRenderer().DrawWireframeRectangle2D(
-			Vec2i(200, 200), Vec2i(500, 500), ColorUtil::Red
-		);
+		int32_t x = 100, y = 100;
+		TetrisBoard.DrawBoard(Vec2i(x, y), 0.3f);
+
+		NextTetromino->DrawTetromino(Vec2i(700, 400), 0.4f);
+
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
