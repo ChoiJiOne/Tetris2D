@@ -130,7 +130,7 @@ void Board::CreateBlockTexture()
 {
 	std::string ResourceDirectory = GameEngine::GetResourceDirectory();
 
-	std::vector<std::pair<EBlockColor, std::string>> BlockInfos = {
+	std::unordered_map<EBlockColor, std::string> BlockInfos = {
 		{ EBlockColor::BLUE,   "BlueBlock"   },
 		{ EBlockColor::CYAN,   "CyanBlock"   },
 		{ EBlockColor::GRAY,   "GrayBlock"   },
