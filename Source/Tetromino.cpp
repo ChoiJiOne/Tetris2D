@@ -1,14 +1,10 @@
-#include "Public/GameEngine.h"
-#include "Public/GameRenderer.h"
-#include "Public/Macro.h"
 #include "Tetromino.h"
 
-Tetromino::Tetromino(const EShape& InShape, const EBlockColor& InBlockColor, const Vec2i& InPositionInBoard)
-	: PositionInBoard(InPositionInBoard)
-	, BlockColor(InBlockColor)
+Tetromino::Tetromino(const Vec2i& InAbsolutePosition, const EShape& InShape, const LinearColor& InColor)
+	: AbsolutePosition(InAbsolutePosition)
+	, BlockColor(InColor)
 {
-	GenerateBlockPositions(InShape);
-	TetrominoTexture.CreateTextureFromFile(GameEngine::GetResourceDirectory() + "texture/GrayBlock.png");
+	GenerateRelativePositions(InShape);
 }
 
 Tetromino::~Tetromino()
@@ -16,10 +12,10 @@ Tetromino::~Tetromino()
 }
 
 Tetromino::Tetromino(const Tetromino& InInstance) noexcept
-	: BoundSize(InInstance.BoundSize)
-	, PositionInBoard(InInstance.PositionInBoard)
-	, BlockPositions(InInstance.BlockPositions)
-	, BlockColor(InInstance.BlockColor)
+	: BlockColor(InInstance.BlockColor)
+	, BoundSize(InInstance.BoundSize)
+	, AbsolutePosition(InInstance.AbsolutePosition)
+	, RelativePositions(InInstance.RelativePositions)
 {
 }
 
@@ -27,19 +23,19 @@ Tetromino& Tetromino::operator=(const Tetromino& InInstance) noexcept
 {
 	if (this == &InInstance) return *this;
 
-	BoundSize = InInstance.BoundSize;
-	PositionInBoard = InInstance.PositionInBoard;
-	BlockPositions = InInstance.BlockPositions;
 	BlockColor = InInstance.BlockColor;
+	BoundSize = InInstance.BoundSize;
+	AbsolutePosition = InInstance.AbsolutePosition;
+	RelativePositions = InInstance.RelativePositions;
 
 	return *this;
 }
 
 Tetromino::Tetromino(Tetromino&& InInstance) noexcept
-	: BoundSize(InInstance.BoundSize)
-	, PositionInBoard(InInstance.PositionInBoard)
-	, BlockPositions(InInstance.BlockPositions)
-	, BlockColor(InInstance.BlockColor)
+	: BlockColor(InInstance.BlockColor)
+	, BoundSize(InInstance.BoundSize)
+	, AbsolutePosition(InInstance.AbsolutePosition)
+	, RelativePositions(InInstance.RelativePositions)
 {
 }
 
@@ -47,64 +43,30 @@ Tetromino& Tetromino::operator=(Tetromino&& InInstance) noexcept
 {
 	if (this == &InInstance) return *this;
 
-	BoundSize = InInstance.BoundSize;
-	PositionInBoard = InInstance.PositionInBoard;
-	BlockPositions = InInstance.BlockPositions;
 	BlockColor = InInstance.BlockColor;
+	BoundSize = InInstance.BoundSize;
+	AbsolutePosition = InInstance.AbsolutePosition;
+	RelativePositions = InInstance.RelativePositions;
 
 	return *this;
 }
 
-std::shared_ptr<Tetromino> Tetromino::GenerateRandomTetromino(const Vec2i& InPositionInBoard)
+void Tetromino::Spin(ESpin spin)
 {
-	static EShape TetrominoShapes[] = {
-		EShape::I,
-		EShape::O,
-		EShape::T,
-		EShape::J,
-		EShape::L,
-		EShape::S,
-		EShape::Z
-	};
-
-	static EBlockColor TetrominoColors[] = {
-		EBlockColor::BLUE,
-		EBlockColor::CYAN,
-		EBlockColor::GRAY,
-		EBlockColor::GREEN,
-		EBlockColor::ORANGE,
-		EBlockColor::PINK,
-		EBlockColor::PURPLE,
-		EBlockColor::RED,
-		EBlockColor::YELLOW
-	};
-
-	int32_t TetrominoShape = MathUtil::GenerateRandomInt<int32_t>(0, std::size(TetrominoShapes) - 1);
-	int32_t TetrominoColor = MathUtil::GenerateRandomInt<int32_t>(0, std::size(TetrominoColors) - 1);
-
-	return std::make_shared<Tetromino>(
-		TetrominoShapes[TetrominoShape],
-		TetrominoColors[TetrominoColor],
-		InPositionInBoard
-	);
-}
-
-void Tetromino::Spin(ESpin InSpin)
-{
-	switch (InSpin)
+	switch (spin)
 	{
 	case ESpin::CW:
-		BlockPositions[0] = Vec2i(BoundSize - 1 - BlockPositions[0].y, BlockPositions[0].x);
-		BlockPositions[1] = Vec2i(BoundSize - 1 - BlockPositions[1].y, BlockPositions[1].x);
-		BlockPositions[2] = Vec2i(BoundSize - 1 - BlockPositions[2].y, BlockPositions[2].x);
-		BlockPositions[3] = Vec2i(BoundSize - 1 - BlockPositions[3].y, BlockPositions[3].x);
+		RelativePositions[0] = Vec2i(BoundSize - 1 - RelativePositions[0].y, RelativePositions[0].x);
+		RelativePositions[1] = Vec2i(BoundSize - 1 - RelativePositions[1].y, RelativePositions[1].x);
+		RelativePositions[2] = Vec2i(BoundSize - 1 - RelativePositions[2].y, RelativePositions[2].x);
+		RelativePositions[3] = Vec2i(BoundSize - 1 - RelativePositions[3].y, RelativePositions[3].x);
 		break;
 
 	case ESpin::CCW:
-		BlockPositions[0] = Vec2i(BlockPositions[0].y, BoundSize - 1 - BlockPositions[0].x);
-		BlockPositions[1] = Vec2i(BlockPositions[1].y, BoundSize - 1 - BlockPositions[1].x);
-		BlockPositions[2] = Vec2i(BlockPositions[2].y, BoundSize - 1 - BlockPositions[2].x);
-		BlockPositions[3] = Vec2i(BlockPositions[3].y, BoundSize - 1 - BlockPositions[3].x);
+		RelativePositions[0] = Vec2i(RelativePositions[0].y, BoundSize - 1 - RelativePositions[0].x);
+		RelativePositions[1] = Vec2i(RelativePositions[1].y, BoundSize - 1 - RelativePositions[1].x);
+		RelativePositions[2] = Vec2i(RelativePositions[2].y, BoundSize - 1 - RelativePositions[2].x);
+		RelativePositions[3] = Vec2i(RelativePositions[3].y, BoundSize - 1 - RelativePositions[3].x);
 		break;
 
 	default:
@@ -112,24 +74,24 @@ void Tetromino::Spin(ESpin InSpin)
 	}
 }
 
-void Tetromino::Move(EMove InMove)
+void Tetromino::Move(EMove move)
 {
-	switch (InMove)
+	switch (move)
 	{
 	case EMove::Left:
-		PositionInBoard.x -= 1;
+		AbsolutePosition.x -= 1;
 		break;
 
 	case EMove::Right:
-		PositionInBoard.x += 1;
+		AbsolutePosition.x += 1;
 		break;
 
 	case EMove::Down:
-		PositionInBoard.y += 1;
+		AbsolutePosition.y += 1;
 		break;
 
 	case EMove::Up:
-		PositionInBoard.y -= 1;
+		AbsolutePosition.y -= 1;
 		break;
 
 	default:
@@ -137,86 +99,84 @@ void Tetromino::Move(EMove InMove)
 	}
 }
 
-void Tetromino::DrawTetromino(const Vec2i& InPosition, float InScale)
+void Tetromino::Draw(const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor)
 {
-	int32_t TextureWidth = 0, TextureHeight = 0;
-
-	TextureWidth  = static_cast<int32_t>(static_cast<float>(TetrominoTexture.GetWidth()) * InScale);
-	TextureHeight = static_cast<int32_t>(static_cast<float>(TetrominoTexture.GetHeight()) * InScale);
-
-	for (const auto& BlockPosition : BlockPositions)
+	for (const auto& Position : RelativePositions)
 	{
-		Vec2i MovePosition(BlockPosition.x * TextureWidth, BlockPosition.y * TextureHeight);
+		GameEngine::GetGameRenderer().DrawRectangle2D(
+			Vec2i(      InWindowPosition.x + InBlockSize * Position.x,       InWindowPosition.y + InBlockSize * Position.y),
+			Vec2i(InWindowPosition.x + InBlockSize * (Position.x + 1), InWindowPosition.y + InBlockSize * (Position.y + 1)),
+			BlockColor
+		);
 
-		GameEngine::GetGameRenderer().DrawTexture2D(
-			TetrominoTexture,
-			InPosition + MovePosition,
-			InScale,
-			InScale
+		GameEngine::GetGameRenderer().DrawWireframeRectangle2D(
+			Vec2i(      InWindowPosition.x + InBlockSize * Position.x,       InWindowPosition.y + InBlockSize * Position.y),
+			Vec2i(InWindowPosition.x + InBlockSize * (Position.x + 1), InWindowPosition.y + InBlockSize * (Position.y + 1)),
+			InOutlineColor
 		);
 	}
 }
 
-void Tetromino::GenerateBlockPositions(const EShape& InShape)
+void Tetromino::GenerateRelativePositions(const EShape& InShape)
 {
-	BlockPositions.resize(4);
+	RelativePositions.resize(4);
 
 	switch (InShape)
 	{
 	case EShape::I:
 		BoundSize = 4;
-		BlockPositions[0] = Vec2i(0, 1);
-		BlockPositions[1] = Vec2i(1, 1);
-		BlockPositions[2] = Vec2i(2, 1);
-		BlockPositions[3] = Vec2i(3, 1);
+		RelativePositions[0] = Vec2i(0, 1);
+		RelativePositions[1] = Vec2i(1, 1);
+		RelativePositions[2] = Vec2i(2, 1);
+		RelativePositions[3] = Vec2i(3, 1);
 		break;
 
 	case EShape::O:
 		BoundSize = 4;
-		BlockPositions[0] = Vec2i(1, 1);
-		BlockPositions[1] = Vec2i(2, 1);
-		BlockPositions[2] = Vec2i(1, 2);
-		BlockPositions[3] = Vec2i(2, 2);
+		RelativePositions[0] = Vec2i(1, 1);
+		RelativePositions[1] = Vec2i(2, 1);
+		RelativePositions[2] = Vec2i(1, 2);
+		RelativePositions[3] = Vec2i(2, 2);
 		break;
 
 	case EShape::T:
 		BoundSize = 3;
-		BlockPositions[0] = Vec2i(0, 1);
-		BlockPositions[1] = Vec2i(1, 1);
-		BlockPositions[2] = Vec2i(2, 1);
-		BlockPositions[3] = Vec2i(1, 2);
+		RelativePositions[0] = Vec2i(0, 1);
+		RelativePositions[1] = Vec2i(1, 1);
+		RelativePositions[2] = Vec2i(2, 1);
+		RelativePositions[3] = Vec2i(1, 2);
 		break;
 
 	case EShape::J:
 		BoundSize = 3;
-		BlockPositions[0] = Vec2i(0, 1);
-		BlockPositions[1] = Vec2i(1, 1);
-		BlockPositions[2] = Vec2i(2, 1);
-		BlockPositions[3] = Vec2i(2, 2);
+		RelativePositions[0] = Vec2i(0, 1);
+		RelativePositions[1] = Vec2i(1, 1);
+		RelativePositions[2] = Vec2i(2, 1);
+		RelativePositions[3] = Vec2i(2, 2);
 		break;
 
 	case EShape::L:
 		BoundSize = 3;
-		BlockPositions[0] = Vec2i(0, 1);
-		BlockPositions[1] = Vec2i(1, 1);
-		BlockPositions[2] = Vec2i(2, 1);
-		BlockPositions[3] = Vec2i(0, 2);
+		RelativePositions[0] = Vec2i(0, 1);
+		RelativePositions[1] = Vec2i(1, 1);
+		RelativePositions[2] = Vec2i(2, 1);
+		RelativePositions[3] = Vec2i(0, 2);
 		break;
 
 	case EShape::S:
 		BoundSize = 3;
-		BlockPositions[0] = Vec2i(1, 0);
-		BlockPositions[1] = Vec2i(2, 0);
-		BlockPositions[2] = Vec2i(0, 1);
-		BlockPositions[3] = Vec2i(1, 1);
+		RelativePositions[0] = Vec2i(1, 0);
+		RelativePositions[1] = Vec2i(2, 0);
+		RelativePositions[2] = Vec2i(0, 1);
+		RelativePositions[3] = Vec2i(1, 1);
 		break;
 
 	case EShape::Z:
 		BoundSize = 3;
-		BlockPositions[0] = Vec2i(0, 0);
-		BlockPositions[1] = Vec2i(0, 1);
-		BlockPositions[2] = Vec2i(1, 1);
-		BlockPositions[3] = Vec2i(2, 1);
+		RelativePositions[0] = Vec2i(0, 0);
+		RelativePositions[1] = Vec2i(0, 1);
+		RelativePositions[2] = Vec2i(1, 1);
+		RelativePositions[3] = Vec2i(2, 1);
 		break;
 
 	default:
