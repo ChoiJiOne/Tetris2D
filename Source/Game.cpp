@@ -2,11 +2,6 @@
 
 Game::~Game()
 {
-	TetrisBoard.reset();
-
-	CurrTetromino.reset();
-	NextTetromino.reset();
-
 	GameEngine::Release();
 }
 
@@ -29,6 +24,8 @@ void Game::Run()
 	// 게임 타이머를 초기화합니다.
 	Timer.Reset();
 
+	std::shared_ptr<Tetromino> Tet = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+
 
 	// 루프를 수행합니다.
 	while (!bIsDone)
@@ -44,24 +41,14 @@ void Game::Run()
 		// 프레임 렌더링을 시작합니다.
 		GameEngine::GetGameRenderer().BeginFrame(ColorUtil::Black);
 
-		
-		// Grid 평면을 그립니다.
-		for (int32_t x = 10; x < 1000; x += 10)
-		{
-			GameEngine::GetGameRenderer().DrawLine2D(Vec2i(x, 0), Vec2i(x, 800), ColorUtil::White);
-		}
 
-		for (int32_t y = 10; y < 800; y += 10)
+		if (GameEngine::GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_UP))
 		{
-			GameEngine::GetGameRenderer().DrawLine2D(Vec2i(0, y), Vec2i(1000, y), ColorUtil::White);
+			Tet->Spin(Tetromino::ESpin::CW);
 		}
 
 
-		int32_t x = 100, y = 100;
-		TetrisBoard->DrawBoard(Vec2i(x, y), 0.3f);
-
-		NextTetromino->DrawTetromino(Vec2i(700, 400), 0.4f);
-
+		Tet->Draw(Vec2i(100, 100), 30, ColorUtil::Black);
 
 
 		// 프레임 렌더링을 종료하고, 벡 버퍼를 화면에 표시합니다.
@@ -112,13 +99,4 @@ void Game::SetupTetrisProperties()
 	// 게임 폰트를 생성합니다.
 	std::string FontPath = ResourceDirectory + "font/Nanum.ttf";
 	Font.CreateGameFont(FontPath, 32.0f);
-
-
-	// 테트리스 보드를 초기화합니다.
-	TetrisBoard = std::make_shared<Board>();
-
-
-	// 테트로미노를 생성합니다.
-	CurrTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard->GetBoardWidth() / 3, 0));
-	NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(TetrisBoard->GetBoardWidth() / 3, 0));
 }
