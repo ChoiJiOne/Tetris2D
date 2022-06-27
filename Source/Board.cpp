@@ -2,155 +2,380 @@
 #include "Public/GameRenderer.h"
 #include "Board.h"
 
-Board::Board(int32_t InBoardWidth, int32_t InBoardHeight)
-	: BoardWidth(InBoardWidth)
-	, BoardHeight(InBoardHeight)
+int32_t Board::GetOffset(int32_t x, int32_t y, int32_t row, int32_t col)
 {
-	Reset();
-
-	if (BlockTextureCache.empty())
+	if (!(0 <= x && x < col) &&
+		!(0 <= y && y < row))
 	{
-		CreateBlockTexture();
+		throw std::exception("out of range in board");
 	}
+
+	return y * col + x;
 }
 
-Board::~Board()
+bool Board::IsFullRowLine(const std::vector<Block>& blocks, int32_t row, int32_t col, int32_t rowLine)
 {
-	for (auto& Texture : BlockTextureCache)
+	for (int32_t x = 1; x < col - 1; ++x)
 	{
-		Texture.second.reset();
-		Texture.second = nullptr;
-	}
-}
-
-void Board::Reset()
-{
-	BoardState.resize(BoardWidth * BoardHeight, Block(EBlockState::EMPTY, EBlockColor::GRAY));
-
-	for (int32_t Row = 0; Row < BoardHeight; ++Row)
-	{
-		if (Row == BoardHeight - 1)
+		if (blocks[GetOffset(x, rowLine, row, col)].first != EBlockState::Fill)
 		{
-			for (int32_t Col = 0; Col < BoardWidth; ++Col)
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Board::IsEmptyRowLine(const std::vector<Block>& blocks, int32_t row, int32_t col, int32_t rowLine)
+{
+	for (int32_t x = 1; x < col - 1; ++x)
+	{
+		if (blocks[GetOffset(x, rowLine, row, col)].first != EBlockState::Empty)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void Board::RemoveRowLine(std::vector<Block>& blocks, int32_t row, int32_t col, int32_t rowLine)
+{
+	for (int32_t x = 1; x < col - 1; ++x)
+	{
+		blocks[GetOffset(x, rowLine, row, col)].first = EBlockState::Empty;
+	}
+}
+
+std::vector<Board::Block> Board::CreateBoardBlocks(int32_t row, int32_t col)
+{
+	return std::vector<Block>(row * col, Block(EBlockState::Empty, backgroundColor));
+}
+
+void Board::SetupBoardBlocks(std::vector<Block>& blocks, int32_t row, int32_t col)
+{
+	std::fill(blocks.begin(), blocks.end(), Block(EBlockState::Empty, backgroundColor));
+
+	for (int32_t y = 0; y < row; ++y)
+	{
+
+		if (y == row - 1)
+		{
+			for (int32_t x = 0; x < col; ++x)
 			{
-				BoardState[GetBoardOffset(Row, Col)] = Block(EBlockState::FIX, EBlockColor::GRAY);
+				blocks[GetOffset(x, y, row, col)] = Block(EBlockState::Fix, wallColor);
 			}
 		}
 		else
 		{
-			BoardState[GetBoardOffset(Row, 0)]              = Block(EBlockState::FIX, EBlockColor::GRAY);
-			BoardState[GetBoardOffset(Row, BoardWidth - 1)] = Block(EBlockState::FIX, EBlockColor::GRAY);
+			blocks[GetOffset(0, y, row, col)] = Block(EBlockState::Fix, wallColor);
+			blocks[GetOffset(col - 1, y, row, col)] = Block(EBlockState::Fix, wallColor);
 		}
 	}
 }
 
-Block Board::GetBlockInBoard(int32_t InRow, int32_t InCol) const
+Board::Block Board::GetBlock(int32_t x, int32_t y)
 {
-	CHECK_FAILED(IsInsidePosition(InRow, InCol), "out of range in board");
-	return BoardState[GetBoardOffset(InRow, InCol)];
+	int32_t offset = GetOffset(x, y, rowSize, colSize);
+	return boardBlocks[offset];
 }
 
-EBlockState Board::GetBlockStateInBoard(int32_t InRow, int32_t InCol) const
+void Board::SetBlock(int32_t x, int32_t y, Block block)
 {
-	return GetBlockInBoard(InRow, InCol).first;
+	int32_t offset = GetOffset(x, y, rowSize, colSize);
+	boardBlocks[offset] = block;
 }
 
-EBlockColor Board::GetBlockColorInBoard(int32_t InRow, int32_t InCol) const
+Board::Board(int32_t rowSize_, int32_t colSize_, LinearColor wallColor_, LinearColor backgroundColor_)
+	: rowSize(rowSize_)
+	, colSize(colSize_)
+	, wallColor(wallColor_)
+	, backgroundColor(backgroundColor_)
 {
-	return GetBlockInBoard(InRow, InCol).second;
+	boardBlocks = CreateBoardBlocks(rowSize, colSize);
+	SetupBoardBlocks(boardBlocks, rowSize, colSize);
 }
 
-void Board::SetBlockInBoard(int32_t InRow, int32_t InCol, const Block& InBlock)
+Board::~Board()
 {
-	if (IsInsidePosition(InRow, InCol))
+}
+
+Board::Board(Board&& instance) noexcept
+	: wallColor(instance.wallColor)
+	, backgroundColor(instance.backgroundColor)
+	, rowSize(instance.rowSize)
+	, colSize(instance.colSize)
+	, boardBlocks(instance.boardBlocks)
+{
+}
+
+Board& Board::operator=(Board&& instance) noexcept
+{
+	if (this == &instance) return *this;
+
+	wallColor = instance.wallColor;
+	backgroundColor = instance.backgroundColor;
+	rowSize = instance.rowSize;
+	colSize = instance.colSize;
+	boardBlocks = instance.boardBlocks;
+
+	return *this;
+}
+
+Board::Board(const Board& instance) noexcept
+	: wallColor(instance.wallColor)
+	, backgroundColor(instance.backgroundColor)
+	, rowSize(instance.rowSize)
+	, colSize(instance.colSize)
+	, boardBlocks(instance.boardBlocks)
+{
+}
+
+Board& Board::operator=(const Board& instance) noexcept
+{
+	if (this == &instance) return *this;
+
+	wallColor = instance.wallColor;
+	backgroundColor = instance.backgroundColor;
+	rowSize = instance.rowSize;
+	colSize = instance.colSize;
+	boardBlocks = instance.boardBlocks;
+
+	return *this;
+}
+
+bool Board::CheckInsidePositionInBoard(int32_t x, int32_t y)
+{
+	return ((0 <= x && x < colSize) && (0 <= y && y < rowSize));
+}
+
+int32_t Board::UpdateBoardState()
+{
+	bool bIsUpdate = false;
+	int32_t removeLine = 0;
+
+	for (int32_t y = 0; y < rowSize - 1; ++y)
 	{
-		BoardState[GetBoardOffset(InRow, InCol)] = InBlock;
-	}
-}
-
-void Board::SetBlockStateInBoard(int32_t InRow, int32_t InCol, const EBlockState& InBlockState)
-{
-	if (IsInsidePosition(InRow, InCol))
-	{
-		BoardState[GetBoardOffset(InRow, InCol)].first = InBlockState;
-	}
-}
-
-void Board::SetBlockColorInBoard(int32_t InRow, int32_t InCol, const EBlockColor& InBlockColor)
-{
-	if (IsInsidePosition(InRow, InCol))
-	{
-		BoardState[GetBoardOffset(InRow, InCol)].second = InBlockColor;
-	}
-}
-
-void Board::DrawBoard(const Vec2i& InPosition, float InScale)
-{
-	for (int32_t Row = 0; Row < BoardHeight; ++Row)
-	{
-		for (int32_t Col = 0; Col < BoardWidth; ++Col)
+		if (IsFullRowLine(boardBlocks, rowSize, colSize, y))
 		{
-			if (GetBlockStateInBoard(Row, Col) != EBlockState::EMPTY)
+			RemoveRowLine(boardBlocks, rowSize, colSize, y);
+			removeLine++;
+			bIsUpdate = true;
+		}
+	}
+
+	if (bIsUpdate)
+	{
+		std::vector<Block> tempBlocks = CreateBoardBlocks(rowSize, colSize);
+		SetupBoardBlocks(tempBlocks, rowSize, colSize);
+
+		for (int32_t y = rowSize - 2, colLine = rowSize - 2; y >= 0; --y)
+		{
+			if (!IsEmptyRowLine(boardBlocks, rowSize, colSize, y))
 			{
-				int32_t TextureWidth = static_cast<int32_t>(static_cast<float>(
-					BlockTextureCache[GetBlockColorInBoard(Row, Col)]->GetWidth()) * InScale
-					);
+				for (int32_t x = 1; x < colSize - 1; ++x)
+				{
+					tempBlocks[GetOffset(x, colLine, rowSize, colSize)] = boardBlocks[GetOffset(x, y, rowSize, colSize)];
+				}
 
-				int32_t TextureHeight = static_cast<int32_t>(static_cast<float>(
-					BlockTextureCache[GetBlockColorInBoard(Row, Col)]->GetWidth()) * InScale
-					);
+				colLine--;
+			}
+		}
 
+		boardBlocks = tempBlocks;
+	}
 
-				Vec2i MovePosition(Col * TextureWidth, Row * TextureHeight);
+	return removeLine;
+}
 
+void Board::ResetBoardState()
+{
+	SetupBoardBlocks(boardBlocks, rowSize, colSize);
+}
 
-				GameEngine::GetGameRenderer().DrawTexture2D(
-					*BlockTextureCache[GetBlockColorInBoard(Row, Col)].get(),
-					InPosition + MovePosition,
-					InScale,
-					InScale
+void Board::Draw(const Vec2i& windowPos, int32_t blockSize)
+{
+	for (int32_t x = 0; x < colSize; ++x)
+	{
+		for (int32_t y = 0; y < rowSize; ++y)
+		{
+			Block state = GetBlock(x, y);
+
+			if (state.first == Board::EBlockState::Fix)
+			{
+				GameEngine::GetGameRenderer().DrawRectangle2D(
+					Vec2i(windowPos.x + blockSize * x, windowPos.y + blockSize * y),
+					Vec2i(windowPos.x + blockSize * (x + 1), windowPos.y + blockSize * (y + 1)),
+					wallColor
+				);
+			}
+			else if (state.first == Board::EBlockState::Fill)
+			{
+				GameEngine::GetGameRenderer().DrawRectangle2D(
+					Vec2i(windowPos.x + blockSize * x, windowPos.y + blockSize * y),
+					Vec2i(windowPos.x + blockSize * (x + 1), windowPos.y + blockSize * (y + 1)),
+					state.second
+				);
+
+				GameEngine::GetGameRenderer().DrawRectangle2D(
+					Vec2i(windowPos.x + blockSize * x, windowPos.y + blockSize * y),
+					Vec2i(windowPos.x + blockSize * (x + 1), windowPos.y + blockSize * (y + 1)),
+					backgroundColor
+				);
+			}
+			else
+			{
+				GameEngine::GetGameRenderer().DrawRectangle2D(
+					Vec2i(windowPos.x + blockSize * x, windowPos.y + blockSize * y),
+					Vec2i(windowPos.x + blockSize * (x + 1), windowPos.y + blockSize * (y + 1)),
+					backgroundColor
 				);
 			}
 		}
 	}
 }
 
-bool Board::IsInsidePosition(int32_t InRow, int32_t InCol) const
+void Board::AddTetrominoInBoard(Tetromino& tetromino)
 {
-	return (0 <= InRow && InRow < BoardHeight) 
-		&& (0 <= InCol && InCol < BoardWidth);
-}
+	const std::vector<Vec2i> positions = tetromino.GetRelativePositions();
 
-int32_t Board::GetBoardOffset(int32_t InRow, int32_t InCol) const
-{
-	return InRow * BoardWidth + InCol;
-}
-
-void Board::CreateBlockTexture()
-{
-	std::string ResourceDirectory = GameEngine::GetResourceDirectory();
-
-	std::unordered_map<EBlockColor, std::string> BlockInfos = {
-		{ EBlockColor::BLUE,   "BlueBlock"   },
-		{ EBlockColor::CYAN,   "CyanBlock"   },
-		{ EBlockColor::GRAY,   "GrayBlock"   },
-		{ EBlockColor::GREEN,  "GreenBlock"  },
-		{ EBlockColor::ORANGE, "OrangeBlock" },
-		{ EBlockColor::PINK,   "PinkBlock"   },
-		{ EBlockColor::PURPLE, "PurpleBlock" },
-		{ EBlockColor::RED,    "RedBlock"    },
-		{ EBlockColor::YELLOW, "YellowBlock" }
-	};
-
-	for (const auto& BlockInfo : BlockInfos)
+	for (const auto& position : positions)
 	{
-		std::string TexturePath = StringUtil::StringFormat(
-			"%stexture/%s.png",
-			ResourceDirectory.c_str(),
-			BlockInfo.second.c_str()
-		);
+		Vec2i boardPos;
+		boardPos.x = tetromino.GetAbsolutePosition().x + position.x;
+		boardPos.y = tetromino.GetAbsolutePosition().y + position.y;
 
-		BlockTextureCache[BlockInfo.first] = std::make_unique<GameTexture2D>();
-		BlockTextureCache[BlockInfo.first].get()->CreateTextureFromFile(TexturePath);
+
+		SetBlock(boardPos.x, boardPos.y, Board::Block(Board::EBlockState::Fill, tetromino.GetBlockColor()));
 	}
+}
+
+void Board::RemoveTetrominoInBoard(Tetromino& tetromino)
+{
+	const std::vector<Vec2i> positions = tetromino.GetRelativePositions();
+
+	for (const auto& position : positions)
+	{
+		Vec2i boardPos;
+		boardPos.x = tetromino.GetAbsolutePosition().x + position.x;
+		boardPos.y = tetromino.GetAbsolutePosition().y + position.y;
+
+
+		SetBlock(boardPos.x, boardPos.y, Board::Block(Board::EBlockState::Empty, tetromino.GetBlockColor()));
+	}
+}
+
+bool Board::IsCrashTetrominoAndBoard(Tetromino& tetromino)
+{
+	const std::vector<Vec2i> positions = tetromino.GetRelativePositions();
+
+	for (const auto& position : positions)
+	{
+		Vec2i boardPos;
+		boardPos.x = tetromino.GetAbsolutePosition().x + position.x;
+		boardPos.y = tetromino.GetAbsolutePosition().y + position.y;
+
+		if (!CheckInsidePositionInBoard(boardPos.x, boardPos.y))
+		{
+			return true;
+		}
+
+		if (GetBlock(boardPos.x, boardPos.y).first != Board::EBlockState::Empty)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Board::MoveDownTetrominoInBoard(Tetromino& tetromino)
+{
+	bool bCanMove = true;
+	RemoveTetrominoInBoard(tetromino);
+
+	tetromino.Move(Tetromino::EMove::Down);
+
+	if (IsCrashTetrominoAndBoard(tetromino))
+	{
+		tetromino.Move(Tetromino::EMove::Up);
+		bCanMove = false;
+	}
+
+	AddTetrominoInBoard(tetromino);
+	return bCanMove;
+}
+
+void Board::MoveLeftTetrominoInBoard(Tetromino& tetromino)
+{
+	RemoveTetrominoInBoard(tetromino);
+
+	tetromino.Move(Tetromino::EMove::Left);
+
+	if (IsCrashTetrominoAndBoard(tetromino))
+	{
+		tetromino.Move(Tetromino::EMove::Right);
+	}
+
+	AddTetrominoInBoard(tetromino);
+}
+
+void Board::MoveRightTetrominoInBoard(Tetromino& tetromino)
+{
+	RemoveTetrominoInBoard(tetromino);
+
+	tetromino.Move(Tetromino::EMove::Right);
+
+	if (IsCrashTetrominoAndBoard(tetromino))
+	{
+		tetromino.Move(Tetromino::EMove::Left);
+	}
+
+	AddTetrominoInBoard(tetromino);
+}
+
+void Board::MoveBottomTetrominoInBoard(Tetromino& tetromino)
+{
+	RemoveTetrominoInBoard(tetromino);
+
+	while (true)
+	{
+		tetromino.Move(Tetromino::EMove::Down);
+
+		if (IsCrashTetrominoAndBoard(tetromino))
+		{
+			tetromino.Move(Tetromino::EMove::Up);
+			break;
+		}
+	}
+
+	AddTetrominoInBoard(tetromino);
+}
+
+void Board::SpinClockWiseTetrominoInBoard(Tetromino& tetromino)
+{
+	RemoveTetrominoInBoard(tetromino);
+
+	tetromino.Spin(Tetromino::ESpin::CW);
+
+	if (IsCrashTetrominoAndBoard(tetromino))
+	{
+		tetromino.Spin(Tetromino::ESpin::CCW);
+	}
+
+	AddTetrominoInBoard(tetromino);
+}
+
+void Board::SpinCounterClockWiseTetrominoInBoard(Tetromino& tetromino)
+{
+	RemoveTetrominoInBoard(tetromino);
+
+	tetromino.Spin(Tetromino::ESpin::CCW);
+
+	if (IsCrashTetrominoAndBoard(tetromino))
+	{
+		tetromino.Spin(Tetromino::ESpin::CW);
+	}
+
+	AddTetrominoInBoard(tetromino);
 }

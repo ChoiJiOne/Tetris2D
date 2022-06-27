@@ -6,6 +6,9 @@
 // 테트로미노를 사용하기 위한 헤더 선언을 추가합니다.
 #include "Tetromino.h"
 
+// 테트리스 보드를 사용하기 위한 헤더 선언을 추가합니다.
+#include "Board.h"
+
 
 // 게임 클래스입니다.
 class Game
@@ -40,6 +43,24 @@ private:
 	void SetupTetrisProperties();
 
 
+	// 게임을 업데이트합니다.
+	void Update();
+
+
+	// 게임을 백 버퍼에 렌더링합니다.
+	void Draw();
+
+	void UpdatePlay();
+	void UpdateWait();
+	void UpdateTitleScene();
+	void UpdateEndingScene();
+
+	void DrawPlay();
+	void DrawWait();
+	void DrawTitleScene();
+	void DrawEndingScene();
+
+
 private:
 	// 게임 루프 종료 여부입니다.
 	bool bIsDone = false;
@@ -55,4 +76,25 @@ private:
 
 	// 게임 폰트입니다.
 	GameFont Font;
+
+	std::unordered_map<std::string, Vec2i> uiPositionCache;
+
+	bool bIsStartGame = false;
+	bool bIsDoneGame = false;
+	bool bIsExitGame = false;
+	bool bIsWaitNextLevel = true;
+
+	std::shared_ptr<Board>     tetrisBoard = nullptr;
+	std::shared_ptr<Tetromino> currTetromino = nullptr;
+	std::shared_ptr<Tetromino> nextTetromino = nullptr;
+
+	int32_t userLevel = 0;
+	int32_t userRemoveLine = 0;
+	float userPlayTime = 0.0f;
+	float userStepTime = 0.0f;
+	float waitTime = 0.0f;
+
+	float gameStepTime = 1.5f;
+	const float gamePlayTime = 100.0f;
+	const float gameWaitTime = 3.0f;
 };
