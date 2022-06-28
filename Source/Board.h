@@ -4,9 +4,11 @@
 #include "Tetromino.h"
 
 
+// 테트리스 보드입니다.
 class Board
 {
 public:
+	// 테트리스 블럭의 상태입니다.
 	enum class EBlockState : int32_t
 	{
 		Empty = 0,
@@ -14,7 +16,10 @@ public:
 		Fix = 2
 	};
 
+
+	// 테트리스 블럭입니다.
 	using Block = std::pair<EBlockState, LinearColor>;
+
 
 public:
 	Board(int32_t rowSize_ = 20, int32_t colSize_ = 10, LinearColor wallColor_ = ColorUtil::White, LinearColor backgroundColor_ = ColorUtil::Black);
