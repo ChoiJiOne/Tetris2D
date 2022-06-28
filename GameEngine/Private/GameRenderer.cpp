@@ -146,8 +146,8 @@ void GameRenderer::DrawText2D(const GameFont& InFont, const Vec2i& InPosition, c
 
 		SDL_Rect Dst =
 		{
-			x,
-			y + static_cast<int32_t>(InFont.GetFontSize() - static_cast<float>(Info.y1 - Info.y0)),
+			x + static_cast<int32_t>(Info.xoff),
+			y + static_cast<int32_t>(Info.yoff),
 			(Info.x1 - Info.x0),
 			(Info.y1 - Info.y0)
 		};
