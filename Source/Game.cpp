@@ -304,7 +304,6 @@ void Game::UpdateWait()
 			Vec2i(tetrisBoard->GetColSize() / 3, 0)
 		);
 
-
 		tetrisBoard->AddTetrominoInBoard(*currTetromino);
 	}
 }

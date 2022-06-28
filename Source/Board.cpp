@@ -217,7 +217,7 @@ void Board::Draw(const Vec2i& windowPos, int32_t blockSize)
 					state.second
 				);
 
-				GameEngine::GetGameRenderer().DrawRectangle2D(
+				GameEngine::GetGameRenderer().DrawWireframeRectangle2D(
 					Vec2i(windowPos.x + blockSize * x, windowPos.y + blockSize * y),
 					Vec2i(windowPos.x + blockSize * (x + 1), windowPos.y + blockSize * (y + 1)),
 					backgroundColor
