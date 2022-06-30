@@ -1,10 +1,7 @@
+-- 소스 파일 추가
 function IncludeFiles()
    files {
       "%{source_path}/*",
-
-      "%{engine_path}/*",
-      "%{engine_path}/Public/*",
-      "%{engine_path}/Private/*",
 
       "%{third_party_path}/Include/Json/*",
       "%{third_party_path}/Include/SDL2/*",
@@ -12,44 +9,44 @@ function IncludeFiles()
    }
 end
 
+
+-- 헤더 파일 경로 추가
 function IncludeDirs()
    includedirs {
       "%{source_path}",
-      "%{engine_path}",
+
       "%{third_party_path}/Include",
    }
 end
 
+
+-- Debug 모드에 정적 라이브러리 추가
 function LinkStaticLibraryInDebug()
    links {
       "%{third_party_path}/Debug/SDL2d.lib",
       "%{third_party_path}/Debug/SDL2maind.lib",
-      "Dbghelp.lib"
    }
 end
 
+-- Release 모드에 정적 라이브러리 추가
 function LinkStaticLibraryInRelease()
    links {
       "%{third_party_path}/Release/SDL2.lib",
       "%{third_party_path}/Release/SDL2main.lib",
-      "Dbghelp.lib"
    }
 end
 
+-- Tetris2D 프로젝트 설정
 workspace "Tetris2D"
 
    configurations { "Debug", "Release" }
    platforms { "Win64" }
 
-
    location "Tetris2D"
    
-
    source_path="%{wks.location}/../Source"
-   engine_path="%{wks.location}/../GameEngine"
    third_party_path="%{wks.location}/../ThirdParty"
 
-   
    project "Tetris2D"
       kind "ConsoleApp"
       language "C++"
