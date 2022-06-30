@@ -1,5 +1,5 @@
-#include "../Public/Macro.h"
-#include "../Public/GameWindow.h"
+#include "Macro.h"
+#include "GameWindow.h"
 
 GameWindow::~GameWindow()
 {

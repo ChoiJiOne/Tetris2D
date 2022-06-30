@@ -1,6 +1,6 @@
-#include "../Public/StringUtil.h"
-#include "../Public/Logger.h"
-#include "../Public/GameInput.h"
+#include "StringUtil.h"
+#include "Logger.h"
+#include "GameInput.h"
 
 GameInput::~GameInput()
 {

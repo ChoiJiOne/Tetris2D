@@ -1,8 +1,8 @@
-#include "../Public/GameInput.h"
-#include "../Public/GameRenderer.h"
-#include "../Public/GameWindow.h"
-#include "../Public/Macro.h"
-#include "../Public/GameEngine.h"
+#include "GameInput.h"
+#include "GameRenderer.h"
+#include "GameWindow.h"
+#include "Macro.h"
+#include "GameEngine.h"
 
 // 게임 프레임워크 초기화 여부입니다.
 bool GameEngine::bIsInitialize = false;

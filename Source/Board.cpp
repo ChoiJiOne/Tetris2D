@@ -1,5 +1,5 @@
-#include "Public/GameEngine.h"
-#include "Public/GameRenderer.h"
+#include "GameEngine.h"
+#include "GameRenderer.h"
 #include "Board.h"
 
 int32_t Board::GetOffset(int32_t x, int32_t y, int32_t row, int32_t col)

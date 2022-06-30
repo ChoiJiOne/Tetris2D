@@ -1,4 +1,4 @@
-#include "../Public/Logger.h"
+#include "Logger.h"
 
 void Logger::ClearConsole()
 {

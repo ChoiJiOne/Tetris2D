@@ -1,9 +1,9 @@
 #include "stb/stb_image.h"
 
-#include "../Public/GameEngine.h"
-#include "../Public/GameRenderer.h"
-#include "../Public/Macro.h"
-#include "../Public/GameTexture2D.h"
+#include "GameEngine.h"
+#include "GameRenderer.h"
+#include "Macro.h"
+#include "GameTexture2D.h"
 
 GameTexture2D::~GameTexture2D()
 {

@@ -1,7 +1,7 @@
-#include "../Public/Macro.h"
-#include "../Public/GameFont.h"
-#include "../Public/GameTexture2D.h"
-#include "../Public/GameRenderer.h"
+#include "Macro.h"
+#include "GameFont.h"
+#include "GameTexture2D.h"
+#include "GameRenderer.h"
 
 GameRenderer::~GameRenderer()
 {

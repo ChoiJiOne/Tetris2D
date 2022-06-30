@@ -1,4 +1,4 @@
-#include "../Public/MathUtil.h"
+#include "MathUtil.h"
 
 LinearColor ColorUtil::Black   = LinearColor(0.0f, 0.0f, 0.0f, 1.0f);
 LinearColor ColorUtil::Red     = LinearColor(1.0f, 0.0f, 0.0f, 1.0f);
