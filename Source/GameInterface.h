@@ -15,17 +15,11 @@
 // 게임 렌더링을 수행하기 위한 헤더 선언을 추가합니다.
 #include "GameRenderer.h"
 
-// 게임 텍스처를 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameTexture2D.h"
-
 // 게임 타이머를 사용하기 위한 헤더 선언을 추가합니다.
 #include "GameTimer.h"
 
 // 게임 윈도우를 생성 및 관리하기 위한 헤더 선언을 추가합니다.
 #include "GameWindow.h"
-
-// Json 파일을 로드하고 사용하기 위한 헤더 선언을 추가합니다.
-#include "JsonUtil.h"
 
 // 로그 기능을 사용하기 위한 헤더 선언을 추가합니다.
 #include "Logger.h"

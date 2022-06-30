@@ -110,16 +110,6 @@ public:
 	void DrawRectangle2D(const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor);
 
 
-	// 백버퍼에 텍스처를 그립니다.
-	// 
-	// @param InTexture - 백버퍼에 그릴 텍스처입니다.
-	// @param InCenterPosition - 텍스처의 중심이 위치할 화면상의 좌표입니다.
-	// @param InWidthScaling - 렌더링할 텍스처의 원본 텍스처 대비 가로 크기 비율입니다.
-	// @param InHeightScaling - 렌더링할 텍스처의 원본 텍스처 대비 세로 크기 비율입니다.
-	// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
-	void DrawTexture2D(const class GameTexture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling = 1.0f, float InHeightScaling = 1.0f);
-
-
 	// 벡버퍼에 UTF-16 텍스트를 그립니다.
 	//
 	// @param InFont - 렌더링 시 참조할 폰트입니다.

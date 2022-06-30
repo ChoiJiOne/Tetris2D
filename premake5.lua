@@ -3,7 +3,6 @@ function IncludeFiles()
    files {
       "%{source_path}/*",
 
-      "%{third_party_path}/Include/Json/*",
       "%{third_party_path}/Include/SDL2/*",
       "%{third_party_path}/Include/STB/*",
    }
