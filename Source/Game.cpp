@@ -94,11 +94,11 @@ void Game::SetupCommonProperties()
 void Game::SetupTetrisProperties()
 {
 	// 게임 리소스 경로입니다.
-	std::string ResourceDirectory = GameEngine::GetResourceDirectory();
+	std::string RootDirectory = GameEngine::GetProjectRootDirectory();
 
 
 	// 게임 폰트를 생성합니다.
-	std::string FontPath = ResourceDirectory + "font/Nanum.ttf";
+	std::string FontPath = RootDirectory + "font/Nanum.ttf";
 	Font.CreateGameFont(FontPath, 20.0f);
 
 	tetrisBoard = std::make_shared<Board>();
