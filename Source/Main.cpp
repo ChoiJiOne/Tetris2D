@@ -1,7 +1,4 @@
-#include "Game/GameString.h"
-#include "Game/GameSDLUtility.h"
-
-#include "SDL2/SDL.h"
+#include "Tetris2D.h"
 
 int main(int argc, char* argv[])
 {
@@ -11,25 +8,14 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		Game::SDLUtility::Init();
-
-		SDL_Window* Window = Game::SDLUtility::CreateSDLWindow(
-			"Tetris2D",
-			SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,
-			700,
-			800,
-			SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
-		);
-		Sleep(3000);
-
-		Game::SDLUtility::DestroySDLWindow(Window);
+		auto TetrisGame = std::make_unique<Tetris2D>();
+		TetrisGame->Setup();
+		TetrisGame->Run();
 	}
 	catch (const std::exception& Exception)
 	{
 		std::cout << Exception.what() << std::endl;
 	}
 
-	Game::SDLUtility::Release();
 	return 0;
 }
