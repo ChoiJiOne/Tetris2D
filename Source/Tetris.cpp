@@ -1,11 +1,11 @@
-#include "Game.h"
+#include "Tetris.h"
 
-Game::~Game()
+Tetris::~Tetris()
 {
 	GameEngine::Release();
 }
 
-void Game::Setup()
+void Tetris::Setup()
 {
 	// 게임 엔진을 초기화합니다.
 	GameEngine::Init();
@@ -19,7 +19,7 @@ void Game::Setup()
 	SetupTetrisProperties();
 }
 
-void Game::Run()
+void Tetris::Run()
 {
 	// 게임 타이머를 초기화합니다.
 	Timer.Reset();
@@ -45,7 +45,7 @@ void Game::Run()
 	}
 }
 
-void Game::SetupCommonProperties()
+void Tetris::SetupCommonProperties()
 {
 	// 게임 윈도우를 생성합니다.
 	int32_t WindowWidth = 1000;
@@ -91,7 +91,7 @@ void Game::SetupCommonProperties()
 
 }
 
-void Game::SetupTetrisProperties()
+void Tetris::SetupTetrisProperties()
 {
 	// 게임 리소스 경로입니다.
 	std::string RootDirectory = GameEngine::GetProjectRootDirectory();
@@ -104,7 +104,7 @@ void Game::SetupTetrisProperties()
 	tetrisBoard = std::make_shared<Board>();
 }
 
-void Game::Update()
+void Tetris::Update()
 {
 	if (GameEngine::GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_ESCAPE))
 	{
@@ -136,7 +136,7 @@ void Game::Update()
 	}
 }
 
-void Game::Draw()
+void Tetris::Draw()
 {
 	GameEngine::GetGameRenderer().BeginFrame(ColorUtil::Black);
 
@@ -166,7 +166,7 @@ void Game::Draw()
 	GameEngine::GetGameRenderer().EndFrame();
 }
 
-void Game::UpdatePlay()
+void Tetris::UpdatePlay()
 {
 	userPlayTime += Timer.DeltaTime();
 	userStepTime += Timer.DeltaTime();
@@ -282,7 +282,7 @@ void Game::UpdatePlay()
 	}
 }
 
-void Game::UpdateWait()
+void Tetris::UpdateWait()
 {
 	waitTime += Timer.DeltaTime();
 
@@ -308,7 +308,7 @@ void Game::UpdateWait()
 	}
 }
 
-void Game::UpdateTitleScene()
+void Tetris::UpdateTitleScene()
 {
 	if (GameEngine::GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_RETURN))
 	{
@@ -316,7 +316,7 @@ void Game::UpdateTitleScene()
 	}
 }
 
-void Game::UpdateEndingScene()
+void Tetris::UpdateEndingScene()
 {
 	if (GameEngine::GetGameInput().GetKeyboardState().IsCurrKeyPress(SDL_Scancode::SDL_SCANCODE_RETURN))
 	{
@@ -324,7 +324,7 @@ void Game::UpdateEndingScene()
 	}
 }
 
-void Game::DrawPlay()
+void Tetris::DrawPlay()
 {
 	tetrisBoard->Draw(uiPositionCache["board"], 30);
 
@@ -366,7 +366,7 @@ void Game::DrawPlay()
 	);
 }
 
-void Game::DrawWait()
+void Tetris::DrawWait()
 {
 	tetrisBoard->Draw(uiPositionCache["board"], 30);
 
@@ -378,7 +378,7 @@ void Game::DrawWait()
 	);
 }
 
-void Game::DrawTitleScene()
+void Tetris::DrawTitleScene()
 {
 	GameEngine::GetGameRenderer().DrawText2D(
 		Font,
@@ -395,7 +395,7 @@ void Game::DrawTitleScene()
 	);
 }
 
-void Game::DrawEndingScene()
+void Tetris::DrawEndingScene()
 {
 	GameEngine::GetGameRenderer().DrawText2D(
 		Font,

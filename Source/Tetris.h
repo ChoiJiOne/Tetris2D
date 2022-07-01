@@ -11,15 +11,15 @@
 
 
 // 게임 클래스입니다.
-class Game
+class Tetris
 {
 public:
 	// 생성자입니다.
-	Game() = default;
+	Tetris() = default;
 
 
 	// 가상소멸자입니다.
-	virtual ~Game();
+	virtual ~Tetris();
 
 
 	// 게임 프레임워크 및 전체 게임을 초기화합니다.

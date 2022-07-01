@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Tetris.h"
 
 int main(int argc, char* argv[])
 {
@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		auto TetrisGame = std::make_shared<Game>();
+		auto TetrisGame = std::make_shared<Tetris>();
 		TetrisGame->Setup();
 		TetrisGame->Run();
 	}
