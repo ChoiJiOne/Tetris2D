@@ -3,6 +3,9 @@
 // 게임 프레임워크를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Framework.h"
 
+// 게임 타이머를 사용하기 위한 헤더를 선언합니다.
+#include "Game/Timer.h"
+
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
 class Tetris2D : public Game::Framework
@@ -53,4 +56,8 @@ private:
 
 	// 루프를 종료할 지 확인합니다.
 	bool bIsDoneLoop = false;
+
+
+	// 게임 타이머입니다.
+	Game::Timer GameTImer;
 };

@@ -32,9 +32,12 @@ void Tetris2D::Setup()
 void Tetris2D::Run()
 {
 	SDL_Event Event;
+	GameTImer.Reset();
 
 	while (!bIsDoneLoop)
 	{
+		GameTImer.Tick();
+
 		while (SDL_PollEvent(&Event))
 		{
 			if (Event.type == SDL_QUIT)
