@@ -1,4 +1,5 @@
 #include "Game/SDLHelper.h"
+#include "Game/Renderer.h"
 
 #include "Tetris2D.h"
 
@@ -27,6 +28,10 @@ void Tetris2D::Setup()
 
 
 	Renderer = Game::SDLHelper::CreateSDLRenderer(Window);
+
+	// 이 부분 수정 필요!
+	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Font/Nanum.ttf";
+	Font = std::make_unique<Game::Font>(Renderer, FontPath, 32.0f);
 }
 
 void Tetris2D::Run()
@@ -57,4 +62,9 @@ void Tetris2D::Update()
 
 void Tetris2D::Draw()
 {
+	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
+
+	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"한글 출력 확인", ColorHelper::White);
+
+	Game::Renderer::EndFrame(Renderer);
 }

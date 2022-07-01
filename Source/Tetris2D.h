@@ -6,6 +6,9 @@
 // 게임 타이머를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Timer.h"
 
+// 게임 폰트를 사용하기 위한 헤더를 선언합니다.
+#include "Game/Font.h"
+
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
 class Tetris2D : public Game::Framework
@@ -60,4 +63,8 @@ private:
 
 	// 게임 타이머입니다.
 	Game::Timer GameTImer;
+
+
+	// 게임 폰트입니다.
+	std::unique_ptr<Game::Font> Font = nullptr;
 };
