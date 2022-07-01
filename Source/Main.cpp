@@ -8,9 +8,9 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		auto TetrisGame = std::make_unique<Tetris2D>();
-		TetrisGame->Setup();
-		TetrisGame->Run();
+		auto Game = std::make_unique<Tetris2D>();
+		Game->Setup();
+		Game->Run();
 	}
 	catch (const std::exception& Exception)
 	{
