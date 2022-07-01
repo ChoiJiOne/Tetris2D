@@ -23,9 +23,6 @@ int main(int argc, char* argv[])
 		);
 		Sleep(3000);
 
-		Game::SDLUtility::SetWindowTitle(Window, "Change Title Name");
-		Sleep(3000);
-
 		Game::SDLUtility::DestroySDLWindow(Window);
 	}
 	catch (const std::exception& Exception)
