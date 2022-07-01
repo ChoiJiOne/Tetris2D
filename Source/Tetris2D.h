@@ -40,12 +40,26 @@ public:
 	virtual void Run() override;
 
 
+	// 테트리스 게임 입력 처리를 수행합니다.
+	virtual void Input() override;
+
+
 	// 테트리스 게임 루프를 업데이트합니다.
 	virtual void Update() override;
 
 
 	// 테트리스 게임을 화면에 그립니다.
 	virtual void Draw() override;
+
+
+private:
+	// 특정 키가 눌렸는지 확인합니다.
+	//
+	// @param InKeyboardState - 검사를 수행할 키보드의 상태입니다.
+	// @param InKeyCode - 검사를 수행할 키입니다.
+	//
+	// @return 만약 키를 눌렀다면 true, 그렇지 않다면 false를 반환합니다.
+	bool IsPressKey(const std::vector<uint8_t>& InKeyboardState, uint8_t InKeyCode);
 
 
 private:
@@ -67,4 +81,12 @@ private:
 
 	// 게임 폰트입니다.
 	std::unique_ptr<Game::Font> Font = nullptr;
+
+
+	// 게임의 이전 키보드 상태입니다.
+	std::vector<uint8_t> CurrKeyboardState;
+
+
+	// 게임의 현재 키보드 상태입니다.
+	std::vector<uint8_t> PrevKeyboardState;
 };
