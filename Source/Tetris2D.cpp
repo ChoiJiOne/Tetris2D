@@ -1,4 +1,4 @@
-#include "Game/GameSDLHelper.h"
+#include "Game/SDLHelper.h"
 
 #include "Tetris2D.h"
 

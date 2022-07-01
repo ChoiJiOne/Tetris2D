@@ -1,7 +1,7 @@
 #pragma once
 
 // 게임 프레임워크를 사용하기 위한 헤더를 선언합니다.
-#include "Game/GameFramework.h"
+#include "Game/Framework.h"
 
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.

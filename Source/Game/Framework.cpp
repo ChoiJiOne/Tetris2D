@@ -1,4 +1,4 @@
-#include "GameSDLHelper.h"
+#include "SDLHelper.h"
 #include "Framework.h"
 
 Game::Framework::~Framework()

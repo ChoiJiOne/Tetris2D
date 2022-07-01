@@ -1,13 +1,13 @@
 #pragma once
 
 // 표준 라이브러리를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "GameHeader.h"
+#include "Header.h"
 
 
 namespace Game
 {
     // 게임 내의 문자열 관련 기능을 제공하는 클래스입니다.
-    class String
+    class StringHelper
     {
     public:
         // 기존의 sprintf 를 대체할 때 호출합니다.

@@ -1,7 +1,7 @@
 #pragma once
 
 // 문자열 관련 기능을 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameString.h"
+#include "StringHelper.h"
 
 
 // 강제로 C++ 표준 예외를 반환합니다.
@@ -12,7 +12,7 @@
 #define ENFORCE_THROW_EXCEPTION(MESSAGE)\
 {\
     throw std::exception(\
-        Game::String::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
+        Game::StringHelper::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
     );\
 }
 #endif
@@ -29,7 +29,7 @@
     if(!CONDITION)\
     {\
         throw std::exception(\
-            Game::String::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
+            Game::StringHelper::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
         );\
     }\
 }
@@ -46,7 +46,7 @@
     if(!CONDITION)\
     {\
         throw std::exception(\
-            Game::String::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, SDL_GetError()).c_str()\
+            Game::StringHelper::Format("[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n", __FILE__, __LINE__, __FUNCTION__, SDL_GetError()).c_str()\
         );\
     }\
 }

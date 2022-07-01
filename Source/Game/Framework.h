@@ -1,7 +1,7 @@
 #pragma once
 
 // 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "GameHeader.h"
+#include "Header.h"
 
 
 namespace Game

@@ -1,5 +1,5 @@
-#include "GameMacro.h"
-#include "GameSDLHelper.h"
+#include "Macro.h"
+#include "SDLHelper.h"
 
 bool bIsInitialize = false;
 static std::string ExecuteDirectory;
