@@ -13,7 +13,7 @@
     
     
       
-        <title>Visual Studio 솔루션 생성 자동화 - Tetris2D</title>
+        <title>솔루션 생성 자동화 - Tetris2D</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#visual-studio" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Visual Studio 솔루션 생성 자동화
+              솔루션 생성 자동화
             
           </span>
         </div>
@@ -245,12 +245,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Visual Studio 솔루션 생성 자동화
+          솔루션 생성 자동화
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Visual Studio 솔루션 생성 자동화
+        솔루션 생성 자동화
       </a>
       
         
@@ -269,21 +269,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_1" class="md-nav__link">
+  <a href="#visual-studio" class="md-nav__link">
     Visual Studio 솔루션 생성 자동화를 하는 이유는 무엇인가요?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_2" class="md-nav__link">
+  <a href="#visual-studio_1" class="md-nav__link">
     Visual Studio 솔루션 생성 자동화 구현은 무엇을 이용해서 하나요?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_3" class="md-nav__link">
+  <a href="#visual-studio_2" class="md-nav__link">
     Visual Studio 솔루션 생성을 생성하는 방법
   </a>
   
@@ -354,21 +354,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_1" class="md-nav__link">
+  <a href="#visual-studio" class="md-nav__link">
     Visual Studio 솔루션 생성 자동화를 하는 이유는 무엇인가요?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_2" class="md-nav__link">
+  <a href="#visual-studio_1" class="md-nav__link">
     Visual Studio 솔루션 생성 자동화 구현은 무엇을 이용해서 하나요?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visual-studio_3" class="md-nav__link">
+  <a href="#visual-studio_2" class="md-nav__link">
     Visual Studio 솔루션 생성을 생성하는 방법
   </a>
   
@@ -388,12 +388,12 @@
                 
 
 
-<h1 id="visual-studio">Visual Studio 솔루션 생성 자동화</h1>
+<h1 id="_1">솔루션 생성 자동화</h1>
 <ul>
 <li>작성자 : 최지원
 <br><br></li>
 </ul>
-<h2 id="visual-studio_1">Visual Studio 솔루션 생성 자동화를 하는 이유는 무엇인가요?</h2>
+<h2 id="visual-studio">Visual Studio 솔루션 생성 자동화를 하는 이유는 무엇인가요?</h2>
 <p>Tetris2D 프로젝트의 Visual Studio 솔루션 생성을 자동화 하는 이유는 크게 다음 두 가지 때문입니다.  </p>
 <ol>
 <li>다양한 환경에서의 구현 작업 진행  </li>
@@ -402,14 +402,14 @@
 <p>첫 번째의 경우, 집에서 작업할 때가 대부분이지만 특별한 경우에 밖에서 노트북으로 작업하는 경우가 있는데, 처음에 생성한 솔루션을 그대로 사용할 경우 Windows SDK의 버전이 다르면 빌드가 되지 않는 경우가 있습니다. 따라서, 이러한 상황을 미리 막기 위해 Visual Studio 솔루션 생성 자동화를 구현합니다.  </p>
 <p>두 번째의 경우, 조엘 테스트 항목에도 있듯이 이는 일일 빌드를 자동화 하기 위한 것으로 자동으로 Visual Studio 솔루션을 생성한 뒤에 그 솔루션과 <code>MSBuild.exe</code>를 사용하여 일일 빌드 자동화를 구현하기 위함입니다.<br />
 <br><br></p>
-<h2 id="visual-studio_2">Visual Studio 솔루션 생성 자동화 구현은 무엇을 이용해서 하나요?</h2>
+<h2 id="visual-studio_1">Visual Studio 솔루션 생성 자동화 구현은 무엇을 이용해서 하나요?</h2>
 <p>Visual Studio 솔루션 생성 자동화의 경우 많은 오픈 소스 프로젝트가 <code>CMake</code>를 사용합니다.<br />
 하지만, 이 프로젝트의 경우 단 하나이지만 무조건적이고 강력한 조건을 만족해야 합니다.<br />
 그것은 <strong>"쉽고 간단하게 사용할 수 있어야 한다."</strong> 입니다.<br />
 이 조건을 만족하는 것으로는 <a href="https://premake.github.io/">Premake</a>가 있습니다.<br />
 따라서, 이 Tetris2D 프로젝트에서 Visual Studio 솔루션 생성 자동화를 수행하기 위해서는 Premake5를 사용합니다.  <br />
 <br><br></p>
-<h2 id="visual-studio_3">Visual Studio 솔루션 생성을 생성하는 방법</h2>
+<h2 id="visual-studio_2">Visual Studio 솔루션 생성을 생성하는 방법</h2>
 <p>프로젝트 내에 <code>GenerateProjectFiles.bat</code> 파일을 실행할 경우, <code>Tetris2D</code> 폴더 하위에 <code>Tetris2D.sln</code> 파일을 얻을 수 있습니다.</p>
 <p><br><br></p>
 
