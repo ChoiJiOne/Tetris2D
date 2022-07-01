@@ -37,6 +37,10 @@ namespace Game
 		virtual void Run() = 0;
 
 
+		// 게임 입력처리를 수행합니다.
+		virtual void Input() = 0;
+
+
 		// 게임 루프를 업데이트합니다.
 		virtual void Update() = 0;
 
