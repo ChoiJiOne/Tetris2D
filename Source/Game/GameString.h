@@ -58,45 +58,45 @@ namespace Game
         }
 
 
-        // UTF-8 문자열을 UTF-16 문자열로 변환할 때 호출합니다.
+        // UTF-8 문자열을 UTF-16 문자열로 변환합니다.
         // https://stackoverflow.com/questions/2573834/c-convert-string-or-char-to-wstring-or-wchar-t
         // 
         // @param InUTF8 - UTF-16으로 변환할 UTF-8 문자열입니다.
         // @return - UTF-16으로 변환이 완료된 문자열을 반환합니다.
-        static inline std::wstring ConvertUTF8ToUTF16(const std::string& InUTF8)
+        static inline std::wstring ConvertUTF16(const std::string& InUTF8)
         {
             static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> Converter;
             return Converter.from_bytes(InUTF8);
         }
 
 
-        // UTF-16 문자열을 UTF-8 문자열로 변환할 때 호출합니다.
+        // UTF-16 문자열을 UTF-8 문자열로 변환합니다.
         // https://stackoverflow.com/questions/2573834/c-convert-string-or-char-to-wstring-or-wchar-t
         // 
         // @param InUTF16 - UTF-8으로 변환할 UTF-16 문자열입니다.
         // @return - UTF-8으로 변환이 완료된 문자열을 반환합니다.
-        static inline std::string ConvertUTF16ToUTF8(const std::wstring& InUTF16)
+        static inline std::string ConvertUTF8(const std::wstring& InUTF16)
         {
             static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> Converter;
             return Converter.to_bytes(InUTF16);
         }
 
 
-        // UTF-8 문자열을 Hash 키 값으로 변환합니다.
+        // UTF-8 문자열의 Hash 값을 얻습니다.
         //
         // @param InUTF8 - Hash 값으로 변환할 UTF-8 문자열입니다.
         // @return - UTF-8 문자열의 Hash 값입니다. 
-        static inline std::size_t ConvertUTF8ToHash(const std::string& InUTF8)
+        static inline std::size_t GetHash(const std::string& InUTF8)
         {
             return std::hash<std::string>{}(InUTF8);
         }
 
 
-        // UTF-16 문자열을 Hash 키 값으로 변환합니다.
+        // UTF-16 문자열의 Hash 값을 얻습니다.
         //
         // @param InUTF16 - Hash 값으로 변환할 UTF-16 문자열입니다.
         // @return - UTF-16 문자열의 Hash 값입니다. 
-        static inline std::size_t ConvertUTF16ToHash(const std::wstring& InUTF16)
+        static inline std::size_t GetHash(const std::wstring& InUTF16)
         {
             return std::hash<std::wstring>{}(InUTF16);
         }
