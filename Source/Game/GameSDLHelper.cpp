@@ -26,7 +26,7 @@ void Game::SDLHelper::Release()
 
 SDL_Window* Game::SDLHelper::CreateSDLWindow(const std::string InTitle, int32_t InX, int32_t InY, int32_t InWidth, int32_t InHeight, uint32_t InFlags)
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	SDL_Window* Window = SDL_CreateWindow(
 		InTitle.c_str(),
@@ -52,7 +52,7 @@ void Game::SDLHelper::DestroySDLWindow(SDL_Window* InWindow)
 
 SDL_Renderer* Game::SDLHelper::CreateSDLRenderer(SDL_Window* InWindow)
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	SDL_Renderer* Renderer = SDL_CreateRenderer(InWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -71,21 +71,21 @@ void Game::SDLHelper::DestroySDLRenderer(SDL_Renderer* InRenderer)
 
 std::string Game::SDLHelper::GetExecuteDirectory()
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	return ExecuteDirectory;
 }
 
 void Game::SDLHelper::SetWindowTitle(SDL_Window* InWindow, const std::string& InTitle)
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	SDL_SetWindowTitle(InWindow, InTitle.c_str());
 }
 
 void Game::SDLHelper::SetVisibleConsoleWindow(bool bIsShow)
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	HWND ConsoleWindowHandle = GetConsoleWindow();
 	ShowWindow(ConsoleWindowHandle, bIsShow ? SW_SHOW : SW_HIDE);
@@ -93,7 +93,7 @@ void Game::SDLHelper::SetVisibleConsoleWindow(bool bIsShow)
 
 float Game::SDLHelper::GetWindowAspectRatio(SDL_Window* InWindow)
 {
-	CheckInitializeSDLUtility();
+	CheckInitializeSDLHelper();
 
 	float WindowWidth = 0.0f, WindowHeight = 0.0f;
 	GetWindowSize<float>(InWindow, WindowWidth, WindowHeight);
@@ -101,7 +101,7 @@ float Game::SDLHelper::GetWindowAspectRatio(SDL_Window* InWindow)
 	return WindowWidth / WindowHeight;
 }
 
-void Game::SDLHelper::CheckInitializeSDLUtility()
+void Game::SDLHelper::CheckInitializeSDLHelper()
 {
 	if (!bIsInitialize)
 	{
