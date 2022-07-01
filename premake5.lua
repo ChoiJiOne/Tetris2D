@@ -2,6 +2,7 @@
 function IncludeFiles()
    files {
       "%{source_path}/*",
+      "%{source_path}/Game/*",
 
       "%{third_party_path}/Include/SDL2/*",
       "%{third_party_path}/Include/STB/*",
