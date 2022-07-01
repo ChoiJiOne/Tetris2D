@@ -16,6 +16,16 @@ public:
 	virtual ~Tetris2D();
 
 
+	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다. 
+	Tetris2D(Tetris2D&& InInstance) = delete;
+	Tetris2D(const Tetris2D& InInstance) = delete;
+
+
+	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	Tetris2D& operator=(Tetris2D&& InInstance) = delete;
+	Tetris2D& operator=(const Tetris2D& InInstance) = delete;
+
+
 	// 테트리스 게임을 초기화합니다.
 	virtual void Setup() override;
 
