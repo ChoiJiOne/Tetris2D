@@ -6,8 +6,8 @@
 
 namespace Game
 {
-	// 게임 내에 SDL 관련 기능을 제공하는 클래스입니다.
-	class SDLUtility
+	// 게임 내에 SDL 헬퍼 클래스입니다.
+	class SDLHelper
 	{
 	public:
 		// 게임 유틸리티를 초기화합니다.

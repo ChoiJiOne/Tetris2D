@@ -1,12 +1,12 @@
-#include "GameSDLUtility.h"
+#include "GameSDLHelper.h"
 #include "GameFramework.h"
 
 Game::Framework::~Framework()
 {
-	SDLUtility::Release();
+	SDLHelper::Release();
 }
 
 void Game::Framework::Setup()
 {
-	SDLUtility::Init();
+	SDLHelper::Init();
 }

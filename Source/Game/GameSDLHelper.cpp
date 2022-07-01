@@ -1,10 +1,10 @@
 #include "GameMacro.h"
-#include "GameSDLUtility.h"
+#include "GameSDLHelper.h"
 
 bool bIsInitialize = false;
 static std::string ExecuteDirectory;
 
-void Game::SDLUtility::Init()
+void Game::SDLHelper::Init()
 {
 	if (!bIsInitialize)
 	{
@@ -15,7 +15,7 @@ void Game::SDLUtility::Init()
 	}
 }
 
-void Game::SDLUtility::Release()
+void Game::SDLHelper::Release()
 {
 	if (bIsInitialize)
 	{
@@ -24,7 +24,7 @@ void Game::SDLUtility::Release()
 	}
 }
 
-SDL_Window* Game::SDLUtility::CreateSDLWindow(const std::string InTitle, int32_t InX, int32_t InY, int32_t InWidth, int32_t InHeight, uint32_t InFlags)
+SDL_Window* Game::SDLHelper::CreateSDLWindow(const std::string InTitle, int32_t InX, int32_t InY, int32_t InWidth, int32_t InHeight, uint32_t InFlags)
 {
 	CheckInitializeSDLUtility();
 
@@ -41,7 +41,7 @@ SDL_Window* Game::SDLUtility::CreateSDLWindow(const std::string InTitle, int32_t
 	return Window;
 }
 
-void Game::SDLUtility::DestroySDLWindow(SDL_Window* InWindow)
+void Game::SDLHelper::DestroySDLWindow(SDL_Window* InWindow)
 {
 	if (InWindow)
 	{
@@ -50,7 +50,7 @@ void Game::SDLUtility::DestroySDLWindow(SDL_Window* InWindow)
 	}
 }
 
-SDL_Renderer* Game::SDLUtility::CreateSDLRenderer(SDL_Window* InWindow)
+SDL_Renderer* Game::SDLHelper::CreateSDLRenderer(SDL_Window* InWindow)
 {
 	CheckInitializeSDLUtility();
 
@@ -60,7 +60,7 @@ SDL_Renderer* Game::SDLUtility::CreateSDLRenderer(SDL_Window* InWindow)
 	return Renderer;
 }
 
-void Game::SDLUtility::DestroySDLRenderer(SDL_Renderer* InRenderer)
+void Game::SDLHelper::DestroySDLRenderer(SDL_Renderer* InRenderer)
 {
 	if (InRenderer)
 	{
@@ -69,21 +69,21 @@ void Game::SDLUtility::DestroySDLRenderer(SDL_Renderer* InRenderer)
 	}
 }
 
-std::string Game::SDLUtility::GetExecuteDirectory()
+std::string Game::SDLHelper::GetExecuteDirectory()
 {
 	CheckInitializeSDLUtility();
 
 	return ExecuteDirectory;
 }
 
-void Game::SDLUtility::SetWindowTitle(SDL_Window* InWindow, const std::string& InTitle)
+void Game::SDLHelper::SetWindowTitle(SDL_Window* InWindow, const std::string& InTitle)
 {
 	CheckInitializeSDLUtility();
 
 	SDL_SetWindowTitle(InWindow, InTitle.c_str());
 }
 
-void Game::SDLUtility::SetVisibleConsoleWindow(bool bIsShow)
+void Game::SDLHelper::SetVisibleConsoleWindow(bool bIsShow)
 {
 	CheckInitializeSDLUtility();
 
@@ -91,7 +91,7 @@ void Game::SDLUtility::SetVisibleConsoleWindow(bool bIsShow)
 	ShowWindow(ConsoleWindowHandle, bIsShow ? SW_SHOW : SW_HIDE);
 }
 
-float Game::SDLUtility::GetWindowAspectRatio(SDL_Window* InWindow)
+float Game::SDLHelper::GetWindowAspectRatio(SDL_Window* InWindow)
 {
 	CheckInitializeSDLUtility();
 
@@ -101,10 +101,10 @@ float Game::SDLUtility::GetWindowAspectRatio(SDL_Window* InWindow)
 	return WindowWidth / WindowHeight;
 }
 
-void Game::SDLUtility::CheckInitializeSDLUtility()
+void Game::SDLHelper::CheckInitializeSDLUtility()
 {
 	if (!bIsInitialize)
 	{
-		ENFORCE_THROW_EXCEPTION("You are not ready to use SDL. please call SDLUtility::Init()");
+		ENFORCE_THROW_EXCEPTION("You are not ready to use SDL. please call SDLHelper::Init()");
 	}
 }
