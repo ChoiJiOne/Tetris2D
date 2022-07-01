@@ -138,7 +138,7 @@ void Tetris::Update()
 
 void Tetris::Draw()
 {
-	GameEngine::GetGameRenderer().BeginFrame(ColorUtil::Black);
+	GameEngine::GetGameRenderer().BeginFrame(Color::Black);
 
 	if (bIsStartGame)
 	{
@@ -329,8 +329,8 @@ void Tetris::DrawPlay()
 	tetrisBoard->Draw(uiPositionCache["board"], 30);
 
 
-	GameEngine::GetGameRenderer().DrawText2D(Font, uiPositionCache["next"], L"다음 테트로미노", ColorUtil::White);
-	nextTetromino->Draw(uiPositionCache["nextTetromino"], 30, ColorUtil::Black);
+	GameEngine::GetGameRenderer().DrawText2D(Font, uiPositionCache["next"], L"다음 테트로미노", Color::White);
+	nextTetromino->Draw(uiPositionCache["nextTetromino"], 30, Color::Black);
 
 
 	int32_t remainTime = static_cast<int32_t>(gamePlayTime - userPlayTime);
@@ -338,7 +338,7 @@ void Tetris::DrawPlay()
 		Font,
 		uiPositionCache["time"],
 		StringUtil::StringFormat(L"남은 시간 : %d", remainTime),
-		remainTime > 10 ? ColorUtil::White : ColorUtil::Red
+		remainTime > 10 ? Color::White : Color::Red
 	);
 
 
@@ -346,7 +346,7 @@ void Tetris::DrawPlay()
 		Font,
 		uiPositionCache["level"],
 		StringUtil::StringFormat(L"현재 레벨 : %d", userLevel),
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -354,7 +354,7 @@ void Tetris::DrawPlay()
 		Font,
 		uiPositionCache["remove"],
 		StringUtil::StringFormat(L"삭제한 라인 수 : %d", userRemoveLine),
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -362,7 +362,7 @@ void Tetris::DrawPlay()
 		Font,
 		uiPositionCache["exit"],
 		L"게임 종료 시 ESC 키를 입력",
-		ColorUtil::White
+		Color::White
 	);
 }
 
@@ -374,7 +374,7 @@ void Tetris::DrawWait()
 		Font,
 		uiPositionCache["countDown"],
 		StringUtil::StringFormat(L"count down : %d", static_cast<int32_t>(gameWaitTime - waitTime)),
-		ColorUtil::White
+		Color::White
 	);
 }
 
@@ -384,14 +384,14 @@ void Tetris::DrawTitleScene()
 		Font,
 		uiPositionCache["titleScene"],
 		L"Tetris2D",
-		ColorUtil::White
+		Color::White
 	);
 
 	GameEngine::GetGameRenderer().DrawText2D(
 		Font,
 		Vec2i(uiPositionCache["titleScene"].x - 80, uiPositionCache["titleScene"].y + 30),
 		L"시작하려면 엔터 키를 입력하세요...",
-		ColorUtil::White
+		Color::White
 	);
 }
 
@@ -401,7 +401,7 @@ void Tetris::DrawEndingScene()
 		Font,
 		Vec2i(uiPositionCache["endingScene"].x, uiPositionCache["endingScene"].y),
 		L"플레이 해주셔서 감사합니다.",
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -409,7 +409,7 @@ void Tetris::DrawEndingScene()
 		Font,
 		Vec2i(uiPositionCache["endingScene"].x, uiPositionCache["endingScene"].y + 30),
 		StringUtil::StringFormat(L"유저 레벨 : %d", userLevel),
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -417,7 +417,7 @@ void Tetris::DrawEndingScene()
 		Font,
 		Vec2i(uiPositionCache["endingScene"].x, uiPositionCache["endingScene"].y + 60),
 		StringUtil::StringFormat(L"플레이 시간 : %d s", static_cast<int32_t>(Timer.TotalTime())),
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -425,7 +425,7 @@ void Tetris::DrawEndingScene()
 		Font,
 		Vec2i(uiPositionCache["endingScene"].x, uiPositionCache["endingScene"].y + 90),
 		StringUtil::StringFormat(L"삭제한 라인 수 : %d", userRemoveLine),
-		ColorUtil::White
+		Color::White
 	);
 
 
@@ -433,6 +433,6 @@ void Tetris::DrawEndingScene()
 		Font,
 		Vec2i(uiPositionCache["endingScene"].x, uiPositionCache["endingScene"].y + 120),
 		L"종료하려면 엔터키를 입력하세요...",
-		ColorUtil::White
+		Color::White
 	);
 }

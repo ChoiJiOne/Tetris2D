@@ -1,7 +1,7 @@
 #pragma once
 
 // Game Engine 기능을 사용하기 위한 헤더 선언을 추가합니다.
-#include "GameInterface.h"
+#include "MathHelper.h"
 
 
 // 테트리스 보드 내의 테트로미노입니다.
@@ -117,18 +117,18 @@ public:
 		};
 
 		static LinearColor ColorTable[] = {
-			ColorUtil::Red,
-			ColorUtil::Green,
-			ColorUtil::Blue,
-			ColorUtil::Yellow,
-			ColorUtil::Magenta,
-			ColorUtil::Cyan
+			Color::Red,
+			Color::Green,
+			Color::Blue,
+			Color::Yellow,
+			Color::Magenta,
+			Color::Cyan
 		};
 
 		return std::make_shared<Tetromino>(
 			InPosition,
-			ShapeTable[MathUtil::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ShapeTable)) - 1)],
-			ColorTable[MathUtil::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ColorTable)) - 1)]
+			ShapeTable[Math::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ShapeTable)) - 1)],
+			ColorTable[Math::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ColorTable)) - 1)]
 		);
 	}
 

@@ -22,7 +22,7 @@ public:
 
 
 public:
-	Board(int32_t rowSize_ = 20, int32_t colSize_ = 10, LinearColor wallColor_ = ColorUtil::White, LinearColor backgroundColor_ = ColorUtil::Black);
+	Board(int32_t rowSize_ = 20, int32_t colSize_ = 10, LinearColor wallColor_ = Color::White, LinearColor backgroundColor_ = Color::Black);
 	virtual ~Board();
 
 	Board(Board&& instance) noexcept;

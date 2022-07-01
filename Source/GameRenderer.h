@@ -4,7 +4,7 @@
 #include "CommonHeader.h"
 
 // 수학 기능을 사용하기 위한 헤더 선언을 추가합니다.
-#include "MathUtil.h"
+#include "MathHelper.h"
 
 
 // 렌더링을 수행하는 클래스입니다.

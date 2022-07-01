@@ -1,3 +1,6 @@
+#include "Logger.h"
+#include "GameRenderer.h"
+#include "GameEngine.h"
 #include "Tetromino.h"
 
 Tetromino::Tetromino(const Vec2i& InAbsolutePosition, const EShape& InShape, const LinearColor& InColor)
