@@ -9,6 +9,9 @@
 // 게임 폰트를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Font.h"
 
+// 테트로미노를 사용하기 위한 헤더를 선언합니다.
+#include "Tetromino.h"
+
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
 class Tetris2D : public Game::Framework
@@ -89,4 +92,8 @@ private:
 
 	// 게임의 현재 키보드 상태입니다.
 	std::vector<uint8_t> PrevKeyboardState;
+
+
+	// 테트로미노입니다.
+	std::shared_ptr<Tetromino> CurrentTetromino = nullptr;
 };

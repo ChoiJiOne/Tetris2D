@@ -43,6 +43,10 @@ void Tetris2D::Setup()
 	// 키보드 상태를 초기화합니다.
 	PrevKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
 	CurrKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
+
+
+	// 테트로미노를 생성합니다.
+	CurrentTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
 }
 
 void Tetris2D::Run()
@@ -94,26 +98,7 @@ void Tetris2D::Draw()
 {
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT))
-	{
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"방향키 감지 : 왼쪽", ColorHelper::White);
-	}
-	else if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT))
-	{
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"방향키 감지 : 오른쪽", ColorHelper::White);
-	}
-	else if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_UP))
-	{
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"방향키 감지 : 위", ColorHelper::White);
-	}
-	else if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN))
-	{
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"방향키 감지 : 아래", ColorHelper::White);
-	}
-	else
-	{
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(40, 40), L"방향키가 감지되지 않습니다.", ColorHelper::White);
-	}
+	CurrentTetromino->Draw(Renderer, Vec2i(100, 100), 20);
 
 	Game::Renderer::EndFrame(Renderer);
 }
