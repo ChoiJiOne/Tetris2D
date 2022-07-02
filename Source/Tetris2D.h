@@ -9,6 +9,9 @@
 // 게임 폰트를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Font.h"
 
+// 게임 로그를 사용하기 위한 헤더를 선언합니다.
+#include "Game/Logger.h"
+
 // 테트로미노를 사용하기 위한 헤더를 선언합니다.
 #include "Tetromino.h"
 
