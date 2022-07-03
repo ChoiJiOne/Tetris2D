@@ -102,7 +102,7 @@ void Tetromino::Move(EMove InMove)
 	}
 }
 
-void Tetromino::Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor)
+void Tetromino::Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor) const
 {
 	for (const auto& BlockPosition : BlockPositions)
 	{

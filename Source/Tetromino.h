@@ -77,19 +77,19 @@ public:
 	// 테트로미노의 블럭 컬러를 반환합니다.
 	//
 	// @return - 테트로미노의 블럭 컬러를 반환합니다.
-	LinearColor GetBlockColor() noexcept { return BlockColor; }
+	LinearColor GetBlockColor() const noexcept { return BlockColor; }
 
 
 	// 테트리스 보드 상의 테트로미노 왼쪽 상단 좌표를 반환합니다.
 	//
 	// @return - 테트리스 보드 상의 테트로미노 왼쪽 상단 좌표를 반환합니다.
-	Vec2i GetPositionInBoard() noexcept { return PositionInBoard; }
+	Vec2i GetPositionInBoard() const noexcept { return PositionInBoard; }
 
 
 	// 테트로미노 블럭들의 위치를 반환합니다.
 	//
 	// @return - 테트로미노 블럭들의 위치를 반환합니다.
-	const std::vector<Vec2i>& GetBlockPositions() noexcept { return BlockPositions; }
+	const std::vector<Vec2i>& GetBlockPositions() const noexcept { return BlockPositions; }
 
 
 	// 테트로미노를 백 버퍼에 그립니다.
@@ -98,7 +98,7 @@ public:
 	// @param InWindowPosition - 테트로미노를 그릴 윈도우 상의 좌표입니다.
 	// @param InBlockSize - 테트로미노 블럭의 크기입니다.
 	// @param OutlineColor - 테트로미노의 테두리 색상입니다.
-	void Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor = ColorHelper::Black);
+	void Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor = ColorHelper::Black) const;
 
 
 	// 임의의 테트로미노를 생성합니다.
