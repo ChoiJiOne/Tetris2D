@@ -24,8 +24,9 @@ public:
 	// 테트로미노의 회전 방향 입니다.
 	enum class ESpin : int32_t
 	{
-		CCW = 0,
-		CW  = 1
+		CCW  = 0,
+		CW   = 1,
+		None = 2
 	};
 
 
@@ -167,6 +168,33 @@ public:
 		}
 
 		return OutMove;
+	}
+
+
+	// 테트로미노의 회전 방향의 반대 방향을 계산합니다.
+	// 
+	// @param InSpin - 계산할 방향입니다.
+	//
+	// @return - 입력받은 방향의 반대 방향을 반환합니다.
+	static ESpin CalculateCountMove(const ESpin& InSpin)
+	{
+		ESpin OutSpin = ESpin::None;
+
+		switch (InSpin)
+		{
+		case ESpin::CCW:
+			OutSpin = ESpin::CW;
+			break;
+
+		case ESpin::CW:
+			OutSpin = ESpin::CCW;
+			break;
+
+		default:
+			break;
+		}
+
+		return OutSpin;
 	}
 
 
