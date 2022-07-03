@@ -129,13 +129,8 @@ bool Board::AddTetromino(const Tetromino& InTetromino)
 	return true;
 }
 
-bool Board::RemoveTetromino(const Tetromino& InTetromino)
+void Board::RemoveTetromino(const Tetromino& InTetromino)
 {
-	if (IsCrashTetromino(InTetromino))
-	{
-		return false;
-	}
-
 	const std::vector<Vec2i> Positions = InTetromino.GetBlockPositions();
 
 	for (const auto& Position : Positions)
@@ -151,8 +146,6 @@ bool Board::RemoveTetromino(const Tetromino& InTetromino)
 			ColSize
 		);
 	}
-
-	return true;
 }
 
 bool Board::MoveTetromino(Tetromino& InTetromino, const Tetromino::EMove& InMove)

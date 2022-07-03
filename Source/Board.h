@@ -71,9 +71,7 @@ public:
 	// 테트로미노를 테트리스 보드에 삭제합니다.
 	//
 	// @param InTetromino - 삭제할 테트로미노입니다.
-	//
-	// @return - 삭제할 수 있다면 true, 삭제할 수 없다면 false를 반환합니다.
-	bool RemoveTetromino(const Tetromino& InTetromino);
+	void RemoveTetromino(const Tetromino& InTetromino);
 
 
 	// 테트리스 보드 상의 테트로미노를 움직입니다.
