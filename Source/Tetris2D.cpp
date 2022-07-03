@@ -5,6 +5,10 @@
 
 Tetris2D::~Tetris2D()
 {
+	TetrisBoard.reset();
+
+	CurrentTetromino.reset();
+
 	Font.reset();
 
 	Game::SDLHelper::DestroySDLRenderer(Renderer);
@@ -97,6 +101,25 @@ void Tetris2D::Input()
 
 void Tetris2D::Update()
 {
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT))
+	{
+		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
+	}	
+	
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT))
+	{
+		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Right);
+	}	
+	
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_UP) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_UP))
+	{
+		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Up);
+	}	
+	
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN))
+	{
+		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+	}
 }
 
 void Tetris2D::Draw()
