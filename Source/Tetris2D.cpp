@@ -47,6 +47,11 @@ void Tetris2D::Setup()
 
 	// 테트로미노를 생성합니다.
 	CurrentTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+
+
+	// 테트리스 보드를 생성합니다.
+	TetrisBoard = std::make_unique<Board>();
+	TetrisBoard->AddTetromino(*CurrentTetromino);
 }
 
 void Tetris2D::Run()
@@ -98,7 +103,8 @@ void Tetris2D::Draw()
 {
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
-	CurrentTetromino->Draw(Renderer, Vec2i(100, 100), 20);
+	CurrentTetromino->Draw(Renderer, Vec2i(300, 100), 20);
+	TetrisBoard->Draw(Renderer, Vec2i(10, 10), 20);
 
 	Game::Renderer::EndFrame(Renderer);
 }

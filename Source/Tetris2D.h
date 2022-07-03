@@ -15,6 +15,9 @@
 // 테트로미노를 사용하기 위한 헤더를 선언합니다.
 #include "Tetromino.h"
 
+// 테트리스 보드를 사용하기 위한 헤더를 선언합니다.
+#include "Board.h"
+
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
 class Tetris2D : public Game::Framework
@@ -99,4 +102,8 @@ private:
 
 	// 테트로미노입니다.
 	std::shared_ptr<Tetromino> CurrentTetromino = nullptr;
+
+
+	// 테트리스 보드입니다.
+	std::unique_ptr<Board> TetrisBoard = nullptr;
 };
