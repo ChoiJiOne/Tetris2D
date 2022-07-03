@@ -35,7 +35,8 @@ public:
 		Left  = 0,
 		Right = 1,
 		Down  = 2,
-		Up    = 3
+		Up    = 3,
+		None  = 4
 	};
 
 
@@ -96,14 +97,14 @@ public:
 	// 
 	// @param InRenderer - SDL 렌더러의 포인터입니다.
 	// @param InWindowPosition - 테트로미노를 그릴 윈도우 상의 좌표입니다.
-	// @param InBlockSize - 테트로미노 블럭의 크기입니다.
+	// @param InBlockSize - 화면에 그려질 테트로미노 블럭의 크기입니다.
 	// @param OutlineColor - 테트로미노의 테두리 색상입니다.
 	void Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_t InBlockSize, const LinearColor& InOutlineColor = ColorHelper::Black) const;
 
 
 	// 임의의 테트로미노를 생성합니다.
 	// 
-	// @param InPosition - 
+	// @param InPosition - 테트리스 보드 상의 테트로미노 왼쪽 상단 좌표입니다.
 	// @return - 생성된 테트로미노의 스마트 포인터를 반환합니다.
 	static std::shared_ptr<Tetromino> GenerateRandomTetromino(const Vec2i& InPosition)
 	{
@@ -131,6 +132,41 @@ public:
 			ShapeTable[MathHelper::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ShapeTable)) - 1)],
 			ColorTable[MathHelper::GenerateRandomInt<int32_t>(0, static_cast<int32_t>(std::size(ColorTable)) - 1)]
 		);
+	}
+
+
+	// 테트로미노의 움직이는 방향의 반대 방향을 계산합니다.
+	// 
+	// @param InMove - 계산할 방향입니다.
+	//
+	// @return - 입력받은 방향의 반대 방향을 반환합니다.
+	static EMove CalculateCountMove(const EMove& InMove)
+	{
+		EMove OutMove = EMove::None;
+
+		switch (InMove)
+		{
+		case EMove::Down:
+			OutMove = EMove::Up;
+			break;
+
+		case EMove::Up:
+			OutMove = EMove::Down;
+			break;
+
+		case EMove::Left:
+			OutMove = EMove::Right;
+			break;
+
+		case EMove::Right:
+			OutMove = EMove::Left;
+			break;
+
+		default:
+			break;
+		}
+
+		return OutMove;
 	}
 
 
