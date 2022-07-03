@@ -176,7 +176,7 @@ public:
 	// @param InSpin - 계산할 방향입니다.
 	//
 	// @return - 입력받은 방향의 반대 방향을 반환합니다.
-	static ESpin CalculateCountMove(const ESpin& InSpin)
+	static ESpin CalculateCountSpin(const ESpin& InSpin)
 	{
 		ESpin OutSpin = ESpin::None;
 
