@@ -5,8 +5,11 @@
 
 Tetris2D::~Tetris2D()
 {
-	TetrisBoard.reset();
+	GamePlayer.reset();
 
+	GameBoard.reset();
+
+	NextTetromino.reset();
 	CurrentTetromino.reset();
 
 	Font.reset();
@@ -55,8 +58,13 @@ void Tetris2D::Setup()
 
 
 	// 테트리스 보드를 생성합니다.
-	TetrisBoard = std::make_unique<Board>();
-	TetrisBoard->AddTetromino(*CurrentTetromino);
+	GameBoard = std::make_unique<Board>();
+	GameBoard->AddTetromino(*CurrentTetromino);
+
+
+	// 게임 플레이어를 생성합니다.
+	GamePlayer = std::make_unique<Player>();
+	GamePlayer->ResetAllProperties();
 }
 
 void Tetris2D::Run()
@@ -102,6 +110,8 @@ void Tetris2D::Input()
 
 void Tetris2D::Update()
 {
+	GamePlayer->UpdateRemainTime(GameTImer.DeltaTime());
+
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_ESCAPE))
 	{
 		bIsDoneLoop = true;
@@ -109,22 +119,30 @@ void Tetris2D::Update()
 
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT))
 	{
-		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
+		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
 	}	
 	
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT))
 	{
-		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Right);
+		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Right);
 	}	
 	
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_UP) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_UP))
 	{
-		TetrisBoard->SpinTetromino(*CurrentTetromino, Tetromino::ESpin::CW);
+		GameBoard->SpinTetromino(*CurrentTetromino, Tetromino::ESpin::CW);
 	}	
 	
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN))
 	{
-		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+	}
+
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_SPACE) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_SPACE))
+	{
+		while (GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down))
+		{
+
+		}
 	}
 }
 
@@ -132,22 +150,9 @@ void Tetris2D::Draw()
 {
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
-	{
-		TetrisBoard->Draw(Renderer, Vec2i(10, 10), 35);
-
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 50), L"Next", ColorHelper::White);
-		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 60), Vec2i(580, 260), ColorHelper::White);
-		NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
-
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 330), L"Time", ColorHelper::White);
-		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 340), Vec2i(580, 410), ColorHelper::White);
-
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 480), L"Level", ColorHelper::White);
-		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 490), Vec2i(580, 560), ColorHelper::White);
-
-		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 630), L"Line", ColorHelper::White);
-		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 640), Vec2i(580, 710), ColorHelper::White);
-	}
+	GameBoard->Draw(Renderer, Vec2i(10, 10), 35);
+	NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
+	GamePlayer->Draw(Renderer, *Font, Vec2i());
 
 	Game::Renderer::EndFrame(Renderer);
 }

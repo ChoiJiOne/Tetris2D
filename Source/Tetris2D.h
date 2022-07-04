@@ -18,6 +18,9 @@
 // 테트리스 보드를 사용하기 위한 헤더를 선언합니다.
 #include "Board.h"
 
+// 게임 플레이어를 사용하기 위한 헤더를 선언합니다.
+#include "Player.h"
+
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
 class Tetris2D : public Game::Framework
@@ -113,5 +116,9 @@ private:
 
 
 	// 테트리스 보드입니다.
-	std::unique_ptr<Board> TetrisBoard = nullptr;
+	std::unique_ptr<Board> GameBoard = nullptr;
+
+
+	// 게임 플레이어입니다.
+	std::unique_ptr<Player> GamePlayer = nullptr;
 };
