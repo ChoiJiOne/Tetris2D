@@ -1,7 +1,7 @@
 #include "Macro.h"
 #include "SDLHelper.h"
 
-bool bIsInitialize = false;
+static bool bIsInitialize = false;
 static std::string ExecuteDirectory;
 
 void Game::SDLHelper::Init()
