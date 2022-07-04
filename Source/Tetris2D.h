@@ -84,6 +84,10 @@ private:
 	bool bIsDoneLoop = false;
 
 
+	// 게임을 중지할지 확인합니다.
+	bool bIsPaused = false;
+
+
 	// 게임 타이머입니다.
 	Game::Timer GameTImer;
 
@@ -100,8 +104,12 @@ private:
 	std::vector<uint8_t> PrevKeyboardState;
 
 
-	// 테트로미노입니다.
+	// 현재 테트로미노입니다.
 	std::shared_ptr<Tetromino> CurrentTetromino = nullptr;
+
+
+	// 다음 테트로미노입니다.
+	std::shared_ptr<Tetromino> NextTetromino = nullptr;
 
 
 	// 테트리스 보드입니다.

@@ -22,8 +22,8 @@ void Tetris2D::Setup()
 
 
 	// SDL 윈도우를 생성합니다.
-	int32_t WindowWidth  = 700;
-	int32_t WindowHeight = 900;
+	int32_t WindowWidth  = 600;
+	int32_t WindowHeight = 720;
 
 	Window = Game::SDLHelper::CreateSDLWindow(
 		"Tetris2D",
@@ -41,7 +41,7 @@ void Tetris2D::Setup()
 
 	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
 	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Font/Nanum.ttf";
-	Font = std::make_unique<Game::Font>(Renderer, FontPath, 32.0f);
+	Font = std::make_unique<Game::Font>(Renderer, FontPath, 40.0f);
 
 
 	// 키보드 상태를 초기화합니다.
@@ -51,6 +51,7 @@ void Tetris2D::Setup()
 
 	// 테트로미노를 생성합니다.
 	CurrentTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+	NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
 
 
 	// 테트리스 보드를 생성합니다.
@@ -101,6 +102,11 @@ void Tetris2D::Input()
 
 void Tetris2D::Update()
 {
+	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_ESCAPE))
+	{
+		bIsDoneLoop = true;
+	}
+
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT))
 	{
 		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
@@ -113,7 +119,7 @@ void Tetris2D::Update()
 	
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_UP) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_UP))
 	{
-		TetrisBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Up);
+		TetrisBoard->SpinTetromino(*CurrentTetromino, Tetromino::ESpin::CW);
 	}	
 	
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN))
@@ -126,8 +132,34 @@ void Tetris2D::Draw()
 {
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
-	CurrentTetromino->Draw(Renderer, Vec2i(300, 100), 20);
-	TetrisBoard->Draw(Renderer, Vec2i(10, 10), 20);
+	TetrisBoard->Draw(Renderer, Vec2i(10, 10), 35);
+
+	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 50), L"Next", ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 60), Vec2i(580, 260), ColorHelper::White);
+	NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
+
+	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 330), L"Time", ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 340), Vec2i(580, 410), ColorHelper::White);
+
+	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 480), L"Level", ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 490), Vec2i(580, 560), ColorHelper::White);
+	
+	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 630), L"Line", ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 640), Vec2i(580, 710), ColorHelper::White);
+
+	bool isDraw = false;
+	if (isDraw)
+	{
+		for (int32_t x = 0; x <= 600; x += 10)
+		{
+			Game::Renderer::DrawLine2D(Renderer, Vec2i(x, 0), Vec2i(x, 720), ColorHelper::Blue);
+		}
+
+		for (int32_t y = 0; y <= 720; y += 10)
+		{
+			Game::Renderer::DrawLine2D(Renderer, Vec2i(0, y), Vec2i(600, y), ColorHelper::Blue);
+		}
+	}
 
 	Game::Renderer::EndFrame(Renderer);
 }
