@@ -132,33 +132,21 @@ void Tetris2D::Draw()
 {
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
-	TetrisBoard->Draw(Renderer, Vec2i(10, 10), 35);
-
-	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 50), L"Next", ColorHelper::White);
-	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 60), Vec2i(580, 260), ColorHelper::White);
-	NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
-
-	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 330), L"Time", ColorHelper::White);
-	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 340), Vec2i(580, 410), ColorHelper::White);
-
-	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 480), L"Level", ColorHelper::White);
-	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 490), Vec2i(580, 560), ColorHelper::White);
-	
-	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 630), L"Line", ColorHelper::White);
-	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 640), Vec2i(580, 710), ColorHelper::White);
-
-	bool isDraw = false;
-	if (isDraw)
 	{
-		for (int32_t x = 0; x <= 600; x += 10)
-		{
-			Game::Renderer::DrawLine2D(Renderer, Vec2i(x, 0), Vec2i(x, 720), ColorHelper::Blue);
-		}
+		TetrisBoard->Draw(Renderer, Vec2i(10, 10), 35);
 
-		for (int32_t y = 0; y <= 720; y += 10)
-		{
-			Game::Renderer::DrawLine2D(Renderer, Vec2i(0, y), Vec2i(600, y), ColorHelper::Blue);
-		}
+		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 50), L"Next", ColorHelper::White);
+		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 60), Vec2i(580, 260), ColorHelper::White);
+		NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
+
+		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 330), L"Time", ColorHelper::White);
+		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 340), Vec2i(580, 410), ColorHelper::White);
+
+		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 480), L"Level", ColorHelper::White);
+		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 490), Vec2i(580, 560), ColorHelper::White);
+
+		Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(380, 630), L"Line", ColorHelper::White);
+		Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(380, 640), Vec2i(580, 710), ColorHelper::White);
 	}
 
 	Game::Renderer::EndFrame(Renderer);
