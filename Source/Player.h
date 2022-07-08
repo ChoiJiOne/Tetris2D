@@ -59,6 +59,10 @@ public:
 	void ResetRemainTime();
 
 
+	// 게임 플레이어의 대기 시간을 초기화합니다.
+	void ResetWaitTime();
+
+
 	// 플레이어 정보를 화면에 그립니다.
 	// 
 	// @param InRenderer - SDL 렌더러의 포인터입니다.
@@ -69,7 +73,7 @@ public:
 
 private:
 	// 플레이어의 레벨입니다.
-	int32_t Lavel = 1;
+	int32_t Lavel = 0;
 
 
 	// 플레이어가 삭제한 라인 수입니다.
@@ -78,4 +82,12 @@ private:
 
 	// 플레이어의 남은 시간입니다. 단위는 초단위입니다.
 	float RemainTime = 0.0f;
+
+
+	// 플레이어가 현재 대기중인지 확인합니다.
+	bool bIsWait = false;
+
+
+	// 플레이어가 대기한 시간입니다.
+	float WaitTime = 0.0f;
 };

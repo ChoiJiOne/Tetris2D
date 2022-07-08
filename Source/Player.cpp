@@ -31,11 +31,12 @@ void Player::ResetAllProperties()
 	ResetLevel();
 	ResetRemoveLine();
 	ResetRemainTime();
+	ResetWaitTime();
 }
 
 void Player::ResetLevel()
 {
-	Lavel = 1;
+	Lavel = 0;
 }
 
 void Player::ResetRemoveLine()
@@ -46,6 +47,11 @@ void Player::ResetRemoveLine()
 void Player::ResetRemainTime()
 {
 	RemainTime = static_cast<float>(PLAY_TIME);
+}
+
+void Player::ResetWaitTime()
+{
+	WaitTime = 0.0f;
 }
 
 void Player::Draw(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InWindowPosition)
