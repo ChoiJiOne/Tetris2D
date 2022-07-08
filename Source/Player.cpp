@@ -8,7 +8,7 @@ Player::~Player()
 
 void Player::LevelUp()
 {
-	Lavel++;
+	Level++;
 }
 
 void Player::AddRemoveLine(int32_t InRemoveLine)
@@ -16,27 +16,59 @@ void Player::AddRemoveLine(int32_t InRemoveLine)
 	RemoveLine += InRemoveLine;
 }
 
-void Player::UpdateRemainTime(float InDeltaTime)
+void Player::Update(float InDeltaTime)
 {
-	RemainTime -= InDeltaTime;
+	StateElapsedTime += InDeltaTime;
+	StepTime += InDeltaTime;
+	BeforeState = CurrentState;
+
+	switch (CurrentState)
+	{
+	case EState::Play:
+		if (StateElapsedTime >= static_cast<float>(PLAY_TIME_PER_LEVEL))
+		{
+			StateElapsedTime = 0.0f;
+			CurrentState = EState::Wait;
+		}
+		break;
+
+	case EState::Wait:
+		if (StateElapsedTime >= static_cast<float>(WAIT_TIME_PER_LEVEL))
+		{
+			LevelUp();
+
+			StateElapsedTime = 0.0f;
+			CurrentState = EState::Play;
+		}
+		break;
+
+	default:
+		break;
+	}
 }
 
-bool Player::IsOverPlayTime()
+void Player::SetCurrentMaxStepTime(float InCurrentMaxStepTime)
 {
-	return RemainTime <= 0.0f;
+	if (InCurrentMaxStepTime < MinStepTime)
+	{
+		CurrentMaxStepTime = MinStepTime;
+	}
+	else
+	{
+		CurrentMaxStepTime = InCurrentMaxStepTime;
+	}
 }
 
 void Player::ResetAllProperties()
 {
 	ResetLevel();
 	ResetRemoveLine();
-	ResetRemainTime();
-	ResetWaitTime();
+	ResetStepTime();
 }
 
 void Player::ResetLevel()
 {
-	Lavel = 0;
+	Level = 0;
 }
 
 void Player::ResetRemoveLine()
@@ -44,26 +76,45 @@ void Player::ResetRemoveLine()
 	RemoveLine = 0;
 }
 
-void Player::ResetRemainTime()
+void Player::ResetStepTime()
 {
-	RemainTime = static_cast<float>(PLAY_TIME);
-}
-
-void Player::ResetWaitTime()
-{
-	WaitTime = 0.0f;
+	StepTime = 0.0f;
 }
 
 void Player::Draw(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InWindowPosition)
 {
-	LinearColor RemainTimeColor = (RemainTime <= 10.0f) ? ColorHelper::Red : ColorHelper::White;
+	DrawUILayout(InRenderer, InFont, InWindowPosition);
 
-	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 340), Vec2i(580, 410), ColorHelper::White);
-	Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Time : %3d", static_cast<int32_t>(RemainTime)), RemainTimeColor);
+	float ShowTime = 0.0f;
+	LinearColor ShowTimeColor;
 
-	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 490), Vec2i(580, 560), ColorHelper::White);
-	Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 540), Game::StringHelper::Format(L"Level: %3d", Lavel), ColorHelper::White);
+	if (CurrentState == EState::Play)
+	{
+		ShowTime = static_cast<float>(PLAY_TIME_PER_LEVEL) - StateElapsedTime;
+		ShowTimeColor = (ShowTime <= 10.0f) ? ColorHelper::Red : ColorHelper::White;
+		Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Play : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
 
-	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 640), Vec2i(580, 710), ColorHelper::White);
+	}
+	else if (CurrentState == EState::Wait)
+	{
+		ShowTime = static_cast<float>(WAIT_TIME_PER_LEVEL) - StateElapsedTime;
+		ShowTimeColor = ColorHelper::White;
+		Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Wait : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
+	}
+	else // CurrentState == EState::Done
+	{
+		ShowTime = 0.0f;
+		ShowTimeColor = ColorHelper::White;
+		Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Done : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
+	}
+
+	Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 540), Game::StringHelper::Format(L"Level: %3d", Level), ColorHelper::White);
 	Game::Renderer::DrawText2D(InRenderer, InFont, Vec2i(380, 690), Game::StringHelper::Format(L"Line : %3d", RemoveLine), ColorHelper::White);
+}
+
+void Player::DrawUILayout(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InWindowPosition)
+{
+	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 340), Vec2i(580, 410), ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 490), Vec2i(580, 560), ColorHelper::White);
+	Game::Renderer::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 640), Vec2i(580, 710), ColorHelper::White);
 }

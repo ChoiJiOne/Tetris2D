@@ -59,7 +59,6 @@ void Tetris2D::Setup()
 
 	// 테트리스 보드를 생성합니다.
 	GameBoard = std::make_unique<Board>();
-	GameBoard->AddTetromino(*CurrentTetromino);
 
 
 	// 게임 플레이어를 생성합니다.
@@ -110,39 +109,45 @@ void Tetris2D::Input()
 
 void Tetris2D::Update()
 {
-	GamePlayer->UpdateRemainTime(GameTImer.DeltaTime());
-
 	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_ESCAPE))
 	{
 		bIsDoneLoop = true;
 	}
 
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_LEFT))
+	GamePlayer->Update(GameTImer.DeltaTime());
+
+	if (GamePlayer->GetCurrentState() == Player::EState::Wait && GamePlayer->GetBeforeState() == Player::EState::Play)
 	{
-		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
-	}	
-	
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_RIGHT))
-	{
-		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Right);
-	}	
-	
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_UP) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_UP))
-	{
-		GameBoard->SpinTetromino(*CurrentTetromino, Tetromino::ESpin::CW);
-	}	
-	
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_DOWN))
-	{
-		GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+		GameBoard->ResetBoardState();
 	}
 
-	if (IsPressKey(CurrKeyboardState, SDL_Scancode::SDL_SCANCODE_SPACE) && !IsPressKey(PrevKeyboardState, SDL_Scancode::SDL_SCANCODE_SPACE))
+	if (GamePlayer->GetCurrentState() == Player::EState::Play && GamePlayer->GetBeforeState() == Player::EState::Wait)
 	{
-		while (GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down))
-		{
+		float NewMaxStepTime = GamePlayer->GetCurrentMaxStepTime() - 0.1f;
 
-		}
+		GamePlayer->ResetStepTime();
+		GamePlayer->SetCurrentMaxStepTime(NewMaxStepTime);
+		GameBoard->AddTetromino(*CurrentTetromino);
+	}
+
+	Player::EState CurrentPlayerState = GamePlayer->GetCurrentState();
+
+	switch (CurrentPlayerState)
+	{
+	case Player::EState::Play:
+		UpdatePlay();
+		break;
+
+	case Player::EState::Wait:
+		UpdateWait();
+		break;
+
+	case Player::EState::Done:
+		UpdateDone();
+		break;
+
+	default:
+		Game::Logger::Warning("undefined player state");
 	}
 }
 
@@ -151,7 +156,6 @@ void Tetris2D::Draw()
 	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
 
 	GameBoard->Draw(Renderer, Vec2i(10, 10), 35);
-	NextTetromino->Draw(Renderer, Vec2i(420, 80), 35);
 	GamePlayer->Draw(Renderer, *Font, Vec2i());
 
 	Game::Renderer::EndFrame(Renderer);
@@ -160,4 +164,94 @@ void Tetris2D::Draw()
 bool Tetris2D::IsPressKey(const std::vector<uint8_t>& InKeyboardState, uint8_t InKeyCode)
 {
 	return InKeyboardState[InKeyCode] == 0 ? false : true;
+}
+
+void Tetris2D::UpdatePlay()
+{
+	bool bIsNextTetromino = false;
+
+	static uint8_t KeyCodes[5] = {
+		SDL_Scancode::SDL_SCANCODE_LEFT,
+		SDL_Scancode::SDL_SCANCODE_RIGHT,
+		SDL_Scancode::SDL_SCANCODE_UP,
+		SDL_Scancode::SDL_SCANCODE_DOWN,
+		SDL_Scancode::SDL_SCANCODE_SPACE
+	};
+
+	for (const auto& KeyCode : KeyCodes)
+	{
+		if (IsPressKey(CurrKeyboardState, KeyCode) && !IsPressKey(PrevKeyboardState, KeyCode))
+		{
+			switch (KeyCode)
+			{
+			case SDL_Scancode::SDL_SCANCODE_LEFT:
+				GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Left);
+				break;
+
+
+			case SDL_Scancode::SDL_SCANCODE_RIGHT:
+				GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Right);
+				break;
+
+
+			case SDL_Scancode::SDL_SCANCODE_UP:
+				GameBoard->SpinTetromino(*CurrentTetromino, Tetromino::ESpin::CW);
+				break;
+
+
+			case SDL_Scancode::SDL_SCANCODE_DOWN:
+				bIsNextTetromino = !GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+				break;
+
+			case SDL_Scancode::SDL_SCANCODE_SPACE:
+				while (GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down))
+					;
+				bIsNextTetromino = true;
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	if (GamePlayer->GetStepTime() >= GamePlayer->GetCurrentMaxStepTime())
+	{
+		GamePlayer->ResetStepTime();
+		bIsNextTetromino = !GameBoard->MoveTetromino(*CurrentTetromino, Tetromino::EMove::Down);
+	}
+
+	GamePlayer->AddRemoveLine(GameBoard->UpdateBoardState());
+
+	if (bIsNextTetromino)
+	{
+		CurrentTetromino.reset();
+		CurrentTetromino = NextTetromino;
+		NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+
+		if (!GameBoard->AddTetromino(*CurrentTetromino))
+		{
+			GamePlayer->SetCurrentState(Player::EState::Done);
+		}
+	}
+}
+
+void Tetris2D::UpdateWait()
+{
+}
+
+void Tetris2D::UpdateDone()
+{
+	static uint8_t KeyCodes[2] = {
+		SDL_Scancode::SDL_SCANCODE_ESCAPE,
+		SDL_Scancode::SDL_SCANCODE_KP_ENTER
+	};
+
+	for (const auto& KeyCode : KeyCodes)
+	{
+		if (IsPressKey(CurrKeyboardState, KeyCode))
+		{
+			bIsDoneLoop = true;
+		}
+	}
 }

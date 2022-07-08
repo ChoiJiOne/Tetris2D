@@ -74,6 +74,18 @@ private:
 	bool IsPressKey(const std::vector<uint8_t>& InKeyboardState, uint8_t InKeyCode);
 
 
+	// 플레이 상태의 루프를 업데이트합니다.
+	void UpdatePlay();
+
+
+	// 대기 상태의 루프를 업데이트 합니다.
+	void UpdateWait();
+
+
+	// 게임이 끝났을 때의 루프를 업데이트합니다.
+	void UpdateDone();
+
+
 private:
 	// SDL 윈도우 포인터입니다.
 	SDL_Window* Window = nullptr;
@@ -85,10 +97,6 @@ private:
 
 	// 루프를 종료할 지 확인합니다.
 	bool bIsDoneLoop = false;
-
-
-	// 게임을 중지할지 확인합니다.
-	bool bIsPaused = false;
 
 
 	// 게임 타이머입니다.
