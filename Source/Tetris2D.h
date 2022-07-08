@@ -129,4 +129,8 @@ private:
 
 	// 게임 플레이어입니다.
 	std::unique_ptr<Player> GamePlayer = nullptr;
+
+
+	// 테트로미노 리스폰 위치입니다.
+	Vec2i RespawnPosition;
 };

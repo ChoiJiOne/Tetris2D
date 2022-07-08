@@ -52,9 +52,13 @@ void Tetris2D::Setup()
 	CurrKeyboardState.resize(SDL_Scancode::SDL_NUM_SCANCODES);
 
 
+	// 테트로미노 리스폰 위치를 설정합니다.
+	RespawnPosition = Vec2i(3, 0);
+
+
 	// 테트로미노를 생성합니다.
-	CurrentTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
-	NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+	CurrentTetromino = Tetromino::GenerateRandomTetromino(RespawnPosition);
+	NextTetromino = Tetromino::GenerateRandomTetromino(RespawnPosition);
 
 
 	// 테트리스 보드를 생성합니다.
@@ -227,7 +231,7 @@ void Tetris2D::UpdatePlay()
 	{
 		CurrentTetromino.reset();
 		CurrentTetromino = NextTetromino;
-		NextTetromino = Tetromino::GenerateRandomTetromino(Vec2i(3, 0));
+		NextTetromino = Tetromino::GenerateRandomTetromino(RespawnPosition);
 
 		if (!GameBoard->AddTetromino(*CurrentTetromino))
 		{
