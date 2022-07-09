@@ -143,7 +143,6 @@ void Tetris2D::Update()
 		break;
 
 	case Player::EState::Wait:
-		UpdateWait();
 		break;
 
 	case Player::EState::Done:
@@ -238,10 +237,6 @@ void Tetris2D::UpdatePlay()
 			GamePlayer->SetCurrentState(Player::EState::Done);
 		}
 	}
-}
-
-void Tetris2D::UpdateWait()
-{
 }
 
 void Tetris2D::UpdateDone()

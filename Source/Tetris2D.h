@@ -78,10 +78,6 @@ private:
 	void UpdatePlay();
 
 
-	// 대기 상태의 루프를 업데이트 합니다.
-	void UpdateWait();
-
-
 	// 게임이 끝났을 때의 루프를 업데이트합니다.
 	void UpdateDone();
 
