@@ -5,8 +5,10 @@ function IncludeFiles()
       
       "%{package_path}/Game/*",
 
+      "%{third_party_path}/Include/httplib/*",
+      "%{third_party_path}/Include/json/*",
       "%{third_party_path}/Include/SDL2/*",
-      "%{third_party_path}/Include/STB/*",
+      "%{third_party_path}/Include/stb/*",
    }
 end
 
