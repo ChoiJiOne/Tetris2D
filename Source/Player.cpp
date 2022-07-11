@@ -85,6 +85,7 @@ void Player::Draw(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2
 {
 	DrawUILayout(InRenderer, InFont, InWindowPosition);
 
+	/*
 	float ShowTime = 0.0f;
 	LinearColor ShowTimeColor;
 
@@ -110,11 +111,14 @@ void Player::Draw(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2
 
 	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 540), Game::StringHelper::Format(L"Level: %3d", Level), ColorHelper::White);
 	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 690), Game::StringHelper::Format(L"Line : %3d", RemoveLine), ColorHelper::White);
+	*/
 }
 
 void Player::DrawUILayout(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InWindowPosition)
 {
+	/*
 	Game::DrawHelper::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 340), Vec2i(580, 410), ColorHelper::White);
 	Game::DrawHelper::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 490), Vec2i(580, 560), ColorHelper::White);
 	Game::DrawHelper::DrawWireframeRectangle2D(InRenderer, Vec2i(370, 640), Vec2i(580, 710), ColorHelper::White);
+	*/
 }
