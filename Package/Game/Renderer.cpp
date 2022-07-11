@@ -86,10 +86,8 @@ void Game::Renderer::DrawText2D(SDL_Renderer* InRenderer, const Game::Font& InFo
 	int32_t x = InPosition.x;
 	int32_t y = InPosition.y;
 
-	uint8_t R = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.x, 0.0f, 1.0f) * 255.0f);
-	uint8_t G = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.y, 0.0f, 1.0f) * 255.0f);
-	uint8_t B = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.z, 0.0f, 1.0f) * 255.0f);
-	uint8_t A = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.w, 0.0f, 1.0f) * 255.0f);
+	uint8_t R = 0, G = 0, B = 0, A = 0;
+	ColorHelper::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
 
 	for (const auto& Unicode : InText)
 	{
