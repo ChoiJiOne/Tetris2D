@@ -95,6 +95,18 @@ namespace Game
 		static void DrawRectangle2D(SDL_Renderer* InRenderer, const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor);
 
 
+		// 백버퍼에 텍스처를 그립니다.
+		// 
+		// @param InRenderer - SDL 렌더러의 포인터입니다.
+		// @param InTexture - 백버퍼에 그릴 텍스처입니다.
+		// @param InCenterPosition - 텍스처의 중심이 위치할 화면상의 좌표입니다.
+		// @param InWidthScaling - 렌더링할 텍스처의 원본 텍스처 대비 가로 크기 비율입니다.
+		// @param InHeightScaling - 렌더링할 텍스처의 원본 텍스처 대비 세로 크기 비율입니다.
+		// 
+		// @throws - 렌더링에 실패할 경우, C++ 표준 예외를 반환합니다.
+		static void DrawTexture2D(SDL_Renderer* InRenderer, const class Texture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling = 1.0f, float InHeightScaling = 1.0f);
+
+
 		// 벡버퍼에 UTF-16 텍스트를 그립니다.
 		//
 		// @param InRenderer - SDL 렌더러의 포인터입니다.

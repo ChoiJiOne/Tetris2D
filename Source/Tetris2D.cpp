@@ -38,6 +38,11 @@ void Tetris2D::Setup()
 	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
 	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Font/kenvector_future.ttf";
 	Font = std::make_unique<Game::Font>(Renderer, FontPath, 40.0f);
+
+
+	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
+	std::string TexturePath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Texture/Block/BlueBlockFX.png";
+	Texture = std::make_unique<Game::Texture2D>(Renderer, TexturePath);
 }
 
 void Tetris2D::Run()
@@ -77,6 +82,7 @@ void Tetris2D::Draw()
 
 	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
 	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
+	Game::Renderer::DrawTexture2D(Renderer, *Texture, Vec2i(200, 400));
 
 	Game::Renderer::EndFrame(Renderer);
 }

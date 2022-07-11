@@ -12,6 +12,9 @@
 // 게임 로그를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Logger.h"
 
+// 게임 텍스처를 사용하기 위한 헤더를 선언합니다.
+#include "Game/Texture2D.h"
+
 // 테트로미노를 사용하기 위한 헤더를 선언합니다.
 #include "Tetromino.h"
 
@@ -83,4 +86,8 @@ private:
 
 	// 게임 폰트입니다.
 	std::unique_ptr<Game::Font> Font = nullptr;
+
+
+	// 게임 텍스처입니다.
+	std::unique_ptr<Game::Texture2D> Texture = nullptr;
 };

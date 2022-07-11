@@ -1,5 +1,6 @@
 #include "Font.h"
 #include "Macro.h"
+#include "Texture2D.h"
 
 #include "Renderer.h"
 
@@ -79,6 +80,21 @@ void Game::Renderer::DrawRectangle2D(SDL_Renderer* InRenderer, const Vec2i& InCe
 	P1.y = static_cast<int32_t>(InCenterPosition.y + (InHeight / 2));
 
 	DrawRectangle2D(InRenderer, P0, P1, InColor);
+}
+
+void Game::Renderer::DrawTexture2D(SDL_Renderer* InRenderer, const Texture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
+{
+	float ScaleWidth = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
+	float ScaleHeight = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
+
+	SDL_Rect Rect = {
+		InCenterPosition.x - static_cast<int32_t>(ScaleWidth  / 2.0f),
+		InCenterPosition.y - static_cast<int32_t>(ScaleHeight / 2.0f),
+		static_cast<int32_t>(ScaleWidth),
+		static_cast<int32_t>(ScaleHeight)
+	};
+
+	CHECK_SDL_FAILED((SDL_RenderCopy(InRenderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
 }
 
 void Game::Renderer::DrawText2D(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
