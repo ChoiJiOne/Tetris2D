@@ -1,4 +1,4 @@
-#include "Game/Logger.h"
+#include "Game/LogHelper.h"
 #include "Game/DrawHelper.h"
 
 #include "Tetromino.h"
@@ -73,7 +73,7 @@ void Tetromino::Spin(ESpin InSpin)
 		break;
 
 	default:
-		Game::Logger::Warning("undefined spin type");
+		Game::LogHelper::Warning("undefined spin type");
 	}
 }
 
@@ -98,7 +98,7 @@ void Tetromino::Move(EMove InMove)
 		break;
 
 	default:
-		Game::Logger::Warning("undefined move type");
+		Game::LogHelper::Warning("undefined move type");
 	}
 }
 
@@ -184,6 +184,6 @@ void Tetromino::GenerateBlockPositions(const EShape& InShape)
 		break;
 
 	default:
-		Game::Logger::Warning("undefined tetromino shape");
+		Game::LogHelper::Warning("undefined tetromino shape");
 	}
 }

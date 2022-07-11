@@ -10,7 +10,7 @@
 #include "Game/Font.h"
 
 // 게임 로그를 사용하기 위한 헤더를 선언합니다.
-#include "Game/Logger.h"
+#include "Game/LogHelper.h"
 
 // 게임 텍스처를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Texture2D.h"

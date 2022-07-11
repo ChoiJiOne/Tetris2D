@@ -6,7 +6,7 @@
 namespace Game
 {
 	// 콘솔 화면에 로그를 출력하는 클래스입니다.
-	class Logger
+	class LogHelper
 	{
 	public:
 		// 콘솔 텍스트의 색상 타입입니다.

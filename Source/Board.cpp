@@ -1,4 +1,4 @@
-#include "Game/Logger.h"
+#include "Game/LogHelper.h"
 #include "Game/Macro.h"
 #include "Game/DrawHelper.h"
 
