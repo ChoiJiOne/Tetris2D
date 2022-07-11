@@ -113,7 +113,7 @@ void Game::Renderer::DrawText2D(SDL_Renderer* InRenderer, const Game::Font& InFo
 		SDL_Rect Dst =
 		{
 			x + static_cast<int32_t>(Info.xoff),
-			y + static_cast<int32_t>(Info.yoff),
+			y,
 			(Info.x1 - Info.x0),
 			(Info.y1 - Info.y0)
 		};
