@@ -9,8 +9,6 @@
 
 Tetris2D::~Tetris2D()
 {
-	Game::ResourceHelper::Cleanup();
-
 	Game::SDLHelper::DestroySDLRenderer(Renderer);
 	Game::SDLHelper::DestroySDLWindow(Window);
 }
