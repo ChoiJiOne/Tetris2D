@@ -87,8 +87,8 @@ void Tetris2D::Draw()
 	Game::DrawHelper::BeginDraw(Renderer, ColorHelper::Black);
 
 	Game::DrawHelper::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
-	Game::DrawHelper::DrawText2D(Renderer, Game::ResourceHelper::GetFont(FontKey), Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
-	Game::DrawHelper::DrawTexture2D(Renderer, Game::ResourceHelper::GetTexture2D(TextureKey), Vec2i(200, 400));
+	Game::DrawHelper::DrawText2D(Renderer, FontKey, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
+	Game::DrawHelper::DrawTexture2D(Renderer, TextureKey, Vec2i(200, 400));
 
 	Game::DrawHelper::EndDraw(Renderer);
 }

@@ -1,6 +1,7 @@
-#include "Font.h"
 #include "Macro.h"
+#include "ResourceHelper.h"
 #include "Texture2D.h"
+#include "Font.h"
 
 #include "DrawHelper.h"
 
@@ -82,10 +83,12 @@ void Game::DrawHelper::DrawRectangle2D(SDL_Renderer* InRenderer, const Vec2i& In
 	DrawRectangle2D(InRenderer, P0, P1, InColor);
 }
 
-void Game::DrawHelper::DrawTexture2D(SDL_Renderer* InRenderer, const Texture2D& InTexture, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
+void Game::DrawHelper::DrawTexture2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
 {
-	float ScaleWidth = static_cast<float>(InTexture.GetWidth()) * InWidthScaling;
-	float ScaleHeight = static_cast<float>(InTexture.GetHeight()) * InHeightScaling;
+	const Texture2D& Texture = ResourceHelper::GetTexture2D(InHashKey);
+
+	float ScaleWidth = static_cast<float>(Texture.GetWidth()) * InWidthScaling;
+	float ScaleHeight = static_cast<float>(Texture.GetHeight()) * InHeightScaling;
 
 	SDL_Rect Rect = {
 		InCenterPosition.x - static_cast<int32_t>(ScaleWidth  / 2.0f),
@@ -94,11 +97,13 @@ void Game::DrawHelper::DrawTexture2D(SDL_Renderer* InRenderer, const Texture2D& 
 		static_cast<int32_t>(ScaleHeight)
 	};
 
-	CHECK_SDL_FAILED((SDL_RenderCopy(InRenderer, InTexture.GetTexture(), nullptr, &Rect) == 0));
+	CHECK_SDL_FAILED((SDL_RenderCopy(InRenderer, Texture.GetTexture(), nullptr, &Rect) == 0));
 }
 
-void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
+void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
 {
+	const Game::Font& Font = ResourceHelper::GetFont(InHashKey);
+
 	int32_t x = InPosition.x;
 	int32_t y = InPosition.y;
 
@@ -107,14 +112,14 @@ void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const Game::Font& In
 
 	for (const auto& Unicode : InText)
 	{
-		SDL_Texture* Texture = InFont.GetAtlas(Unicode);
+		SDL_Texture* Texture = Font.GetAtlas(Unicode);
 
 		if (!Texture) continue;
 
 		SDL_SetTextureColorMod(Texture, R, G, B);
 		SDL_SetTextureAlphaMod(Texture, A);
 
-		const stbtt_packedchar& Info = InFont.GetPackedchar(Unicode);
+		const stbtt_packedchar& Info = Font.GetPackedchar(Unicode);
 
 		SDL_Rect Src =
 		{
