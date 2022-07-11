@@ -65,24 +65,6 @@ public:
 
 
 private:
-	// 특정 키가 눌렸는지 확인합니다.
-	//
-	// @param InKeyboardState - 검사를 수행할 키보드의 상태입니다.
-	// @param InKeyCode - 검사를 수행할 키입니다.
-	//
-	// @return 만약 키를 눌렀다면 true, 그렇지 않다면 false를 반환합니다.
-	bool IsPressKey(const std::vector<uint8_t>& InKeyboardState, uint8_t InKeyCode);
-
-
-	// 플레이 상태의 루프를 업데이트합니다.
-	void UpdatePlay();
-
-
-	// 게임이 끝났을 때의 루프를 업데이트합니다.
-	void UpdateDone();
-
-
-private:
 	// SDL 윈도우 포인터입니다.
 	SDL_Window* Window = nullptr;
 
@@ -101,32 +83,4 @@ private:
 
 	// 게임 폰트입니다.
 	std::unique_ptr<Game::Font> Font = nullptr;
-
-
-	// 게임의 이전 키보드 상태입니다.
-	std::vector<uint8_t> CurrKeyboardState;
-
-
-	// 게임의 현재 키보드 상태입니다.
-	std::vector<uint8_t> PrevKeyboardState;
-
-
-	// 현재 테트로미노입니다.
-	std::shared_ptr<Tetromino> CurrentTetromino = nullptr;
-
-
-	// 다음 테트로미노입니다.
-	std::shared_ptr<Tetromino> NextTetromino = nullptr;
-
-
-	// 테트리스 보드입니다.
-	std::unique_ptr<Board> GameBoard = nullptr;
-
-
-	// 게임 플레이어입니다.
-	std::unique_ptr<Player> GamePlayer = nullptr;
-
-
-	// 테트로미노 리스폰 위치입니다.
-	Vec2i RespawnPosition;
 };
