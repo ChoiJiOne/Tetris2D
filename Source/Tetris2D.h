@@ -6,14 +6,8 @@
 // 게임 타이머를 사용하기 위한 헤더를 선언합니다.
 #include "Game/Timer.h"
 
-// 게임 폰트를 사용하기 위한 헤더를 선언합니다.
-#include "Game/Font.h"
-
 // 게임 로그를 사용하기 위한 헤더를 선언합니다.
 #include "Game/LogHelper.h"
-
-// 게임 텍스처를 사용하기 위한 헤더를 선언합니다.
-#include "Game/Texture2D.h"
 
 // 테트로미노를 사용하기 위한 헤더를 선언합니다.
 #include "Tetromino.h"
@@ -84,10 +78,10 @@ private:
 	Game::Timer GameTImer;
 
 
-	// 게임 폰트입니다.
-	std::unique_ptr<Game::Font> Font = nullptr;
+	// 게임 폰트키입니다.
+	std::size_t FontKey = 0;
 
 
-	// 게임 텍스처입니다.
-	std::unique_ptr<Game::Texture2D> Texture = nullptr;
+	// 게임 텍스처키입니다.
+	std::size_t TextureKey = 0;
 };

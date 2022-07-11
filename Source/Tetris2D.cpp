@@ -1,11 +1,15 @@
 #include "Game/SDLHelper.h"
+#include "Game/ResourceHelper.h"
 #include "Game/DrawHelper.h"
+#include "Game/StringHelper.h"
+#include "Game/Texture2D.h"
+#include "Game/Font.h"
 
 #include "Tetris2D.h"
 
 Tetris2D::~Tetris2D()
 {
-	Font.reset();
+	Game::ResourceHelper::Cleanup();
 
 	Game::SDLHelper::DestroySDLRenderer(Renderer);
 	Game::SDLHelper::DestroySDLWindow(Window);
@@ -37,12 +41,14 @@ void Tetris2D::Setup()
 
 	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
 	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Font/kenvector_future.ttf";
-	Font = std::make_unique<Game::Font>(Renderer, FontPath, 40.0f);
+	FontKey = Game::StringHelper::GetHash("Font");
+	Game::ResourceHelper::CreateFont(Renderer, FontKey, FontPath, 40.0f);
 
-
+	
 	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
 	std::string TexturePath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Texture/Block/BlueBlockFX.png";
-	Texture = std::make_unique<Game::Texture2D>(Renderer, TexturePath);
+	TextureKey = Game::StringHelper::GetHash("Texture");
+	Game::ResourceHelper::CreateTexture2D(Renderer, TextureKey, TexturePath);
 }
 
 void Tetris2D::Run()
@@ -81,8 +87,8 @@ void Tetris2D::Draw()
 	Game::DrawHelper::BeginDraw(Renderer, ColorHelper::Black);
 
 	Game::DrawHelper::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
-	Game::DrawHelper::DrawText2D(Renderer, *Font, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
-	Game::DrawHelper::DrawTexture2D(Renderer, *Texture, Vec2i(200, 400));
+	Game::DrawHelper::DrawText2D(Renderer, Game::ResourceHelper::GetFont(FontKey), Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
+	Game::DrawHelper::DrawTexture2D(Renderer, Game::ResourceHelper::GetTexture2D(TextureKey), Vec2i(200, 400));
 
 	Game::DrawHelper::EndDraw(Renderer);
 }
