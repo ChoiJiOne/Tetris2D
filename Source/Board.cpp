@@ -1,6 +1,6 @@
 #include "Game/Logger.h"
 #include "Game/Macro.h"
-#include "Game/Renderer.h"
+#include "Game/DrawHelper.h"
 
 #include "Board.h"
 
@@ -206,16 +206,16 @@ void Board::Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, int32_
 
 			if (BlockState.first == Board::EBlockState::Fix)
 			{
-				Game::Renderer::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, WallBlockColor);
+				Game::DrawHelper::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, WallBlockColor);
 			}
 			else if (BlockState.first == Board::EBlockState::Fill)
 			{
-				Game::Renderer::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, BlockState.second);
-				Game::Renderer::DrawWireframeRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, EmptyBlockColor);
+				Game::DrawHelper::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, BlockState.second);
+				Game::DrawHelper::DrawWireframeRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, EmptyBlockColor);
 			}
 			else // BlockState.first == Board::EBlockState::Empty
 			{
-				Game::Renderer::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, EmptyBlockColor);
+				Game::DrawHelper::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottonPosition, EmptyBlockColor);
 			}
 		}
 	}

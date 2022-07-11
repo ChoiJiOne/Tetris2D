@@ -9,8 +9,8 @@
 
 namespace Game
 {
-	// 렌더러 클래스입니다.
-	class Renderer
+	// 그리기 헬퍼 클래스입니다.
+	class DrawHelper
 	{
 	public:
 		// 프레임 렌더링을 시작합니다.
@@ -19,13 +19,13 @@ namespace Game
 		// @param InColor - 벡버퍼를 비울 색상입니다.
 		// 
 		// @throws - 백버퍼 초기화에 실패할 경우, C++ 표준 예외를 던집니다.
-		static void BeginFrame(SDL_Renderer* InRenderer, const LinearColor& InColor);
+		static void BeginDraw(SDL_Renderer* InRenderer, const LinearColor& InColor);
 
 
 		// 프레임 렌더링을 종료하고, 벡버퍼를 화면에 표시합니다.
 		//
 		// @param InRenderer - SDL 렌더러의 포인터입니다.
-		static void EndFrame(SDL_Renderer* InRenderer);
+		static void EndDraw(SDL_Renderer* InRenderer);
 
 
 		// 벡버퍼에 2D 점을 그립니다.

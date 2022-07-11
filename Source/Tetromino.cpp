@@ -1,5 +1,5 @@
 #include "Game/Logger.h"
-#include "Game/Renderer.h"
+#include "Game/DrawHelper.h"
 
 #include "Tetromino.h"
 
@@ -116,8 +116,8 @@ void Tetromino::Draw(SDL_Renderer* InRenderer, const Vec2i& InWindowPosition, in
 			InWindowPosition.y + InBlockSize * (BlockPosition.y + 1)
 		);
 
-		Game::Renderer::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottomPosition, BlockColor);
-		Game::Renderer::DrawWireframeRectangle2D(InRenderer, LeftTopPosition, RightBottomPosition, InOutlineColor);
+		Game::DrawHelper::DrawRectangle2D(InRenderer, LeftTopPosition, RightBottomPosition, BlockColor);
+		Game::DrawHelper::DrawWireframeRectangle2D(InRenderer, LeftTopPosition, RightBottomPosition, InOutlineColor);
 	}
 }
 

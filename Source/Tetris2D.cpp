@@ -1,5 +1,5 @@
 #include "Game/SDLHelper.h"
-#include "Game/Renderer.h"
+#include "Game/DrawHelper.h"
 
 #include "Tetris2D.h"
 
@@ -78,11 +78,11 @@ void Tetris2D::Update()
 
 void Tetris2D::Draw()
 {
-	Game::Renderer::BeginFrame(Renderer, ColorHelper::Black);
+	Game::DrawHelper::BeginDraw(Renderer, ColorHelper::Black);
 
-	Game::Renderer::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
-	Game::Renderer::DrawText2D(Renderer, *Font, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
-	Game::Renderer::DrawTexture2D(Renderer, *Texture, Vec2i(200, 400));
+	Game::DrawHelper::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
+	Game::DrawHelper::DrawText2D(Renderer, *Font, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
+	Game::DrawHelper::DrawTexture2D(Renderer, *Texture, Vec2i(200, 400));
 
-	Game::Renderer::EndFrame(Renderer);
+	Game::DrawHelper::EndDraw(Renderer);
 }
