@@ -74,6 +74,8 @@ void Tetris2D::Input()
 			bIsDoneLoop = true;
 		}
 	}
+
+	Keyboard.Update();
 }
 
 void Tetris2D::Update()
@@ -85,7 +87,13 @@ void Tetris2D::Draw()
 	Game::DrawHelper::BeginDraw(Renderer, ColorHelper::Black);
 
 	Game::DrawHelper::DrawWireframeRectangle2D(Renderer, Vec2i(100, 100), Vec2i(400, 200), ColorHelper::Blue);
-	Game::DrawHelper::DrawText2D(Renderer, FontKey, Vec2i(100, 100), L"ABCDEFGHIJK", ColorHelper::Red);
+
+	LinearColor Color = ColorHelper::White;
+	if (Keyboard.GetKeyState(SDL_Scancode::SDL_SCANCODE_A) == Game::EButtonState::Held)
+	{
+		Color = ColorHelper::Red;
+	}
+	Game::DrawHelper::DrawText2D(Renderer, FontKey, Vec2i(100, 100), L"ABCDEFGHIJK", Color);
 	Game::DrawHelper::DrawTexture2D(Renderer, TextureKey, Vec2i(200, 400));
 
 	Game::DrawHelper::EndDraw(Renderer);

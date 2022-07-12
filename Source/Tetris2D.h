@@ -9,6 +9,9 @@
 // 게임 로그를 사용하기 위한 헤더를 선언합니다.
 #include "Game/LogHelper.h"
 
+// 게임 입력 처리를 위한 헤더를 선언합니다.
+#include "Game/InputHelper.h"
+
 // 테트로미노를 사용하기 위한 헤더를 선언합니다.
 #include "Tetromino.h"
 
@@ -84,4 +87,8 @@ private:
 
 	// 게임 텍스처키입니다.
 	std::size_t TextureKey = 0;
+
+
+	// 키보드입니다.
+	Game::KeyboardState Keyboard;
 };
