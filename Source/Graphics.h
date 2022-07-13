@@ -36,6 +36,14 @@ public:
 
 
 	/**
+	 * SDL Renderer의 포인터를 반환합니다.
+	 * 
+	 * @return SDL Renderer의 포인터를 반환합니다.
+	 */
+	SDL_Renderer* GetRenderer() const { return Renderer; }
+
+
+	/**
 	 * 프레임 렌더링을 시작합니다.
 	 * 
 	 * @param InColor - 벡버퍼를 비울 색상입니다.
