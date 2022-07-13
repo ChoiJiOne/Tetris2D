@@ -28,11 +28,6 @@ namespace Game
 		{
 			size_t Size = static_cast<size_t>(std::snprintf(nullptr, 0, InFormat.c_str(), InArgs_ ...)) + 1;
 
-			if (Size <= 0)
-			{
-				throw std::runtime_error("error during formatting.");
-			}
-
 			auto Buffer = std::make_unique<char[]>(Size);
 			std::snprintf(Buffer.get(), Size, InFormat.c_str(), InArgs_ ...);
 
@@ -53,11 +48,6 @@ namespace Game
 		static inline std::wstring Format(const std::wstring& InFormat, Args ... InArgs_)
 		{
 			size_t Size = static_cast<size_t>(std::swprintf(nullptr, 0, InFormat.c_str(), InArgs_ ...)) + 1;
-
-			if (Size <= 0)
-			{
-				throw std::runtime_error("error during formatting.");
-			}
 
 			auto Buffer = std::make_unique<wchar_t[]>(Size);
 			std::swprintf(Buffer.get(), Size, InFormat.c_str(), InArgs_ ...);
