@@ -1,21 +1,22 @@
-#include "SDLHelper.h"
 #include "ResourceHelper.h"
 #include "StringHelper.h"
 #include "Texture2D.h"
 #include "Font.h"
 
+
+#include "Macro.h"
 #include "Tetris2D.h"
 
 Tetris2D::~Tetris2D()
 {
 	Game::ResourceHelper::Cleanup();
-	Game::SDLHelper::Release();
+
+	SDL_Quit();
 }
 
 void Tetris2D::Setup()
 {
-	// 프레임워크를 초기화합니다.
-	Game::SDLHelper::Init();
+	CHECK((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0), SDL_GetError());
 
 
 	// SDL 윈도우를 생성합니다.
@@ -36,13 +37,16 @@ void Tetris2D::Setup()
 
 
 	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
-	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Font/kenvector_future.ttf";
+	std::string ExecuteDirectory = SDL_GetBasePath();
+
+
+	std::string FontPath = ExecuteDirectory + "../../../../Resource/Font/kenvector_future.ttf";
 	FontKey = Game::StringHelper::GetHash("Font");
 	Game::ResourceHelper::CreateFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
 
 	
 	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
-	std::string TexturePath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Texture/Block/BlueBlockFX.png";
+	std::string TexturePath = ExecuteDirectory + "../../../../Resource/Texture/Block/BlueBlockFX.png";
 	TextureKey = Game::StringHelper::GetHash("Texture");
 	Game::ResourceHelper::CreateTexture2D(Graphics2D.GetRenderer(), TextureKey, TexturePath);
 }
