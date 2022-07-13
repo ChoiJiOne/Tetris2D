@@ -1,29 +1,15 @@
 #pragma once
 
-// 게임 프레임워크를 사용하기 위한 헤더를 선언합니다.
-#include "Framework.h"
-
-// 게임 타이머를 사용하기 위한 헤더를 선언합니다.
-#include "Timer.h"
-
-// 게임 로그를 사용하기 위한 헤더를 선언합니다.
 #include "LogHelper.h"
-
-// 게임 입력 처리를 위한 헤더를 선언합니다.
 #include "InputHelper.h"
 
-// 테트로미노를 사용하기 위한 헤더를 선언합니다.
-#include "Tetromino.h"
-
-// 테트리스 보드를 사용하기 위한 헤더를 선언합니다.
-#include "Board.h"
-
-// 게임 플레이어를 사용하기 위한 헤더를 선언합니다.
-#include "Player.h"
+#include "Timer.h"
+#include "Window.h"
+#include "Graphics.h"
 
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
-class Tetris2D : public Game::Framework
+class Tetris2D
 {
 public:
 	// 생성자입니다.
@@ -45,32 +31,35 @@ public:
 
 
 	// 테트리스 게임을 초기화합니다.
-	virtual void Setup() override;
+	void Setup();
 
 
 	// 테트리스 게임 루프를 실행합니다.
-	virtual void Run() override;
+	void Run();
 
 
 	// 테트리스 게임 입력 처리를 수행합니다.
-	virtual void Input() override;
+	void Input();
 
 
 	// 테트리스 게임 루프를 업데이트합니다.
-	virtual void Update() override;
+	void Update();
 
 
 	// 테트리스 게임을 화면에 그립니다.
-	virtual void Draw() override;
+	void Draw();
 
 
 private:
-	// SDL 윈도우 포인터입니다.
-	SDL_Window* Window = nullptr;
+	/**
+	 * 게임 윈도우입니다.
+	 */
+	Game::Window Window;
 
-
-	// SDL 렌더러 포인터입니다.
-	SDL_Renderer* Renderer = nullptr;
+	/**
+	 * 게임 렌더링을 위한 그래픽스 인스턴스입니다.
+	 */
+	Game::Graphics Graphics2D;
 
 
 	// 루프를 종료할 지 확인합니다.
@@ -78,7 +67,7 @@ private:
 
 
 	// 게임 타이머입니다.
-	Timer GameTimer;
+	Game::Timer GameTimer;
 
 
 	// 게임 폰트키입니다.
