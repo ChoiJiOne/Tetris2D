@@ -1,7 +1,8 @@
 #pragma once
 
-// 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "Header.h"
+#include <cstdint>
+#include <chrono>
+#include <random>
 
 
 // int32_t 타입의 2차원 벡터입니다.
