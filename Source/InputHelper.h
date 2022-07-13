@@ -69,21 +69,4 @@ namespace Game
 		// 업데이트 후의 키보드 상태입니다.
 		std::vector<uint8_t> CurrKeyboardState;
 	};
-
-
-	// 마우스의 상태를 나타내는 클래스입니다.
-	class MouseState
-	{
-	public:
-		// 생성자입니다.
-		MouseState();
-
-
-		// 가상 소멸자입니다.
-		virtual ~MouseState();
-
-
-	private:
-		// 
-	};
 }

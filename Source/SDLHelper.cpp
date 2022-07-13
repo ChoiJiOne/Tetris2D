@@ -8,7 +8,7 @@ void Game::SDLHelper::Init()
 {
 	if (!bIsInitialize)
 	{
-		CHECK_SDL_FAILED((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0));
+		CHECK((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0), SDL_GetError());
 
 		ExecuteDirectory = SDL_GetBasePath();
 		bIsInitialize = true;
@@ -37,7 +37,7 @@ SDL_Window* Game::SDLHelper::CreateSDLWindow(const std::string InTitle, int32_t 
 		static_cast<Uint32>(InFlags)
 	);
 
-	CHECK_SDL_FAILED((Window != nullptr));
+	CHECK((Window != nullptr), SDL_GetError());
 	return Window;
 }
 
@@ -56,7 +56,7 @@ SDL_Renderer* Game::SDLHelper::CreateSDLRenderer(SDL_Window* InWindow)
 
 	SDL_Renderer* Renderer = SDL_CreateRenderer(InWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-	CHECK_SDL_FAILED((Renderer != nullptr));
+	CHECK((Renderer != nullptr), SDL_GetError());
 	return Renderer;
 }
 

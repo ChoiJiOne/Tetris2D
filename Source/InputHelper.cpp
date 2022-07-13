@@ -61,11 +61,3 @@ bool Game::KeyboardState::IsPressKey(const std::vector<uint8_t>& InKeyboardState
 {
 	return InKeyboardState[InKeyCode] == 0 ? false : true;
 }
-
-Game::MouseState::MouseState()
-{
-}
-
-Game::MouseState::~MouseState()
-{
-}

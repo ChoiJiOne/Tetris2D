@@ -49,7 +49,7 @@ void Game::CharacterTextureAtlas::CreateCharacterTextureAtlas(
 		Bitmap = std::make_unique<uint8_t[]>(TextureSize * TextureSize);
 
 		Success = stbtt_PackBegin(&PackContext, Bitmap.get(), TextureSize, TextureSize, 0, 1, nullptr);
-		CHECK_FAILED((Success == 1), "failed to stbtt_PackBegin");
+		CHECK((Success == 1), "failed to stbtt_PackBegin");
 
 		Success = stbtt_PackFontRange(
 			&PackContext,
@@ -74,7 +74,7 @@ void Game::CharacterTextureAtlas::CreateCharacterTextureAtlas(
 		}
 	}
 
-	CHECK_FAILED((Success == 1), "failed to create character texture atlas");
+	CHECK((Success == 1), "failed to create character texture atlas");
 
 
 	auto pixels = std::make_unique<uint32_t[]>(OutTextureSize * OutTextureSize);
@@ -89,7 +89,7 @@ void Game::CharacterTextureAtlas::CreateCharacterTextureAtlas(
 	}
 
 
-	CHECK_SDL_FAILED((SDL_UpdateTexture(OutTextureAtlas, nullptr, pixels.get(), OutTextureSize * sizeof(uint32_t)) == 0));
+	CHECK((SDL_UpdateTexture(OutTextureAtlas, nullptr, pixels.get(), OutTextureSize * sizeof(uint32_t)) == 0), SDL_GetError());
 	SDL_FreeFormat(format);
 }
 
@@ -153,7 +153,7 @@ void Game::Font::LoadTrueTypeFont(const std::string& InPath, std::vector<uint8_t
 
 	FILE* File = nullptr;
 
-	CHECK_FAILED((fopen_s(&File, InPath.c_str(), "rb") == 0), "failed to call fopen_s");
+	CHECK((fopen_s(&File, InPath.c_str(), "rb") == 0), "failed to call fopen_s");
 
 	fread(&OutBuffer[0], 1, 1 << 25, File);
 	fclose(File);
@@ -164,5 +164,5 @@ void Game::Font::LoadTrueTypeFont(const std::string& InPath, std::vector<uint8_t
 		stbtt_GetFontOffsetForIndex(reinterpret_cast<const unsigned char*>(&OutBuffer[0]), 0)
 	) != 0 ? true : false;
 
-	CHECK_FAILED((bSuccess), "failed to call stbtt_InitFont");
+	CHECK((bSuccess), "failed to call stbtt_InitFont");
 }

@@ -93,24 +93,24 @@ void Player::Draw(SDL_Renderer* InRenderer, const Game::Font& InFont, const Vec2
 	{
 		ShowTime = static_cast<float>(PLAY_TIME_PER_LEVEL) - StateElapsedTime;
 		ShowTimeColor = (ShowTime <= 10.0f) ? ColorHelper::Red : ColorHelper::White;
-		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Play : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
+		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), StringHelper::Format(L"Play : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
 
 	}
 	else if (CurrentState == EState::Wait)
 	{
 		ShowTime = static_cast<float>(WAIT_TIME_PER_LEVEL) - StateElapsedTime;
 		ShowTimeColor = ColorHelper::White;
-		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Wait : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
+		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), StringHelper::Format(L"Wait : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
 	}
 	else // CurrentState == EState::Done
 	{
 		ShowTime = 0.0f;
 		ShowTimeColor = ColorHelper::White;
-		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), Game::StringHelper::Format(L"Done : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
+		Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 390), StringHelper::Format(L"Done : %3d", static_cast<int32_t>(ShowTime)), ShowTimeColor);
 	}
 
-	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 540), Game::StringHelper::Format(L"Level: %3d", Level), ColorHelper::White);
-	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 690), Game::StringHelper::Format(L"Line : %3d", RemoveLine), ColorHelper::White);
+	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 540), StringHelper::Format(L"Level: %3d", Level), ColorHelper::White);
+	Game::DrawHelper::DrawText2D(InRenderer, InFont, Vec2i(380, 690), StringHelper::Format(L"Line : %3d", RemoveLine), ColorHelper::White);
 	*/
 }
 

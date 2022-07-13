@@ -32,7 +32,7 @@ void Game::Texture2D::CreateTextureFromFile(SDL_Renderer* InRenderer, const std:
 void Game::Texture2D::LoadTextureBufferFromFile(const std::string& InPath, uint8_t*& OutBuffer, int32_t& OutWidth, int32_t& OutHeight, int32_t& OutFormat)
 {
 	OutBuffer = stbi_load(InPath.c_str(), &OutWidth, &OutHeight, &OutFormat, 0);
-	CHECK_FAILED((OutBuffer != nullptr), StringHelper::Format("failed to load texture : %s", stbi_failure_reason()).c_str());
+	CHECK((OutBuffer != nullptr), StringHelper::Format("failed to load texture : %s", stbi_failure_reason()).c_str());
 }
 
 SDL_Texture* Game::Texture2D::CreateTextureFromBuffer(SDL_Renderer* InRenderer, uint8_t*& InBuffer, const int32_t& InWidth, const int32_t& InHeight, const int32_t& InFormat)
@@ -55,7 +55,7 @@ SDL_Texture* Game::Texture2D::CreateTextureFromBuffer(SDL_Renderer* InRenderer, 
 	}
 
 	SDL_Texture* SDLTexture = SDL_CreateTexture(InRenderer, TextureFormat, SDL_TEXTUREACCESS_STATIC, InWidth, InHeight);
-	CHECK_SDL_FAILED((SDLTexture != nullptr));
+	CHECK((SDLTexture != nullptr), SDL_GetError());
 
 	if (SDL_UpdateTexture(SDLTexture, nullptr, InBuffer, InWidth * InFormat) != 0)
 	{

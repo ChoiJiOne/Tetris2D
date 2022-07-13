@@ -39,13 +39,13 @@ void Tetris2D::Setup()
 
 	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
 	std::string FontPath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Font/kenvector_future.ttf";
-	FontKey = Game::StringHelper::GetHash("Font");
+	FontKey = StringHelper::GetHash("Font");
 	Game::ResourceHelper::CreateFont(Renderer, FontKey, FontPath, 40.0f);
 
 	
 	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
 	std::string TexturePath = Game::SDLHelper::GetExecuteDirectory() + "../../../../Resource/Texture/Block/BlueBlockFX.png";
-	TextureKey = Game::StringHelper::GetHash("Texture");
+	TextureKey = StringHelper::GetHash("Texture");
 	Game::ResourceHelper::CreateTexture2D(Renderer, TextureKey, TexturePath);
 }
 

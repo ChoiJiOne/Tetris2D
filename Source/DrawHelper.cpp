@@ -9,7 +9,7 @@
 void Game::DrawHelper::BeginDraw(SDL_Renderer* InRenderer, const LinearColor& InColor)
 {
 	SetDrawColor(InRenderer, InColor);
-	CHECK_SDL_FAILED((SDL_RenderClear(InRenderer) == 0));
+	CHECK((SDL_RenderClear(InRenderer) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::EndDraw(SDL_Renderer* InRenderer)
@@ -20,13 +20,13 @@ void Game::DrawHelper::EndDraw(SDL_Renderer* InRenderer)
 void Game::DrawHelper::DrawPoint2D(SDL_Renderer* InRenderer, const Vec2i& InPosition, const LinearColor& InColor)
 {
 	SetDrawColor(InRenderer, InColor);
-	CHECK_SDL_FAILED((SDL_RenderDrawPoint(InRenderer, InPosition.x, InPosition.y) == 0));
+	CHECK((SDL_RenderDrawPoint(InRenderer, InPosition.x, InPosition.y) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::DrawLine2D(SDL_Renderer* InRenderer, const Vec2i& InP0, const Vec2i& InP1, const LinearColor& InColor)
 {
 	SetDrawColor(InRenderer, InColor);
-	CHECK_SDL_FAILED((SDL_RenderDrawLine(InRenderer, InP0.x, InP0.y, InP1.x, InP1.y) == 0));
+	CHECK((SDL_RenderDrawLine(InRenderer, InP0.x, InP0.y, InP1.x, InP1.y) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::DrawWireframeRectangle2D(SDL_Renderer* InRenderer, const Vec2i& InP0, const Vec2i& InP1, const LinearColor& InColor)
@@ -40,7 +40,7 @@ void Game::DrawHelper::DrawWireframeRectangle2D(SDL_Renderer* InRenderer, const 
 		std::abs(InP1.y - InP0.y) + 1
 	};
 
-	CHECK_SDL_FAILED((SDL_RenderDrawRect(InRenderer, &Rect) == 0));
+	CHECK((SDL_RenderDrawRect(InRenderer, &Rect) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::DrawWireframeRectangle2D(SDL_Renderer* InRenderer, const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor)
@@ -67,7 +67,7 @@ void Game::DrawHelper::DrawRectangle2D(SDL_Renderer* InRenderer, const Vec2i& In
 		std::abs(InP1.y - InP0.y) + 1
 	};
 
-	CHECK_SDL_FAILED((SDL_RenderFillRect(InRenderer, &Rect) == 0));
+	CHECK((SDL_RenderFillRect(InRenderer, &Rect) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::DrawRectangle2D(SDL_Renderer* InRenderer, const Vec2i& InCenterPosition, int32_t InWidth, int32_t InHeight, const LinearColor& InColor)
@@ -97,7 +97,7 @@ void Game::DrawHelper::DrawTexture2D(SDL_Renderer* InRenderer, const std::size_t
 		static_cast<int32_t>(ScaleHeight)
 	};
 
-	CHECK_SDL_FAILED((SDL_RenderCopy(InRenderer, Texture.GetTexture(), nullptr, &Rect) == 0));
+	CHECK((SDL_RenderCopy(InRenderer, Texture.GetTexture(), nullptr, &Rect) == 0), SDL_GetError());
 }
 
 void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
@@ -116,8 +116,8 @@ void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const std::size_t& I
 
 		if (!Texture) continue;
 
-		SDL_SetTextureColorMod(Texture, R, G, B);
-		SDL_SetTextureAlphaMod(Texture, A);
+		CHECK((SDL_SetTextureColorMod(Texture, R, G, B) == 0), SDL_GetError());
+		CHECK((SDL_SetTextureAlphaMod(Texture, A) == 0), SDL_GetError());
 
 		const stbtt_packedchar& Info = Font.GetPackedchar(Unicode);
 
@@ -137,7 +137,7 @@ void Game::DrawHelper::DrawText2D(SDL_Renderer* InRenderer, const std::size_t& I
 			(Info.y1 - Info.y0)
 		};
 
-		SDL_RenderCopy(InRenderer, Texture, &Src, &Dst);
+		CHECK((SDL_RenderCopy(InRenderer, Texture, &Src, &Dst) == 0), SDL_GetError());
 		x += static_cast<int32_t>(Info.xadvance);
 	}
 }
@@ -151,5 +151,5 @@ void Game::DrawHelper::SetDrawColor(SDL_Renderer* InRenderer, const LinearColor&
 
 void Game::DrawHelper::SetDrawColor(SDL_Renderer* InRenderer, uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
 {
-	CHECK_SDL_FAILED((SDL_SetRenderDrawColor(InRenderer, InRed, InGreen, InBlue, InAlpha) == 0));
+	CHECK((SDL_SetRenderDrawColor(InRenderer, InRed, InGreen, InBlue, InAlpha) == 0), SDL_GetError());
 }

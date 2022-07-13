@@ -26,7 +26,7 @@ void Game::ResourceHelper::Cleanup()
 const Game::Texture2D& Game::ResourceHelper::CreateTexture2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath)
 {
 	auto TextureCacheIter = TextureCache.find(InHashKey);
-	CHECK_FAILED((TextureCacheIter == TextureCache.end()), "hash collision!");
+	CHECK((TextureCacheIter == TextureCache.end()), "hash collision!");
 
 	TextureCache.insert({ InHashKey, std::make_shared<Game::Texture2D>(InRenderer, InPath) });
 	return *TextureCache.at(InHashKey).get();
@@ -35,7 +35,7 @@ const Game::Texture2D& Game::ResourceHelper::CreateTexture2D(SDL_Renderer* InRen
 const Game::Font& Game::ResourceHelper::CreateFont(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath, float InFontSize)
 {
 	auto FontCacheIter = FontCache.find(InHashKey);
-	CHECK_FAILED((FontCacheIter == FontCache.end()), "hash collision!");
+	CHECK((FontCacheIter == FontCache.end()), "hash collision!");
 
 	FontCache.insert({ InHashKey, std::make_shared<Game::Font>(InRenderer, InPath, InFontSize) });
 	return *FontCache.at(InHashKey).get();
@@ -44,7 +44,7 @@ const Game::Font& Game::ResourceHelper::CreateFont(SDL_Renderer* InRenderer, con
 const Game::Texture2D& Game::ResourceHelper::GetTexture2D(const std::size_t& InHashKey)
 {
 	auto TextureCacheIter = TextureCache.find(InHashKey);
-	CHECK_FAILED((TextureCacheIter != TextureCache.end()), "don't exist hash key");
+	CHECK((TextureCacheIter != TextureCache.end()), "don't exist hash key");
 
 	return *TextureCache.at(InHashKey).get();
 }
@@ -52,7 +52,7 @@ const Game::Texture2D& Game::ResourceHelper::GetTexture2D(const std::size_t& InH
 const Game::Font& Game::ResourceHelper::GetFont(const std::size_t& InHashKey)
 {
 	auto FontCacheIter = FontCache.find(InHashKey);
-	CHECK_FAILED((FontCacheIter != FontCache.end()), "don't exist hash key");
+	CHECK((FontCacheIter != FontCache.end()), "don't exist hash key");
 
 	return *FontCache.at(InHashKey).get();
 }

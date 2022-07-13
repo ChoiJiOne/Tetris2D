@@ -265,7 +265,7 @@ bool Board::CheckInsidePositionInBlocks(int32_t InRow, int32_t InCol, int32_t In
 
 int32_t Board::GetBlocksOffset(int32_t InRow, int32_t InCol, int32_t InRowSize, int32_t InColSize)
 {
-	CHECK_FAILED(CheckInsidePositionInBlocks(InRow, InCol, InRowSize, InColSize), "out of range in blocks");
+	CHECK(CheckInsidePositionInBlocks(InRow, InCol, InRowSize, InColSize), "out of range in blocks");
 	return InRow * InColSize + InCol;
 }
 
