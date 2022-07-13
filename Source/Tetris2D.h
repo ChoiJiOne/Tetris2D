@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Window.h"
 
 
 /**
@@ -57,5 +58,5 @@ public:
 
 
 private:
-
+	Game::Window Window;
 };
