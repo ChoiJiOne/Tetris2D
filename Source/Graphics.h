@@ -1,11 +1,10 @@
 #pragma once
 
-// 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "Header.h"
-
 // 수학 관련 기능을 사용하기 위해서 헤더 파일을 추가합니다.
 #include "MathHelper.h"
 
+struct SDL_Renderer;
+struct SDL_Window;
 
 /**
  * 그래픽스 클래스입니다.

@@ -1,8 +1,12 @@
+// @third party code - BEGIN SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
+// @third party code - END
+
 #include "Macro.h"
 #include "ResourceHelper.h"
 #include "Texture2D.h"
 #include "Font.h"
-
 #include "Graphics.h"
 
 
