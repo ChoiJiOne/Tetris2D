@@ -1,62 +1,94 @@
 #pragma once
 
-#include "Engine.h"
-#include "Window.h"
+// 게임 프레임워크를 사용하기 위한 헤더를 선언합니다.
+#include "Framework.h"
+
+// 게임 타이머를 사용하기 위한 헤더를 선언합니다.
+#include "Timer.h"
+
+// 게임 로그를 사용하기 위한 헤더를 선언합니다.
+#include "LogHelper.h"
+
+// 게임 입력 처리를 위한 헤더를 선언합니다.
+#include "InputHelper.h"
+
+// 테트로미노를 사용하기 위한 헤더를 선언합니다.
+#include "Tetromino.h"
+
+// 테트리스 보드를 사용하기 위한 헤더를 선언합니다.
+#include "Board.h"
+
+// 게임 플레이어를 사용하기 위한 헤더를 선언합니다.
+#include "Player.h"
 
 
-/**
- * 테트리스 게임 클래스입니다.
- */
-class Tetris2D : public Game::Engine
+// 테트리스 게임을 실행 및 관리하는 클래스입니다.
+class Tetris2D : public Game::Framework
 {
 public:
-	/**
-	 * 테트리스 게임 클래스의 생성자입니다.
-	 */
+	// 생성자입니다.
 	Tetris2D() = default;
 
 
-	/**
-	 * 테트리스 게임 클래스의 소멸자입니다.
-	 */
+	// 가상 소멸자입니다.
 	virtual ~Tetris2D();
 
 
-	/**
-	 * 테트리스 게임을 초기화합니다.
-	 * @note 이 메서드는 Engine의 Initialize 메서드를 재정의합니다.
-	 */
-	virtual void Initialize() override;
+	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다. 
+	Tetris2D(Tetris2D&& InInstance) = delete;
+	Tetris2D(const Tetris2D& InInstance) = delete;
 
 
-	/**
-	 * 테트리스 게임 입력 처리를 수행합니다.
-	 * @note 이 메서드는 Engine의 Input 메서드를 재정의합니다.
-	 */
-	virtual void Input() override;
+	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	Tetris2D& operator=(Tetris2D&& InInstance) = delete;
+	Tetris2D& operator=(const Tetris2D& InInstance) = delete;
 
 
-	/**
-	 * 테트리스 게임 루프를 업데이트합니다.
-	 * @note 이 메서드는 Engine의 Update 메서드를 재정의합니다.
-	 */
-	virtual void Update() override;
+	// 테트리스 게임을 초기화합니다.
+	virtual void Setup() override;
 
 
-	/**
-	 * 테트리스 게임을 렌더링합니다.
-	 * @note 이 메서드는 Engine의 Render 메서드를 재정의합니다.
-	 */
-	virtual void Render() override;
-
-
-	/**
-	 * 테트리스 게임 루프를 실행합니다.
-	 * @note 이 메서드는 Engine의 Run 메서드를 재정의합니다.
-	 */
+	// 테트리스 게임 루프를 실행합니다.
 	virtual void Run() override;
 
 
+	// 테트리스 게임 입력 처리를 수행합니다.
+	virtual void Input() override;
+
+
+	// 테트리스 게임 루프를 업데이트합니다.
+	virtual void Update() override;
+
+
+	// 테트리스 게임을 화면에 그립니다.
+	virtual void Draw() override;
+
+
 private:
-	Game::Window Window;
+	// SDL 윈도우 포인터입니다.
+	SDL_Window* Window = nullptr;
+
+
+	// SDL 렌더러 포인터입니다.
+	SDL_Renderer* Renderer = nullptr;
+
+
+	// 루프를 종료할 지 확인합니다.
+	bool bIsDoneLoop = false;
+
+
+	// 게임 타이머입니다.
+	Timer GameTimer;
+
+
+	// 게임 폰트키입니다.
+	std::size_t FontKey = 0;
+
+
+	// 게임 텍스처키입니다.
+	std::size_t TextureKey = 0;
+
+
+	// 키보드입니다.
+	Game::KeyboardState Keyboard;
 };

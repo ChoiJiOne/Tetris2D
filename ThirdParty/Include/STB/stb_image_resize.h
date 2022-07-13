@@ -104,7 +104,7 @@
          alpha, linear filtering (such as image resampling done by this
          library, or performed in texture units on GPUs) does the "right
          thing". While premultiplied alpha is standard in the movie CGI
-         industry, it is still uncommon in the videogame/real-time world.
+         industry, it is still uncommon in the videoreal-time world.
 
          If you linearly filter non-premultiplied alpha, strange effects
          occur. (For example, the 50/50 average of 99% transparent bright green

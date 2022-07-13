@@ -1,14 +1,6 @@
-// @third party code - BEGIN crtdbg
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-// @third party code - END
-// 메모리 누수를 점검하는 데 사용됩니다.
-
-#include <iostream>
-#include <stdexcept>
-#include <memory>
 
 #include "Tetris2D.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -19,12 +11,12 @@ int main(int argc, char* argv[])
 	try
 	{
 		auto Game = std::make_unique<Tetris2D>();
-		Game->Initialize();
+		Game->Setup();
 		Game->Run();
 	}
 	catch (const std::exception& Exception)
 	{
-		std::cout << Exception.what() << std::endl;
+		Game::LogHelper::Error(Exception.what());
 	}
 
 	return 0;
