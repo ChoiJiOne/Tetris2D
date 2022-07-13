@@ -1,3 +1,6 @@
+#include <Windows.h>
+#include <iostream>
+
 #include "LogHelper.h"
 
 void Game::LogHelper::ClearConsole()
@@ -8,28 +11,28 @@ void Game::LogHelper::ClearConsole()
 void Game::LogHelper::Message(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
-	std::cout << "[MESSAGE] : " << InMessage << '\n';
+	std::cout << "[MESSAGE]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Game::LogHelper::Success(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightGreen);
-	std::cout << "[SUCCESS] : " << InMessage << '\n';
+	std::cout << "[SUCCESS]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Game::LogHelper::Warning(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightYellow);
-	std::cout << "[WARNING] : " << InMessage << '\n';
+	std::cout << "[WARNING]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
 void Game::LogHelper::Error(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightRed);
-	std::cout << "[ERROR] : " << InMessage << '\n';
+	std::cout << "[ERROR]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 

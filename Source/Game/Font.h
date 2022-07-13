@@ -1,11 +1,17 @@
 #pragma once
 
-// 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "Header.h"
-
-// 트루 타입 폰트를 처리하기 위한 헤더 선언을 추가합니다.
+// @third party code - BEGIN stb
 #include <stb/stb_rect_pack.h>
 #include <stb/stb_truetype.h>
+// @third party code - END
+
+#include <string>
+#include <cstdint>
+#include <vector>
+#include <memory>
+
+struct SDL_Renderer;
+struct SDL_Texture;
 
 
 namespace Game
@@ -22,7 +28,7 @@ namespace Game
 		// @param InStartUnicode - 생성할 폰트 텍스처 아틀라스의 시작 문자입니다. 
 		// @param InEndUnicode - 생성할 폰트 텍스처 아틀라스의 끝 문자입니다. 이때, 끝 문자를 포함합니다.
 		// 
-		// @throws - 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
+		// @throws 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
 		CharacterTextureAtlas(
 			SDL_Renderer* InRenderer,
 			const std::vector<uint8_t>& InTTFBuffer,
@@ -89,7 +95,7 @@ namespace Game
 		// @param OutPackedchars - 생성한 문자들의 위치 및 크기 정보들입니다.
 		// @param OutTextureSize - 생성한 텍스처 아틀라스의 크기입니다.
 		// 
-		// @throws - 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
+		// @throws 텍스처 생성에 실패할 경우, C++ 표준 예외를 반환합니다.
 		void CreateCharacterTextureAtlas(
 			SDL_Renderer* InRenderer, 
 			const std::vector<uint8_t>& InTTFBuffer, 

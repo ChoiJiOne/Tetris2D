@@ -1,10 +1,14 @@
 #pragma once
 
-// 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "Header.h"
-
-// 텍스처 파일을 불러오기 위한 헤더 선언을 추가합니다.
+// @third party code - stb
 #include <stb/stb_image.h>
+// @third party code - END
+
+#include <string>
+#include <cstdint>
+
+struct SDL_Texture;
+struct SDL_Renderer;
 
 
 namespace Game
@@ -105,7 +109,7 @@ namespace Game
 		// @param InHeight - 텍스처 버퍼의 세로 길이입니다.
 		// @param InFormat - 텍스처의 픽셀 포멧입니다.
 		// 
-		// @throws - 이미지의 포멧이 지원하지 않는 포멧일 경우, C++ 표준 예외를 반환합니다.
+		// @throws 이미지의 포멧이 지원하지 않는 포멧일 경우, C++ 표준 예외를 반환합니다.
 		// 
 		// @returen - SDL 텍스처 포인터를 반환합니다.
 		SDL_Texture* CreateTextureFromBuffer(SDL_Renderer* InRenderer, uint8_t*& InBuffer, const int32_t& InWidth, const int32_t& InHeight, const int32_t& InFormat);

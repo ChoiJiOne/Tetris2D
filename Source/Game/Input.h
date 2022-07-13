@@ -1,10 +1,6 @@
 #pragma once
 
-// 표준 라이브러리와 SDL2를 사용하기 위해서 헤더 파일을 추가합니다.
-#include "Header.h"
-
-// 수학 기능을 사용하기 위한 헤더 파일을 추가합니다.
-
+#include <vector>
 
 
 namespace Game

@@ -1,7 +1,6 @@
 #include "Texture2D.h"
 #include "Font.h"
 #include "Macro.h"
-
 #include "ResourceHelper.h"
 
 // 리소스 헬퍼가 관리하는 텍스처 캐쉬입니다.

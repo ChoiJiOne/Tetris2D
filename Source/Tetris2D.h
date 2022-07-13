@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LogHelper.h"
-#include "InputHelper.h"
+#include "Input.h"
 
 #include "Timer.h"
 #include "Window.h"

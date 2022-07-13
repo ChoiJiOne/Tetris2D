@@ -1,6 +1,9 @@
 #pragma once
 
-struct SDL_Window;
+// @third party code - BEGIN SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
+// @third party code - END
 
 
 namespace Game

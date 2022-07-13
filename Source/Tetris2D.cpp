@@ -1,3 +1,8 @@
+// @third party code - BEGIN SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
+// @third party code - END
+
 #include "ResourceHelper.h"
 #include "StringHelper.h"
 #include "Texture2D.h"

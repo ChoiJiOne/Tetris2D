@@ -1,4 +1,9 @@
-#include "InputHelper.h"
+// @third party code - BEGIN SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
+// @third party code - END
+
+#include "Input.h"
 
 Game::KeyboardState::KeyboardState()
 	: CurrKeyboardState(SDL_Scancode::SDL_NUM_SCANCODES, 0)

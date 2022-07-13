@@ -1,4 +1,7 @@
-
+// Visual Compiler 메모리 누수 체크 라이브러리 추가
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <memory>
 #include "Tetris2D.h"
 
 
