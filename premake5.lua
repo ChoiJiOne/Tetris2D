@@ -3,7 +3,7 @@ function IncludeFiles()
    files {
       "%{source_path}/*",
       
-      "%{package_path}/Game/*",
+      "%{engine_source_path}/*",
 
       "%{third_party_path}/Include/httplib/*",
       "%{third_party_path}/Include/json/*",
@@ -18,7 +18,7 @@ function IncludeDirs()
    includedirs {
       "%{source_path}",
 
-      "%{package_path}",
+      "%{engine_source_path}",
 
       "%{third_party_path}/Include",
    }
@@ -49,10 +49,10 @@ workspace "Tetris2D"
 
    location "Tetris2D"
    
-   package_path="%{wks.location}/../Package"
+   engine_path="%{wks.location}/../GameEngine"
    source_path="%{wks.location}/../Source"
-
-   third_party_path="%{package_path}/ThirdParty"
+   third_party_path="%{engine_path}/ThirdParty"
+   engine_source_path="%{engine_path}/Engine"
 
    project "Tetris2D"
       kind "ConsoleApp"
