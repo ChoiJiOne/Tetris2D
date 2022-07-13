@@ -5,73 +5,76 @@
 
 #include "Timer.h"
 
-Timer::~Timer()
+namespace Game
 {
-}
-
-float Timer::DeltaTime() const
-{
-	if (bIsStop)
+	Timer::~Timer()
 	{
-		return 0.0f;
 	}
-	else
+
+	float Timer::DeltaTime() const
 	{
-		return static_cast<float>(CurrentTime - PreviousTime) / 1000.0f;
+		if (bIsStop)
+		{
+			return 0.0f;
+		}
+		else
+		{
+			return static_cast<float>(CurrentTime - PreviousTime) / 1000.0f;
+		}
 	}
-}
 
-float Timer::TotalTime() const
-{
-	if (bIsStop)
+	float Timer::TotalTime() const
 	{
-		return static_cast<float>(StopTime - PausedTime - BaseTime) / 1000.0f;
+		if (bIsStop)
+		{
+			return static_cast<float>(StopTime - PausedTime - BaseTime) / 1000.0f;
+		}
+		else
+		{
+			return static_cast<float>(CurrentTime - PausedTime - BaseTime) / 1000.0f;
+		}
 	}
-	else
-	{
-		return static_cast<float>(CurrentTime - PausedTime - BaseTime) / 1000.0f;
-	}
-}
 
-void Timer::Reset()
-{
-	uint64_t TickTime = SDL_GetTicks64();
-
-	BaseTime = TickTime;
-	PausedTime = 0ULL;
-	StopTime = 0ULL;
-	PreviousTime = TickTime;
-	CurrentTime = TickTime;
-}
-
-void Timer::Start()
-{
-	if (bIsStop)
+	void Timer::Reset()
 	{
 		uint64_t TickTime = SDL_GetTicks64();
 
-		PausedTime += (TickTime - StopTime);
-		PreviousTime = TickTime;
+		BaseTime = TickTime;
+		PausedTime = 0ULL;
 		StopTime = 0ULL;
-
-		bIsStop = false;
+		PreviousTime = TickTime;
+		CurrentTime = TickTime;
 	}
-}
 
-void Timer::Stop()
-{
-	if (!bIsStop)
+	void Timer::Start()
 	{
-		uint64_t TickTime = SDL_GetTicks64();
+		if (bIsStop)
+		{
+			uint64_t TickTime = SDL_GetTicks64();
 
-		StopTime = TickTime;
+			PausedTime += (TickTime - StopTime);
+			PreviousTime = TickTime;
+			StopTime = 0ULL;
 
-		bIsStop = true;
+			bIsStop = false;
+		}
 	}
-}
 
-void Timer::Tick()
-{
-	PreviousTime = CurrentTime;
-	CurrentTime = SDL_GetTicks64();
+	void Timer::Stop()
+	{
+		if (!bIsStop)
+		{
+			uint64_t TickTime = SDL_GetTicks64();
+
+			StopTime = TickTime;
+
+			bIsStop = true;
+		}
+	}
+
+	void Timer::Tick()
+	{
+		PreviousTime = CurrentTime;
+		CurrentTime = SDL_GetTicks64();
+	}
 }

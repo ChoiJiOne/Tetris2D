@@ -17,7 +17,7 @@
 	if(!EXPRESSION)\
 	{\
 		throw std::exception(\
-			StringHelper::Format(\
+			Game::StringHelper::Format(\
 				"[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n",\
 				 __FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
 		);\
@@ -37,7 +37,7 @@
 #define ENFORCE_THROW_EXCEPTION(MESSAGE)\
 {\
 	throw std::exception(\
-		StringHelper::Format(\
+		Game::StringHelper::Format(\
 			"[File] : %s\n[Line] : %d\n[Function] : %s\n[Message] : %s\n",\
 				__FILE__, __LINE__, __FUNCTION__, MESSAGE).c_str()\
 	);\
