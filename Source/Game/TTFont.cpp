@@ -4,22 +4,9 @@
 // @third party code - END
 
 #include "Macro.h"
-#include "Font.h"
+#include "TTFont.h"
 
-Game::CharacterTextureAtlas::CharacterTextureAtlas(
-	SDL_Renderer* InRenderer, 
-	const std::vector<uint8_t>& InTTFBuffer, 
-	float InSize, 
-	int32_t InStartUnicode, 
-	int32_t InEndUnicode
-) : FontSize(InSize),
-	StartUnicode(InStartUnicode),
-	EndUnicode(InEndUnicode)
-{
-	CreateCharacterTextureAtlas(InRenderer, InTTFBuffer, TextureAtlas, Packedchars, TextureAtlasSize);
-}
-
-Game::CharacterTextureAtlas::~CharacterTextureAtlas()
+Game::UnicodeTextureAtlas::~UnicodeTextureAtlas()
 {
 	if (TextureAtlas)
 	{
@@ -28,18 +15,35 @@ Game::CharacterTextureAtlas::~CharacterTextureAtlas()
 	}
 }
 
-bool Game::CharacterTextureAtlas::IsUnicodeInRange(const wchar_t& InUnicode) const
+void Game::UnicodeTextureAtlas::Initialize(SDL_Renderer* InRenderer, const std::vector<uint8_t>& InTTFBuffer, float InSize, int32_t InStartUnicode, int32_t InEndUnicode)
+{
+	if (TextureAtlas)
+	{
+		Packedchars.resize(0);
+
+		SDL_DestroyTexture(TextureAtlas);
+		TextureAtlas = nullptr;
+	}
+
+	StartUnicode = InStartUnicode;
+	EndUnicode = InEndUnicode;
+	FontSize = InSize;
+
+	GenerateUnicodeTextureAtlas(InRenderer, InTTFBuffer, TextureAtlas, Packedchars, TextureAtlasSize);
+}
+
+bool Game::UnicodeTextureAtlas::IsUnicodeInRange(const wchar_t& InUnicode) const
 {
 	int32_t Code = static_cast<int32_t>(InUnicode);
 	return (StartUnicode <= Code && Code <= EndUnicode);
 }
 
-void Game::CharacterTextureAtlas::CreateCharacterTextureAtlas(
-	SDL_Renderer* InRenderer,
-	const std::vector<uint8_t>& InTTFBuffer,
-	SDL_Texture*& OutTextureAtlas,
+void Game::UnicodeTextureAtlas::GenerateUnicodeTextureAtlas(
+	SDL_Renderer*                  InRenderer,
+	const std::vector<uint8_t>&    InTTFBuffer,
+	SDL_Texture*&                  OutTextureAtlas,
 	std::vector<stbtt_packedchar>& OutPackedchars,
-	int32_t& OutTextureSize
+	int32_t&                       OutTextureSize
 )
 {
 	std::size_t UnicodeRange = EndUnicode - StartUnicode + 1;
@@ -98,25 +102,34 @@ void Game::CharacterTextureAtlas::CreateCharacterTextureAtlas(
 	SDL_FreeFormat(format);
 }
 
-Game::Font::Font(SDL_Renderer* InRenderer, const std::string& InPath, float InFontSize)
-	: FontSize(InFontSize)
-{
-	std::vector<uint8_t> Buffer;
-	stbtt_fontinfo FontInfo;
-
-	LoadTrueTypeFont(InPath, Buffer, FontInfo);
-
-	AsciiTextureAtlas  = std::make_unique<CharacterTextureAtlas>(InRenderer, Buffer, FontSize,   0x20,   0x7E);
-	HangulTextureAtlas = std::make_unique<CharacterTextureAtlas>(InRenderer, Buffer, FontSize, 0xAC00, 0xD7AF);
-}
-
-Game::Font::~Font()
+Game::TTFont::~TTFont()
 {
 	AsciiTextureAtlas.reset();
 	HangulTextureAtlas.reset();
 }
 
-SDL_Texture* Game::Font::GetAtlas(const wchar_t& InUnicode) const
+void Game::TTFont::Initialize(SDL_Renderer* InRenderer, const std::string& InPath, float InFontSize)
+{
+	if (AsciiTextureAtlas && HangulTextureAtlas)
+	{
+		AsciiTextureAtlas.reset();
+		HangulTextureAtlas.reset();
+	}
+
+	std::vector<uint8_t> Buffer;
+	stbtt_fontinfo FontInfo;
+
+	FontSize = InFontSize;
+	LoadTrueTypeFontFromFile(InPath, Buffer, FontInfo);
+
+	AsciiTextureAtlas = std::make_unique<UnicodeTextureAtlas>();
+	AsciiTextureAtlas->Initialize(InRenderer, Buffer, FontSize, 0x20, 0x7E);
+
+	HangulTextureAtlas = std::make_unique<UnicodeTextureAtlas>();
+	HangulTextureAtlas->Initialize(InRenderer, Buffer, FontSize, 0xAC00, 0xD7AF);
+}
+
+SDL_Texture* Game::TTFont::GetTextureAtlas(const wchar_t& InUnicode) const
 {
 	int32_t Code = static_cast<int32_t>(InUnicode);
 
@@ -134,7 +147,7 @@ SDL_Texture* Game::Font::GetAtlas(const wchar_t& InUnicode) const
 	}
 }
 
-const stbtt_packedchar& Game::Font::GetPackedchar(const wchar_t& InUnicode) const
+const stbtt_packedchar& Game::TTFont::GetPackedchar(const wchar_t& InUnicode) const
 {
 	int32_t Code = static_cast<int32_t>(InUnicode);
 
@@ -152,7 +165,7 @@ const stbtt_packedchar& Game::Font::GetPackedchar(const wchar_t& InUnicode) cons
 	}
 }
 
-void Game::Font::LoadTrueTypeFont(const std::string& InPath, std::vector<uint8_t>& OutBuffer, stbtt_fontinfo& OutFontInfo)
+void Game::TTFont::LoadTrueTypeFontFromFile(const std::string& InPath, std::vector<uint8_t>& OutBuffer, stbtt_fontinfo& OutFontInfo)
 {
 	OutBuffer.resize(1 << 25);
 

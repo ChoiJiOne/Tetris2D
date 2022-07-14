@@ -6,7 +6,7 @@
 #include "Macro.h"
 #include "ResourceHelper.h"
 #include "Texture2D.h"
-#include "Font.h"
+#include "TTFont.h"
 #include "Graphics.h"
 
 namespace Game
@@ -123,7 +123,7 @@ namespace Game
 
 	void Graphics::DrawText2D(const std::size_t& InHashKey, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
 	{
-		const Font& Font = ResourceHelper::GetFont(InHashKey);
+		const TTFont& Font = ResourceHelper::GetTTFont(InHashKey);
 
 		int32_t x = InPosition.x;
 		int32_t y = InPosition.y;
@@ -133,7 +133,7 @@ namespace Game
 
 		for (const auto& Unicode : InText)
 		{
-			SDL_Texture* Texture = Font.GetAtlas(Unicode);
+			SDL_Texture* Texture = Font.GetTextureAtlas(Unicode);
 
 			if (!Texture) continue;
 

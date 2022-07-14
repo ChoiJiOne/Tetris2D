@@ -3,13 +3,12 @@
 #include <SDL2/SDL_syswm.h>
 // @third party code - END
 
-#include "ResourceHelper.h"
-#include "StringHelper.h"
-#include "Texture2D.h"
-#include "Font.h"
+#include "Game/ResourceHelper.h"
+#include "Game/StringHelper.h"
+#include "Game/Texture2D.h"
+#include "Game/TTFont.h"
+#include "Game/Macro.h"
 
-
-#include "Macro.h"
 #include "Tetris2D.h"
 
 Tetris2D::~Tetris2D()
@@ -47,7 +46,7 @@ void Tetris2D::Setup()
 
 	std::string FontPath = ExecuteDirectory + "../../../../Resource/Font/kenvector_future.ttf";
 	FontKey = Game::StringHelper::GetHash("Font");
-	Game::ResourceHelper::CreateFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
+	Game::ResourceHelper::CreateTTFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
 
 	
 	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)

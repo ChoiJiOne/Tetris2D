@@ -1,11 +1,11 @@
 #pragma once
 
-#include "LogHelper.h"
-#include "Input.h"
+#include "Game/LogHelper.h"
+#include "Game/Input.h"
 
-#include "Timer.h"
-#include "Window.h"
-#include "Graphics.h"
+#include "Game/Timer.h"
+#include "Game/Window.h"
+#include "Game/Graphics.h"
 
 
 // 테트리스 게임을 실행 및 관리하는 클래스입니다.
