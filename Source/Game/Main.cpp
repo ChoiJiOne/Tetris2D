@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& Exception)
 	{
-		Game::LogHelper::Error(Exception.what());
+		Game::Logging::Error(Exception.what());
 	}
 
 	return 0;

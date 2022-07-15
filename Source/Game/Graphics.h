@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MathHelper.h"
+#include "Math.h"
 
 struct SDL_Renderer;
 struct SDL_Window;

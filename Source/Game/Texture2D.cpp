@@ -4,7 +4,7 @@
 // @third party code - END
 
 #include "Macro.h"
-#include "StringHelper.h"
+#include "Text.h"
 #include "Texture2D.h"
 
 Game::Texture2D::Texture2D(SDL_Renderer* InRenderer, const std::string& InPath)
@@ -37,7 +37,7 @@ void Game::Texture2D::CreateTextureFromFile(SDL_Renderer* InRenderer, const std:
 void Game::Texture2D::LoadTextureBufferFromFile(const std::string& InPath, uint8_t*& OutBuffer, int32_t& OutWidth, int32_t& OutHeight, int32_t& OutFormat)
 {
 	OutBuffer = stbi_load(InPath.c_str(), &OutWidth, &OutHeight, &OutFormat, 0);
-	CHECK((OutBuffer != nullptr), StringHelper::Format("failed to load texture : %s", stbi_failure_reason()).c_str());
+	CHECK((OutBuffer != nullptr), Text::Format("failed to load texture : %s", stbi_failure_reason()).c_str());
 }
 
 SDL_Texture* Game::Texture2D::CreateTextureFromBuffer(SDL_Renderer* InRenderer, uint8_t*& InBuffer, const int32_t& InWidth, const int32_t& InHeight, const int32_t& InFormat)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/LogHelper.h"
+#include "Game/Logging.h"
 #include "Game/Input.h"
 
 #include "Game/Timer.h"

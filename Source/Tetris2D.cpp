@@ -3,8 +3,8 @@
 #include <SDL2/SDL_syswm.h>
 // @third party code - END
 
-#include "Game/ResourceHelper.h"
-#include "Game/StringHelper.h"
+#include "Game/ResourceManager.h"
+#include "Game/Text.h"
 #include "Game/Texture2D.h"
 #include "Game/TTFont.h"
 #include "Game/Macro.h"
@@ -13,7 +13,7 @@
 
 Tetris2D::~Tetris2D()
 {
-	Game::ResourceHelper::Cleanup();
+	Game::ResourceManager::Cleanup();
 
 	SDL_Quit();
 }
@@ -45,14 +45,14 @@ void Tetris2D::Setup()
 
 
 	std::string FontPath = ExecuteDirectory + "../../../../Resource/Font/kenvector_future.ttf";
-	FontKey = Game::StringHelper::GetHash("Font");
-	Game::ResourceHelper::CreateTTFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
+	FontKey = Game::Text::GetHash("Font");
+	Game::ResourceManager::CreateTTFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
 
 	
 	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
 	std::string TexturePath = ExecuteDirectory + "../../../../Resource/Texture/Block/BlueBlockFX.png";
-	TextureKey = Game::StringHelper::GetHash("Texture");
-	Game::ResourceHelper::CreateTexture2D(Graphics2D.GetRenderer(), TextureKey, TexturePath);
+	TextureKey = Game::Text::GetHash("Texture");
+	Game::ResourceManager::CreateTexture2D(Graphics2D.GetRenderer(), TextureKey, TexturePath);
 }
 
 void Tetris2D::Run()
@@ -90,14 +90,14 @@ void Tetris2D::Update()
 
 void Tetris2D::Draw()
 {
-	Graphics2D.BeginFrame(Game::ColorHelper::Black);
+	Graphics2D.BeginFrame(Game::Color::Black);
 
-	Graphics2D.DrawRect2D(Game::Vec2i(100, 100), Game::Vec2i(400, 200), Game::ColorHelper::Blue);
+	Graphics2D.DrawRect2D(Game::Vec2i(100, 100), Game::Vec2i(400, 200), Game::Color::Blue);
 
-	Game::LinearColor Color = Game::ColorHelper::White;
+	Game::LinearColor Color = Game::Color::White;
 	if (Keyboard.GetKeyState(SDL_Scancode::SDL_SCANCODE_A) == Game::EButtonState::Held)
 	{
-		Color = Game::ColorHelper::Red;
+		Color = Game::Color::Red;
 	}
 	Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 100), L"ABCDEFGHIJK", Color);
 	Graphics2D.DrawTexture2D(TextureKey, Game::Vec2i(200, 400));

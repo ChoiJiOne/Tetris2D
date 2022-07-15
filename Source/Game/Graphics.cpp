@@ -4,7 +4,7 @@
 // @third party code - END
 
 #include "Macro.h"
-#include "ResourceHelper.h"
+#include "ResourceManager.h"
 #include "Texture2D.h"
 #include "TTFont.h"
 #include "Graphics.h"
@@ -106,7 +106,7 @@ namespace Game
 
 	void Graphics::DrawTexture2D(const std::size_t& InHashKey, const Vec2i& InCenterPosition, float InWidthScaling, float InHeightScaling)
 	{
-		const Texture2D& Texture = ResourceHelper::GetTexture2D(InHashKey);
+		const Texture2D& Texture = ResourceManager::GetTexture2D(InHashKey);
 
 		float ScaleWidth = static_cast<float>(Texture.GetWidth()) * InWidthScaling;
 		float ScaleHeight = static_cast<float>(Texture.GetHeight()) * InHeightScaling;
@@ -123,13 +123,13 @@ namespace Game
 
 	void Graphics::DrawText2D(const std::size_t& InHashKey, const Vec2i& InPosition, const std::wstring& InText, const LinearColor& InColor)
 	{
-		const TTFont& Font = ResourceHelper::GetTTFont(InHashKey);
+		const TTFont& Font = ResourceManager::GetTTFont(InHashKey);
 
 		int32_t x = InPosition.x;
 		int32_t y = InPosition.y;
 
 		uint8_t R = 0, G = 0, B = 0, A = 0;
-		ColorHelper::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
+		Color::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
 
 		for (const auto& Unicode : InText)
 		{
@@ -166,7 +166,7 @@ namespace Game
 	void Graphics::SetDrawColor(const LinearColor& InColor)
 	{
 		uint8_t R = 0, G = 0, B = 0, A = 0;
-		ColorHelper::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
+		Color::ConvertLinearColorToR8G8B8A8(InColor, R, G, B, A);
 		SetDrawColor(R, G, B, A);
 	}
 

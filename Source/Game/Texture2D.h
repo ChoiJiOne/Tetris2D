@@ -13,19 +13,40 @@ struct SDL_Renderer;
 
 namespace Game
 {
-	// 2D 텍스처 클래스입니다.
+	/**
+	 * 2D 텍스처 클래스입니다.
+	 */
 	class Texture2D
 	{
 	public:
-		// RGBA32 픽셀 포멧의 크기입니다. 이때, 단위는 바이트 단위입니다.
+		/**
+		 * RGBA32 픽셀 포멧의 크기입니다. 
+		 * @note 단위는 바이트 단위입니다.
+		 */
 		const static int32_t PIXEL_FORMAT_RGBA32 = 4;
 
 
-		// RGB24 픽셀 포멧의 크기입니다. 이때, 단위는 바이트 단위입니다.
+		/**
+		 * RGB24 픽셀 포멧의 크기입니다. 
+		 * @note 단위는 바이트 단위입니다.
+		 */
 		const static int32_t PIXEL_FORMAT_RGB24 = 3;
 
 
 	public:
+		/**
+		 * 2D 텍스처 클래스의 생성자입니다.
+		 * @note 2D 텍스처 클래스를 사용하기 위해서는 반드시 Initialize를 호출해야 합니다.
+		 */
+		Texture2D() = default;
+
+
+		// 가상 소멸자입니다.
+		/**
+		 * 
+		 */
+		virtual ~Texture2D();
+
 		// 생성자입니다.
 		// 
 		// @param InRenderer - SDL 렌더러의 포인터입니다.
@@ -35,10 +56,6 @@ namespace Game
 		// - 이미지 파일 로딩을 실패할 경우, C++ 표준 예외를 던집니다.
 		// - 텍스처 생성에 실패할 경우, C++ 표준 예외를 던집니다.
 		Texture2D(SDL_Renderer* InRenderer, const std::string& InPath);
-
-
-		// 가상 소멸자입니다.
-		virtual ~Texture2D();
 
 
 		// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
