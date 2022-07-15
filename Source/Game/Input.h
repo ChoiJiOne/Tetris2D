@@ -79,4 +79,48 @@ namespace Game
 		// 업데이트 후의 키보드 상태입니다.
 		std::vector<uint8_t> CurrKeyboardState;
 	};
+
+
+	/**
+	 * 입력 클래스입니다.
+	 */
+	class Input
+	{
+	public:
+		/**
+		 * 입력 클래스의 생성자입니다.
+		 */
+		Input() = default;
+
+
+		/**
+		 * 입력 클래스의 가상 소멸자입니다.
+		 */
+		virtual ~Input();
+
+
+		/**
+		 * 입력 상태를 업데이트합니다.
+		 * @note 이때, 이 메서드는 매 프레임 호출되어야 합니다.
+		 * 
+		 * @return QUIT 메시지가 감지될 경우 true, 그렇지 않으면 false를 반환합니다.
+		 * 
+		 */
+		bool Tick();
+
+		
+		/**
+		 * 입력 클래스가 관리하는 키보드를 반환합니다.
+		 * 
+		 * @return 입력 클래스가 관리하는 키보드를 반환합니다.
+		 */
+		const KeyboardState& GetKeyboardState() const { return Keyboard; }
+
+
+	private:
+		/**
+		 * 입력 클래스가 관리하는 키보드입니다.
+		 */
+		KeyboardState Keyboard;
+	};
 }

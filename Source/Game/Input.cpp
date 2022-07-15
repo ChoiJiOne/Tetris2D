@@ -66,3 +66,26 @@ bool Game::KeyboardState::IsPressKey(const std::vector<uint8_t>& InKeyboardState
 {
 	return InKeyboardState[InKeyCode] == 0 ? false : true;
 }
+
+Game::Input::~Input()
+{
+}
+
+bool Game::Input::Tick()
+{
+	bool bIsDetectQuitMessage = false;
+
+	SDL_Event Event;
+
+	while (SDL_PollEvent(&Event))
+	{
+		if (Event.type == SDL_QUIT)
+		{
+			bIsDetectQuitMessage = true;
+		}
+	}
+
+	Keyboard.Update();
+
+	return bIsDetectQuitMessage;
+}
