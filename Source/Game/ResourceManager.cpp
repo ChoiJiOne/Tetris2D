@@ -1,15 +1,12 @@
 #include "Texture2D.h"
 #include "TTFont.h"
 #include "Macro.h"
-#include "ResourceHelper.h"
+#include "ResourceManager.h"
 
-// 리소스 헬퍼가 관리하는 텍스처 캐쉬입니다.
-std::unordered_map<std::size_t, std::shared_ptr<Game::Texture2D>> Game::ResourceHelper::TextureCache;
+std::unordered_map<std::size_t, std::shared_ptr<Game::Texture2D>> Game::ResourceManager::TextureCache;
+std::unordered_map<std::size_t, std::shared_ptr<Game::TTFont>> Game::ResourceManager::TTFontCache;
 
-// 리스소 헬퍼가 관리하는 폰트 캐쉬입니다.
-std::unordered_map<std::size_t, std::shared_ptr<Game::TTFont>> Game::ResourceHelper::TTFontCache;
-
-void Game::ResourceHelper::Cleanup()
+void Game::ResourceManager::Cleanup()
 {
 	for (auto& Texture : TextureCache)
 	{
@@ -22,7 +19,7 @@ void Game::ResourceHelper::Cleanup()
 	}
 }
 
-const Game::Texture2D& Game::ResourceHelper::CreateTexture2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath)
+const Game::Texture2D& Game::ResourceManager::CreateTexture2D(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath)
 {
 	auto TextureCacheIter = TextureCache.find(InHashKey);
 	CHECK((TextureCacheIter == TextureCache.end()), "hash collision!");
@@ -31,7 +28,7 @@ const Game::Texture2D& Game::ResourceHelper::CreateTexture2D(SDL_Renderer* InRen
 	return *TextureCache.at(InHashKey).get();
 }
 
-const Game::TTFont& Game::ResourceHelper::CreateTTFont(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath, float InFontSize)
+const Game::TTFont& Game::ResourceManager::CreateTTFont(SDL_Renderer* InRenderer, const std::size_t& InHashKey, const std::string& InPath, float InFontSize)
 {
 	auto FontCacheIter = TTFontCache.find(InHashKey);
 	CHECK((FontCacheIter == TTFontCache.end()), "hash collision!");
@@ -43,7 +40,7 @@ const Game::TTFont& Game::ResourceHelper::CreateTTFont(SDL_Renderer* InRenderer,
 	return *TTFontCache.at(InHashKey).get();
 }
 
-const Game::Texture2D& Game::ResourceHelper::GetTexture2D(const std::size_t& InHashKey)
+const Game::Texture2D& Game::ResourceManager::GetTexture2D(const std::size_t& InHashKey)
 {
 	auto TextureCacheIter = TextureCache.find(InHashKey);
 	CHECK((TextureCacheIter != TextureCache.end()), "don't exist hash key");
@@ -51,7 +48,7 @@ const Game::Texture2D& Game::ResourceHelper::GetTexture2D(const std::size_t& InH
 	return *TextureCache.at(InHashKey).get();
 }
 
-const Game::TTFont& Game::ResourceHelper::GetTTFont(const std::size_t& InHashKey)
+const Game::TTFont& Game::ResourceManager::GetTTFont(const std::size_t& InHashKey)
 {
 	auto FontCacheIter = TTFontCache.find(InHashKey);
 	CHECK((FontCacheIter != TTFontCache.end()), "don't exist hash key");
