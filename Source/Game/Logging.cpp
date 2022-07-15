@@ -1,47 +1,47 @@
 #include <Windows.h>
 #include <iostream>
 
-#include "LogHelper.h"
+#include "Logging.h"
 
-void Game::LogHelper::ClearConsole()
+void Game::Logging::ClearConsole()
 {
 	system("cls");
 }
 
-void Game::LogHelper::Message(const std::string& InMessage)
+void Game::Logging::Message(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 	std::cout << "[MESSAGE]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
-void Game::LogHelper::Success(const std::string& InMessage)
+void Game::Logging::Success(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightGreen);
 	std::cout << "[SUCCESS]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
-void Game::LogHelper::Warning(const std::string& InMessage)
+void Game::Logging::Warning(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightYellow);
 	std::cout << "[WARNING]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
-void Game::LogHelper::Error(const std::string& InMessage)
+void Game::Logging::Error(const std::string& InMessage)
 {
 	SetConsoleTextColor(EConsoleTextColor::LightRed);
 	std::cout << "[ERROR]\n" << InMessage << '\n';
 	SetConsoleTextColor(EConsoleTextColor::BrightWhite);
 }
 
-void Game::LogHelper::SetConsoleTextColor(EConsoleTextColor InTextColor)
+void Game::Logging::SetConsoleTextColor(EConsoleTextColor InTextColor)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(InTextColor));
 }
 
-void Game::LogHelper::SetConsoleCursorVisible(bool bIsVisible)
+void Game::Logging::SetConsoleCursorVisible(bool bIsVisible)
 {
 	CONSOLE_CURSOR_INFO CursorInfo = { 0 };
 
