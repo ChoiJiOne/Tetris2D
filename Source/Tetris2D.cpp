@@ -59,29 +59,13 @@ void Tetris2D::Run()
 {
 	GameTimer.Reset();
 
-	while (!bIsDoneLoop)
+	while (!Input.Tick())
 	{
 		GameTimer.Tick();
 
-		Input();
 		Update();
 		Draw();
 	}
-}
-
-void Tetris2D::Input()
-{
-	SDL_Event Event;
-
-	while (SDL_PollEvent(&Event))
-	{
-		if (Event.type == SDL_QUIT)
-		{
-			bIsDoneLoop = true;
-		}
-	}
-
-	Keyboard.Update();
 }
 
 void Tetris2D::Update()
@@ -95,7 +79,7 @@ void Tetris2D::Draw()
 	Graphics2D.DrawRect2D(Game::Vec2i(100, 100), Game::Vec2i(400, 200), Game::Color::Blue);
 
 	Game::LinearColor Color = Game::Color::White;
-	if (Keyboard.GetKeyState(SDL_Scancode::SDL_SCANCODE_A) == Game::EButtonState::Held)
+	if (Input.GetKeyboardState().GetKeyState(SDL_Scancode::SDL_SCANCODE_A) == Game::EButtonState::Held)
 	{
 		Color = Game::Color::Red;
 	}

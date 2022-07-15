@@ -2,7 +2,6 @@
 
 #include "Game/Logging.h"
 #include "Game/Input.h"
-
 #include "Game/Timer.h"
 #include "Game/Window.h"
 #include "Game/Graphics.h"
@@ -38,10 +37,6 @@ public:
 	void Run();
 
 
-	// 테트리스 게임 입력 처리를 수행합니다.
-	void Input();
-
-
 	// 테트리스 게임 루프를 업데이트합니다.
 	void Update();
 
@@ -56,28 +51,28 @@ private:
 	 */
 	Game::Window Window;
 
+
 	/**
 	 * 게임 렌더링을 위한 그래픽스 인스턴스입니다.
 	 */
 	Game::Graphics Graphics2D;
 
 
-	// 루프를 종료할 지 확인합니다.
-	bool bIsDoneLoop = false;
+	/**
+	 * 게임 입력 처리를 위한 인스턴스입니다.
+	 */
+	Game::Input Input;
 
 
-	// 게임 타이머입니다.
+	/**
+	 * 게임 타이머입니다.
+	 */
 	Game::Timer GameTimer;
 
 
-	// 게임 폰트키입니다.
+	/**
+	 * 테스트용입니다.
+	 */
 	std::size_t FontKey = 0;
-
-
-	// 게임 텍스처키입니다.
 	std::size_t TextureKey = 0;
-
-
-	// 키보드입니다.
-	Game::KeyboardState Keyboard;
 };
