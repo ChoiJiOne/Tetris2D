@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		auto Game = std::make_unique<Tetris2D>();
-		Game->Setup();
+		Game->Initialize();
 		Game->Run();
 	}
 	catch (const std::exception& Exception)
