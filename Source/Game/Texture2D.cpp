@@ -7,11 +7,6 @@
 #include "Text.h"
 #include "Texture2D.h"
 
-Game::Texture2D::Texture2D(SDL_Renderer* InRenderer, const std::string& InPath)
-{
-	CreateTextureFromFile(InRenderer, InPath);
-}
-
 Game::Texture2D::~Texture2D()
 {
 	if (Texture)
@@ -19,6 +14,17 @@ Game::Texture2D::~Texture2D()
 		SDL_DestroyTexture(Texture);
 		Texture = nullptr;
 	}
+}
+
+void Game::Texture2D::Initialize(SDL_Renderer* InRenderer, const std::string& InPath)
+{
+	if (Texture)
+	{
+		SDL_DestroyTexture(Texture);
+		Texture = nullptr;
+	}
+
+	CreateTextureFromFile(InRenderer, InPath);
 }
 
 void Game::Texture2D::CreateTextureFromFile(SDL_Renderer* InRenderer, const std::string& InPath)

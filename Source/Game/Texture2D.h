@@ -41,31 +41,37 @@ namespace Game
 		Texture2D() = default;
 
 
-		// 가상 소멸자입니다.
 		/**
-		 * 
+		 * 2D 텍스처 클래스의 가상 소멸자입니다.
 		 */
 		virtual ~Texture2D();
 
-		// 생성자입니다.
-		// 
-		// @param InRenderer - SDL 렌더러의 포인터입니다.
-		// @param InPath - 텍스처 이미지의 리소스 경로입니다.
-		// 
-		// @throws 
-		// - 이미지 파일 로딩을 실패할 경우, C++ 표준 예외를 던집니다.
-		// - 텍스처 생성에 실패할 경우, C++ 표준 예외를 던집니다.
-		Texture2D(SDL_Renderer* InRenderer, const std::string& InPath);
 
-
-		// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+		/**
+		 * 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+		 */
 		Texture2D(Texture2D&& InInstance) = delete;
 		Texture2D(const Texture2D& InInstance) = delete;
 
 
-		// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+		/**
+		 * 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+		 */
 		Texture2D& operator=(Texture2D&& InInstance) = delete;
 		Texture2D& operator=(const Texture2D& InInstance) = delete;
+
+
+		/**
+		 * 2D 텍스처를 초기화합니다.
+		 * 
+		 * @param InRenderer - SDL 렌더러의 포인터입니다.
+		 * @param InPath - 텍스처 이미지의 리소스 경로입니다.
+		 * 
+		 * @throws
+		 * 이미지 파일 로딩을 실패할 경우, C++ 표준 예외를 던집니다.
+		 * 텍스처 생성에 실패할 경우, C++ 표준 예외를 던집니다.
+		 */
+		void Initialize(SDL_Renderer* InRenderer, const std::string& InPath);
 
 
 		// 텍스처의 가로 크기를 반환합니다.

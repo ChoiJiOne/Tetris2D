@@ -24,7 +24,10 @@ const Game::Texture2D& Game::ResourceManager::CreateTexture2D(SDL_Renderer* InRe
 	auto TextureCacheIter = TextureCache.find(InHashKey);
 	CHECK((TextureCacheIter == TextureCache.end()), "hash collision!");
 
-	TextureCache.insert({ InHashKey, std::make_shared<Game::Texture2D>(InRenderer, InPath) });
+	std::shared_ptr<Game::Texture2D> Texture = std::make_shared<Game::Texture2D>();
+	Texture->Initialize(InRenderer, InPath);
+
+	TextureCache.insert({ InHashKey, Texture });
 	return *TextureCache.at(InHashKey).get();
 }
 
