@@ -4,6 +4,7 @@
 #include <chrono>
 #include <random>
 
+
 namespace Game
 {
 	// int32_t 타입의 2차원 벡터입니다.
@@ -679,7 +680,7 @@ namespace Game
 
 
 	// 수학 관련 유틸리티 클래스입니다.
-	class MathHelper
+	class Math
 	{
 	public:
 		// 임의의 정수를 생성합니다.
@@ -857,7 +858,7 @@ namespace Game
 
 
 	// 색상을 관리하는 클래스입니다.
-	class ColorHelper
+	class Color
 	{
 	public:
 		static LinearColor Black;
@@ -893,10 +894,10 @@ namespace Game
 		inline static LinearColor ConvertR8G8B8A8ToLinearColor(uint8_t InRed, uint8_t InGreen, uint8_t InBlue, uint8_t InAlpha)
 		{
 			return LinearColor(
-				MathHelper::Clamp<float>(static_cast<float>(InRed) / 255.0f, 0.0f, 1.0f),
-				MathHelper::Clamp<float>(static_cast<float>(InGreen) / 255.0f, 0.0f, 1.0f),
-				MathHelper::Clamp<float>(static_cast<float>(InBlue) / 255.0f, 0.0f, 1.0f),
-				MathHelper::Clamp<float>(static_cast<float>(InAlpha) / 255.0f, 0.0f, 1.0f)
+				Math::Clamp<float>(static_cast<float>(InRed) / 255.0f, 0.0f, 1.0f),
+				Math::Clamp<float>(static_cast<float>(InGreen) / 255.0f, 0.0f, 1.0f),
+				Math::Clamp<float>(static_cast<float>(InBlue) / 255.0f, 0.0f, 1.0f),
+				Math::Clamp<float>(static_cast<float>(InAlpha) / 255.0f, 0.0f, 1.0f)
 			);
 		}
 
@@ -938,10 +939,10 @@ namespace Game
 		// @param OutAlpha - 변환이 완료된 A값입니다.
 		inline static void ConvertLinearColorToR8G8B8A8(const LinearColor& InColor, uint8_t& OutRed, uint8_t& OutGreen, uint8_t& OutBlue, uint8_t& OutAlpha)
 		{
-			OutRed = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.x, 0.0f, 1.0f) * 255.0f);
-			OutGreen = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.y, 0.0f, 1.0f) * 255.0f);
-			OutBlue = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.z, 0.0f, 1.0f) * 255.0f);
-			OutAlpha = static_cast<uint8_t>(MathHelper::Clamp<float>(InColor.w, 0.0f, 1.0f) * 255.0f);
+			OutRed = static_cast<uint8_t>(Math::Clamp<float>(InColor.x, 0.0f, 1.0f) * 255.0f);
+			OutGreen = static_cast<uint8_t>(Math::Clamp<float>(InColor.y, 0.0f, 1.0f) * 255.0f);
+			OutBlue = static_cast<uint8_t>(Math::Clamp<float>(InColor.z, 0.0f, 1.0f) * 255.0f);
+			OutAlpha = static_cast<uint8_t>(Math::Clamp<float>(InColor.w, 0.0f, 1.0f) * 255.0f);
 		}
 
 
