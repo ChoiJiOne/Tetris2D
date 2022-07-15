@@ -11,7 +11,7 @@ namespace Game
 	/**
 	 * 게임 내의 문자열 관련 기능을 제공하는 클래스입니다.
 	 */
-	class StringHelper
+	class Text
 	{
 	public:
 		/**
