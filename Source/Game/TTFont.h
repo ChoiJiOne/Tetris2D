@@ -190,6 +190,21 @@ namespace Game
 		 */
 		virtual ~TTFont();
 
+
+		/**
+		 * 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+		 */
+		TTFont(TTFont&& InInstance) = delete;
+		TTFont(const TTFont& InInstance) = delete;
+
+
+		/**
+		 * 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+		 */
+		TTFont& operator=(TTFont&& InInstance) = delete;
+		TTFont& operator=(const TTFont& InInstance) = delete;
+
+
 		
 		/**
 		 * 폰트를 초기화합니다.
@@ -213,29 +228,38 @@ namespace Game
 		float GetFontSize() const { return FontSize; }
 
 
-		// 텍스처 아틀라스를 반환합니다.
-		// 
-		// @param InUnicode - 유니코드 문자입니다.
-		// @return - 인자로 받은 유니코드를 포함하는 텍스처 아틀라스의 포인터를 반환합니다.
+		/**
+		 * 텍스처 아틀라스를 반환합니다.
+		 * 
+		 * @param InUnicode - 유니코드 문자입니다.
+		 * 
+		 * @return 인자로 받은 유니코드를 포함하는 텍스처 아틀라스의 포인터를 반환합니다.
+		 */
 		SDL_Texture* GetTextureAtlas(const wchar_t& InUnicode) const;
 
 
-		// stbtt_packedchar를 반환합니다.
-		//
-		// @param InUnicode - 유니코드 문자입니다.
-		// @return - 인자로 받은 유니코드에 대응하는 stbtt_packedchar를 반환합니다.
+		/**
+		 * stbtt_packedchar를 반환합니다.
+		 * 
+		 * @param InUnicode - 유니코드 문자입니다.
+		 * 
+		 * @return 인자로 받은 유니코드에 대응하는 stbtt_packedchar를 반환합니다.
+		 */
 		const stbtt_packedchar& GetPackedchar(const wchar_t& InUnicode) const;
 
 
 	private:
-		// 파일로부터 트루 타입 폰트를 불러옵니다.
-		//
-		// @param InPath - 트루 타입 폰트의 리소스 경로입니다.
-		// @param OutBuffer - 트루 타입 폰트의 비트 정보를 저장할 버퍼입니다.
-		// @param OutFontInfo - 폰트 정보입니다.
-		// @throws 
-		// - 트루 타입 폰트 로드에 실패할 경우, C++ 표준 예외를 반환합니다.
-		// - 폰트 정보 생성에 실패할 경우 C++ 표준 예외를 반환합니다.
+		/**
+		 * 파일로부터 트루 타입 폰트를 불러옵니다.
+		 * 
+		 * @param InPath - 트루 타입 폰트의 리소스 경로입니다.
+		 * @param OutBuffer - 트루 타입 폰트의 비트 정보를 저장할 버퍼입니다.
+		 * @param OutFontInfo - 폰트 정보입니다.
+		 * 
+		 * @throws 
+		 * 트루 타입 폰트 로드에 실패할 경우, C++ 표준 예외를 반환합니다.
+		 * 폰트 정보 생성에 실패할 경우 C++ 표준 예외를 반환합니다.
+		 */
 		void LoadTrueTypeFontFromFile(const std::string& InPath, std::vector<uint8_t>& OutBuffer, stbtt_fontinfo& OutFontInfo);
 
 
