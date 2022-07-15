@@ -18,19 +18,16 @@ Tetris2D::~Tetris2D()
 	SDL_Quit();
 }
 
-void Tetris2D::Setup()
+void Tetris2D::Initialize()
 {
 	CHECK((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0), SDL_GetError());
 
 
 	// SDL 윈도우를 생성합니다.
-	int32_t WindowWidth  = 600;
-	int32_t WindowHeight = 720;
-
 	Game::WindowConstructParams WindowParams;
 	WindowParams.Title = "Tetris2D";
-	WindowParams.w = WindowWidth;
-	WindowParams.h = WindowHeight;
+	WindowParams.w = 600;
+	WindowParams.h = 720;
 	WindowParams.Flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
 	Window.Initialize(WindowParams);
@@ -38,21 +35,6 @@ void Tetris2D::Setup()
 
 	// SDL 렌더러를 생성합니다.
 	Graphics2D.Initialize(Window.GetSDLWindow());
-
-
-	// 폰트를 생성합니다. (TODO : 폰트 리소스 경로 수정 필요)
-	std::string ExecuteDirectory = SDL_GetBasePath();
-
-
-	std::string FontPath = ExecuteDirectory + "../../../../Resource/Font/kenvector_future.ttf";
-	FontKey = Game::Text::GetHash("Font");
-	Game::ResourceManager::CreateTTFont(Graphics2D.GetRenderer(), FontKey, FontPath, 40.0f);
-
-	
-	// 텍스처를 생성합니다. (TODO : 텍스처 리소스 경로 수정 필요)
-	std::string TexturePath = ExecuteDirectory + "../../../../Resource/Texture/Block/BlueBlockFX.png";
-	TextureKey = Game::Text::GetHash("Texture");
-	Game::ResourceManager::CreateTexture2D(Graphics2D.GetRenderer(), TextureKey, TexturePath);
 }
 
 void Tetris2D::Run()
@@ -75,41 +57,6 @@ void Tetris2D::Update()
 void Tetris2D::Draw()
 {
 	Graphics2D.BeginFrame(Game::Color::Black);
-
-	Graphics2D.DrawRect2D(Game::Vec2i(100, 100), Game::Vec2i(400, 200), Game::Color::Blue);
-
-	Game::LinearColor Color = Game::Color::White;
-	if (Input.GetKeyboardState().GetKeyState(SDL_Scancode::SDL_SCANCODE_A) == Game::EButtonState::Held)
-	{
-		Color = Game::Color::Red;
-	}
-
-	Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 100), L"ABCDEFGHIJK", Color);
-	Graphics2D.DrawTexture2D(TextureKey, Game::Vec2i(200, 400));
-
-	Game::Vec2i MousePosition = Input.GetMouseState().GetCurrPosition();
-	Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 400), Game::Text::Format(L"Position : (%d, %d)", MousePosition.x, MousePosition.y), Color);
-
-	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Held)
-	{
-		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Held", Color);
-	}
-
-	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::None)
-	{
-		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse None", Color);
-	}
-
-	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Pressed)
-	{
-		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Pressed", Color);
-	}
-
-	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Released)
-	{
-		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Released", Color);
-	}
-
 
 	Graphics2D.EndFrame();
 }

@@ -7,30 +7,41 @@
 #include "Game/Graphics.h"
 
 
-// 테트리스 게임을 실행 및 관리하는 클래스입니다.
+/**
+ * 테트리스 게임 클래스입니다.
+ */
 class Tetris2D
 {
 public:
-	// 생성자입니다.
+	/**
+	 * 테트리스 게임 클래스의 생성자입니다.
+	 * @note 테트리스 게임을 초기화하기 위해서는 반드시 Initialize 메서드를 호출해야 합니다.
+	 */
 	Tetris2D() = default;
 
 
-	// 가상 소멸자입니다.
+	/**
+	 * 테트리스 게임 클래스의 가상 소멸자입니다.
+	 */
 	virtual ~Tetris2D();
 
 
-	// 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다. 
+	/**
+	 * 복사 생성자를 사용할 수 없도록 명시적으로 삭제합니다.
+	 */
 	Tetris2D(Tetris2D&& InInstance) = delete;
 	Tetris2D(const Tetris2D& InInstance) = delete;
 
 
-	// 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	/**
+	 * 대입 연산자를 사용할 수 없도록 명시적으로 삭제합니다.
+	 */
 	Tetris2D& operator=(Tetris2D&& InInstance) = delete;
 	Tetris2D& operator=(const Tetris2D& InInstance) = delete;
 
 
 	// 테트리스 게임을 초기화합니다.
-	void Setup();
+	void Initialize();
 
 
 	// 테트리스 게임 루프를 실행합니다.
@@ -47,13 +58,13 @@ public:
 
 private:
 	/**
-	 * 게임 윈도우입니다.
+	 * 게임 윈도우를 위한 인스턴스입니다.
 	 */
 	Game::Window Window;
 
 
 	/**
-	 * 게임 렌더링을 위한 그래픽스 인스턴스입니다.
+	 * 게임 렌더링을 위한 인스턴스입니다.
 	 */
 	Game::Graphics Graphics2D;
 
@@ -68,11 +79,4 @@ private:
 	 * 게임 타이머입니다.
 	 */
 	Game::Timer GameTimer;
-
-
-	/**
-	 * 테스트용입니다.
-	 */
-	std::size_t FontKey = 0;
-	std::size_t TextureKey = 0;
 };
