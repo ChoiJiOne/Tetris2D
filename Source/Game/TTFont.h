@@ -185,7 +185,9 @@ namespace Game
 		TTFont() = default;
 
 
-		// 가상 소멸자입니다.
+		/**
+		 * 트루 타입 폰트 클래스의 가상 소멸자입니다.
+		 */
 		virtual ~TTFont();
 
 		
