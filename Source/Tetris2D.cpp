@@ -83,8 +83,33 @@ void Tetris2D::Draw()
 	{
 		Color = Game::Color::Red;
 	}
+
 	Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 100), L"ABCDEFGHIJK", Color);
 	Graphics2D.DrawTexture2D(TextureKey, Game::Vec2i(200, 400));
+
+	Game::Vec2i MousePosition = Input.GetMouseState().GetCurrPosition();
+	Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 400), Game::Text::Format(L"Position : (%d, %d)", MousePosition.x, MousePosition.y), Color);
+
+	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Held)
+	{
+		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Held", Color);
+	}
+
+	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::None)
+	{
+		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse None", Color);
+	}
+
+	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Pressed)
+	{
+		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Pressed", Color);
+	}
+
+	if (Input.GetMouseState().GetKeyState(Game::MouseState::EKeyType::Right) == Game::EButtonState::Released)
+	{
+		Graphics2D.DrawText2D(FontKey, Game::Vec2i(100, 500), L"Mouse Released", Color);
+	}
+
 
 	Graphics2D.EndFrame();
 }

@@ -3,6 +3,7 @@
 #include <SDL2/SDL_syswm.h>
 // @third party code - END
 
+#include "Logging.h"
 #include "Input.h"
 
 Game::KeyboardState::KeyboardState()
@@ -85,7 +86,83 @@ bool Game::Input::Tick()
 		}
 	}
 
-	Keyboard.Update();
+	Keyboard.Update(); 
+	Mouse.Update();
 
 	return bIsDetectQuitMessage;
+}
+
+Game::MouseState::MouseState()
+{
+	GetCurrentMouseState(PrevCursorPosition, PrevButtonState);
+	GetCurrentMouseState(CurrCursorPosition, CurrButtonState);
+}
+
+Game::MouseState::~MouseState()
+{
+}
+
+void Game::MouseState::Update()
+{
+	PrevCursorPosition = CurrCursorPosition;
+	PrevButtonState = CurrButtonState;
+
+	GetCurrentMouseState(CurrCursorPosition, CurrButtonState);
+}
+
+Game::EButtonState Game::MouseState::GetKeyState(const EKeyType& InKeyType) const
+{
+	EButtonState OutButtonState = EButtonState::None;
+
+	if (IsPressKey(PrevButtonState, InKeyType))
+	{
+		if (IsPressKey(CurrButtonState, InKeyType))
+		{
+			OutButtonState = EButtonState::Held;
+		}
+		else
+		{
+			OutButtonState = EButtonState::Released;
+		}
+	}
+	else
+	{
+		if (IsPressKey(CurrButtonState, InKeyType))
+		{
+			OutButtonState = EButtonState::Pressed;
+		}
+		else
+		{
+			OutButtonState = EButtonState::None;
+		}
+	}
+
+	return OutButtonState;
+}
+
+void Game::MouseState::GetCurrentMouseState(Vec2i& InCursorPosition, uint32_t& InButtonState)
+{
+	InButtonState = SDL_GetMouseState(&InCursorPosition.x, &InCursorPosition.y);
+}
+
+bool Game::MouseState::IsPressKey(const uint32_t& InButtonState, const EKeyType& InKeyType) const
+{
+	uint32_t Mask = 0;
+
+	switch (InKeyType)
+	{
+	case EKeyType::Left:
+		Mask = SDL_BUTTON_LMASK;
+		break;
+
+	case EKeyType::Right:
+		Mask = SDL_BUTTON_RMASK;
+		break;
+
+	default:
+		Logging::Warning("undefined mouse key type");
+		break;
+	}
+
+	return (InButtonState & Mask) == 0 ? false : true;
 }
