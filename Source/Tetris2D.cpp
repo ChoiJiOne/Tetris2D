@@ -22,18 +22,13 @@ void Tetris2D::Initialize()
 {
 	CHECK((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == 0), SDL_GetError());
 
+	Window.Initialize(Game::WindowConstructParams{
+		"Tetris2D",
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		600, 700,
+		SDL_WINDOW_SHOWN
+	});
 
-	// SDL 윈도우를 생성합니다.
-	Game::WindowConstructParams WindowParams;
-	WindowParams.Title = "Tetris2D";
-	WindowParams.w = 600;
-	WindowParams.h = 720;
-	WindowParams.Flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-
-	Window.Initialize(WindowParams);
-
-
-	// SDL 렌더러를 생성합니다.
 	Graphics2D.Initialize(Window.GetSDLWindow());
 }
 

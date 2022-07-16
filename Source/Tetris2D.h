@@ -65,6 +65,9 @@ public:
 
 
 private:
+
+
+private:
 	/**
 	 * 게임 윈도우를 위한 인스턴스입니다.
 	 */
