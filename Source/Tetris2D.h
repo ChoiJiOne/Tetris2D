@@ -90,4 +90,10 @@ private:
 	 * 게임 타이머입니다.
 	 */
 	Game::Timer GameTimer;
+
+	
+	/**
+	 * 테스트용 코드입니다.
+	 */
+	std::size_t FontKey = 0;
 };
