@@ -34,12 +34,18 @@ void Tetris2D::Initialize()
 	glfwMakeContextCurrent(Window);
 
 	CHECK(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "failed to initialize glad");
+
+	Graphics.Initialize();
 }
 
 void Tetris2D::Run()
 {
+	Timer.Reset();
+
 	while (!glfwWindowShouldClose(Window))
 	{
+		Timer.Tick();
+
 		ProcessInput();
 		Update();
 		Draw();
@@ -62,8 +68,8 @@ void Tetris2D::Update()
 
 void Tetris2D::Draw()
 {
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(0, 0, WindowWidth, WindowHeight);
-	glfwSwapBuffers(Window);
+	Graphics.BeginFrame(Game::Color::Blue);
+
+
+	Graphics.EndFrame();
 }

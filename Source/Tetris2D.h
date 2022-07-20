@@ -4,12 +4,9 @@
 #include <crtdbg.h>
 #include <memory>
 
+#include "Game/Graphics.h"
 #include "Game/Logging.h"
-
-namespace Game
-{
-	class Timer;
-}
+#include "Game/Timer.h"
 
 struct GLFWwindow;
 
@@ -81,4 +78,16 @@ private:
 	 * GLFW 윈도우의 세로 크기입니다.
 	 */
 	int32_t WindowHeight = 800;
+
+
+	/**
+	 * 게임 타이머입니다.
+	 */
+	Game::Timer Timer;
+
+
+	/**
+	 * 2D 렌더링을 위한 그래픽스 인스턴스입니다.
+	 */
+	Game::Graphics Graphics;
 };
