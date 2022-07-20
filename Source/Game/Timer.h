@@ -75,30 +75,30 @@ namespace Game
 		/**
 		 * 타이머가 시작된 시간을 나타냅니다.
 		 */
-		uint64_t BaseTime = 0ULL;
+		float BaseTime = 0.0f;
 
 
 		/**
 		 * 타이머가 중지된 동안의 누적 시간을 나타냅니다.
 		 */
-		uint64_t PausedTime = 0ULL;
+		float PausedTime = 0.0f;
 
 
 		/**
 		 * 타이머가 중지된 시간을 나타냅니다.
 		 */
-		uint64_t StopTime = 0ULL;
+		float StopTime = 0.0f;
 
 
 		/**
 		 * 직전의 Tick 호출 시간을 나타냅니다.
 		 */
-		uint64_t PreviousTime = 0ULL;
+		float PreviousTime = 0.0f;
 
 
 		/**
 		 * Tick 호출 시간을 나타냅니다.
 		 */
-		uint64_t CurrentTime = 0ULL;
+		float CurrentTime = 0.0f;
 	};
 }
