@@ -62,30 +62,30 @@ public:
 	 */
 	void Init()
 	{
-		WNDCLASSEX wcex;
-		wcex.cbSize = sizeof(WNDCLASSEX);
-		wcex.style = CS_HREDRAW | CS_VREDRAW;
-		wcex.lpfnWndProc = WindowMessageHandler;
-		wcex.cbClsExtra = 0;
-		wcex.cbWndExtra = 0;
-		wcex.hInstance = GetModuleHandle(nullptr);
-		wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-		wcex.lpszMenuName = NULL;
-		wcex.lpszClassName = L"Tetris2D";
-		wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-		RegisterClassEx(&wcex);
+		WNDCLASSEX WC;
+		WC.cbSize = sizeof(WNDCLASSEX);
+		WC.style = CS_HREDRAW | CS_VREDRAW;
+		WC.lpfnWndProc = WindowMessageHandler;
+		WC.cbClsExtra = 0;
+		WC.cbWndExtra = 0;
+		WC.hInstance = GetModuleHandle(nullptr);
+		WC.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+		WC.hCursor = LoadCursor(NULL, IDC_ARROW);
+		WC.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+		WC.lpszMenuName = NULL;
+		WC.lpszClassName = L"Tetris2D";
+		WC.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+		RegisterClassEx(&WC);
 
-		RECT rc = { 0, 0, 800, 600 };
-		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+		RECT Rect = { 0, 0, 800, 600 };
+		AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
 
 		HWND WindowHandle = CreateWindow(
 			L"Tetris2D",
 			L"Tetris2D",
 			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 			CW_USEDEFAULT, CW_USEDEFAULT,
-			rc.right - rc.left, rc.bottom - rc.top,
+			Rect.right - Rect.left, Rect.bottom - Rect.top,
 			nullptr,
 			nullptr,
 			GetModuleHandle(nullptr),
