@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Text.hpp"
+
 
 /**
  * @brief COM 리소스를 할당 해제합니다.
@@ -31,4 +33,69 @@ CLASS(CLASS&&) = delete;\
 CLASS(const CLASS&) = delete;\
 CLASS& operator=(CLASS&&) = delete;\
 CLASS& operator=(const CLASS&) = delete;
+#endif
+
+
+/**
+* @brief 평가식을 검사하고 거짓으로 평가되면 C++ 표준 예외를 던집니다.
+*
+* @param EXPRESSION 검사할 평가식입니다.
+* @param MESSAGE 평가식이 거짓으로 평가될 경우의 메시지입니다.
+*
+* @throws 평가식이 거짓으로 평가될 경우, C++ 표준 예외를 던집니다.
+*/
+#ifndef CHECK
+#define CHECK(EXPRESSION, MESSAGE)\
+{\
+	if(!EXPRESSION)\
+	{\
+		std::string ErrorString = Format(\
+			"file : %s, line : %d, function : %s, message : %s",\
+				__FILE__, __LINE__, __FUNCTION__, MESSAGE);\
+		OutputDebugStringA(ErrorString.c_str());\
+		throw std::exception(ErrorString.c_str());\
+	}\
+}
+#endif
+
+
+/**
+ * @brief HRESULT 값을 검사하고 성공하지 못하면 C++ 표준 예외를 던집니다.
+ * 
+ * @param EXPRESSION 검사할 HRESULT 값입니다.
+ * @param MESSAGE 평가식이 거짓으로 평가될 경우의 메시지입니다.
+ *
+ * @throws HRESULT 값이 성공으로 평가되지 못하면 C++ 표준 예외를 던집니다.
+ */
+#ifndef CHECK_HR
+#define CHECK_HR(EXPRESSION, MESSAGE)\
+{\
+	if(((HRESULT)(EXPRESSION)) < 0)\
+	{\
+		std::string ErrorString = Format(\
+			"file : %s, line : %d, function : %s, HRESULT : %x, message : %s",\
+				__FILE__, __LINE__, __FUNCTION__, EXPRESSION, MESSAGE);\
+		OutputDebugStringA(ErrorString.c_str());\
+		throw std::exception(ErrorString.c_str());\
+	}\
+}
+#endif
+
+
+/**
+ * @brief 강제로 C++ 표준 예외를 던집니다.
+ *
+ * @param MESSAGE 예외가 발생했을 때의 메시지입니다.
+ *
+ * @throws C++ 표준 예외를 던집니다.
+ */
+#ifndef ENFORCE_THROW_EXCEPTION
+#define ENFORCE_THROW_EXCEPTION(MESSAGE)\
+{\
+	std::string ErrorString = Format(\
+		"file : %s, line : %d, function : %s, message : %s",\
+			__FILE__, __LINE__, __FUNCTION__, MESSAGE);\
+	OutputDebugStringA(ErrorString.c_str());\
+	throw std::exception(ErrorString.c_str());\
+}
 #endif
