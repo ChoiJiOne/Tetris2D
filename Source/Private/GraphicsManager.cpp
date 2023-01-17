@@ -162,6 +162,8 @@ HRESULT GraphicsManager::CreateSwapChain(HWND WindowHandle)
 
 	HR = Factory->CreateSwapChain(Device_, &SwapChainDesc, &SwapChain_);
 
+	HR = Factory->MakeWindowAssociation(WindowHandle, DXGI_MWA_NO_ALT_ENTER);
+
 	SAFE_RELEASE(Factory);
 	SAFE_RELEASE(Adapter);
 	SAFE_RELEASE(Device);

@@ -37,7 +37,6 @@ public:
 	void Init();
 
 
-
 	/**
 	 * @brief GraphicsManager의 내부 요소를 명시적으로 정리합니다.
 	 */
