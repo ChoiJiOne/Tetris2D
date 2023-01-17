@@ -22,7 +22,7 @@ public:
 	/**
 	 * @brief GraphicsManager의 인스턴스를 얻습니다.
 	 * 
-	 * @return GraphicsManager의 인스턴스를 반환합니다.
+	 * @return GraphicsManager의 인스턴스 참조자를 반환합니다.
 	 */
 	static GraphicsManager& Get()
 	{
