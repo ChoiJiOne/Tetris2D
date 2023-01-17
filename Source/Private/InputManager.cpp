@@ -24,14 +24,9 @@ void InputManager::Tick()
 	bool bHaveMessage = true;
 	MSG CurrentMessage = {};
 
-	while (bHaveMessage && !bIsDetectQuitMessage)
+	while (bHaveMessage)
 	{
-		if (CurrentMessage.message == WM_QUIT)
-		{
-			bIsDetectQuitMessage = true;
-			bHaveMessage = false;
-
-		}
+		bIsDetectQuitMessage = (CurrentMessage.message == WM_QUIT);
 
 		if (PeekMessage(&CurrentMessage, nullptr, 0, 0, PM_REMOVE))
 		{
