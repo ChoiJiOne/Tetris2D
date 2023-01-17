@@ -28,6 +28,23 @@ void GraphicsManager::Cleanup()
 	SAFE_RELEASE(Device_);
 }
 
+void GraphicsManager::Resize()
+{
+	HRESULT HR = S_OK;
+
+	HWND CurrentWindowHandle = GetForegroundWindow();
+	RECT CurrentWindowRect = {};
+	GetClientRect(CurrentWindowHandle, &CurrentWindowRect);
+
+	uint32_t BackBufferWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
+	uint32_t BackBufferHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
+	DXGI_FORMAT BackBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+	uint32_t BackBufferCount = 2;
+
+	HR = SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight, BackBufferFormat, 0);
+	HR = CreateRenderTargetView();
+}
+
 void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth, float MaxDepth)
 {
 	D3D11_VIEWPORT Viewport = {};

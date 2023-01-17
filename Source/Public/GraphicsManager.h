@@ -44,6 +44,12 @@ public:
 
 
 	/**
+	 * @brief 내부 버퍼 리소스의 크기를 변경합니다.
+	 */
+	void Resize();
+
+
+	/**
 	 * @brief 파이프라인의 뷰 포트를 설정합니다.
 	 * 
 	 * @param TopLeftX 뷰 포트 왼쪽 상단의 X좌표입니다.
