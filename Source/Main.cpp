@@ -50,25 +50,26 @@ public:
 	 */
 	virtual void Run() override
 	{
-		MSG msg = { 0 };
-		while (WM_QUIT != msg.message)
+		while (!bIsDone_)
 		{
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
-				GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
-				GraphicsManager::Get().Present();
-			}
+			InputManager::Get().Tick();
+
+			bIsDone_ = InputManager::Get().IsDetectQuitMessage();
+
+			GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
+			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
+			GraphicsManager::Get().Present();
 		}
 	}
 
 
 private:
+	/**
+	 * @brief 게임 루프를 수행할 지 확인합니다.
+	 */
+	bool bIsDone_ = false;
+
+
 	/**
 	 * @brief 윈도우 창입니다.
 	 */

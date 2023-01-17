@@ -47,6 +47,22 @@ public:
 	 * @return 윈도우에 반환할 값입니다.
 	 */
 	static LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
+
+
+	/**
+	 * @brief 입력 상태를 업데이트합니다.
+	 * 
+	 * @note 이 메서드는 매 프레임 호출해야 합니다.
+	 */
+	void Tick();
+
+
+	/**
+	 * @brief QUIT 메시지가 감지되었는지 확인합니다.
+	 * 
+	 * @return QUIT 메시지가 감지되었다면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	bool IsDetectQuitMessage() const { return bIsDetectQuitMessage; }
 	
 
 private:
@@ -62,4 +78,11 @@ private:
 	 * @brief 입력 처리를 수행하는 클래스의 가상 소멸자입니다.
 	 */
 	virtual ~InputManager() {}
+
+
+private:
+	/**
+	 * QUIT 메시지가 감지되었는지 확인합니다.
+	 */
+	bool bIsDetectQuitMessage = false;
 };

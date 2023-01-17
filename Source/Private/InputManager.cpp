@@ -18,3 +18,29 @@ LRESULT CALLBACK InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t 
 
 	return 0;
 }
+
+void InputManager::Tick()
+{
+	bool bHaveMessage = true;
+	MSG CurrentMessage = {};
+
+	while (bHaveMessage && !bIsDetectQuitMessage)
+	{
+		if (CurrentMessage.message == WM_QUIT)
+		{
+			bIsDetectQuitMessage = true;
+			bHaveMessage = false;
+
+		}
+
+		if (PeekMessage(&CurrentMessage, nullptr, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&CurrentMessage);
+			DispatchMessage(&CurrentMessage);
+		}
+		else
+		{
+			bHaveMessage = false;
+		}
+	}
+}
