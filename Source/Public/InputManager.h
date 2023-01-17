@@ -57,8 +57,6 @@ public:
 	/**
 	 * @brief 윈도우 메시지 핸들러입니다.
 	 * 
-	 * @note 내부의 윈도우 메시지 핸들러를 호출합니다.
-	 * 
 	 * @see https://learn.microsoft.com/ko-kr/windows/win32/learnwin32/writing-the-window-procedure
 	 *
 	 * @param WindowHandle 윈도우 창에 대한 핸들입니다.
@@ -68,7 +66,7 @@ public:
 	 *
 	 * @return 윈도우에 반환할 값입니다.
 	 */
-	static LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
+	LRESULT WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
 
 
 	/**

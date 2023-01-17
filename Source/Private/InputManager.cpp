@@ -1,6 +1,6 @@
 #include "InputManager.h"
 
-LRESULT CALLBACK InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
+LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
 	switch (Message)
 	{

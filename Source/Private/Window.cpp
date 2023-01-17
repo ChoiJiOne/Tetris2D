@@ -1,6 +1,25 @@
 #include "Window.h"
 #include "InputManager.h"
 
+/**
+ * @brief 윈도우 메시지 핸들러입니다.
+ *
+ * @note 내부의 윈도우 메시지 핸들러를 호출합니다.
+ *
+ * @see https://learn.microsoft.com/ko-kr/windows/win32/learnwin32/writing-the-window-procedure
+ *
+ * @param WindowHandle 윈도우 창에 대한 핸들입니다.
+ * @param Message 윈도우 메시지 코드입니다.
+ * @param WParam 윈도우 메시지의 추가 데이터입니다.
+ * @param LParam 윈도우 메시지의 추가 데이터입니다.
+ *
+ * @return 윈도우에 반환할 값입니다.
+ */
+LRESULT CALLBACK WindowProc(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
+{
+	return InputManager::Get().WindowMessageHandler(WindowHandle, Message, WParam, LParam);
+}
+
 Window::Window(const WindowConstructorParam& ConstructorParam)
 	: Window(ConstructorParam.Title, ConstructorParam.PositionX, ConstructorParam.PositionY, ConstructorParam.Width, ConstructorParam.Height)
 {
@@ -11,7 +30,7 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 	WNDCLASSEX WC;
 	WC.cbSize = sizeof(WNDCLASSEX);
 	WC.style = CS_HREDRAW | CS_VREDRAW;
-	WC.lpfnWndProc = InputManager::WindowMessageHandler;
+	WC.lpfnWndProc = WindowProc;
 	WC.cbClsExtra = 0;
 	WC.cbWndExtra = 0;
 	WC.hInstance = GetModuleHandle(nullptr);
