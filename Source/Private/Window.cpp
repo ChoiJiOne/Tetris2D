@@ -29,7 +29,7 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 	WindowHandle_ = CreateWindow(
 		Title.c_str(),
 		Title.c_str(),
-		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+		WS_OVERLAPPEDWINDOW,
 		PositionX, PositionY,
 		Rect.right - Rect.left, Rect.bottom - Rect.top,
 		nullptr,
