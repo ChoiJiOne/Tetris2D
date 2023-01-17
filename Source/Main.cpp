@@ -6,40 +6,9 @@
 #include <d3d11_1.h>
 
 #include "GameFramework.h"
+#include "InputManager.h"
 #include "GraphicsManager.h"
 #include "Macro.h"
-
-
-/**
- * @brief 윈도우 메시지 핸들러입니다.
- * 
- * @see https://learn.microsoft.com/ko-kr/windows/win32/learnwin32/writing-the-window-procedure
- * 
- * @param WindowHandle 윈도우 창에 대한 핸들입니다.
- * @param Message 윈도우 메시지 코드입니다.
- * @param WParam 윈도우 메시지의 추가 데이터입니다.
- * @param LParam 윈도우 메시지의 추가 데이터입니다.
- * 
- * @return 윈도우에 반환할 값입니다.
- */
-LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
-{
-	switch (Message)
-	{
-	case WM_CLOSE:
-		DestroyWindow(WindowHandle);
-		break;
-
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-
-	default:
-		return DefWindowProc(WindowHandle, Message, WParam, LParam);
-	}
-
-	return 0;
-}
 
 
 /**
@@ -71,7 +40,7 @@ public:
 		WNDCLASSEX WC;
 		WC.cbSize = sizeof(WNDCLASSEX);
 		WC.style = CS_HREDRAW | CS_VREDRAW;
-		WC.lpfnWndProc = WindowMessageHandler;
+		WC.lpfnWndProc = InputManager::WindowMessageHandler;
 		WC.cbClsExtra = 0;
 		WC.cbWndExtra = 0;
 		WC.hInstance = GetModuleHandle(nullptr);
