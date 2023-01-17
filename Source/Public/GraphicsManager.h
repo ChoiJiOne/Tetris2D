@@ -93,18 +93,6 @@ private:
 
 
 	/**
-	 * @brief 그래픽 관련 리소스를 초기화합니다.
-	 */
-	void InitAllProperties();
-
-
-	/**
-	 * @brief 그래픽 관련 리소스를 정리합니다.
-	 */
-	void CleanupAllProperties();
-
-
-	/**
 	 * @brief 디바이스 및 컨텍스트를 생성합니다.
 	 * 
 	 * @param WindowHandle 대상이 되는 윈도우 핸들입니다.

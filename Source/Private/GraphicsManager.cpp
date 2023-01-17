@@ -6,13 +6,26 @@
 
 void GraphicsManager::Init()
 {
-	CleanupAllProperties();
-	InitAllProperties();
+	HWND CurrentWindowHandle = GetForegroundWindow();
+	HRESULT HR = S_OK;
+
+	HR = CreateDeviceAndContext(CurrentWindowHandle);
+	HR = CreateSwapChain(CurrentWindowHandle);
+	HR = CreateRenderTargetView();
 }
 
 void GraphicsManager::Cleanup()
 {
-	CleanupAllProperties();
+	SAFE_RELEASE(RenderTargetView_);
+	SAFE_RELEASE(SwapChain_);
+
+	if (Context_)
+	{
+		Context_->ClearState();
+	}
+
+	SAFE_RELEASE(Context_);
+	SAFE_RELEASE(Device_);
 }
 
 void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth, float MaxDepth)
@@ -44,32 +57,14 @@ void GraphicsManager::Present(bool bIsVSync)
 
 GraphicsManager::~GraphicsManager()
 {
-	CleanupAllProperties();
-}
-
-void GraphicsManager::InitAllProperties()
-{
-	HWND CurrentWindowHandle = GetForegroundWindow();
-	HRESULT HR = S_OK;
-
-	if (!Device_ && !Context_)
-	{
-		HR = CreateDeviceAndContext(CurrentWindowHandle);
-		HR = CreateSwapChain(CurrentWindowHandle);
-		HR = CreateRenderTargetView();
-	}
-}
-
-void GraphicsManager::CleanupAllProperties()
-{
-	SAFE_RELEASE(RenderTargetView_);
-	SAFE_RELEASE(SwapChain_);
-	SAFE_RELEASE(Context_);
-	SAFE_RELEASE(Device_);
+	Cleanup();
 }
 
 HRESULT GraphicsManager::CreateDeviceAndContext(HWND WindowHandle)
 {
+	SAFE_RELEASE(Context_);
+	SAFE_RELEASE(Device_);
+
 	HRESULT HR = S_OK;
 
 	RECT CurrentWindowRect = {};
@@ -124,6 +119,8 @@ HRESULT GraphicsManager::CreateDeviceAndContext(HWND WindowHandle)
 
 HRESULT GraphicsManager::CreateSwapChain(HWND WindowHandle)
 {
+	SAFE_RELEASE(SwapChain_);
+
 	HRESULT HR = S_OK;
 
 	IDXGIDevice* Device = nullptr;
@@ -173,6 +170,8 @@ HRESULT GraphicsManager::CreateSwapChain(HWND WindowHandle)
 
 HRESULT GraphicsManager::CreateRenderTargetView()
 {
+	SAFE_RELEASE(RenderTargetView_);
+
 	HRESULT HR = S_OK;
 
 	ID3D11Texture2D* BackBuffer = nullptr;
