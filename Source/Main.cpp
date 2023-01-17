@@ -6,6 +6,7 @@
 #include <d3d11_1.h>
 
 #include "GameFramework.h"
+#include "Window.h"
 #include "InputManager.h"
 #include "GraphicsManager.h"
 #include "Macro.h"
@@ -29,6 +30,7 @@ public:
 	virtual ~Tetris()
 	{
 		GraphicsManager::Get().Cleanup();
+		Window_.reset();
 	}
 
 
@@ -37,37 +39,7 @@ public:
 	 */
 	virtual void Init() override
 	{
-		WNDCLASSEX WC;
-		WC.cbSize = sizeof(WNDCLASSEX);
-		WC.style = CS_HREDRAW | CS_VREDRAW;
-		WC.lpfnWndProc = InputManager::WindowMessageHandler;
-		WC.cbClsExtra = 0;
-		WC.cbWndExtra = 0;
-		WC.hInstance = GetModuleHandle(nullptr);
-		WC.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		WC.hCursor = LoadCursor(NULL, IDC_ARROW);
-		WC.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-		WC.lpszMenuName = NULL;
-		WC.lpszClassName = L"Tetris2D";
-		WC.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-		RegisterClassEx(&WC);
-
-		RECT Rect = { 0, 0, 800, 600 };
-		AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
-
-		WindowHandle_ = CreateWindow(
-			L"Tetris2D",
-			L"Tetris2D",
-			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-			CW_USEDEFAULT, CW_USEDEFAULT,
-			Rect.right - Rect.left, Rect.bottom - Rect.top,
-			nullptr,
-			nullptr,
-			GetModuleHandle(nullptr),
-			nullptr
-		);
-
-		ShowWindow(WindowHandle_, SW_SHOW);
+		Window_ = std::make_unique<Window>(L"Tetris2D", 200, 200, 1000, 800);
 
 		GraphicsManager::Get().Init();
 	}
@@ -88,7 +60,7 @@ public:
 			}
 			else
 			{
-				GraphicsManager::Get().SetViewport(0.0f, 0.0f, 800.0f, 600.0f);
+				GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
 				GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
 				GraphicsManager::Get().Present();
 			}
@@ -98,11 +70,9 @@ public:
 
 private:
 	/**
-	 * @brief 윈도우 창 핸들러입니다.
-	 * 
-	 * @see https://learn.microsoft.com/ko-kr/windows/win32/learnwin32/creating-a-window
+	 * @brief 윈도우 창입니다.
 	 */
-	HWND WindowHandle_ = nullptr;
+	std::unique_ptr<Window> Window_ = nullptr;
 };
 
 
