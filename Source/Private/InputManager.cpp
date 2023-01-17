@@ -4,6 +4,19 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 {
 	switch (Message)
 	{
+	case WM_ACTIVATE:
+		if (LOWORD(WParam) == WA_INACTIVE)
+		{
+			bIsActive_ = false;
+			HandleWindowEvent(EWindowEvent::INACTIVE);
+		}
+		else
+		{
+			bIsActive_ = true;
+			HandleWindowEvent(EWindowEvent::ACTIVE);
+		}
+		break;
+
 	case WM_CLOSE:
 		DestroyWindow(WindowHandle);
 		break;
@@ -19,6 +32,19 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 	return 0;
 }
 
+void InputManager::RegisterWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback)
+{
+	WindowEvents_.insert({ WindowEvent, EventCallback });
+}
+
+void InputManager::UnregisterWindowEvent(const EWindowEvent& WindowEvent)
+{
+	if (WindowEvents_.find(WindowEvent) != WindowEvents_.end())
+	{
+		WindowEvents_.erase(WindowEvent);
+	}
+}
+
 void InputManager::Tick()
 {
 	bool bHaveMessage = true;
@@ -28,8 +54,9 @@ void InputManager::Tick()
 	{
 		if (EventMessage.message == WM_QUIT)
 		{
-			bIsDetectQuitMessage = true;
+			bIsQuit_ = true;
 			bHaveMessage = false;
+			HandleWindowEvent(EWindowEvent::QUIT);
 		}
 
 		if (PeekMessage(&EventMessage, nullptr, 0, 0, PM_REMOVE))
@@ -91,4 +118,12 @@ InputManager::InputManager()
 bool InputManager::IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const
 {
 	return (KeyboardState[KeyCode] & 0x80);
+}
+
+void InputManager::HandleWindowEvent(const EWindowEvent& WindowEvent)
+{
+	if (WindowEvents_.find(WindowEvent) != WindowEvents_.end())
+	{
+		WindowEvents_.at(WindowEvent)();
+	}
 }

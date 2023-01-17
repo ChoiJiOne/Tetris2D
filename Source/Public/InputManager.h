@@ -4,12 +4,15 @@
 
 #include <cstdint>
 #include <vector>
+#include <functional>
+#include <unordered_map>
 
 #include <windows.h>
 
 
 /**
- * 입력 상태를 나타냅니다.
+ * @brief 입력 상태를 나타냅니다.
+ * 
  * --------------------------------------
  * | 이전 프레임 | 현재 프레임 | 입력 상태 |
  * --------------------------------------
@@ -25,6 +28,18 @@ enum class EPressState
 	PRESSED  = 1,
 	RELEASED = 2,
 	HELD     = 3
+};
+
+
+/**
+ * @brief 윈도우 이벤트 키 값입니다.
+ */
+enum class EWindowEvent
+{
+	QUIT     = 0,
+	ACTIVE   = 1,
+	INACTIVE = 2,
+	RESIZE   = 3,
 };
 
 
@@ -70,6 +85,25 @@ public:
 
 
 	/**
+	 * @brief 윈도우 이벤트를 등록합니다.
+	 * 
+	 * @note 이벤트에 대응하는 실행 루틴은 유일합니다. 새로운 루틴을 실행하려면 다시 등록해야 합니다.
+	 * 
+	 * @param WindowEvent 등록할 윈도우 이벤트 종류입니다.
+	 * @param EventCallback 이벤트 감지 시 실행할 루틴입니다.
+	 */
+	void RegisterWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback);
+
+
+	/**
+	 * @brief 윈도우 이벤트를 등록 해제합니다.
+	 * 
+	 * @param WindowEvent 등록 해제할 윈도우 이벤트입니다.
+	 */
+	void UnregisterWindowEvent(const EWindowEvent& WindowEvent);
+
+
+	/**
 	 * @brief 입력 상태를 업데이트합니다.
 	 * 
 	 * @note 이 메서드는 매 프레임 호출해야 합니다.
@@ -82,7 +116,7 @@ public:
 	 * 
 	 * @return QUIT 메시지가 감지되었다면 true, 그렇지 않다면 false를 반환합니다.
 	 */
-	bool IsDetectQuitMessage() const { return bIsDetectQuitMessage; }
+	bool IsDetectQuit() const { return bIsQuit_; }
 
 
 	/**
@@ -119,11 +153,25 @@ private:
 	bool IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const;
 
 
+	/**
+	 * @brief 윈도우 이벤트에 대응하는 루틴을 실행합니다.
+	 *
+	 * @param WindowEvent 실행할 윈도우 이벤트입니다.
+	 */
+	void HandleWindowEvent(const EWindowEvent& WindowEvent);
+
+
 private:
 	/**
 	 * @brief QUIT 메시지가 감지되었는지 확인합니다.
 	 */
-	bool bIsDetectQuitMessage = false;
+	bool bIsQuit_ = false;
+
+
+	/**
+	 * @brief 윈도우 창이 활성화 되었는지 확인합니다.
+	 */
+	bool bIsActive_ = false;
 
 
 	/**
@@ -136,4 +184,10 @@ private:
 	 * @brief 업데이트 후(Tick 호출 후)의 키보드 상태입니다.
 	 */
 	std::vector<uint8_t> CurrKeyboardState_;
+
+
+	/**
+	 * 윈도우 이벤트 키 값에 대응하는 이벤트입니다.
+	 */
+	std::unordered_map<EWindowEvent, std::function<void()>> WindowEvents_;
 };
