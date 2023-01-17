@@ -3,6 +3,7 @@
 #include <array>
 
 #include <windows.h>
+#include <d3d11_1.h>
 
 
 /**
@@ -71,7 +72,10 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-
+		SAFE_RELEASE(RenderTargetView_);
+		SAFE_RELEASE(SwapChain_);
+		SAFE_RELEASE(Content_);
+		SAFE_RELEASE(Device_);
 	}
 
 
@@ -111,6 +115,91 @@ public:
 		);
 
 		ShowWindow(WindowHandle, SW_SHOW);
+
+		HRESULT HR = S_OK;
+		uint32_t Width = Rect.right - Rect.left;
+		uint32_t Height = Rect.bottom - Rect.top;
+
+		uint32_t CreateDeviceFlags = 0;
+#ifdef DEBUG
+		CreateDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+		std::array<D3D_DRIVER_TYPE, 3> DriverTypes = {
+			D3D_DRIVER_TYPE_HARDWARE,
+			D3D_DRIVER_TYPE_WARP,
+			D3D_DRIVER_TYPE_REFERENCE,
+		};
+
+		std::array<D3D_FEATURE_LEVEL, 7> FeatureLevels = {
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_1,
+		};
+
+		for (auto DriverType : DriverTypes)
+		{
+			DriverType_ = DriverType;
+			HR = D3D11CreateDevice(
+				nullptr, 
+				DriverType_, 
+				nullptr, 
+				CreateDeviceFlags, 
+				&FeatureLevels[0], 
+				std::size(FeatureLevels),
+				D3D11_SDK_VERSION, 
+				&Device_, 
+				&FeatureLevel_, 
+				&Context_
+			);
+
+			if (HR == E_INVALIDARG)
+			{
+				HR = D3D11CreateDevice(
+					nullptr, 
+					DriverType_,
+					nullptr, 
+					CreateDeviceFlags,
+					&FeatureLevels[1],
+					std::size(FeatureLevels) - 1,
+					D3D11_SDK_VERSION, 
+					&Device_,
+					&FeatureLevel_,
+					&Context_
+				);
+			}
+
+			if (SUCCEEDED(HR)) break;
+		}
+
+		if (FAILED(HR)) return;
+
+		ID3D11Device1* Device1 = nullptr;
+		ID3D11DeviceContext1* ontext1 = nullptr;
+		IDXGISwapChain1* SwapChain1 = nullptr;
+
+		IDXGIFactory1* dxgiFactory = nullptr;
+		{
+			IDXGIDevice* dxgiDevice = nullptr;
+			hr = g_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
+			if (SUCCEEDED(hr))
+			{
+				IDXGIAdapter* adapter = nullptr;
+				hr = dxgiDevice->GetAdapter(&adapter);
+				if (SUCCEEDED(hr))
+				{
+					hr = adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory));
+					adapter->Release();
+				}
+				dxgiDevice->Release();
+			}
+		}
+		if (FAILED(hr))
+			return hr;
 	}
 
 
@@ -142,6 +231,54 @@ private:
 	 * @see https://learn.microsoft.com/ko-kr/windows/win32/learnwin32/creating-a-window
 	 */
 	HWND WindowHandle_ = nullptr;
+
+	
+	/**
+	 * @brief 드라이버 타입입니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3dcommon/ne-d3dcommon-d3d_driver_type
+	 */
+	D3D_DRIVER_TYPE	DriverType_ = D3D_DRIVER_TYPE_NULL;
+
+
+	/**
+	 * @brief 디바이스가 대상으로 하는 기능입니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3dcommon/ne-d3dcommon-d3d_feature_level
+	 */
+	D3D_FEATURE_LEVEL FeatureLevel_ = D3D_FEATURE_LEVEL_11_0;
+
+
+	/**
+	 * @brief 리소스를 만들고 디스플레이 어댑터의 기능을 열거하는 데 사용합니다.
+	 * 
+	 * @see https://learn.microsoft.com/ko-kr/windows/win32/direct3d11/overviews-direct3d-11-devices-intro
+	 */
+	ID3D11Device* Device_ = nullptr;
+
+
+	/**
+	 * @brief 디바이스가 소유한 리소스를 사용하여 파이프라인 상태를 설정하고 렌더링 명령을 생성하는 데 사용합니다.
+	 * 
+	 * @see https://learn.microsoft.com/ko-kr/windows/win32/direct3d11/overviews-direct3d-11-devices-intro
+	 */
+	ID3D11DeviceContext* Context_ = nullptr;
+
+
+	/**
+	 * @brief 렌더링된 데이터를 출력에 표시하기 전에 저장합니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
+	 */
+	IDXGISwapChain* SwapChain_ = nullptr;
+
+
+	/**
+	 * @brief 렌더링 중 엑세스 할 수 있는 리소스입니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
+	 */
+	ID3D11RenderTargetView* RenderTargetView_ = nullptr;
 };
 
 
