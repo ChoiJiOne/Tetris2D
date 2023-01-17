@@ -74,7 +74,7 @@ public:
 	{
 		SAFE_RELEASE(RenderTargetView_);
 		SAFE_RELEASE(SwapChain_);
-		SAFE_RELEASE(Content_);
+		SAFE_RELEASE(Context_);
 		SAFE_RELEASE(Device_);
 	}
 
@@ -102,7 +102,7 @@ public:
 		RECT Rect = { 0, 0, 800, 600 };
 		AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
 
-		HWND WindowHandle = CreateWindow(
+		WindowHandle_ = CreateWindow(
 			L"Tetris2D",
 			L"Tetris2D",
 			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
@@ -114,7 +114,7 @@ public:
 			nullptr
 		);
 
-		ShowWindow(WindowHandle, SW_SHOW);
+		ShowWindow(WindowHandle_, SW_SHOW);
 
 		HRESULT HR = S_OK;
 		uint32_t Width = Rect.right - Rect.left;
@@ -178,28 +178,56 @@ public:
 
 		if (FAILED(HR)) return;
 
-		ID3D11Device1* Device1 = nullptr;
-		ID3D11DeviceContext1* ontext1 = nullptr;
-		IDXGISwapChain1* SwapChain1 = nullptr;
+		IDXGIDevice* Device = nullptr;
+		HR = Device_->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&Device));
 
-		IDXGIFactory1* dxgiFactory = nullptr;
-		{
-			IDXGIDevice* dxgiDevice = nullptr;
-			hr = g_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
-			if (SUCCEEDED(hr))
-			{
-				IDXGIAdapter* adapter = nullptr;
-				hr = dxgiDevice->GetAdapter(&adapter);
-				if (SUCCEEDED(hr))
-				{
-					hr = adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory));
-					adapter->Release();
-				}
-				dxgiDevice->Release();
-			}
-		}
-		if (FAILED(hr))
-			return hr;
+		IDXGIAdapter* Adapter = nullptr;
+		HR = Device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&Adapter));
+
+		IDXGIFactory* Factory = nullptr;
+		HR = Adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&Factory));
+
+		DXGI_SWAP_CHAIN_DESC sd = {};
+		sd.BufferCount = 1;
+		sd.BufferDesc.Width = Width;
+		sd.BufferDesc.Height = Height;
+		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		sd.BufferDesc.RefreshRate.Numerator = 60;
+		sd.BufferDesc.RefreshRate.Denominator = 1;
+		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		sd.OutputWindow = WindowHandle_;
+		sd.SampleDesc.Count = 1;
+		sd.SampleDesc.Quality = 0;
+		//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+		sd.Windowed = TRUE;
+
+		Factory->CreateSwapChain(Device_, &sd, &SwapChain_);
+
+		SAFE_RELEASE(Factory);
+		SAFE_RELEASE(Adapter);
+		SAFE_RELEASE(Device);
+
+		ID3D11Texture2D* BackBuffer = nullptr;
+		HR = SwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBuffer));
+		if (FAILED(HR)) return;
+
+		HR = Device_->CreateRenderTargetView(BackBuffer, nullptr, &RenderTargetView_);
+		SAFE_RELEASE(BackBuffer);
+
+		if (FAILED(HR)) return;
+
+		Context_->OMSetRenderTargets(1, &RenderTargetView_, nullptr);
+
+		// Setup the viewport
+		D3D11_VIEWPORT vp;
+		vp.Width = (FLOAT)Width;
+		vp.Height = (FLOAT)Height;
+		vp.MinDepth = 0.0f;
+		vp.MaxDepth = 1.0f;
+		vp.TopLeftX = 0;
+		vp.TopLeftY = 0;
+		
+		Context_->RSSetViewports(1, &vp);
 	}
 
 
@@ -218,7 +246,10 @@ public:
 			}
 			else
 			{
+				FLOAT Color[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
 
+				Context_->ClearRenderTargetView(RenderTargetView_, Color);
+				SwapChain_->Present(0, 0);
 			}
 		}
 	}
