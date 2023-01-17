@@ -56,6 +56,11 @@ public:
 
 			bIsDone_ = InputManager::Get().IsDetectQuitMessage();
 
+			if (InputManager::Get().GetKeyPressState(VK_SPACE) == EPressState::HELD)
+			{
+				OutputDebugStringA("Press SPACE\n");
+			}
+
 			GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
 			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
 			GraphicsManager::Get().Present();

@@ -3,6 +3,8 @@
 #include "Macro.h"
 
 #include <cstdint>
+#include <vector>
+
 #include <windows.h>
 
 
@@ -83,15 +85,23 @@ public:
 	 * @return QUIT 메시지가 감지되었다면 true, 그렇지 않다면 false를 반환합니다.
 	 */
 	bool IsDetectQuitMessage() const { return bIsDetectQuitMessage; }
+
+
+	/**
+	 * @brief 키의 입력 상태를 반환합니다.
+	 *
+	 * @param KeyCode - 검사를 수행할 키입니다.
+	 *
+	 * @return 키의 버튼 상태를 반환합니다.
+	 */
+	EPressState GetKeyPressState(int32_t KeyCode) const;
 	
 
 private:
 	/**
 	 * @brief 입력 처리를 수행하는 클래스의 생성자입니다.
-	 * 
-	 * @note 생성자는 아무런 동작도 수행하지 않습니다.
 	 */
-	InputManager() = default;
+	InputManager();
 
 
 	/**
@@ -100,9 +110,32 @@ private:
 	virtual ~InputManager() {}
 
 
+	/**
+	 * @brief 특정 키가 눌렸는지 검사합니다.
+	 * 
+	 * @param KeyboardState 검사를 수행할 키보드 상태입니다.
+	 * @param KeyCode 검사를 수행할 키 코드입니다.
+	 * 
+	 * @return 키가 눌렸다면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	bool IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const;
+
+
 private:
 	/**
 	 * @brief QUIT 메시지가 감지되었는지 확인합니다.
 	 */
 	bool bIsDetectQuitMessage = false;
+
+
+	/**
+	 * @brief 업데이트 이전(Tick 호출 이전)의 키보드 상태입니다.
+	 */
+	std::vector<uint8_t> PrevKeyboardState_;
+
+
+	/**
+	 * @brief 업데이트 후(Tick 호출 후)의 키보드 상태입니다.
+	 */
+	std::vector<uint8_t> CurrKeyboardState_;
 };
