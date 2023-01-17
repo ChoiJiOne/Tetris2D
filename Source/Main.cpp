@@ -119,6 +119,7 @@ public:
 			}
 			else
 			{
+				GraphicsManager::Get().SetViewport(0.0f, 0.0f, 800.0f, 600.0f);
 				GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
 				GraphicsManager::Get().Present();
 			}
