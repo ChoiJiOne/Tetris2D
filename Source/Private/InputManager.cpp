@@ -76,7 +76,7 @@ void InputManager::Tick()
 		static_cast<int32_t>(PrevKeyboardState_.size())
 	);
 
-	GetKeyboardState(&CurrKeyboardState_[0]);
+	CHECK(GetKeyboardState(&CurrKeyboardState_[0]), "failed to get keyboard state");
 }
 
 EPressState InputManager::GetKeyPressState(int32_t KeyCode) const
