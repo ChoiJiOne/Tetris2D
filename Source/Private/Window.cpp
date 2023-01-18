@@ -64,3 +64,18 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 Window::~Window()
 {
 }
+
+void Window::GetSize(int32_t& Width, int32_t& Height)
+{
+	RECT WindowRect = {};
+	CHECK(GetClientRect(WindowHandle_, &WindowRect), "failed to get client size");
+
+	Width = static_cast<int32_t>(WindowRect.right - WindowRect.left);
+	Height = static_cast<int32_t>(WindowRect.bottom - WindowRect.top);
+}
+
+void Window::SetSize(int32_t Width, int32_t Height)
+{
+	RECT Rect = { 0, 0, Width, Height };
+	CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE), "failed to adjust window size");
+}
