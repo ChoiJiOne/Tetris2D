@@ -40,10 +40,10 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 	WC.lpszMenuName = NULL;
 	WC.lpszClassName = Title.c_str();
 	WC.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-	RegisterClassEx(&WC);
+	CHECK((RegisterClassEx(&WC) != 0), "failed to register window class");
 
 	RECT Rect = { 0, 0, Width, Height };
-	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
+	CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE), "failed to adjust window size");
 
 	WindowHandle_ = CreateWindow(
 		Title.c_str(),
@@ -56,8 +56,9 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 		GetModuleHandle(nullptr),
 		nullptr
 	);
+	CHECK((WindowHandle_ != nullptr), "failed to create window");
 
-	ShowWindow(WindowHandle_, SW_SHOW);
+	CHECK(ShowWindow(WindowHandle_, SW_SHOW) == 0, "failed to show window");
 }
 
 Window::~Window()
