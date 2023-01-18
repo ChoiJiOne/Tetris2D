@@ -38,6 +38,8 @@ void GraphicsManager::Resize()
 	DXGI_FORMAT BackBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	uint32_t BackBufferCount = 2;
 
+	SAFE_RELEASE(RenderTargetView_);
+
 	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight, BackBufferFormat, 0), "failed to resize buffer");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 }
