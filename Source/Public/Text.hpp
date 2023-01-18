@@ -17,7 +17,7 @@
  * @return 포멧팅이 완료된 문자열을 반환합니다.
  */
 template<typename ... Args>
-static inline std::string Format(const std::string& Text, Args ... Argument)
+inline std::string Format(const std::string& Text, Args ... Argument)
 {
 	size_t Size = static_cast<size_t>(std::snprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
 
@@ -39,7 +39,7 @@ static inline std::string Format(const std::string& Text, Args ... Argument)
  * @return 포멧팅이 완료된 문자열을 반환합니다.
  */
 template<typename ... Args>
-static inline std::wstring Format(const std::wstring& Text, Args ... Argument)
+inline std::wstring Format(const std::wstring& Text, Args ... Argument)
 {
 	size_t Size = static_cast<size_t>(std::swprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
 
@@ -58,7 +58,7 @@ static inline std::wstring Format(const std::wstring& Text, Args ... Argument)
  *
  * @return 나누어진 문자열의 벡터를 반환합니다.
  */
-static inline std::vector<std::string> Split(std::string Text, const std::string& Delimiter)
+inline std::vector<std::string> Split(std::string Text, const std::string& Delimiter)
 {
 	std::vector<std::string> Tokens;
 	std::size_t Position = 0;
@@ -82,7 +82,7 @@ static inline std::vector<std::string> Split(std::string Text, const std::string
  *
  * @return 나누어진 문자열의 벡터를 반환합니다.
  */
-static inline std::vector<std::wstring> Split(std::wstring Text, const std::wstring& Delimiter)
+inline std::vector<std::wstring> Split(std::wstring Text, const std::wstring& Delimiter)
 {
 	std::vector<std::wstring> Tokens;
 	std::size_t Position = 0;
