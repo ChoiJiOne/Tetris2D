@@ -50,7 +50,7 @@ CLASS& operator=(const CLASS&) = delete;
 	if(!EXPRESSION)\
 	{\
 		std::string ErrorString = Format(\
-			"file : %s, line : %d, function : %s, message : %s",\
+			"file : %s, line : %d, function : %s, message : %s\n",\
 				__FILE__, __LINE__, __FUNCTION__, MESSAGE);\
 		OutputDebugStringA(ErrorString.c_str());\
 		throw std::exception(ErrorString.c_str());\
@@ -73,7 +73,7 @@ CLASS& operator=(const CLASS&) = delete;
 	if(((HRESULT)(EXPRESSION)) < 0)\
 	{\
 		std::string ErrorString = Format(\
-			"file : %s, line : %d, function : %s, HRESULT : %x, message : %s",\
+			"file : %s, line : %d, function : %s, HRESULT : %x, message : %s\n",\
 				__FILE__, __LINE__, __FUNCTION__, EXPRESSION, MESSAGE);\
 		OutputDebugStringA(ErrorString.c_str());\
 		throw std::exception(ErrorString.c_str());\
@@ -93,7 +93,7 @@ CLASS& operator=(const CLASS&) = delete;
 #define ENFORCE_THROW_EXCEPTION(MESSAGE)\
 {\
 	std::string ErrorString = Format(\
-		"file : %s, line : %d, function : %s, message : %s",\
+		"file : %s, line : %d, function : %s, message : %s\n",\
 			__FILE__, __LINE__, __FUNCTION__, MESSAGE);\
 	OutputDebugStringA(ErrorString.c_str());\
 	throw std::exception(ErrorString.c_str());\
