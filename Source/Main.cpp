@@ -9,6 +9,7 @@
 #include "CommandLineManager.h"
 #include "Debug.h"
 #include "Window.h"
+#include "Timer.h"
 #include "InputManager.h"
 #include "GraphicsManager.h"
 #include "Macro.h"
@@ -61,9 +62,14 @@ public:
 	 */
 	virtual void Run() override
 	{
+		Timer_.Reset();
+
 		while (!bIsDone_)
 		{
+			Timer_.Tick();
 			InputManager::Get().Tick();
+
+			//OutputDebugStringA((std::to_string(Timer_.GetDeltaTime()) + "\n").c_str());
 
 			GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
 			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
@@ -77,6 +83,12 @@ private:
 	 * @brief 게임 루프를 수행할 지 확인합니다.
 	 */
 	bool bIsDone_ = false;
+
+
+	/**
+	 * @brief 게임 타이머입니다.
+	 */
+	Timer Timer_;
 
 
 	/**
