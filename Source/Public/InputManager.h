@@ -40,6 +40,8 @@ enum class EWindowEvent
 	ACTIVE   = 1,
 	INACTIVE = 2,
 	RESIZE   = 3,
+	MINIMZED = 4,
+	MAXIMIZED = 5,
 };
 
 

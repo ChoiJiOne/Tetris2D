@@ -17,6 +17,10 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		}
 		break;
 
+	case WM_SIZE:
+		HandleWindowEvent(EWindowEvent::RESIZE);
+		break;
+
 	case WM_CLOSE:
 		DestroyWindow(WindowHandle);
 		break;
