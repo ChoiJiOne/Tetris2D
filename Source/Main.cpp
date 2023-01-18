@@ -6,6 +6,8 @@
 #include <d3d11_1.h>
 
 #include "GameFramework.h"
+#include "CommandLineManager.h"
+#include "Debug.h"
 #include "Window.h"
 #include "InputManager.h"
 #include "GraphicsManager.h"
@@ -39,6 +41,8 @@ public:
 	 */
 	virtual void Init() override
 	{
+		SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+
 		Window_ = std::make_unique<Window>(L"Tetris2D", 200, 200, 1000, 800);
 
 		GraphicsManager::Get().Init();
