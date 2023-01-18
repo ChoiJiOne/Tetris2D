@@ -7,11 +7,10 @@
 void GraphicsManager::Init()
 {
 	HWND CurrentWindowHandle = GetForegroundWindow();
-	HRESULT HR = S_OK;
 
-	HR = CreateDeviceAndContext(CurrentWindowHandle);
-	HR = CreateSwapChain(CurrentWindowHandle);
-	HR = CreateRenderTargetView();
+	CHECK_HR(CreateDeviceAndContext(CurrentWindowHandle), "failed to create device and context");
+	CHECK_HR(CreateSwapChain(CurrentWindowHandle), "failed to create swapchain");
+	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 }
 
 void GraphicsManager::Cleanup()
@@ -30,19 +29,17 @@ void GraphicsManager::Cleanup()
 
 void GraphicsManager::Resize()
 {
-	HRESULT HR = S_OK;
-
 	HWND CurrentWindowHandle = GetForegroundWindow();
 	RECT CurrentWindowRect = {};
-	GetClientRect(CurrentWindowHandle, &CurrentWindowRect);
+	CHECK(GetClientRect(CurrentWindowHandle, &CurrentWindowRect), "failed to get client size");
 
 	uint32_t BackBufferWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
 	uint32_t BackBufferHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
 	DXGI_FORMAT BackBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	uint32_t BackBufferCount = 2;
 
-	HR = SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight, BackBufferFormat, 0);
-	HR = CreateRenderTargetView();
+	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight, BackBufferFormat, 0), "failed to resize buffer");
+	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 }
 
 void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth, float MaxDepth)
@@ -69,7 +66,7 @@ void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha)
 
 void GraphicsManager::Present(bool bIsVSync)
 {
-	HRESULT HR = SwapChain_->Present(static_cast<uint32_t>(bIsVSync), 0);
+	CHECK_HR(SwapChain_->Present(static_cast<uint32_t>(bIsVSync), 0), "failed to present backbuffer");
 }
 
 GraphicsManager::~GraphicsManager()
@@ -85,7 +82,7 @@ HRESULT GraphicsManager::CreateDeviceAndContext(HWND WindowHandle)
 	HRESULT HR = S_OK;
 
 	RECT CurrentWindowRect = {};
-	GetClientRect(WindowHandle, &CurrentWindowRect);
+	CHECK(GetClientRect(WindowHandle, &CurrentWindowRect), "failed to get client size");
 
 	uint32_t WindowWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
 	uint32_t WindowHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
@@ -155,7 +152,7 @@ HRESULT GraphicsManager::CreateSwapChain(HWND WindowHandle)
 	}
 
 	RECT CurrentWindowRect = {};
-	GetClientRect(WindowHandle, &CurrentWindowRect);
+	CHECK(GetClientRect(WindowHandle, &CurrentWindowRect), "failed to get client size");
 
 	uint32_t WindowWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
 	uint32_t WindowHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);

@@ -33,6 +33,8 @@ public:
 
 	/**
 	 * @brief GraphicsManager를 명시적으로 초기화합니다.
+	 * 
+	 * @throws 내부 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
 	void Init();
 
@@ -45,6 +47,8 @@ public:
 
 	/**
 	 * @brief 내부 버퍼 리소스의 크기를 변경합니다.
+	 * 
+	 * @throws 버퍼의 크기 변경에 실패하면 C++ 표준 예외를 던집니다.
 	 */
 	void Resize();
 
@@ -76,9 +80,11 @@ public:
 	/**
 	 * @brief 백 버퍼와 프론트 버퍼를 교환합니다.
 	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present
+	 * 
 	 * @param bIsVSync 수직 동기화 여부를 확인합니다. 기본적으로 수직 동기화 처리합니다.
 	 * 
-	 * @see https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present
+	 * @throws 백 버퍼와 프론트 버퍼의 교환에 실패하면 C++ 표준 예외를 던집니다.
 	 */
 	void Present(bool bIsVSync = true);
 
