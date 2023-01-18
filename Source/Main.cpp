@@ -4,6 +4,7 @@
 #include "GraphicsManager.h"
 #include "InputManager.h"
 #include "Macro.h"
+#include "Random.h"
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
@@ -48,7 +49,22 @@ public:
 				bIsDone_ = true;
 			}
 		);
-	}
+
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::RESIZE,
+			[&]() {
+				int32_t Width = 0, Height = 0;
+				Window_->GetSize(Width, Height);
+
+				GraphicsManager::Get().Resize();
+				GraphicsManager::Get().SetViewport(0.0f, 0.0f, static_cast<float>(Width), static_cast<float>(Height));
+			}
+		);
+
+		int32_t Width = 0, Height = 0;
+		Window_->GetSize(Width, Height);
+		GraphicsManager::Get().SetViewport(0.0f, 0.0f, static_cast<float>(Width), static_cast<float>(Height));
+ 	}
 
 
 	/**
@@ -63,8 +79,7 @@ public:
 			Timer_.Tick();
 			InputManager::Get().Tick();
 
-			GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
-			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
+			GraphicsManager::Get().Clear(r, g, b, a);
 			GraphicsManager::Get().Present();
 		}
 	}
