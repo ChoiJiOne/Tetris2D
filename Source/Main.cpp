@@ -1,18 +1,12 @@
-#include <cstdint>
-#include <memory>
-#include <array>
-
-#include <windows.h>
-#include <d3d11_1.h>
-
-#include "GameFramework.h"
 #include "CommandLineManager.h"
 #include "Debug.h"
-#include "Window.h"
-#include "Timer.h"
-#include "InputManager.h"
+#include "GameFramework.h"
 #include "GraphicsManager.h"
+#include "InputManager.h"
 #include "Macro.h"
+#include "Timer.h"
+#include "Vector.hpp"
+#include "Window.h"
 
 
 /**
@@ -68,8 +62,6 @@ public:
 		{
 			Timer_.Tick();
 			InputManager::Get().Tick();
-
-			//OutputDebugStringA((std::to_string(Timer_.GetDeltaTime()) + "\n").c_str());
 
 			GraphicsManager::Get().SetViewport(0.0f, 0.0f, 1000.0f, 800.0f);
 			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
