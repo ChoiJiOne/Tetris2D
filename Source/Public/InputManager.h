@@ -36,7 +36,7 @@ enum class EPressState
  */
 enum class EWindowEvent
 {
-	QUIT     = 0,
+	CLOSE     = 0,
 	ACTIVE   = 1,
 	INACTIVE = 2,
 	RESIZE   = 3,
@@ -142,6 +142,18 @@ private:
 	 * @brief 입력 처리를 수행하는 클래스의 가상 소멸자입니다.
 	 */
 	virtual ~InputManager() {}
+
+
+	/**
+	 * @brief 이벤트 큐의 윈도우 이벤트를 처리합니다.
+	 */
+	void PollEventMessage();
+
+
+	/**
+	 * @brief 키보드의 상태를 업데이트합니다.
+	 */
+	void UpdateKeyboardState();
 
 
 	/**

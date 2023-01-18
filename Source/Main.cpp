@@ -44,7 +44,7 @@ public:
 		GraphicsManager::Get().Init();
 
 		InputManager::Get().RegisterWindowEvent(
-			EWindowEvent::QUIT,
+			EWindowEvent::CLOSE,
 			[&]() {
 				bIsDone_ = true;
 			}
@@ -79,7 +79,7 @@ public:
 			Timer_.Tick();
 			InputManager::Get().Tick();
 
-			GraphicsManager::Get().Clear(r, g, b, a);
+			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
 			GraphicsManager::Get().Present();
 		}
 	}

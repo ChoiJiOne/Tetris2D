@@ -22,6 +22,8 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		break;
 
 	case WM_CLOSE:
+		bIsQuit_ = true;
+		HandleWindowEvent(EWindowEvent::CLOSE);
 		DestroyWindow(WindowHandle);
 		break;
 
@@ -51,36 +53,8 @@ void InputManager::UnregisterWindowEvent(const EWindowEvent& WindowEvent)
 
 void InputManager::Tick()
 {
-	bool bHaveMessage = true;
-	MSG EventMessage = {};
-
-	while (bHaveMessage)
-	{
-		if (EventMessage.message == WM_QUIT)
-		{
-			bIsQuit_ = true;
-			bHaveMessage = false;
-			HandleWindowEvent(EWindowEvent::QUIT);
-		}
-
-		if (PeekMessage(&EventMessage, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&EventMessage);
-			DispatchMessage(&EventMessage);
-		}
-		else
-		{
-			bHaveMessage = false;
-		}
-	}
-
-	std::memcpy(
-		reinterpret_cast<void*>(&PrevKeyboardState_[0]),
-		reinterpret_cast<const void*>(&CurrKeyboardState_[0]),
-		static_cast<int32_t>(PrevKeyboardState_.size())
-	);
-
-	CHECK(GetKeyboardState(&CurrKeyboardState_[0]), "failed to get keyboard state");
+	PollEventMessage();
+	UpdateKeyboardState();
 }
 
 EPressState InputManager::GetKeyPressState(int32_t KeyCode) const
@@ -117,6 +91,24 @@ InputManager::InputManager()
 	: PrevKeyboardState_(256, 0)
 	, CurrKeyboardState_(256, 0)
 {
+}
+
+void InputManager::PollEventMessage()
+{
+	MSG EventMessage = {};
+
+	while (PeekMessage(&EventMessage, nullptr, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&EventMessage);
+		DispatchMessage(&EventMessage);
+	}
+}
+
+void InputManager::UpdateKeyboardState()
+{
+	std::copy(PrevKeyboardState_.begin(), PrevKeyboardState_.end(), CurrKeyboardState_.begin());
+
+	CHECK(GetKeyboardState(&CurrKeyboardState_[0]), "failed to get keyboard state");
 }
 
 bool InputManager::IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const
