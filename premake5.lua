@@ -36,6 +36,7 @@ workspace "Tetris2D"
         debugargs {
             "-Dump=%{wks.location}..\\Dump\\",
             "-Content=%{wks.location}..\\Content\\",
+            "-Shader=%{wks.location}..\\Source\\Shader\\",
         }
 
         -- 소스 코드의 include 경로를 추가합니다.
