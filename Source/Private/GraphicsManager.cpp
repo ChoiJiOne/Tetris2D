@@ -16,7 +16,7 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 
 void GraphicsManager::Cleanup()
 {
-	if (RenderTargetWindow_->IsFullScreen())
+	if (RenderTargetWindow_->IsFullScreen() && SwapChain_)
 	{
 		CHECK_HR(SwapChain_->SetFullscreenState(false, nullptr), "failed to set full screen state");
 	}
