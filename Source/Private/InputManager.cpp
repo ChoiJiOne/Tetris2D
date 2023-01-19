@@ -73,7 +73,6 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		break;
 	
 	case WM_CLOSE:
-		DestroyWindow(WindowHandle);
 		WindowEvent = EWindowEvent::CLOSE;
 		break;
 
