@@ -91,6 +91,14 @@ public:
 	void SetSize(int32_t Width, int32_t Height);
 
 
+	/**
+	 * @brief 윈도우 창의 핸들을 얻습니다.
+	 * 
+	 * @return 윈도우 창의 핸들 값을 반환합니다.
+	 */
+	HWND GetHandle() { return WindowHandle_; }
+
+
 private:
 	/**
 	 * @brief 윈도우 창 핸들러입니다.
