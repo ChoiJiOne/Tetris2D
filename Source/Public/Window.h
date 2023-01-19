@@ -123,12 +123,6 @@ public:
 	bool IsFullScreen() const { return bIsFullScreen_; }
 
 
-	/**
-	 * @brief 윈도우 풀 스크린 모드를 설정합니다.
-	 */
-	void SetFullScreen(bool bIsFullScreen) { bIsFullScreen_ = bIsFullScreen; }
-		 
-
 private:
 	/**
 	 * @brief 윈도우 클래스를 등록합니다.
