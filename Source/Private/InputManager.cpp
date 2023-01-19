@@ -7,12 +7,10 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 	case WM_ACTIVATE:
 		if (LOWORD(WParam) == WA_INACTIVE)
 		{
-			bIsActive_ = false;
 			HandleWindowEvent(EWindowEvent::INACTIVE);
 		}
 		else
 		{
-			bIsActive_ = true;
 			HandleWindowEvent(EWindowEvent::ACTIVE);
 		}
 		break;
@@ -22,9 +20,9 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		break;
 
 	case WM_CLOSE:
-		bIsQuit_ = true;
-		HandleWindowEvent(EWindowEvent::CLOSE);
 		DestroyWindow(WindowHandle);
+
+		HandleWindowEvent(EWindowEvent::CLOSE);
 		break;
 
 	case WM_DESTROY:

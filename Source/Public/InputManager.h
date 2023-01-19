@@ -37,10 +37,10 @@ enum class EPressState
 enum class EWindowEvent
 {
 	CLOSE     = 0,
-	ACTIVE   = 1,
-	INACTIVE = 2,
-	RESIZE   = 3,
-	MINIMZED = 4,
+	ACTIVE    = 1,
+	INACTIVE  = 2,
+	RESIZE    = 3,
+	MINIMZED  = 4,
 	MAXIMIZED = 5,
 };
 
@@ -114,14 +114,6 @@ public:
 
 
 	/**
-	 * @brief QUIT 메시지가 감지되었는지 확인합니다.
-	 * 
-	 * @return QUIT 메시지가 감지되었다면 true, 그렇지 않다면 false를 반환합니다.
-	 */
-	bool IsDetectQuit() const { return bIsQuit_; }
-
-
-	/**
 	 * @brief 키의 입력 상태를 반환합니다.
 	 *
 	 * @param KeyCode - 검사를 수행할 키입니다.
@@ -176,18 +168,6 @@ private:
 
 
 private:
-	/**
-	 * @brief QUIT 메시지가 감지되었는지 확인합니다.
-	 */
-	bool bIsQuit_ = false;
-
-
-	/**
-	 * @brief 윈도우 창이 활성화 되었는지 확인합니다.
-	 */
-	bool bIsActive_ = false;
-
-
 	/**
 	 * @brief 업데이트 이전(Tick 호출 이전)의 키보드 상태입니다.
 	 */
