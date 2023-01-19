@@ -6,6 +6,10 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 
 	switch (Message)
 	{
+	case WM_CREATE:
+		WindowHandle_ = WindowHandle;
+		break;
+
 	case WM_ACTIVATE:
 		WindowEvent = (LOWORD(WParam) == WA_INACTIVE) ? EWindowEvent::INACTIVE : EWindowEvent::ACTIVE;
 		break;
@@ -102,6 +106,7 @@ void InputManager::Tick()
 {
 	PollEventMessage();
 	UpdateKeyboardState();
+	UpdateMousePosition();
 }
 
 EPressState InputManager::GetKeyPressState(int32_t KeyCode) const
@@ -161,6 +166,33 @@ void InputManager::UpdateKeyboardState()
 bool InputManager::IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const
 {
 	return (KeyboardState[KeyCode] & 0x80);
+}
+
+Vec2i InputManager::GetMousePositionFromScreen()
+{
+	POINT MousePosition;
+	CHECK(GetCursorPos(&MousePosition), "failed to get current mouse position");
+
+	return Vec2i(static_cast<int32_t>(MousePosition.x), static_cast<int32_t>(MousePosition.y));
+}
+
+Vec2i InputManager::GetMousePositionFromWindow()
+{
+	POINT MousePosition;
+	
+	CHECK(GetCursorPos(&MousePosition), "failed to get current mouse position");
+	CHECK(ScreenToClient(WindowHandle_, &MousePosition), "failed to convert mouse position");
+
+	return Vec2i(static_cast<int32_t>(MousePosition.x), static_cast<int32_t>(MousePosition.y));
+}
+
+void InputManager::UpdateMousePosition()
+{
+	PrevScreenMousePosition_ = CurrScreenMousePosition_;
+	PrevWindowMousePosition_ = CurrWindowMousePosition_;
+
+	CurrScreenMousePosition_ = GetMousePositionFromScreen();
+	CurrWindowMousePosition_ = GetMousePositionFromWindow();
 }
 
 void InputManager::HandleWindowEvent(const EWindowEvent& WindowEvent)

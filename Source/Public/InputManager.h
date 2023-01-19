@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Macro.h"
+#include "Vector.hpp"
 
 #include <cstdint>
 #include <vector>
@@ -131,6 +132,38 @@ public:
 	 * @return 키의 버튼 상태를 반환합니다.
 	 */
 	EPressState GetKeyPressState(int32_t KeyCode) const;
+
+
+	/**
+	 * @brief Tick 호출 이전의 화면 기준 마우스 위치를 얻습니다.
+	 * 
+	 * @return Tick 호출 이전의 화면 기준 마우스 위치를 반환합니다.
+	 */
+	Vec2i GetPrevMousePositionFromScreen() { return PrevScreenMousePosition_; }
+
+
+	/**
+	 * @brief Tick 호출 이전의 윈도우 기준 현재 마우스 위치를 얻습니다.
+	 * 
+	 * @return Tick 호출 이전의 윈도우 기준 마우스 위치를 반환합니다.
+	 */
+	Vec2i GetPrevMousePositionFromWindow() { return PrevWindowMousePosition_; }
+
+
+	/**
+	 * @brief Tick 호출 이후의 화면 기준 마우스 위치를 얻습니다.
+	 *
+	 * @return Tick 호출 이후의 화면 기준 마우스 위치를 반환합니다.
+	 */
+	Vec2i GetCurrMousePositionFromScreen() { return CurrScreenMousePosition_; }
+
+
+	/**
+	 * @brief Tick 호출 이후의 윈도우 기준 현재 마우스 위치를 얻습니다.
+	 *
+	 * @return Tick 호출 이후의 윈도우 기준 마우스 위치를 반환합니다.
+	 */
+	Vec2i GetCurrMousePositionFromWindow() { return CurrWindowMousePosition_; }
 	
 
 private:
@@ -170,6 +203,30 @@ private:
 
 
 	/**
+	 * @brief 모니터를 기준으로 현재 마우스의 위치를 얻습니다.
+	 * 
+	 * @return 모니터를 기준으로 현재 마우스의 (X, Y) 위치를 반환합니다.
+	 */
+	Vec2i GetMousePositionFromScreen();
+
+
+	/**
+	 * @brief 윈도우를 기준으로 현재 마우스의 위치를 얻습니다.
+	 * 
+	 * @see https://stackoverflow.com/questions/6423729/get-current-cursor-position
+	 * 
+	 * @return 윈도우를 기준으로 현재 마우스의 (X, Y) 위치를 반환합니다.
+	 */
+	Vec2i GetMousePositionFromWindow();
+
+
+	/**
+	 * @brief 마우스의 위치를 업데이트합니다.
+	 */
+	void UpdateMousePosition();
+
+
+	/**
 	 * @brief 윈도우 이벤트에 대응하는 루틴을 실행합니다.
 	 *
 	 * @param WindowEvent 실행할 윈도우 이벤트입니다.
@@ -178,6 +235,12 @@ private:
 
 
 private:
+	/**
+	 * @brief 이벤트 처리 대상이 되는 윈도우 핸들입니다.
+	 */
+	HWND WindowHandle_ = nullptr;
+
+
 	/**
 	 * @brief 윈도우 창의 크기가 변경 중인지 확인합니다.
 	 */
@@ -194,6 +257,30 @@ private:
 	 * @brief 업데이트 후(Tick 호출 후)의 키보드 상태입니다.
 	 */
 	std::vector<uint8_t> CurrKeyboardState_;
+
+
+	/**
+	 * @brief 업데이트 이전(Tick 호출 이전)의 화면 기준 마우스 위치입니다.
+	 */
+	Vec2i PrevScreenMousePosition_;
+
+
+	/**
+	 * @brief 업데이트 이전(Tick 호출 이전)의 윈도우 기준 마우스 위치입니다.
+	 */
+	Vec2i PrevWindowMousePosition_;
+
+
+	/**
+	 * @brief 업데이트 후(Tick 호출 후)의 화면 기준 마우스 위치입니다.
+	 */
+	Vec2i CurrScreenMousePosition_;
+	
+
+	/**
+	 * @brief 업데이트 이전(Tick 호출 후)의 윈도우 기준 마우스 위치입니다.
+	 */
+	Vec2i CurrWindowMousePosition_;
 
 
 	/**
