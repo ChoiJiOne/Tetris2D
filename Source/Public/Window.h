@@ -77,7 +77,15 @@ public:
 	 * 
 	 * @throws 윈도우 창의 크기를 얻는 데 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void GetSize(int32_t& Width, int32_t& Height);
+	template <typename T>
+	void GetSize(T& Width, T& Height)
+	{
+		RECT WindowRect = {};
+		CHECK(GetClientRect(WindowHandle_, &WindowRect), "failed to get client size");
+
+		Width = static_cast<T>(WindowRect.right - WindowRect.left);
+		Height = static_cast<T>(WindowRect.bottom - WindowRect.top);
+	}
 
 
 	/**
@@ -88,7 +96,12 @@ public:
 	 * 
 	 * @throws 윈도우 창의 크기를 설정하는 데 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void SetSize(int32_t Width, int32_t Height);
+	template<typename T>
+	void SetSize(T Width, T Height)
+	{
+		RECT Rect = { 0, 0, static_cast<LONG>(Width), static_cast<LONG>(Height) };
+		CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false), "failed to adjust window size");
+	}
 
 
 	/**

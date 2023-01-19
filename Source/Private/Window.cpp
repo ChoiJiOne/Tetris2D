@@ -34,16 +34,16 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 	WC.cbClsExtra = 0;
 	WC.cbWndExtra = 0;
 	WC.hInstance = GetModuleHandle(nullptr);
-	WC.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	WC.hCursor = LoadCursor(NULL, IDC_ARROW);
+	WC.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+	WC.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	WC.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	WC.lpszMenuName = NULL;
+	WC.lpszMenuName = nullptr;
 	WC.lpszClassName = Title.c_str();
-	WC.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	WC.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 	CHECK((RegisterClassEx(&WC) != 0), "failed to register window class");
 
 	RECT Rect = { 0, 0, Width, Height };
-	CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE), "failed to adjust window size");
+	CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false), "failed to adjust window size");
 
 	WindowHandle_ = CreateWindow(
 		Title.c_str(),
@@ -63,19 +63,4 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 
 Window::~Window()
 {
-}
-
-void Window::GetSize(int32_t& Width, int32_t& Height)
-{
-	RECT WindowRect = {};
-	CHECK(GetClientRect(WindowHandle_, &WindowRect), "failed to get client size");
-
-	Width = static_cast<int32_t>(WindowRect.right - WindowRect.left);
-	Height = static_cast<int32_t>(WindowRect.bottom - WindowRect.top);
-}
-
-void Window::SetSize(int32_t Width, int32_t Height)
-{
-	RECT Rect = { 0, 0, Width, Height };
-	CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE), "failed to adjust window size");
 }
