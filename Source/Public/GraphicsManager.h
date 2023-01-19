@@ -50,6 +50,22 @@ public:
 
 
 	/**
+	 * @brief 리소스를 만들고 디스플레이 어댑터의 기능을 열거하는 데 사용하는 디바이스를 얻습니다.
+	 * 
+	 * @return 디바이스의 포인터를 반환합니다.
+	 */
+	ID3D11Device* GetDevice() { return Device_; }
+
+
+	/**
+	 * @brief 디바이스가 소유한 리소스를 사용하여 파이프라인 상태를 설정하고 렌더링 명령을 생성하는 데 사용하는 컨텍스트를 얻습니다.
+	 * 
+	 * @return 컨텍스트의 포인터를 반환합니다.
+	 */
+	ID3D11DeviceContext* GetContext() { return Context_; }
+
+
+	/**
 	 * @brief 내부 버퍼 리소스의 크기를 변경합니다.
 	 * 
 	 * @throws 버퍼의 크기 변경에 실패하면 C++ 표준 예외를 던집니다.
