@@ -18,6 +18,7 @@ struct WindowConstructorParam
 	int32_t PositionY;
 	int32_t Width;
 	int32_t Height;
+	bool bIsFullScreen; /* 풀 스크린 모드 활성화 시 타이틀을 제외한 요소는 무시됩니다. */
 };
 
 
@@ -45,6 +46,7 @@ public:
 	 * @param PositionY 윈도우 왼쪽 상단의 Y좌표입니다.
 	 * @param Width 윈도우의 가로 크기입니다.
 	 * @param Height 윈도우의 세로 크기입니다.
+	 * @param bIsFullScreen 윈도우의 풀 스크린 모드 여부입니다. 활성화 되었다면 타이틀을 제외한 요소는 무시됩니다.
 	 * 
 	 * @throws 윈도우 창 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
@@ -53,7 +55,8 @@ public:
 		int32_t PositionX,
 		int32_t PositionY,
 		int32_t Width,
-		int32_t Height
+		int32_t Height,
+		bool bIsFullScreen
 	);
 
 
@@ -112,7 +115,38 @@ public:
 	HWND GetHandle() { return WindowHandle_; }
 
 
+	/**
+	 * @brief 윈도우 창이 풀 스크린 모드인지 확인합니다.
+	 * 
+	 * @return 윈도우 차이 풀 스크린 모드라면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	bool IsFullScreen() const { return bIsFullScreen_; }
+
+
+	/**
+	 * @brief 윈도우 풀 스크린 모드를 설정합니다.
+	 */
+	void SetFullScreen(bool bIsFullScreen) { bIsFullScreen_ = bIsFullScreen; }
+		 
+
 private:
+	/**
+	 * @brief 윈도우 클래스를 등록합니다.
+	 * 
+	 * @param ClassTitle 윈도우 클래스의 타이틀입니다.
+	 * 
+	 * @throws 윈도우 클래스 등록에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void RegisterWindowClass(const std::wstring& ClassTitle);
+
+
+private:
+	/**
+	 * @brief 윈도우 창이 풀 스크린 모드인지 확인합니다.
+	 */
+	bool bIsFullScreen_ = false;
+
+
 	/**
 	 * @brief 윈도우 창 핸들러입니다.
 	 *
