@@ -102,8 +102,10 @@ public:
 	 * @param Green 백 버퍼의 초기화할 초록 색상입니다.
 	 * @param Blue 백 버퍼의 초기화할 파랑 색상입니다.
 	 * @param Alpha 백 버퍼의 초기화할 알파 색상입니다.
+	 * @param Depth 깊이 버퍼의 초기화 할 값입니다. 기본 값은 1.0 입니다.
+	 * @param Stencil 스텐실 버퍼의 초기화 할 값입니다. 기본 값은 0입니다.
 	 */
-	void Clear(float Red, float Green, float Blue, float Alpha);
+	void Clear(float Red, float Green, float Blue, float Alpha, float Depth = 1.0f, uint8_t Stencil = 0);
 
 
 	/**
@@ -161,6 +163,30 @@ private:
 	HRESULT CreateRenderTargetView();
 
 
+	/**
+	 * @brief 깊이 스텐실 뷰를 생성합니다.
+	 * 
+	 * @return 깊이 스텐실 버퍼 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateDepthStencilView();
+
+
+	/**
+	 * @brief 디폴트 깊이 스텐실 상태를 생성합니다.
+	 * 
+	 * @return 깊이 스텐실 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateDepthStencilState();
+
+
+	/**
+	 * @brief 디폴트 레스터라이저 상태를 생성합니다.
+	 * 
+	 * @return 레스터라이저 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateRasterizerState();
+
+
 private:
 	/**
 	 * @brief 렌더링 대상이 되는 윈도우입니다.
@@ -214,4 +240,32 @@ private:
 	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
 	 */
 	ID3D11RenderTargetView* RenderTargetView_ = nullptr;
+
+
+	/**
+	 * @brief 깊이 스텐실 버퍼 리소스입니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11texture2d
+	 */
+	ID3D11Texture2D* DepthStencilBuffer_ = nullptr;
+
+
+	/**
+	 * @brief 깊이 스텐실 뷰 리소스입니다.
+	 * 
+	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11depthstencilview
+	 */
+	ID3D11DepthStencilView* DepthStencilView_ = nullptr;
+
+
+	/**
+	 * @brief 디폴트 깊이 스텐실 상태입니다.
+	 */
+	ID3D11DepthStencilState* DepthStencilState_ = nullptr;
+
+
+	/**
+	 * @brief 디폴트 레스터라이저 상태입니다.
+	 */
+	ID3D11RasterizerState* RasterizerState_ = nullptr;
 };

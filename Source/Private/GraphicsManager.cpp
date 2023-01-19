@@ -12,6 +12,12 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	CHECK_HR(CreateDeviceAndContext(RenderTargetWindow_->GetHandle()), "failed to create device and context");
 	CHECK_HR(CreateSwapChain(RenderTargetWindow_->GetHandle()), "failed to create swapchain");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
+	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view");
+	CHECK_HR(CreateDepthStencilState(), "failed to create default depth stencil state");
+	CHECK_HR(CreateRasterizerState(), "failed to create default rasterizer state");
+
+	Context_->OMSetDepthStencilState(DepthStencilState_, 1);
+	Context_->RSSetState(RasterizerState_);
 }
 
 void GraphicsManager::Cleanup()
@@ -21,6 +27,10 @@ void GraphicsManager::Cleanup()
 		CHECK_HR(SwapChain_->SetFullscreenState(false, nullptr), "failed to set full screen state");
 	}
 
+	SAFE_RELEASE(RasterizerState_);
+	SAFE_RELEASE(DepthStencilState_);
+	SAFE_RELEASE(DepthStencilView_);
+	SAFE_RELEASE(DepthStencilBuffer_);
 	SAFE_RELEASE(RenderTargetView_);
 	SAFE_RELEASE(SwapChain_);
 
@@ -45,6 +55,7 @@ void GraphicsManager::Resize()
 
 	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight,BackBufferFormat, 0), "failed to resize buffer");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
+	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view");
 }
 
 void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth, float MaxDepth)
@@ -69,12 +80,14 @@ void GraphicsManager::SetScreenViewport(float MinDepth, float MaxDepth)
 	SetViewport(0.0f, 0.0f, Width, Height, MinDepth, MaxDepth);
 }
 
-void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha)
+void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha, float Depth, uint8_t Stencil)
 {
-	Context_->OMSetRenderTargets(1, &RenderTargetView_, nullptr);
+	Context_->OMSetRenderTargets(1, &RenderTargetView_, DepthStencilView_);
 
 	float ColorRGBA[4] = { Red, Green, Blue, Alpha };
+
 	Context_->ClearRenderTargetView(RenderTargetView_, ColorRGBA);
+	Context_->ClearDepthStencilView(DepthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, Depth, Stencil);
 }
 
 void GraphicsManager::Present(bool bIsVSync)
@@ -203,4 +216,87 @@ HRESULT GraphicsManager::CreateRenderTargetView()
 	SAFE_RELEASE(BackBuffer);
 
 	return HR;
+}
+
+HRESULT GraphicsManager::CreateDepthStencilView()
+{
+	SAFE_RELEASE(DepthStencilView_);
+	SAFE_RELEASE(DepthStencilBuffer_);
+
+	HRESULT HR = S_OK;
+
+	uint32_t WindowWidth = 0, WindowHeight = 0;
+	RenderTargetWindow_->GetSize<uint32_t>(WindowWidth, WindowHeight);
+
+	D3D11_TEXTURE2D_DESC DepthStencilBufferDesc = {};
+
+	DepthStencilBufferDesc.Width = WindowWidth;
+	DepthStencilBufferDesc.Height = WindowHeight;
+	DepthStencilBufferDesc.MipLevels = 1;
+	DepthStencilBufferDesc.ArraySize = 1;
+	DepthStencilBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	DepthStencilBufferDesc.SampleDesc.Count = 1;
+	DepthStencilBufferDesc.SampleDesc.Quality = 0;
+	DepthStencilBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	DepthStencilBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	DepthStencilBufferDesc.CPUAccessFlags = 0;
+	DepthStencilBufferDesc.MiscFlags = 0;
+
+	HR = Device_->CreateTexture2D(&DepthStencilBufferDesc, nullptr, &DepthStencilBuffer_);
+
+	if (SUCCEEDED(HR))
+	{
+		D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc = {};
+
+		DepthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		DepthStencilViewDesc.Texture2D.MipSlice = 0;
+
+		HR = Device_->CreateDepthStencilView(DepthStencilBuffer_, &DepthStencilViewDesc, &DepthStencilView_);
+	}
+
+	return HR;
+}
+
+HRESULT GraphicsManager::CreateDepthStencilState()
+{
+	D3D11_DEPTH_STENCIL_DESC DepthStencilStateDesc = {};
+
+	DepthStencilStateDesc.DepthEnable = true;
+	DepthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	DepthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	DepthStencilStateDesc.StencilEnable = true;
+	DepthStencilStateDesc.StencilReadMask = 0xFF;
+	DepthStencilStateDesc.StencilWriteMask = 0xFF;
+
+	DepthStencilStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	DepthStencilStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	DepthStencilStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	DepthStencilStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	DepthStencilStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	DepthStencilStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	DepthStencilStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	DepthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	return Device_->CreateDepthStencilState(&DepthStencilStateDesc, &DepthStencilState_);
+}
+
+HRESULT GraphicsManager::CreateRasterizerState()
+{
+	D3D11_RASTERIZER_DESC RasterizerDesc;
+
+	RasterizerDesc.AntialiasedLineEnable = false;
+	RasterizerDesc.CullMode = D3D11_CULL_BACK;
+	RasterizerDesc.DepthBias = 0;
+	RasterizerDesc.DepthBiasClamp = 0.0f;
+	RasterizerDesc.DepthClipEnable = true;
+	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	RasterizerDesc.FrontCounterClockwise = false;
+	RasterizerDesc.MultisampleEnable = false;
+	RasterizerDesc.ScissorEnable = false;
+	RasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+	return Device_->CreateRasterizerState(&RasterizerDesc, &RasterizerState_);
 }
