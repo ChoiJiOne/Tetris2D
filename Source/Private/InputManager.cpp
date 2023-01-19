@@ -2,27 +2,75 @@
 
 LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
+	EWindowEvent WindowEvent = EWindowEvent::NONE;
+
 	switch (Message)
 	{
 	case WM_ACTIVATE:
-		if (LOWORD(WParam) == WA_INACTIVE)
-		{
-			HandleWindowEvent(EWindowEvent::INACTIVE);
-		}
-		else
-		{
-			HandleWindowEvent(EWindowEvent::ACTIVE);
-		}
+		WindowEvent = (LOWORD(WParam) == WA_INACTIVE) ? EWindowEvent::INACTIVE : EWindowEvent::ACTIVE;
 		break;
 
 	case WM_SIZE:
-		HandleWindowEvent(EWindowEvent::RESIZE);
+		switch (WParam)
+		{
+		case SIZE_MINIMIZED:
+			WindowEvent = EWindowEvent::MINIMZED;
+			break;
+
+		case SIZE_MAXIMIZED:
+			WindowEvent = EWindowEvent::MAXIMIZED;
+			break;
+
+		case SIZE_RESTORED:
+			WindowEvent = EWindowEvent::RESIZE;
+			break;
+
+		case SIZE_MAXHIDE:
+			WindowEvent = EWindowEvent::MAXHIDE;
+			break;
+
+		case SIZE_MAXSHOW:
+			WindowEvent = EWindowEvent::MAXSHOW;
+			break;
+
+		default:
+			ENFORCE_THROW_EXCEPTION("undefined WM_SIZE event");
+		}
 		break;
 
+	case WM_ENTERSIZEMOVE:
+		bIsResizing_ = true;
+		WindowEvent = EWindowEvent::ENTERSIZEMOVE;
+		break;
+
+	case WM_EXITSIZEMOVE:
+		bIsResizing_ = false;
+		WindowEvent = EWindowEvent::EXITSIZEMOVE;
+		break;
+
+	case WM_LBUTTONDOWN:
+		WindowEvent = EWindowEvent::LBUTTONDOWN;
+		break;
+
+	case WM_LBUTTONUP:
+		WindowEvent = EWindowEvent::LBUTTONUP;
+		break;
+
+	case WM_RBUTTONDOWN:
+		WindowEvent = EWindowEvent::RBUTTONDOWN;
+		break;
+
+	case WM_RBUTTONUP:
+		WindowEvent = EWindowEvent::RBUTTONUP;
+		break;
+
+	case WM_MOUSEMOVE:
+		WindowEvent = EWindowEvent::MOUSEMOVE;
+		break;
+	
 	case WM_CLOSE:
 		DestroyWindow(WindowHandle);
-
-		HandleWindowEvent(EWindowEvent::CLOSE);
+		WindowEvent = EWindowEvent::CLOSE;
 		break;
 
 	case WM_DESTROY:
@@ -33,6 +81,7 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		return DefWindowProc(WindowHandle, Message, WParam, LParam);
 	}
 
+	HandleWindowEvent(WindowEvent);
 	return 0;
 }
 

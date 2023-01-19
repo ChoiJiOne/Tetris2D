@@ -36,12 +36,22 @@ enum class EPressState
  */
 enum class EWindowEvent
 {
-	CLOSE     = 0,
-	ACTIVE    = 1,
-	INACTIVE  = 2,
-	RESIZE    = 3,
-	MINIMZED  = 4,
-	MAXIMIZED = 5,
+	NONE          = 0,
+	ACTIVE        = 1,
+	INACTIVE      = 2,
+	MINIMZED      = 3,
+	MAXIMIZED     = 4,
+	RESIZE        = 5,
+	ENTERSIZEMOVE = 6,
+	EXITSIZEMOVE  = 7,
+	LBUTTONDOWN   = 8,
+	LBUTTONUP     = 9,
+	RBUTTONDOWN   = 10,
+	RBUTTONUP     = 11,
+	MOUSEMOVE     = 12,
+	CLOSE         = 13,
+	MAXHIDE       = 14, /* https://learn.microsoft.com/ko-kr/windows/win32/winmsg/wm-size */
+	MAXSHOW       = 15, /* https://learn.microsoft.com/ko-kr/windows/win32/winmsg/wm-size */
 };
 
 
@@ -169,6 +179,12 @@ private:
 
 private:
 	/**
+	 * @brief 윈도우 창의 크기가 변경 중인지 확인합니다.
+	 */
+	bool bIsResizing_ = false;
+
+
+	/**
 	 * @brief 업데이트 이전(Tick 호출 이전)의 키보드 상태입니다.
 	 */
 	std::vector<uint8_t> PrevKeyboardState_;
@@ -181,7 +197,7 @@ private:
 
 
 	/**
-	 * 윈도우 이벤트 키 값에 대응하는 이벤트입니다.
+	 * @brief 윈도우 이벤트 키 값에 대응하는 이벤트입니다.
 	 */
 	std::unordered_map<EWindowEvent, std::function<void()>> WindowEvents_;
 };
