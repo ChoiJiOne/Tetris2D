@@ -4,6 +4,8 @@
 
 #include <d3d11.h>
 
+class Window;
+
 
 /**
  * @brief 그래픽 관련 처리를 수행합니다.
@@ -34,9 +36,11 @@ public:
 	/**
 	 * @brief GraphicsManager를 명시적으로 초기화합니다.
 	 * 
+	 * @param RenderTargetWindow 렌더링 대상이 되는 윈도우의 포인터입니다.
+	 * 
 	 * @throws 내부 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void Init();
+	void Init(Window* RenderTargetWindow);
 
 
 	/**
@@ -64,6 +68,15 @@ public:
 	 * @param MaxDepth 뷰 포트의 최대 깊이입니다. 기본 값은 1.0 입니다.
 	 */
 	void SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth = 0.0f, float MaxDepth = 1.0f);
+
+
+	/**
+	 * @brief 뷰 포트를 윈도우 창에 맞게 설정합니다.
+	 * 
+	 * @param MinDepth 뷰 포트의 최소 깊이입니다. 기본 값은 0.0 입니다.
+	 * @param MaxDepth 뷰 포트의 최대 깊이입니다. 기본 값은 1.0 입니다.
+	 */
+	void SetScreenViewport(float MinDepth = 0.0f, float MaxDepth = 1.0f);
 
 
 	/**
@@ -133,6 +146,12 @@ private:
 
 
 private:
+	/**
+	 * @brief 렌더링 대상이 되는 윈도우입니다.
+	 */
+	Window* RenderTargetWindow_ = nullptr;
+
+
 	/**
 	 * @brief 드라이버 타입입니다.
 	 *

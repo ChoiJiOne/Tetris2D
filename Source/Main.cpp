@@ -41,7 +41,7 @@ public:
 
 		Window_ = std::make_unique<Window>(L"Tetris2D", 200, 200, 1000, 800);
 
-		GraphicsManager::Get().Init();
+		GraphicsManager::Get().Init(Window_.get());
 
 		InputManager::Get().RegisterWindowEvent(
 			EWindowEvent::CLOSE,
@@ -53,17 +53,12 @@ public:
 		InputManager::Get().RegisterWindowEvent(
 			EWindowEvent::RESIZE,
 			[&]() {
-				int32_t Width = 0, Height = 0;
-				Window_->GetSize(Width, Height);
-
 				GraphicsManager::Get().Resize();
-				GraphicsManager::Get().SetViewport(0.0f, 0.0f, static_cast<float>(Width), static_cast<float>(Height));
+				GraphicsManager::Get().SetScreenViewport();
 			}
 		);
 
-		int32_t Width = 0, Height = 0;
-		Window_->GetSize(Width, Height);
-		GraphicsManager::Get().SetViewport(0.0f, 0.0f, static_cast<float>(Width), static_cast<float>(Height));
+		GraphicsManager::Get().SetScreenViewport();
  	}
 
 

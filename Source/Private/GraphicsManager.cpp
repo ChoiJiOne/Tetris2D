@@ -1,15 +1,16 @@
 #include "GraphicsManager.h"
+#include "Window.h"
 
 #include <array>
 #include <cstdint>
 #include <windows.h>
 
-void GraphicsManager::Init()
+void GraphicsManager::Init(Window* RenderTargetWindow)
 {
-	HWND CurrentWindowHandle = GetForegroundWindow();
+	RenderTargetWindow_ = RenderTargetWindow;
 
-	CHECK_HR(CreateDeviceAndContext(CurrentWindowHandle), "failed to create device and context");
-	CHECK_HR(CreateSwapChain(CurrentWindowHandle), "failed to create swapchain");
+	CHECK_HR(CreateDeviceAndContext(RenderTargetWindow_->GetHandle()), "failed to create device and context");
+	CHECK_HR(CreateSwapChain(RenderTargetWindow_->GetHandle()), "failed to create swapchain");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 }
 
@@ -29,18 +30,15 @@ void GraphicsManager::Cleanup()
 
 void GraphicsManager::Resize()
 {
-	HWND CurrentWindowHandle = GetForegroundWindow();
-	RECT CurrentWindowRect = {};
-	CHECK(GetClientRect(CurrentWindowHandle, &CurrentWindowRect), "failed to get client size");
-
-	uint32_t BackBufferWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
-	uint32_t BackBufferHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
+	uint32_t BackBufferWidth = 0, BackBufferHeight = 0;
 	DXGI_FORMAT BackBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	uint32_t BackBufferCount = 2;
 
 	SAFE_RELEASE(RenderTargetView_);
 
-	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight, BackBufferFormat, 0), "failed to resize buffer");
+	RenderTargetWindow_->GetSize<uint32_t>(BackBufferWidth, BackBufferHeight);
+
+	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight,BackBufferFormat, 0), "failed to resize buffer");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 }
 
@@ -56,6 +54,14 @@ void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, f
 	Viewport.MaxDepth = MaxDepth;
 
 	Context_->RSSetViewports(1, &Viewport);
+}
+
+void GraphicsManager::SetScreenViewport(float MinDepth, float MaxDepth)
+{
+	float Width = 0.0f, Height = 0.0f;
+	RenderTargetWindow_->GetSize<float>(Width, Height);
+
+	SetViewport(0.0f, 0.0f, Width, Height, MinDepth, MaxDepth);
 }
 
 void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha)
@@ -82,12 +88,6 @@ HRESULT GraphicsManager::CreateDeviceAndContext(HWND WindowHandle)
 	SAFE_RELEASE(Device_);
 
 	HRESULT HR = S_OK;
-
-	RECT CurrentWindowRect = {};
-	CHECK(GetClientRect(WindowHandle, &CurrentWindowRect), "failed to get client size");
-
-	uint32_t WindowWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
-	uint32_t WindowHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
 
 	uint32_t CreateDeviceFlags = 0;
 #ifdef DEBUG
@@ -153,11 +153,8 @@ HRESULT GraphicsManager::CreateSwapChain(HWND WindowHandle)
 		}
 	}
 
-	RECT CurrentWindowRect = {};
-	CHECK(GetClientRect(WindowHandle, &CurrentWindowRect), "failed to get client size");
-
-	uint32_t WindowWidth = static_cast<uint32_t>(CurrentWindowRect.right - CurrentWindowRect.left);
-	uint32_t WindowHeight = static_cast<uint32_t>(CurrentWindowRect.bottom - CurrentWindowRect.top);
+	uint32_t WindowWidth = 0, WindowHeight = 0;
+	RenderTargetWindow_->GetSize<uint32_t>(WindowWidth, WindowHeight);
 
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
 	SwapChainDesc.BufferCount = 2;
