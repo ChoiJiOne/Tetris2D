@@ -288,7 +288,7 @@ HRESULT GraphicsManager::CreateRasterizerState()
 	D3D11_RASTERIZER_DESC RasterizerDesc;
 
 	RasterizerDesc.AntialiasedLineEnable = false;
-	RasterizerDesc.CullMode = D3D11_CULL_BACK;
+	RasterizerDesc.CullMode = D3D11_CULL_NONE;
 	RasterizerDesc.DepthBias = 0;
 	RasterizerDesc.DepthBiasClamp = 0.0f;
 	RasterizerDesc.DepthClipEnable = true;
