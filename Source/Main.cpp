@@ -39,7 +39,11 @@ public:
 	{
 		SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
-		Window_ = std::make_unique<Window>(L"Tetris2D", 200, 200, 1000, 800);
+		Window_ = std::make_unique<Window>(
+			WindowConstructorParam {
+				L"Tetris2D", 200, 200, 1000, 800, false
+			}
+		);
 
 		GraphicsManager::Get().Init(Window_.get());
 
@@ -73,6 +77,11 @@ public:
 		{
 			Timer_.Tick();
 			InputManager::Get().Tick();
+
+			if (InputManager::Get().GetKeyPressState(VK_ESCAPE) == EPressState::PRESSED)
+			{
+				bIsDone_ = true;
+			}
 
 			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
 			GraphicsManager::Get().Present();
