@@ -41,7 +41,7 @@ public:
 
 		Window_ = std::make_unique<Window>(
 			WindowConstructorParam {
-				L"Tetris2D", 200, 200, 1000, 800, false
+				L"Tetris2D", 200, 200, 1000, 800, true
 			}
 		);
 
