@@ -43,6 +43,7 @@ workspace "Tetris2D"
             "%{source}",
             "%{source}/Public",
             "%{source}/Private",
+            "%{source}/Shader",
 
             "%{thirdparty}"
         }
@@ -52,6 +53,7 @@ workspace "Tetris2D"
             "%{source}/*",
             "%{source}/Public/*",
             "%{source}/Private/*",
+            "%{source}/Shader/*",
 
             "%{thirdparty}/stb/*",
         }
