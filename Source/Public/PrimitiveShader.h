@@ -4,6 +4,7 @@
 #include "Matrix.hpp"
 #include "Shader.h"
 
+#include <unordered_map>
 #include <vector>
 
 
@@ -23,6 +24,16 @@ public:
 		LINE     = 2,
 		TRIANGLE = 3,
 		QUAD     = 4
+	};
+
+
+	/**
+	 * @brief 기본 도형의 정점입니다.
+	 */
+	struct PrimitiveVertex
+	{
+		Vec3f Position;
+		Vec4f Color;
 	};
 
 
@@ -66,21 +77,13 @@ public:
 
 	/**
 	 * @brief 셰이더 및 렌더링에 필요한 요소를 파이프라인에 바인딩합니다.
+	 * 
+	 * @param Context 바인딩할 파이프라인 컨텍스트입니다.
 	 */
+	void Draw(ID3D11DeviceContext* Context);
 
 
 private:
-	/**
-	 * @brief 정점 셰이더에 전달할 정점 데이터를 생성합니다.
-	 * 
-	 * @param Device 정점 데이터를 생성할 때 사용할 디바이스입니다.
-	 * @param InputLayout 정점 셰이더에 전달할 정점 데이터 정보입니다.
-	 * 
-	 * @return 정점 데이터 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
-	 */
-	HRESULT CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayout);
-
-
 	/**
 	 * @brief 매 프레임 사용할 상수 버퍼를 생성합니다.
 	 * 
@@ -91,17 +94,63 @@ private:
 	HRESULT CreateEveryFrameConstantBuffer(ID3D11Device* Device);
 
 
+	/**
+	 * @brief 파이프라인에서 사용할 정점 버퍼를 생성합니다.
+	 * 
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param Vertices 정점 버퍼를 생성할 때 참조할 정점 목록입니다.
+	 * @param VertexBuffer 생성된 정점 버퍼입니다.
+	 * 
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateVertexBuffer(ID3D11Device* Device, const std::vector<PrimitiveVertex>& Vertices, ID3D11Buffer** VertexBuffer);
+
+
+	/**
+	 * @brief 파이프라인에서 사용할 인덱스 버퍼를 생성합니다.
+	 * 
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param Indices 인덱스 버퍼를 생성할 때 참조할 인덱스 목록입니다.
+	 * @param IndexBuffer 생성된 인덱스 버퍼입니다.
+	 * 
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer);
+
+
 private:
 	/**
-	 * @brief 렌더링 파이프라인의 정점 데이터를 정의합니다.
-	 * 
-	 * @note https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11inputlayout
+	 * @brief 매 프레임 변경되는 셰이더 내의 리소스입니다.
 	 */
-	ID3D11InputLayout* InputLayout_ = nullptr;
+	EveryFramConstantBuffer EveryFrameBufferResource_;
 
 
 	/**
-	 * @brief 셰이더 내의 상수 버퍼입니다.
+	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
 	ID3D11Buffer* EveryFramBuffer_ = nullptr;
+
+
+	/**
+	 * @brief 기본 도형의 정점 목록입니다.
+	 */
+	std::unordered_map<std::string, std::vector<PrimitiveVertex>> PrimitiveVertex_;
+
+
+	/**
+	 * @brief 기본 도형의 정점 버퍼입니다.
+	 */
+	std::unordered_map<std::string, ID3D11Buffer*> PrimitiveVertexBuffer_;
+
+
+	/**
+	 * @brief 기본 도형의 인덱스 목록입니다.
+	 */
+	std::unordered_map<std::string, std::vector<uint32_t>> PrimitiveIndex_;
+
+
+	/**
+	 * @brief 기본 도형의 인덱스 버퍼입니다.
+	 */
+	std::unordered_map<std::string, ID3D11Buffer*> PrimitiveIndexBuffer_;
 };

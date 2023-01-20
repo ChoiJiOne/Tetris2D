@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
+#include "PrimitiveShader.h"
 
 
 /**
@@ -27,6 +28,8 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		PrimitiveShader_.reset();
+
 		GraphicsManager::Get().Cleanup();
 		Window_.reset();
 	}
@@ -63,6 +66,13 @@ public:
 		);
 
 		GraphicsManager::Get().SetScreenViewport();
+
+
+		PrimitiveShader_ = std::make_unique<PrimitiveShader>(
+			GraphicsManager::Get().GetDevice(),
+			L"D:\\work\\Tetris2D\\Source\\Shader\\PrimitiveVS.hlsl",
+			L"D:\\work\\Tetris2D\\Source\\Shader\\PrimitivePS.hlsl"
+		);
  	}
 
 
@@ -83,7 +93,10 @@ public:
 				bIsDone_ = true;
 			}
 
-			GraphicsManager::Get().Clear(0.0f, 1.0f, 1.0f, 1.0f);
+			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+			PrimitiveShader_->Draw(GraphicsManager::Get().GetContext());
+
 			GraphicsManager::Get().Present();
 		}
 	}
@@ -106,6 +119,12 @@ private:
 	 * @brief 윈도우 창입니다.
 	 */
 	std::unique_ptr<Window> Window_ = nullptr;
+
+
+	/**
+	 * @brief 기본 도형을 렌더링 하기 위한 셰이더입니다.
+	 */
+	std::unique_ptr<PrimitiveShader> PrimitiveShader_ = nullptr;
 };
 
 
