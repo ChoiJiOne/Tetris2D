@@ -87,9 +87,21 @@ protected:
 
 protected:
 	/**
+	 * @brief 정점 셰이더 소스 리소스입니다.
+	 */
+	ID3DBlob* VertexShaderSource_ = nullptr;
+
+	
+	/**
 	 * @brief 정점 셰이더 리소스입니다.
 	 */
 	ID3D11VertexShader* VertexShader_ = nullptr;
+
+
+	/**
+	 * @brief 픽셀 셰이더 소스 리소스입니다.
+	 */
+	ID3DBlob* PixelShaderSource_ = nullptr;
 
 
 	/**

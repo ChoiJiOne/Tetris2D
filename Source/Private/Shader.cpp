@@ -10,7 +10,9 @@ Shader::Shader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath,
 
 Shader::~Shader()
 {
+	SAFE_RELEASE(VertexShaderSource_);
 	SAFE_RELEASE(VertexShader_);
+	SAFE_RELEASE(PixelShaderSource_);
 	SAFE_RELEASE(PixelShader_);
 }
 
@@ -49,16 +51,13 @@ HRESULT Shader::CompileShaderFromFile(const std::wstring& SourcePath, const std:
 HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
 {
 	HRESULT HR = S_OK;
-	ID3DBlob* VSBlob = nullptr;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", &VSBlob);
+	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", &VertexShaderSource_);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreateVertexShader(VSBlob->GetBufferPointer(), VSBlob->GetBufferSize(), nullptr, &VertexShader_);
+		HR = Device->CreateVertexShader(VertexShaderSource_->GetBufferPointer(), VertexShaderSource_->GetBufferSize(), nullptr, &VertexShader_);
 	}
-
-	SAFE_RELEASE(VSBlob);
 	
 	return HR;
 }
@@ -66,16 +65,13 @@ HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstr
 HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
 {
 	HRESULT HR = S_OK;
-	ID3DBlob* PSBlob = nullptr;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", &PSBlob);
+	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", &PixelShaderSource_);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreatePixelShader(PSBlob->GetBufferPointer(), PSBlob->GetBufferSize(), nullptr, &PixelShader_);
+		HR = Device->CreatePixelShader(PixelShaderSource_->GetBufferPointer(), PixelShaderSource_->GetBufferSize(), nullptr, &PixelShader_);
 	}
-
-	SAFE_RELEASE(PSBlob);
 
 	return HR;
 }
