@@ -85,7 +85,7 @@ protected:
 	HRESULT CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath);
 
 
-private:
+protected:
 	/**
 	 * @brief 정점 셰이더 리소스입니다.
 	 */
