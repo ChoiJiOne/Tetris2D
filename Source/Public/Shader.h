@@ -52,12 +52,10 @@ protected:
 	 * 
 	 * @param Device 셰이더 생성에 필요한 디바이스입니다.
 	 * @param SourcePath 정점 셰이더 소스의 경로입니다.
-	 * @param VSBlob 컴파일된 정점 셰이더입니다.
-	 * @param VertexShader 생성된 정점 셰이더 리소스입니다.
 	 * 
 	 * @return 셰이더 리소스 생성 결과를 반환합니다. 생성에 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** VSBlob, ID3D11VertexShader** VertexShader);
+	HRESULT CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath);
 
 
 	/**
@@ -65,12 +63,10 @@ protected:
 	 *
 	 * @param Device 셰이더 생성에 필요한 디바이스입니다. 
 	 * @param SourcePath 픽셀 셰이더 소스의 경로입니다.
-	 * @param PSBlob 컴파일된 픽셀 셰이더입니다.
-	 * @param PixelShader 생성된 픽셀 셰이더 리소스입니다.
 	 *
 	 * @return 셰이더 리소스 생성 결과를 반환합니다. 생성에 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** PSBlob, ID3D11PixelShader** PixelShader);
+	HRESULT CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath);
 
 
 	/**
@@ -80,11 +76,10 @@ protected:
 	 *
 	 * @param Device 정점 데이터를 생성할 때 사용할 디바이스입니다.
 	 * @param InputLayoutElements 정점 셰이더에 전달할 정점 데이터 정보입니다.
-	 * @param InputLayout 생성된 정점 데이터 리소스입니다.
 	 *
 	 * @return 정점 데이터 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements, ID3D11InputLayout** InputLayout);
+	HRESULT CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements);
 
 
 protected:

@@ -37,41 +37,49 @@ HRESULT Shader::CompileShaderFromFile(const std::wstring& SourcePath, const std:
 	return HR;
 }
 
-HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** VSBlob, ID3D11VertexShader** VertexShader)
+HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
 {
+	SAFE_RELEASE(VertexShaderSource_);
+	SAFE_RELEASE(VertexShader_);
+
 	HRESULT HR = S_OK;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", VSBlob);
+	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", &VertexShaderSource_);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreateVertexShader((*VSBlob)->GetBufferPointer(), (*VSBlob)->GetBufferSize(), nullptr, VertexShader);
+		HR = Device->CreateVertexShader(VertexShaderSource_->GetBufferPointer(), VertexShaderSource_->GetBufferSize(), nullptr, &VertexShader_);
 	}
 	
 	return HR;
 }
 
-HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** PSBlob, ID3D11PixelShader** PixelShader)
+HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
 {
+	SAFE_RELEASE(PixelShaderSource_);
+	SAFE_RELEASE(PixelShader_);
+
 	HRESULT HR = S_OK;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", PSBlob);
+	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", &PixelShaderSource_);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreatePixelShader((*PSBlob)->GetBufferPointer(), (*PSBlob)->GetBufferSize(), nullptr, PixelShader);
+		HR = Device->CreatePixelShader(PixelShaderSource_->GetBufferPointer(), PixelShaderSource_->GetBufferSize(), nullptr, &PixelShader_);
 	}
 
 	return HR;
 }
 
-HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements, ID3D11InputLayout** InputLayout)
+HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements)
 {
+	SAFE_RELEASE(InputLayout_);
+
 	return Device->CreateInputLayout(
 		&InputLayoutElements[0],
 		static_cast<uint32_t>(InputLayoutElements.size()),
 		VertexShaderSource_->GetBufferPointer(),
 		VertexShaderSource_->GetBufferSize(),
-		InputLayout
+		&InputLayout_
 	);
 }
