@@ -2,24 +2,12 @@
 
 #include <d3dcompiler.h>
 
-Shader::Shader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath, const std::wstring& PixelShaderSourcePath)
-{
-	CHECK_HR(CreateVertexShaderFromFile(Device, VertexShaderSourcePath), "failed to create vertex shader");
-	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
-}
-
 Shader::~Shader()
 {
 	SAFE_RELEASE(VertexShaderSource_);
 	SAFE_RELEASE(VertexShader_);
 	SAFE_RELEASE(PixelShaderSource_);
 	SAFE_RELEASE(PixelShader_);
-}
-
-void Shader::Bind(ID3D11DeviceContext* Context)
-{
-	Context->VSSetShader(VertexShader_, nullptr, 0);
-	Context->PSSetShader(PixelShader_, nullptr, 0);
 }
 
 HRESULT Shader::CompileShaderFromFile(const std::wstring& SourcePath, const std::string& EntryPoint, const std::string& ShaderModel, ID3DBlob** Blob)
