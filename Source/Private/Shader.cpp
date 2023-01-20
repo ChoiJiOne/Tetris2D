@@ -37,41 +37,41 @@ HRESULT Shader::CompileShaderFromFile(const std::wstring& SourcePath, const std:
 	return HR;
 }
 
-HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
+HRESULT Shader::CreateVertexShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** VSBlob, ID3D11VertexShader** VertexShader)
 {
 	HRESULT HR = S_OK;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", &VertexShaderSource_);
+	HR = CompileShaderFromFile(SourcePath, "main", "vs_4_0_level_9_3", VSBlob);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreateVertexShader(VertexShaderSource_->GetBufferPointer(), VertexShaderSource_->GetBufferSize(), nullptr, &VertexShader_);
+		HR = Device->CreateVertexShader((*VSBlob)->GetBufferPointer(), (*VSBlob)->GetBufferSize(), nullptr, VertexShader);
 	}
 	
 	return HR;
 }
 
-HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath)
+HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath, ID3DBlob** PSBlob, ID3D11PixelShader** PixelShader)
 {
 	HRESULT HR = S_OK;
 
-	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", &PixelShaderSource_);
+	HR = CompileShaderFromFile(SourcePath, "main", "ps_4_0_level_9_3", PSBlob);
 
 	if (SUCCEEDED(HR))
 	{
-		HR = Device->CreatePixelShader(PixelShaderSource_->GetBufferPointer(), PixelShaderSource_->GetBufferSize(), nullptr, &PixelShader_);
+		HR = Device->CreatePixelShader((*PSBlob)->GetBufferPointer(), (*PSBlob)->GetBufferSize(), nullptr, PixelShader);
 	}
 
 	return HR;
 }
 
-HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayout)
+HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements, ID3D11InputLayout** InputLayout)
 {
 	return Device->CreateInputLayout(
-		&InputLayout[0],
-		static_cast<uint32_t>(InputLayout.size()),
+		&InputLayoutElements[0],
+		static_cast<uint32_t>(InputLayoutElements.size()),
 		VertexShaderSource_->GetBufferPointer(),
 		VertexShaderSource_->GetBufferSize(),
-		&InputLayout_
+		InputLayout
 	);
 }
