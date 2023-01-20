@@ -76,11 +76,35 @@ public:
 
 
 	/**
-	 * @brief 셰이더 및 렌더링에 필요한 요소를 파이프라인에 바인딩합니다.
+	 * @brief 백 버퍼에 2D 점을 그립니다.
 	 * 
-	 * @param Context 바인딩할 파이프라인 컨텍스트입니다.
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param Position 점의 위치입니다.
+	 * @param Color 점의 색상입니다.
 	 */
-	void Draw(ID3D11DeviceContext* Context);
+	void RenderPoint(
+		ID3D11DeviceContext* Context,
+		const Vec3f& Position, const Vec4f& Color
+	);
+
+
+	/**
+	 * @brief 백 버퍼에 2D 삼각형을 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy 삼각형 정점의 중간점입니다.
+	 * @param ColorBy 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void RenderTriangle (
+		ID3D11DeviceContext* Context,
+		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
+		const Vec3f& PositionBy, const Vec4f& ColorBy,
+		const Vec3f& PositionTo, const Vec4f& ColorTo
+	);
 
 
 private:

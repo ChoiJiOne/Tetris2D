@@ -16,21 +16,50 @@ PrimitiveShader::PrimitiveShader(ID3D11Device* Device, const std::wstring& Verte
 	EveryFrameBufferResource_.View.Identify();
 	EveryFrameBufferResource_.Projection.Identify();
 
-	std::vector<PrimitiveVertex> Vertices = {
-		{ Vec3f(-0.5f, -0.5f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ Vec3f(+0.0f, +0.5f, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ Vec3f(+0.5f, -0.5f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f) }
-	};
+	std::vector<PrimitiveVertex> Vertices;
+	std::vector<uint32_t> Indices;
 
-	std::vector<uint32_t> Indices = {
-		0, 1, 2
-	};
+	Vertices.resize(1);
+	Indices = { 0 };
+	PrimitiveVertex_["Point"] = Vertices;
+	PrimitiveIndex_["Point"] = Indices;
+	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Point"], &PrimitiveVertexBuffer_["Point"]), "failed to create vertex buffer");
+	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Point"], &PrimitiveIndexBuffer_["Point"]), "failed to create index buffer");
 
+	Vertices.resize(2);
+	Indices = { 0, 1 };
+	PrimitiveVertex_["Line"] = Vertices;
+	PrimitiveIndex_["Line"] = Indices;
+	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Line"], &PrimitiveVertexBuffer_["Line"]), "failed to create vertex buffer");
+	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Line"], &PrimitiveIndexBuffer_["Line"]), "failed to create index buffer");
+
+	Vertices.resize(3);
+	Indices = { 0, 1, 2 };
 	PrimitiveVertex_["Triangle"] = Vertices;
 	PrimitiveIndex_["Triangle"] = Indices;
-
 	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Triangle"], &PrimitiveVertexBuffer_["Triangle"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Triangle"], &PrimitiveIndexBuffer_["Triangle"]), "failed to create index buffer");
+
+	Vertices.resize(3);
+	Indices = { 0, 1, 1, 2, 2, 0 };
+	PrimitiveVertex_["WireframeTriangle"] = Vertices;
+	PrimitiveIndex_["WireframeTriangle"] = Indices;
+	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["WireframeTriangle"], &PrimitiveVertexBuffer_["WireframeTriangle"]), "failed to create vertex buffer");
+	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["WireframeTriangle"], &PrimitiveIndexBuffer_["WireframeTriangle"]), "failed to create index buffer");
+
+	Vertices.resize(4);
+	Indices = { 0, 1, 2, 0, 2, 3};
+	PrimitiveVertex_["Quad"] = Vertices;
+	PrimitiveIndex_["Quad"] = Indices;
+	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Quad"], &PrimitiveVertexBuffer_["Quad"]), "failed to create vertex buffer");
+	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Quad"], &PrimitiveIndexBuffer_["Quad"]), "failed to create index buffer");
+
+	Vertices.resize(4);
+	Indices = {0, 1, 1, 2, 2, 3, 3, 0};
+	PrimitiveVertex_["WireframeQuad"] = Vertices;
+	PrimitiveIndex_["WireframeQuad"] = Indices;
+	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["WireframeQuad"], &PrimitiveVertexBuffer_["WireframeQuad"]), "failed to create vertex buffer");
+	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["WireframeQuad"], &PrimitiveIndexBuffer_["WireframeQuad"]), "failed to create index buffer");
 }
 
 PrimitiveShader::~PrimitiveShader()
@@ -49,8 +78,88 @@ PrimitiveShader::~PrimitiveShader()
 	SAFE_RELEASE(InputLayout_);
 }
 
-void PrimitiveShader::Draw(ID3D11DeviceContext* Context)
+void PrimitiveShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Position, const Vec4f& Color)
 {
+	PrimitiveVertex_["Point"][0].Position = Position;
+	PrimitiveVertex_["Point"][0].Color = Color;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["Point"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["Point"][0]),
+			PrimitiveVertex_["Point"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["Point"], 0);
+	}
+
+	uint32_t Stride = sizeof(PrimitiveVertex);
+	uint32_t Offset = 0;
+
+	Context->IASetVertexBuffers(0, 1, &PrimitiveVertexBuffer_["Point"], &Stride, &Offset);
+	Context->IASetIndexBuffer(PrimitiveIndexBuffer_["Point"], DXGI_FORMAT_R32_UINT, 0);
+	Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	Context->IASetInputLayout(InputLayout_);
+
+	Context->VSSetShader(VertexShader_, nullptr, 0);
+	Context->PSSetShader(PixelShader_, nullptr, 0);
+
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	{
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+		Buffer->World = EveryFrameBufferResource_.World;
+		Buffer->View = EveryFrameBufferResource_.View;
+		Buffer->Projection = EveryFrameBufferResource_.Projection;
+
+		Context->Unmap(EveryFramBuffer_, 0);
+	}
+
+	uint32_t BindSlot = 0;
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+
+	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Point"].size()), 0, 0);
+}
+
+void PrimitiveShader::RenderTriangle(
+	ID3D11DeviceContext* Context, 
+	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
+	const Vec3f& PositionBy, const Vec4f& ColorBy, 
+	const Vec3f& PositionTo, const Vec4f& ColorTo
+)
+{
+	PrimitiveVertex_["Triangle"][0].Position = PositionFrom;
+	PrimitiveVertex_["Triangle"][0].Color = ColorFrom;
+
+	PrimitiveVertex_["Triangle"][1].Position = PositionBy;
+	PrimitiveVertex_["Triangle"][1].Color = ColorBy;
+
+	PrimitiveVertex_["Triangle"][2].Position = PositionTo;
+	PrimitiveVertex_["Triangle"][2].Color = ColorTo;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["Triangle"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["Triangle"][0]),
+			PrimitiveVertex_["Triangle"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["Triangle"], 0);
+	}
+
 	uint32_t Stride = sizeof(PrimitiveVertex);
 	uint32_t Offset = 0;
 
@@ -63,11 +172,11 @@ void PrimitiveShader::Draw(ID3D11DeviceContext* Context)
 	Context->VSSetShader(VertexShader_, nullptr, 0);
 	Context->PSSetShader(PixelShader_, nullptr, 0);
 
-	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
 
-	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource)))
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
 	{
-		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(MappedResource.pData);
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
 
 		Buffer->World = EveryFrameBufferResource_.World;
 		Buffer->View = EveryFrameBufferResource_.View;
