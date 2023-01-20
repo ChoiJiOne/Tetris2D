@@ -8,8 +8,8 @@
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
-#include "PrimitiveShader.h"
-#include <DirectXMath.h>
+#include "Primitive2DRenderShader.h"
+
 
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다.
@@ -28,7 +28,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-		PrimitiveShader_.reset();
+		Primitive2DRenderShader_.reset();
 
 		GraphicsManager::Get().Cleanup();
 		Window_.reset();
@@ -69,10 +69,10 @@ public:
 
 		//DirectX::XMMatrixOrthographicRH()
 
-		PrimitiveShader_ = std::make_unique<PrimitiveShader>(
+		Primitive2DRenderShader_ = std::make_unique<Primitive2DRenderShader>(
 			GraphicsManager::Get().GetDevice(),
-			L"D:\\work\\Tetris2D\\Source\\Shader\\PrimitiveVS.hlsl",
-			L"D:\\work\\Tetris2D\\Source\\Shader\\PrimitivePS.hlsl"
+			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderVS.hlsl",
+			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderPS.hlsl"
 		);
  	}
 
@@ -116,7 +116,7 @@ public:
 				Vec3f(+1.0f, -1.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
 			);*/
 
-			PrimitiveShader_->RenderWireframeQuad(
+			Primitive2DRenderShader_->RenderWireframeQuad(
 				GraphicsManager::Get().GetContext(),
 				Vec3f(-1.0f * Delta, -1.0f * Delta, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
 				Vec3f(-1.0f * Delta, +1.0f * Delta, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
@@ -151,7 +151,7 @@ private:
 	/**
 	 * @brief 기본 도형을 렌더링 하기 위한 셰이더입니다.
 	 */
-	std::unique_ptr<PrimitiveShader> PrimitiveShader_ = nullptr;
+	std::unique_ptr<Primitive2DRenderShader> Primitive2DRenderShader_ = nullptr;
 };
 
 

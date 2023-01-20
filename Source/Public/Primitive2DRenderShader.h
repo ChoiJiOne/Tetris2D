@@ -9,9 +9,9 @@
 
 
 /**
- * @brief 기본 도형을 렌더링하는 셰이더입니다.
+ * @brief 2D 기본 도형을 렌더링하는 셰이더입니다.
  */
-class PrimitiveShader : public Shader
+class Primitive2DRenderShader : public Shader
 {
 public:
 	/**
@@ -60,19 +60,19 @@ public:
 	 * 셰이더 컴파일에 실패하면 C++ 표준 예외를 던집니다.
 	 * 셰이더 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	PrimitiveShader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath, const std::wstring& PixelShaderSourcePath);
+	Primitive2DRenderShader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath, const std::wstring& PixelShaderSourcePath);
 	
 
 	/**
 	 * @brief 기본 도형을 렌더링하는 셰이더의 가상 소멸자입니다.
 	 */
-	virtual ~PrimitiveShader();
+	virtual ~Primitive2DRenderShader();
 
 
 	/**
 	 * @brief 복사 생성자와 대입 연산자를 명시적으로 삭제합니다.
 	 */
-	DISALLOW_COPY_AND_ASSIGN(PrimitiveShader);
+	DISALLOW_COPY_AND_ASSIGN(Primitive2DRenderShader);
 
 
 	/**

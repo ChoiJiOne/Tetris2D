@@ -1,6 +1,6 @@
-#include "PrimitiveShader.h"
+#include "Primitive2DRenderShader.h"
 
-PrimitiveShader::PrimitiveShader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath, const std::wstring& PixelShaderSourcePath)
+Primitive2DRenderShader::Primitive2DRenderShader(ID3D11Device* Device, const std::wstring& VertexShaderSourcePath, const std::wstring& PixelShaderSourcePath)
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> InputLayoutElements = {
 		{ "POSITION", 0,    DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -62,7 +62,7 @@ PrimitiveShader::PrimitiveShader(ID3D11Device* Device, const std::wstring& Verte
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["WireframeQuad"], &PrimitiveIndexBuffer_["WireframeQuad"]), "failed to create index buffer");
 }
 
-PrimitiveShader::~PrimitiveShader()
+Primitive2DRenderShader::~Primitive2DRenderShader()
 {
 	for (auto& VertexBuffer : PrimitiveVertexBuffer_)
 	{
@@ -78,7 +78,7 @@ PrimitiveShader::~PrimitiveShader()
 	SAFE_RELEASE(InputLayout_);
 }
 
-void PrimitiveShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Position, const Vec4f& Color)
+void Primitive2DRenderShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Position, const Vec4f& Color)
 {
 	PrimitiveVertex_["Point"][0].Position = Position;
 	PrimitiveVertex_["Point"][0].Color = Color;
@@ -129,7 +129,7 @@ void PrimitiveShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Pos
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Point"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderLine(
+void Primitive2DRenderShader::RenderLine(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionTo, const Vec4f& ColorTo
@@ -187,7 +187,7 @@ void PrimitiveShader::RenderLine(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Line"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderFillTriangle(
+void Primitive2DRenderShader::RenderFillTriangle(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionBy, const Vec4f& ColorBy, 
@@ -249,7 +249,7 @@ void PrimitiveShader::RenderFillTriangle(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Triangle"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderWireframeTriangle(
+void Primitive2DRenderShader::RenderWireframeTriangle(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionBy, const Vec4f& ColorBy, 
@@ -311,7 +311,7 @@ void PrimitiveShader::RenderWireframeTriangle(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["WireframeTriangle"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderFillQuad(
+void Primitive2DRenderShader::RenderFillQuad(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionBy0, const Vec4f& ColorBy0, 
@@ -377,7 +377,7 @@ void PrimitiveShader::RenderFillQuad(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Quad"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderWireframeQuad(
+void Primitive2DRenderShader::RenderWireframeQuad(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionBy0, const Vec4f& ColorBy0, 
@@ -443,7 +443,7 @@ void PrimitiveShader::RenderWireframeQuad(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["WireframeQuad"].size()), 0, 0);
 }
 
-HRESULT PrimitiveShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
+HRESULT Primitive2DRenderShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
 {
 	D3D11_BUFFER_DESC EveryFrameBufferDesc = {};
 
@@ -457,7 +457,7 @@ HRESULT PrimitiveShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
 	return Device->CreateBuffer(&EveryFrameBufferDesc, nullptr, &EveryFramBuffer_);
 }
 
-HRESULT PrimitiveShader::CreateVertexBuffer(ID3D11Device* Device, const std::vector<PrimitiveVertex>& Vertices, ID3D11Buffer** VertexBuffer)
+HRESULT Primitive2DRenderShader::CreateVertexBuffer(ID3D11Device* Device, const std::vector<PrimitiveVertex>& Vertices, ID3D11Buffer** VertexBuffer)
 {
 	D3D11_BUFFER_DESC VertexBufferDesc = {};
 
@@ -476,7 +476,7 @@ HRESULT PrimitiveShader::CreateVertexBuffer(ID3D11Device* Device, const std::vec
 	return Device->CreateBuffer(&VertexBufferDesc, &VertexData, VertexBuffer);
 }
 
-HRESULT PrimitiveShader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer)
+HRESULT Primitive2DRenderShader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer)
 {
 	D3D11_BUFFER_DESC IndexBufferDesc;
 
