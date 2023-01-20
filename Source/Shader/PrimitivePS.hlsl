@@ -6,7 +6,7 @@ struct PS_INPUT
 
 struct PS_OUTPUT
 {
-    float Color : SV_TARGET0;
+    float4 Color : SV_TARGET0;
 };
 
 PS_OUTPUT main(PS_INPUT Input)
