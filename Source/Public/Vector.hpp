@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <cmath>
 #include <cstdint>
 #include <algorithm>
@@ -226,7 +225,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -242,7 +241,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -258,7 +257,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -274,7 +273,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -290,7 +289,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -303,7 +302,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -316,7 +315,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
@@ -329,7 +328,7 @@ struct Vector2
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
@@ -583,7 +582,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -600,7 +599,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -617,7 +616,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -634,7 +633,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -651,7 +650,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -664,7 +663,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -677,7 +676,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
@@ -690,7 +689,7 @@ struct Vector3
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
@@ -962,7 +961,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -980,7 +979,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 더합니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -998,7 +997,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -1016,7 +1015,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터에 대응하는 원소를 뺍니다.
 	 *
-	 * @param 연산을 수행할 피연산자입니다.
+	 * @param Instance 연산을 수행할 피연산자입니다.
 	 *
 	 * @return 연산을 수행한 벡터의 참조자를 반환합니다.
 	 */
@@ -1034,7 +1033,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -1047,7 +1046,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터가 일치하는지 확인합니다.
 	 *
-	 * @param 일치하는지 확인할 피연산자입니다.
+	 * @param Instance 일치하는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소가 모두 일치하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
@@ -1060,7 +1059,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
@@ -1073,7 +1072,7 @@ struct Vector4
 	/**
 	 * @brief 두 벡터가 일치하지 않는지 확인합니다.
 	 *
-	 * @param 일치하지 않는지 확인할 피연산자입니다.
+	 * @param Instance 일치하지 않는지 확인할 피연산자입니다.
 	 *
 	 * @return 두 벡터의 원소 중 하나라도 일치하지 않으면 true, 모두 일치하면 false를 반환합니다.
 	 */
