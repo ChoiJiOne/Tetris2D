@@ -187,7 +187,7 @@ void PrimitiveShader::RenderLine(
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Line"].size()), 0, 0);
 }
 
-void PrimitiveShader::RenderTriangle(
+void PrimitiveShader::RenderFillTriangle(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
 	const Vec3f& PositionBy, const Vec4f& ColorBy, 
@@ -247,6 +247,200 @@ void PrimitiveShader::RenderTriangle(
 	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
 
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Triangle"].size()), 0, 0);
+}
+
+void PrimitiveShader::RenderWireframeTriangle(
+	ID3D11DeviceContext* Context, 
+	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
+	const Vec3f& PositionBy, const Vec4f& ColorBy, 
+	const Vec3f& PositionTo, const Vec4f& ColorTo
+)
+{
+	PrimitiveVertex_["WireframeTriangle"][0].Position = PositionFrom;
+	PrimitiveVertex_["WireframeTriangle"][0].Color = ColorFrom;
+
+	PrimitiveVertex_["WireframeTriangle"][1].Position = PositionBy;
+	PrimitiveVertex_["WireframeTriangle"][1].Color = ColorBy;
+
+	PrimitiveVertex_["WireframeTriangle"][2].Position = PositionTo;
+	PrimitiveVertex_["WireframeTriangle"][2].Color = ColorTo;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["WireframeTriangle"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["WireframeTriangle"][0]),
+			PrimitiveVertex_["WireframeTriangle"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["WireframeTriangle"], 0);
+	}
+
+	uint32_t Stride = sizeof(PrimitiveVertex);
+	uint32_t Offset = 0;
+
+	Context->IASetVertexBuffers(0, 1, &PrimitiveVertexBuffer_["WireframeTriangle"], &Stride, &Offset);
+	Context->IASetIndexBuffer(PrimitiveIndexBuffer_["WireframeTriangle"], DXGI_FORMAT_R32_UINT, 0);
+	Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	Context->IASetInputLayout(InputLayout_);
+
+	Context->VSSetShader(VertexShader_, nullptr, 0);
+	Context->PSSetShader(PixelShader_, nullptr, 0);
+
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	{
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+		Buffer->World = EveryFrameBufferResource_.World;
+		Buffer->View = EveryFrameBufferResource_.View;
+		Buffer->Projection = EveryFrameBufferResource_.Projection;
+
+		Context->Unmap(EveryFramBuffer_, 0);
+	}
+
+	uint32_t BindSlot = 0;
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+
+	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["WireframeTriangle"].size()), 0, 0);
+}
+
+void PrimitiveShader::RenderFillQuad(
+	ID3D11DeviceContext* Context, 
+	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
+	const Vec3f& PositionBy0, const Vec4f& ColorBy0, 
+	const Vec3f& PositionBy1, const Vec4f& ColorBy1, 
+	const Vec3f& PositionTo, const Vec4f& ColorTo
+)
+{
+	PrimitiveVertex_["Quad"][0].Position = PositionFrom;
+	PrimitiveVertex_["Quad"][0].Color = ColorFrom;
+
+	PrimitiveVertex_["Quad"][1].Position = PositionBy0;
+	PrimitiveVertex_["Quad"][1].Color = ColorBy0;
+
+	PrimitiveVertex_["Quad"][2].Position = PositionBy1;
+	PrimitiveVertex_["Quad"][2].Color = ColorBy1;
+
+	PrimitiveVertex_["Quad"][3].Position = PositionTo;
+	PrimitiveVertex_["Quad"][3].Color = ColorTo;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["Quad"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["Quad"][0]),
+			PrimitiveVertex_["Quad"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["Quad"], 0);
+	}
+
+	uint32_t Stride = sizeof(PrimitiveVertex);
+	uint32_t Offset = 0;
+
+	Context->IASetVertexBuffers(0, 1, &PrimitiveVertexBuffer_["Quad"], &Stride, &Offset);
+	Context->IASetIndexBuffer(PrimitiveIndexBuffer_["Quad"], DXGI_FORMAT_R32_UINT, 0);
+	Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	Context->IASetInputLayout(InputLayout_);
+
+	Context->VSSetShader(VertexShader_, nullptr, 0);
+	Context->PSSetShader(PixelShader_, nullptr, 0);
+
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	{
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+		Buffer->World = EveryFrameBufferResource_.World;
+		Buffer->View = EveryFrameBufferResource_.View;
+		Buffer->Projection = EveryFrameBufferResource_.Projection;
+
+		Context->Unmap(EveryFramBuffer_, 0);
+	}
+
+	uint32_t BindSlot = 0;
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+
+	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Quad"].size()), 0, 0);
+}
+
+void PrimitiveShader::RenderWireframeQuad(
+	ID3D11DeviceContext* Context, 
+	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
+	const Vec3f& PositionBy0, const Vec4f& ColorBy0, 
+	const Vec3f& PositionBy1, const Vec4f& ColorBy1, 
+	const Vec3f& PositionTo, const Vec4f& ColorTo
+)
+{
+	PrimitiveVertex_["WireframeQuad"][0].Position = PositionFrom;
+	PrimitiveVertex_["WireframeQuad"][0].Color = ColorFrom;
+
+	PrimitiveVertex_["WireframeQuad"][1].Position = PositionBy0;
+	PrimitiveVertex_["WireframeQuad"][1].Color = ColorBy0;
+
+	PrimitiveVertex_["WireframeQuad"][2].Position = PositionBy1;
+	PrimitiveVertex_["WireframeQuad"][2].Color = ColorBy1;
+
+	PrimitiveVertex_["WireframeQuad"][3].Position = PositionTo;
+	PrimitiveVertex_["WireframeQuad"][3].Color = ColorTo;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["WireframeQuad"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["WireframeQuad"][0]),
+			PrimitiveVertex_["Quad"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["WireframeQuad"], 0);
+	}
+
+	uint32_t Stride = sizeof(PrimitiveVertex);
+	uint32_t Offset = 0;
+
+	Context->IASetVertexBuffers(0, 1, &PrimitiveVertexBuffer_["WireframeQuad"], &Stride, &Offset);
+	Context->IASetIndexBuffer(PrimitiveIndexBuffer_["WireframeQuad"], DXGI_FORMAT_R32_UINT, 0);
+	Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	Context->IASetInputLayout(InputLayout_);
+
+	Context->VSSetShader(VertexShader_, nullptr, 0);
+	Context->PSSetShader(PixelShader_, nullptr, 0);
+
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	{
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+		Buffer->World = EveryFrameBufferResource_.World;
+		Buffer->View = EveryFrameBufferResource_.View;
+		Buffer->Projection = EveryFrameBufferResource_.Projection;
+
+		Context->Unmap(EveryFramBuffer_, 0);
+	}
+
+	uint32_t BindSlot = 0;
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+
+	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["WireframeQuad"].size()), 0, 0);
 }
 
 HRESULT PrimitiveShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)

@@ -105,7 +105,7 @@ public:
 
 
 	/**
-	 * @brief 백 버퍼에 2D 삼각형을 그립니다.
+	 * @brief 백 버퍼에 2D 채움 삼각형을 그립니다.
 	 * 
 	 * @param Context 렌더링을 수행할 컨텍스트입니다.
 	 * @param PositionFrom 삼각형 정점의 시작점입니다.
@@ -115,10 +115,73 @@ public:
 	 * @param PositionTo 삼각형 정점의 끝점입니다.
 	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
 	 */
-	void RenderTriangle (
+	void RenderFillTriangle (
 		ID3D11DeviceContext* Context,
 		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
 		const Vec3f& PositionBy, const Vec4f& ColorBy,
+		const Vec3f& PositionTo, const Vec4f& ColorTo
+	);
+
+
+	/**
+	 * @brief 백 버퍼에 2D 와이어 프레임 삼각형을 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy 삼각형 정점의 중간점입니다.
+	 * @param ColorBy 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void RenderWireframeTriangle(
+		ID3D11DeviceContext* Context,
+		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
+		const Vec3f& PositionBy, const Vec4f& ColorBy,
+		const Vec3f& PositionTo, const Vec4f& ColorTo
+	);
+
+
+	/**
+	 * @brief 백 버퍼에 2D 채움 사각형을 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy0 삼각형 정점의 중간점입니다.
+	 * @param ColorBy0 삼각형 정점의 중간점 색상입니다.	 
+	 * @param PositionBy1 삼각형 정점의 중간점입니다.
+	 * @param ColorBy1 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void RenderFillQuad(
+		ID3D11DeviceContext* Context,
+		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
+		const Vec3f& PositionBy0, const Vec4f& ColorBy0,
+		const Vec3f& PositionBy1, const Vec4f& ColorBy1,
+		const Vec3f& PositionTo, const Vec4f& ColorTo
+	);
+
+
+	/**
+	 * @brief 백 버퍼에 2D 와이어 프레임 사각형을 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy0 삼각형 정점의 중간점입니다.
+	 * @param ColorBy0 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionBy1 삼각형 정점의 중간점입니다.
+	 * @param ColorBy1 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void RenderWireframeQuad(
+		ID3D11DeviceContext* Context,
+		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
+		const Vec3f& PositionBy0, const Vec4f& ColorBy0,
+		const Vec3f& PositionBy1, const Vec4f& ColorBy1,
 		const Vec3f& PositionTo, const Vec4f& ColorTo
 	);
 
