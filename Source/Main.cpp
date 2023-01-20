@@ -9,7 +9,7 @@
 #include "Vector.hpp"
 #include "Window.h"
 #include "PrimitiveShader.h"
-
+#include <DirectXMath.h>
 
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다.
@@ -67,6 +67,7 @@ public:
 
 		GraphicsManager::Get().SetScreenViewport();
 
+		//DirectX::XMMatrixOrthographicRH()
 
 		PrimitiveShader_ = std::make_unique<PrimitiveShader>(
 			GraphicsManager::Get().GetDevice(),
@@ -93,9 +94,35 @@ public:
 				bIsDone_ = true;
 			}
 
+			float Delta = std::abs(std::sin(Timer_.GetTotalTime()));
+
 			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-			PrimitiveShader_->Draw(GraphicsManager::Get().GetContext());
+			/*PrimitiveShader_->RenderPoint(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(Delta, 0.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
+			);
+
+			PrimitiveShader_->RenderLine(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(+Delta, 0.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(-Delta, 0.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
+			);
+
+			PrimitiveShader_->RenderWireframeTriangle(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(-1.0f, -1.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(+0.0f, +1.0f, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
+				Vec3f(+1.0f, -1.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
+			);*/
+
+			PrimitiveShader_->RenderWireframeQuad(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(-1.0f * Delta, -1.0f * Delta, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(-1.0f * Delta, +1.0f * Delta, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
+				Vec3f(+1.0f * Delta, +1.0f * Delta, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f),
+				Vec3f(+1.0f * Delta, -1.0f * Delta, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
+			);
 
 			GraphicsManager::Get().Present();
 		}
