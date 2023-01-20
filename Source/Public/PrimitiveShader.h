@@ -89,6 +89,22 @@ public:
 
 
 	/**
+	 * @brief 백 버퍼에 2D 선을 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PositionFrom 선의 시작점입니다.
+	 * @param ColorFrom 선의 시작점 색상입니다.
+	 * @param PositionTo 선의 끝점입니다.
+	 * @param ColorTo 선의 끝점 색상입니다.
+	 */
+	void RenderLine(
+		ID3D11DeviceContext* Context,
+		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
+		const Vec3f& PositionTo, const Vec4f& ColorTo
+	);
+
+
+	/**
 	 * @brief 백 버퍼에 2D 삼각형을 그립니다.
 	 * 
 	 * @param Context 렌더링을 수행할 컨텍스트입니다.

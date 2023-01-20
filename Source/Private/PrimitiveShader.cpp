@@ -129,6 +129,64 @@ void PrimitiveShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Pos
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Point"].size()), 0, 0);
 }
 
+void PrimitiveShader::RenderLine(
+	ID3D11DeviceContext* Context, 
+	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
+	const Vec3f& PositionTo, const Vec4f& ColorTo
+)
+{
+	PrimitiveVertex_["Line"][0].Position = PositionFrom;
+	PrimitiveVertex_["Line"][0].Color = ColorFrom;
+
+	PrimitiveVertex_["Line"][1].Position = PositionTo;
+	PrimitiveVertex_["Line"][1].Color = ColorTo;
+
+	D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(PrimitiveVertexBuffer_["Line"], 0, D3D11_MAP_WRITE_DISCARD, 0, &VertexBufferMappedResource)))
+	{
+		PrimitiveVertex* Buffer = reinterpret_cast<PrimitiveVertex*>(VertexBufferMappedResource.pData);
+
+		std::memcpy(
+			Buffer,
+			reinterpret_cast<const void*>(&PrimitiveVertex_["Line"][0]),
+			PrimitiveVertex_["Line"].size() * sizeof(PrimitiveVertex)
+		);
+
+		Context->Unmap(PrimitiveVertexBuffer_["Line"], 0);
+	}
+
+	uint32_t Stride = sizeof(PrimitiveVertex);
+	uint32_t Offset = 0;
+
+	Context->IASetVertexBuffers(0, 1, &PrimitiveVertexBuffer_["Line"], &Stride, &Offset);
+	Context->IASetIndexBuffer(PrimitiveIndexBuffer_["Line"], DXGI_FORMAT_R32_UINT, 0);
+	Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	Context->IASetInputLayout(InputLayout_);
+
+	Context->VSSetShader(VertexShader_, nullptr, 0);
+	Context->PSSetShader(PixelShader_, nullptr, 0);
+
+	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
+
+	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	{
+		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+		Buffer->World = EveryFrameBufferResource_.World;
+		Buffer->View = EveryFrameBufferResource_.View;
+		Buffer->Projection = EveryFrameBufferResource_.Projection;
+
+		Context->Unmap(EveryFramBuffer_, 0);
+	}
+
+	uint32_t BindSlot = 0;
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+
+	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_["Line"].size()), 0, 0);
+}
+
 void PrimitiveShader::RenderTriangle(
 	ID3D11DeviceContext* Context, 
 	const Vec3f& PositionFrom, const Vec4f& ColorFrom, 
