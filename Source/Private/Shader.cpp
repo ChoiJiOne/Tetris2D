@@ -4,6 +4,7 @@
 
 Shader::~Shader()
 {
+	SAFE_RELEASE(InputLayout_);
 	SAFE_RELEASE(VertexShaderSource_);
 	SAFE_RELEASE(VertexShader_);
 	SAFE_RELEASE(PixelShaderSource_);
@@ -62,4 +63,15 @@ HRESULT Shader::CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstri
 	}
 
 	return HR;
+}
+
+HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayout)
+{
+	return Device->CreateInputLayout(
+		&InputLayout[0],
+		static_cast<uint32_t>(InputLayout.size()),
+		VertexShaderSource_->GetBufferPointer(),
+		VertexShaderSource_->GetBufferSize(),
+		&InputLayout_
+	);
 }

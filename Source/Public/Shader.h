@@ -69,6 +69,19 @@ protected:
 	HRESULT CreatePixelShaderFromFile(ID3D11Device* Device, const std::wstring& SourcePath);
 
 
+	/**
+	 * @brief 정점 셰이더에 전달할 정점 데이터를 생성합니다.
+	 *
+	 * @note 이 메서드를 호출하기 전에 정점 셰이더가 컴파일 되어야 합니다.
+	 *
+	 * @param Device 정점 데이터를 생성할 때 사용할 디바이스입니다.
+	 * @param InputLayout 정점 셰이더에 전달할 정점 데이터 정보입니다.
+	 *
+	 * @return 정점 데이터 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayout);
+
+
 protected:
 	/**
 	 * @brief 정점 셰이더 소스 리소스입니다.
@@ -92,4 +105,12 @@ protected:
 	 * @brief 픽셀 셰이더 리소스입니다.
 	 */
 	ID3D11PixelShader* PixelShader_ = nullptr;
+
+
+	/**
+	 * @brief 렌더링 파이프라인의 정점 데이터를 정의합니다.
+	 * 
+	 * @note https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11inputlayout
+	 */
+	ID3D11InputLayout* InputLayout_ = nullptr;
 };
