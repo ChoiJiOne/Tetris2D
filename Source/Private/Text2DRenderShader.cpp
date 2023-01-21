@@ -40,7 +40,7 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 
 	float AtlasSize = static_cast<float>(FontResource.GetAtlasSize());
 
-	Vec3f Position(Center.x - TextWidth / 2.0f, Center.y + TextHeight / 2.0f, Center.z);
+	Vec3f Position(Center.x - TextWidth / 2.0f, Center.y - TextHeight / 2.0f, Center.z);
 
 	for (auto& Unicode : Text)
 	{
@@ -49,16 +49,16 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 		float UniucodeWidth = static_cast<float>(UnicodeInfo.Position1.x - UnicodeInfo.Position0.x);
 		float UniucodeHeight = static_cast<float>(UnicodeInfo.Position1.y - UnicodeInfo.Position0.y);
 
-		CharacterVertex_[0].Position = Vec3f(Position.x, Position.y - UniucodeHeight - UnicodeInfo.YOffset - TextHeight, Position.z);
+		CharacterVertex_[0].Position = Vec3f(Position.x, Position.y - UniucodeHeight - UnicodeInfo.YOffset, Position.z);
 		CharacterVertex_[0].UV = Vec2f(static_cast<float>(UnicodeInfo.Position0.x) / AtlasSize, static_cast<float>(UnicodeInfo.Position1.y) / AtlasSize);
 
-		CharacterVertex_[1].Position = Vec3f(Position.x, Position.y - UnicodeInfo.YOffset - TextHeight, Position.z);
+		CharacterVertex_[1].Position = Vec3f(Position.x, Position.y - UnicodeInfo.YOffset, Position.z);
 		CharacterVertex_[1].UV = Vec2f(static_cast<float>(UnicodeInfo.Position0.x) / AtlasSize, static_cast<float>(UnicodeInfo.Position0.y) / AtlasSize);
 
-		CharacterVertex_[2].Position = Vec3f(Position.x + UniucodeWidth, Position.y - UnicodeInfo.YOffset - TextHeight, Position.z);
+		CharacterVertex_[2].Position = Vec3f(Position.x + UniucodeWidth, Position.y - UnicodeInfo.YOffset, Position.z);
 		CharacterVertex_[2].UV = Vec2f(static_cast<float>(UnicodeInfo.Position1.x) / AtlasSize, static_cast<float>(UnicodeInfo.Position0.y) / AtlasSize);
 
-		CharacterVertex_[3].Position = Vec3f(Position.x + UniucodeWidth, Position.y - UniucodeHeight - UnicodeInfo.YOffset - TextHeight, Position.z);
+		CharacterVertex_[3].Position = Vec3f(Position.x + UniucodeWidth, Position.y - UniucodeHeight - UnicodeInfo.YOffset, Position.z);
 		CharacterVertex_[3].UV = Vec2f(static_cast<float>(UnicodeInfo.Position1.x) / AtlasSize, static_cast<float>(UnicodeInfo.Position1.y) / AtlasSize);
 
 		D3D11_MAPPED_SUBRESOURCE VertexBufferMappedResource;
