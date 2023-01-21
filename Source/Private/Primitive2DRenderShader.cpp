@@ -75,7 +75,6 @@ Primitive2DRenderShader::~Primitive2DRenderShader()
 	}
 
 	SAFE_RELEASE(EveryFramBuffer_);
-	SAFE_RELEASE(InputLayout_);
 }
 
 void Primitive2DRenderShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Position, const Vec4f& Color)
