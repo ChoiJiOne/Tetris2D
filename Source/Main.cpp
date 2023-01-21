@@ -75,6 +75,23 @@ public:
 			}
 		);
 
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::MAXIMIZED,
+			[&]() {
+				GraphicsManager::Get().Resize();
+				GraphicsManager::Get().SetScreenViewport();
+
+				float Width = 0.0f, Height = 0.0f;
+				Window_->GetSize<float>(Width, Height);
+				Primitive2DRenderShader_->SetProjectionMatrix(
+					GetOrthographicMatrix(
+						Width, Height,
+						0.0001f, 100.0f
+					)
+				);
+			}
+		);
+
 		GraphicsManager::Get().SetScreenViewport();
 
 		Primitive2DRenderShader_ = std::make_unique<Primitive2DRenderShader>(
@@ -113,27 +130,7 @@ public:
 				bIsDone_ = true;
 			}
 
-			float Delta = std::abs(std::sin(Timer_.GetTotalTime()));
-
 			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
-
-			/*PrimitiveShader_->RenderPoint(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(Delta, 0.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-			);
-
-			PrimitiveShader_->RenderLine(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(+Delta, 0.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
-				Vec3f(-Delta, 0.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
-			);
-
-			PrimitiveShader_->RenderWireframeTriangle(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(-1.0f, -1.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
-				Vec3f(+0.0f, +1.0f, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
-				Vec3f(+1.0f, -1.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
-			);*/
 
 			Primitive2DRenderShader_->RenderWireframeQuad(
 				GraphicsManager::Get().GetContext(),
