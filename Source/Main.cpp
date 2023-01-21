@@ -4,6 +4,7 @@
 #include "GraphicsManager.h"
 #include "InputManager.h"
 #include "Macro.h"
+#include "Math.hpp"
 #include "Random.h"
 #include "Timer.h"
 #include "Vector.hpp"
@@ -62,17 +63,35 @@ public:
 			[&]() {
 				GraphicsManager::Get().Resize();
 				GraphicsManager::Get().SetScreenViewport();
+
+				float Width = 0.0f, Height = 0.0f;
+				Window_->GetSize<float>(Width, Height);
+				Primitive2DRenderShader_->SetProjectionMatrix(
+					GetOrthographicMatrix(
+						Width, Height,
+						0.0001f, 100.0f
+					)
+				);
 			}
 		);
 
 		GraphicsManager::Get().SetScreenViewport();
 
-		//DirectX::XMMatrixOrthographicRH()
-
 		Primitive2DRenderShader_ = std::make_unique<Primitive2DRenderShader>(
 			GraphicsManager::Get().GetDevice(),
 			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderVS.hlsl",
 			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderPS.hlsl"
+		);
+
+		GraphicsManager::Get().SetZBuffer(false);
+
+		float Width = 0.0f, Height = 0.0f;
+		Window_->GetSize<float>(Width, Height);
+		Primitive2DRenderShader_->SetProjectionMatrix(
+			GetOrthographicMatrix(
+				Width, Height,
+				0.0001f, 100.0f
+			)
 		);
  	}
 
@@ -118,10 +137,10 @@ public:
 
 			Primitive2DRenderShader_->RenderWireframeQuad(
 				GraphicsManager::Get().GetContext(),
-				Vec3f(-1.0f * Delta, -1.0f * Delta, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
-				Vec3f(-1.0f * Delta, +1.0f * Delta, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
-				Vec3f(+1.0f * Delta, +1.0f * Delta, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f),
-				Vec3f(+1.0f * Delta, -1.0f * Delta, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
+				Vec3f(-100.0f, -100.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(-100.0f, +100.0f, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
+				Vec3f(+100.0f, +100.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f),
+				Vec3f(+100.0f, -100.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
 			);
 
 			GraphicsManager::Get().Present();
