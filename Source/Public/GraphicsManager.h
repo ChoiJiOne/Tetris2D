@@ -96,6 +96,14 @@ public:
 
 
 	/**
+	 * @brief Z 버퍼 활성화 여부를 설정합니다.
+	 * 
+	 * @param bIsEnable Z 버퍼 활성화 여부입니다.
+	 */
+	void SetZBuffer(bool bIsEnable);
+
+
+	/**
 	 * @brief 백 버퍼를 초기화합니다.
 	 * 
 	 * @param Red 백 버퍼의 초기화할 빨강 색상입니다.
@@ -174,9 +182,12 @@ private:
 	/**
 	 * @brief 디폴트 깊이 스텐실 상태를 생성합니다.
 	 * 
+	 * @param DepthStencilState 생성한 깊이 스텐실 상태를 저장할 포인터입니다.
+	 * @param bIsEnableZ 깊이 버퍼 활성화 여부입니다.
+	 * 
 	 * @return 깊이 스텐실 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateDepthStencilState();
+	HRESULT CreateDepthStencilState(ID3D11DepthStencilState**DepthStencilState, bool bIsEnableZ);
 
 
 	/**
@@ -259,9 +270,15 @@ private:
 
 
 	/**
-	 * @brief 디폴트 깊이 스텐실 상태입니다.
+	 * @brief Z버퍼가 활성화된 깊이 스텐실 상태입니다.
 	 */
-	ID3D11DepthStencilState* DepthStencilState_ = nullptr;
+	ID3D11DepthStencilState* EnableZDepthStencilState_ = nullptr;
+
+
+	/**
+	 * @brief Z버퍼가 비활성화된 깊이 스텐실 상태입니다.
+	 */
+	ID3D11DepthStencilState* DisableZDepthStencilState_ = nullptr;
 
 
 	/**

@@ -13,10 +13,11 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	CHECK_HR(CreateSwapChain(RenderTargetWindow_->GetHandle()), "failed to create swapchain");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view");
-	CHECK_HR(CreateDepthStencilState(), "failed to create default depth stencil state");
+	CHECK_HR(CreateDepthStencilState(&EnableZDepthStencilState_, true), "failed to create enable z depth stencil state");
+	CHECK_HR(CreateDepthStencilState(&DisableZDepthStencilState_, false), "failed to create disable z depth stencil state");
 	CHECK_HR(CreateRasterizerState(), "failed to create default rasterizer state");
 
-	Context_->OMSetDepthStencilState(DepthStencilState_, 1);
+	Context_->OMSetDepthStencilState(EnableZDepthStencilState_, 1);
 	Context_->RSSetState(RasterizerState_);
 }
 
@@ -28,7 +29,8 @@ void GraphicsManager::Cleanup()
 	}
 
 	SAFE_RELEASE(RasterizerState_);
-	SAFE_RELEASE(DepthStencilState_);
+	SAFE_RELEASE(DisableZDepthStencilState_);
+	SAFE_RELEASE(EnableZDepthStencilState_);
 	SAFE_RELEASE(DepthStencilView_);
 	SAFE_RELEASE(DepthStencilBuffer_);
 	SAFE_RELEASE(RenderTargetView_);
@@ -78,6 +80,13 @@ void GraphicsManager::SetScreenViewport(float MinDepth, float MaxDepth)
 	RenderTargetWindow_->GetSize<float>(Width, Height);
 
 	SetViewport(0.0f, 0.0f, Width, Height, MinDepth, MaxDepth);
+}
+
+void GraphicsManager::SetZBuffer(bool bIsEnable)
+{
+	ID3D11DepthStencilState* DepthStencilState = bIsEnable ? EnableZDepthStencilState_ : DisableZDepthStencilState_;
+
+	Context_->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
 void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha, float Depth, uint8_t Stencil)
@@ -258,11 +267,11 @@ HRESULT GraphicsManager::CreateDepthStencilView()
 	return HR;
 }
 
-HRESULT GraphicsManager::CreateDepthStencilState()
+HRESULT GraphicsManager::CreateDepthStencilState(ID3D11DepthStencilState** DepthStencilState, bool bIsEnableZ)
 {
 	D3D11_DEPTH_STENCIL_DESC DepthStencilStateDesc = {};
 
-	DepthStencilStateDesc.DepthEnable = true;
+	DepthStencilStateDesc.DepthEnable = bIsEnableZ;
 	DepthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	DepthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
@@ -280,7 +289,7 @@ HRESULT GraphicsManager::CreateDepthStencilState()
 	DepthStencilStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	DepthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	return Device_->CreateDepthStencilState(&DepthStencilStateDesc, &DepthStencilState_);
+	return Device_->CreateDepthStencilState(&DepthStencilStateDesc, DepthStencilState);
 }
 
 HRESULT GraphicsManager::CreateRasterizerState()
