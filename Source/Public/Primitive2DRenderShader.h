@@ -63,6 +63,30 @@ public:
 
 
 	/**
+	 * @brief 셰이더에서 사용하는 월드 행렬을 설정합니다.
+	 * 
+	 * @param World 설정할 월드 행렬입니다.
+	 */
+	void SetWorldMatrix(const Matrix4x4F& World) { EveryFrameBufferResource_.World = World; }
+
+
+	/**
+	 * @brief 셰이더에서 사용하는 시야 행렬을 설정합니다.
+	 * 
+	 * @param View 설정할 시야 행렬입니다.
+	 */
+	void SetViewMatrix(const Matrix4x4F& View) { EveryFrameBufferResource_.View = View; }
+
+
+	/**
+	 * @brief 셰이더에서 사용하는 투영 행렬을 설정합니다.
+	 * 
+	 * @param Projection 설정할 투영 행렬입니다.
+	 */
+	void SetProjectionMatrix(const Matrix4x4F& Projection) { EveryFrameBufferResource_.Projection = Projection; }
+
+
+	/**
 	 * @brief 백 버퍼에 2D 점을 그립니다.
 	 * 
 	 * @param Context 렌더링을 수행할 컨텍스트입니다.
