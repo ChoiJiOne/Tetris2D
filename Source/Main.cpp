@@ -6,10 +6,13 @@
 #include "Macro.h"
 #include "Math.hpp"
 #include "Random.h"
+#include "Texture2D.h"
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
+
 #include "Primitive2DRenderShader.h"
+#include "Texture2DRenderShader.h"
 
 
 /**
@@ -29,6 +32,8 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		Texture_.reset();
+		Texture2DRenderShader_.reset();
 		Primitive2DRenderShader_.reset();
 
 		GraphicsManager::Get().Cleanup();
@@ -72,6 +77,13 @@ public:
 						0.0001f, 100.0f
 					)
 				);
+
+				Texture2DRenderShader_->SetProjectionMatrix(
+					GetOrthographicMatrix(
+						Width, Height,
+						0.0001f, 100.0f
+					)
+				);
 			}
 		);
 
@@ -89,6 +101,13 @@ public:
 						0.0001f, 100.0f
 					)
 				);
+
+				Texture2DRenderShader_->SetProjectionMatrix(
+					GetOrthographicMatrix(
+						Width, Height,
+						0.0001f, 100.0f
+					)
+				);
 			}
 		);
 
@@ -100,7 +119,14 @@ public:
 			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderPS.hlsl"
 		);
 
+		Texture2DRenderShader_ = std::make_unique<Texture2DRenderShader>(
+			GraphicsManager::Get().GetDevice(),
+			L"D:\\work\\Tetris2D\\Source\\Shader\\Texture2DRenderVS.hlsl",
+			L"D:\\work\\Tetris2D\\Source\\Shader\\Texture2DRenderPS.hlsl"
+		);
+
 		GraphicsManager::Get().SetZBuffer(false);
+		GraphicsManager::Get().SetAlphaBlend(true);
 
 		float Width = 0.0f, Height = 0.0f;
 		Window_->GetSize<float>(Width, Height);
@@ -110,6 +136,15 @@ public:
 				0.0001f, 100.0f
 			)
 		);
+
+		Texture2DRenderShader_->SetProjectionMatrix(
+			GetOrthographicMatrix(
+				Width, Height,
+				0.0001f, 100.0f
+			)
+		);
+
+		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Banana.png");
  	}
 
 
@@ -132,23 +167,20 @@ public:
 
 			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-			for (int32_t x = -500; x <= 500; x += 10)
-			{
-				Primitive2DRenderShader_->RenderLine(
-					GraphicsManager::Get().GetContext(),
-					Vec3f(+x, -400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-					Vec3f(+x, +400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-				);
-			}
+			Texture2DRenderShader_->RenderTexture2D(
+				GraphicsManager::Get().GetContext(),
+				*Texture_.get(),
+				Vec3f(0.0f, 0.0f, 0.0f),
+				400.0f, 300.0f
+			);
 
-			for (int32_t y = -400; y <= 400; y += 10)
-			{
-				Primitive2DRenderShader_->RenderLine(
-					GraphicsManager::Get().GetContext(),
-					Vec3f(-500, +y, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-					Vec3f(+500, +y, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-				);
-			}
+			Primitive2DRenderShader_->RenderWireframeQuad(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(-200.0f, -150.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(-200.0f, +150.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(+200.0f, +150.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
+				Vec3f(+200.0f, -150.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f)
+			);
 
 			GraphicsManager::Get().Present();
 		}
@@ -175,9 +207,21 @@ private:
 
 
 	/**
+	 * @brief 텍스처 리소스입니다.
+	 */
+	std::unique_ptr<Texture2D> Texture_ = nullptr;
+
+
+	/**
 	 * @brief 기본 도형을 렌더링 하기 위한 셰이더입니다.
 	 */
 	std::unique_ptr<Primitive2DRenderShader> Primitive2DRenderShader_ = nullptr;
+
+
+	/**
+	 * @brief 텍스처를 렌더링하기 위한 셰이더입니다.
+	 */
+	std::unique_ptr<Texture2DRenderShader> Texture2DRenderShader_ = nullptr;
 };
 
 
