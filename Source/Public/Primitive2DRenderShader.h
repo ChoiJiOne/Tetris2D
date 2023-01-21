@@ -15,19 +15,6 @@ class Primitive2DRenderShader : public Shader
 {
 public:
 	/**
-	 * @brief 기본 도형 타입입니다.
-	 */
-	enum class PrimitiveType
-	{
-		NONE     = 0,
-		POINT    = 1,
-		LINE     = 2,
-		TRIANGLE = 3,
-		QUAD     = 4
-	};
-
-
-	/**
 	 * @brief 기본 도형의 정점입니다.
 	 */
 	struct PrimitiveVertex
