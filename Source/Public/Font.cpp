@@ -19,10 +19,9 @@ Font::Font(ID3D11Device* Device, const std::string& ResourcePath, int32_t BeginC
 		stbtt_GetFontOffsetForIndex(reinterpret_cast<const unsigned char*>(&Buffer[0]), 0)
 	) != 0), "failed to initialize stb_truetype");
 
-	int32_t AtlasSize = 0;
-	std::shared_ptr<uint8_t[]> AtlasBitmap = GenerateTextureAtlasBitmap(Buffer, BeginCodePoint_, EndCodePoint_, FontSize, CharacterInfos_, AtlasSize);
+	std::shared_ptr<uint8_t[]> AtlasBitmap = GenerateTextureAtlasBitmap(Buffer, BeginCodePoint_, EndCodePoint_, FontSize, CharacterInfos_, AtlasSize_);
 
-	CHECK_HR(CreateTextureAtlasFromBitmap(Device, AtlasBitmap, AtlasSize), "failed to create texture atlas");
+	CHECK_HR(CreateTextureAtlasFromBitmap(Device, AtlasBitmap, AtlasSize_), "failed to create texture atlas");
 }
 
 Font::~Font()
@@ -149,7 +148,7 @@ HRESULT Font::CreateTextureAtlasFromBitmap(ID3D11Device* Device, const std::shar
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
 
-		ShaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		ShaderResourceViewDesc.Format = DXGI_FORMAT_R8_UNORM;
 		ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		ShaderResourceViewDesc.Texture2D.MipLevels = TextureDesc.MipLevels;
 		ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;

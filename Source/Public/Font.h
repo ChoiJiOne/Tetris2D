@@ -88,6 +88,14 @@ public:
 
 
 	/**
+	 * @brief 텍스처 아틀라스의 크기를 얻습니다.
+	 * 
+	 * @return 텍스처 아틀라스의 크기를 반환합니다.
+	 */
+	int32_t GetAtlasSize() const { return AtlasSize_; }
+
+
+	/**
 	 * @brief 코드 포인트가 범위 내에 포함되는지 확인합니다.
 	 *
 	 * @param CodePoint 범위 검사를 수행할 코드 포인트 값입니다.
@@ -201,6 +209,12 @@ private:
 	 * @note 텍스처 아틀라스는 끝점을 포함합니다.
 	 */
 	int32_t EndCodePoint_ = 0;
+
+
+	/**
+	 * @brief 텍스처 아틀라스의 크기입니다.
+	 */
+	int32_t AtlasSize_ = 0;
 
 
 	/**
