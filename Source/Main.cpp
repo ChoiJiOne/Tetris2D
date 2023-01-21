@@ -219,6 +219,14 @@ public:
 				Vec3f(500.0f, 0.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
 			);
 
+			Primitive2DRenderShader_->RenderWireframeQuad(
+				GraphicsManager::Get().GetContext(),
+				Vec3f(-77.0f, +9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
+				Vec3f(+77.0f, +9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
+				Vec3f(+77.0f, -9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
+				Vec3f(-77.0f, -9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
+			);
+
 			Text2DRenderShader_->RenderText2D(
 				GraphicsManager::Get().GetContext(),
 				*Font_.get(),
