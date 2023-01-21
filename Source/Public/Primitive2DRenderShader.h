@@ -15,6 +15,17 @@ class Primitive2DRenderShader : public Shader
 {
 public:
 	/**
+	 * @brief 내부 렌더링 타입입니다.
+	 */
+	enum class ERenderType
+	{
+		POINT    = 0,
+		LINE     = 1,
+		TRIANGLE = 2
+	};
+
+
+	/**
 	 * @brief 기본 도형의 정점입니다.
 	 */
 	struct PrimitiveVertex
@@ -230,6 +241,16 @@ private:
 	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
 	 */
 	HRESULT CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer);
+
+
+	/**
+	 * @brief 기본 도형을 화면에 그립니다.
+	 * 
+	 * @param Context 렌더링을 수행할 컨텍스트입니다.
+	 * @param PrimitiveSignature 기본 도형의 정점 시그니처입니다.
+	 * @param RenderType 렌더링 타입입니다.
+	 */
+	void RenderPrimitive(ID3D11DeviceContext* Context, const std::string& PrimitiveSignature, const ERenderType& RenderType);
 
 
 private:
