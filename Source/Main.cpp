@@ -132,13 +132,23 @@ public:
 
 			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-			Primitive2DRenderShader_->RenderWireframeQuad(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(-100.0f, -100.0f, 0.0f), Vec4f(1.0f, 0.0f, 0.0f, 1.0f),
-				Vec3f(-100.0f, +100.0f, 0.0f), Vec4f(0.0f, 1.0f, 0.0f, 1.0f),
-				Vec3f(+100.0f, +100.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f),
-				Vec3f(+100.0f, -100.0f, 0.0f), Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
-			);
+			for (int32_t x = -500; x <= 500; x += 10)
+			{
+				Primitive2DRenderShader_->RenderLine(
+					GraphicsManager::Get().GetContext(),
+					Vec3f(+x, -400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
+					Vec3f(+x, +400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
+				);
+			}
+
+			for (int32_t y = -400; y <= 400; y += 10)
+			{
+				Primitive2DRenderShader_->RenderLine(
+					GraphicsManager::Get().GetContext(),
+					Vec3f(-500, +y, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
+					Vec3f(+500, +y, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
+				);
+			}
 
 			GraphicsManager::Get().Present();
 		}
