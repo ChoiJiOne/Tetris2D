@@ -9,8 +9,8 @@ Texture2D::Texture2D(ID3D11Device* Device, const std::string& ResourcePath)
 	std::vector<uint8_t> Buffer;
 	int32_t Format = 0, Width = 0, Height = 0;
 
-	CHECK(LoadTextureFromFile(ResourcePath, Buffer, Format, Width, Height), "failed to load texture file");
-	CHECK_HR(CreateTextureResource(Device, Buffer, Format, Width, Height), "failed to create texture resource");
+	//CHECK(LoadTextureFromFile(ResourcePath, Buffer, Format, Width, Height), "failed to load texture file");
+	//CHECK_HR(CreateTextureResource(Device, Buffer, Format, Width, Height), "failed to create texture resource");
 }
 
 Texture2D::~Texture2D()
