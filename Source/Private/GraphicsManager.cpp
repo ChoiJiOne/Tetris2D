@@ -15,9 +15,11 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view");
 	CHECK_HR(CreateDepthStencilState(&EnableZDepthStencilState_, true), "failed to create enable z depth stencil state");
 	CHECK_HR(CreateDepthStencilState(&DisableZDepthStencilState_, false), "failed to create disable z depth stencil state");
+	CHECK_HR(CreateBlendState(), "failed to create alpha blend state");
 	CHECK_HR(CreateRasterizerState(), "failed to create default rasterizer state");
 
 	Context_->OMSetDepthStencilState(EnableZDepthStencilState_, 1);
+	Context_->OMSetBlendState(AlphaBlend_, nullptr, 0xFFFFFFFF);
 	Context_->RSSetState(RasterizerState_);
 }
 
@@ -28,6 +30,7 @@ void GraphicsManager::Cleanup()
 		CHECK_HR(SwapChain_->SetFullscreenState(false, nullptr), "failed to set full screen state");
 	}
 
+	SAFE_RELEASE(AlphaBlend_);
 	SAFE_RELEASE(RasterizerState_);
 	SAFE_RELEASE(DisableZDepthStencilState_);
 	SAFE_RELEASE(EnableZDepthStencilState_);
@@ -87,6 +90,13 @@ void GraphicsManager::SetZBuffer(bool bIsEnable)
 	ID3D11DepthStencilState* DepthStencilState = bIsEnable ? EnableZDepthStencilState_ : DisableZDepthStencilState_;
 
 	Context_->OMSetDepthStencilState(DepthStencilState, 1);
+}
+
+void GraphicsManager::SetAlphaBlend(bool bIsEnable)
+{
+	ID3D11BlendState* BlendState = bIsEnable ? AlphaBlend_ : nullptr;
+	
+	Context_->OMSetBlendState(BlendState, nullptr, 0xFFFFFFFF);
 }
 
 void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha, float Depth, uint8_t Stencil)
@@ -290,6 +300,22 @@ HRESULT GraphicsManager::CreateDepthStencilState(ID3D11DepthStencilState** Depth
 	DepthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	return Device_->CreateDepthStencilState(&DepthStencilStateDesc, DepthStencilState);
+}
+
+HRESULT GraphicsManager::CreateBlendState()
+{
+	D3D11_BLEND_DESC AlphaBlendDesc = {};
+
+	AlphaBlendDesc.RenderTarget[0].BlendEnable = true;
+	AlphaBlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	AlphaBlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	AlphaBlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	AlphaBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	AlphaBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	AlphaBlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	AlphaBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	return Device_->CreateBlendState(&AlphaBlendDesc, &AlphaBlend_);
 }
 
 HRESULT GraphicsManager::CreateRasterizerState()

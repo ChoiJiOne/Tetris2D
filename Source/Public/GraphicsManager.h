@@ -104,6 +104,14 @@ public:
 
 
 	/**
+	 * @brief 알파 블랜딩 활성화 여부를 설정합니다.
+	 * 
+	 * @param bIsEnable 알파 블랜딩 활성화 여부입니다.
+	 */
+	void SetAlphaBlend(bool bIsEnable);
+
+
+	/**
 	 * @brief 백 버퍼를 초기화합니다.
 	 * 
 	 * @param Red 백 버퍼의 초기화할 빨강 색상입니다.
@@ -188,6 +196,14 @@ private:
 	 * @return 깊이 스텐실 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
 	HRESULT CreateDepthStencilState(ID3D11DepthStencilState**DepthStencilState, bool bIsEnableZ);
+
+
+	/**
+	 * @brief 알파 블랜딩을 위한 블랜드 상태를 생성합니다.
+	 * 
+	 * @return 알파 블랜딩 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateBlendState();
 
 
 	/**
@@ -279,6 +295,12 @@ private:
 	 * @brief Z버퍼가 비활성화된 깊이 스텐실 상태입니다.
 	 */
 	ID3D11DepthStencilState* DisableZDepthStencilState_ = nullptr;
+
+
+	/**
+	 * @brief 알파 블랜딩 모드입니다.
+	 */
+	ID3D11BlendState* AlphaBlend_ = nullptr;
 
 
 	/**
