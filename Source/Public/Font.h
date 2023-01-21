@@ -106,7 +106,30 @@ public:
 	 * @param Width[out] 측정한 텍스트의 가로 크기입니다.
 	 * @param Height[out] 측정한 텍스트의 세로 크기입니다.
 	 */
-	void MeasureText(const std::wstring& Text, int32_t& Width, int32_t& Height) const;
+	template <typename T>
+	void MeasureText(const std::wstring& Text, T& Width, T& Height) const
+	{
+		int32_t TextHeight = -1;
+		int32_t TextWidth = 0;
+
+		for (const auto& Unicode : Text)
+		{
+			const CharacterInfo& UnicodeInfo = GetCharacterInfo(static_cast<int32_t>(Unicode));
+
+			int32_t CurrWidth = static_cast<int32_t>(UnicodeInfo.XAdvance);
+			int32_t CurrHeight = UnicodeInfo.Position1.y - UnicodeInfo.Position0.y;
+
+			TextWidth += CurrWidth;
+
+			if (CurrHeight > TextHeight)
+			{
+				TextHeight = CurrHeight;
+			}
+		}
+
+		Width = static_cast<T>(TextWidth);
+		Height = static_cast<T>(TextHeight);
+	}
 
 
 private:
