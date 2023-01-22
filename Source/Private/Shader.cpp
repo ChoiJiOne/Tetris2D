@@ -102,3 +102,24 @@ HRESULT Shader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32
 
 	return Device->CreateBuffer(&IndexBufferDesc, &IndexData, IndexBuffer);
 }
+
+HRESULT Shader::CreateLinearTextureSampler(ID3D11Device* Device, ID3D11SamplerState** LinearTextureSampler)
+{
+	D3D11_SAMPLER_DESC TextureSamplerDesc = { };
+
+	TextureSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	TextureSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	TextureSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	TextureSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	TextureSamplerDesc.MipLODBias = 0.0f;
+	TextureSamplerDesc.MaxAnisotropy = 1;
+	TextureSamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	TextureSamplerDesc.BorderColor[0] = 0;
+	TextureSamplerDesc.BorderColor[1] = 0;
+	TextureSamplerDesc.BorderColor[2] = 0;
+	TextureSamplerDesc.BorderColor[3] = 0;
+	TextureSamplerDesc.MinLOD = 0;
+	TextureSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	return Device->CreateSamplerState(&TextureSamplerDesc, LinearTextureSampler);
+}

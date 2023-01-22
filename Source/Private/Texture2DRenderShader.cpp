@@ -12,7 +12,7 @@ Texture2DRenderShader::Texture2DRenderShader(ID3D11Device* Device, const std::ws
 	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
 	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFrameBuffer_), "failed to every frame constant buffer");
-	CHECK_HR(CreateTextureSampler(Device), "failed to create texture sampler");
+	CHECK_HR(CreateLinearTextureSampler(Device, &LinearSampler_), "failed to create texture sampler");
 
 	EveryFrameBufferResource_.World.Identify();
 	EveryFrameBufferResource_.View.Identify();
@@ -98,25 +98,4 @@ void Texture2DRenderShader::RenderTexture2D(ID3D11DeviceContext* Context, Textur
 	Context->PSSetShaderResources(TextureBindSlot, 1, &TextureView);
 
 	Context->DrawIndexed(static_cast<uint32_t>(QuadTextureIndex_.size()), 0, 0);
-}
-
-HRESULT Texture2DRenderShader::CreateTextureSampler(ID3D11Device* Device)
-{
-	D3D11_SAMPLER_DESC SamplerDesc = { };
-
-	SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	SamplerDesc.MipLODBias = 0.0f;
-	SamplerDesc.MaxAnisotropy = 1;
-	SamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	SamplerDesc.BorderColor[0] = 0;
-	SamplerDesc.BorderColor[1] = 0;
-	SamplerDesc.BorderColor[2] = 0;
-	SamplerDesc.BorderColor[3] = 0;
-	SamplerDesc.MinLOD = 0;
-	SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	return Device->CreateSamplerState(&SamplerDesc, &LinearSampler_);
 }

@@ -95,18 +95,7 @@ public:
 	 * @param Height 텍스처의 세로 크기입니다.
 	 */
 	void RenderTexture2D(ID3D11DeviceContext* Context, Texture2D& Texture, const Vec3f& Center, float Width, float Height);
-
-
-private:
-	/**
-	 * @brief 텍스처를 샘플링할 텍스처 샘플러를 생성합니다.
-	 * 
-	 * @param Device 샘플러를 생성할 때 사용할 디바이스입니다.
-	 * 
-	 * @return 샘플러 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
-	 */
-	HRESULT CreateTextureSampler(ID3D11Device* Device);
-
+	
 
 private:
 	/**
