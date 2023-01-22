@@ -12,6 +12,7 @@ Text2DRenderShader::Text2DRenderShader(ID3D11Device* Device, const std::wstring&
 	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
 	CHECK_HR(CreateEveryFrameConstantBuffer(Device), "failed to every frame constant buffer");
+	CHECK_HR(CreateTextColorConstantBuffer(Device), "failed to text color constant buffer");
 	CHECK_HR(CreateTextureSampler(Device), "failed to create texture sampler");
 
 	EveryFrameBufferResource_.World.Identify();
@@ -30,10 +31,11 @@ Text2DRenderShader::~Text2DRenderShader()
 	SAFE_RELEASE(LinearSampler_);
 	SAFE_RELEASE(CharacterIndexBuffer_);
 	SAFE_RELEASE(CharacterVertexBuffer_);
+	SAFE_RELEASE(TextColorBuffer_);
 	SAFE_RELEASE(EveryFramBuffer_);
 }
 
-void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontResource, const std::wstring& Text, const Vec3f& Center)
+void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontResource, const std::wstring& Text, const Vec3f& Center, const Vec4f& Color)
 {
 	float TextWidth = 0.0f, TextHeight = 0.0f;
 	FontResource.MeasureText<float>(Text, TextWidth, TextHeight);
@@ -101,6 +103,15 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 			Context->Unmap(EveryFramBuffer_, 0);
 		}
 
+		if (SUCCEEDED(Context->Map(TextColorBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+		{
+			TextColorConstantBuffer* Buffer = reinterpret_cast<TextColorConstantBuffer*>(ConstantBufferMappedResource.pData);
+
+			Buffer->TextColor = Color;
+
+			Context->Unmap(TextColorBuffer_, 0);
+		}
+
 		uint32_t BindSlot = 0;
 		Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
 
@@ -110,6 +121,8 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 		uint32_t TextureBindSlot = 0;
 		ID3D11ShaderResourceView* TextureAtlasView = FontResource.GetTextureAtlasView();
 		Context->PSSetShaderResources(TextureBindSlot, 1, &TextureAtlasView);
+
+		Context->PSSetConstantBuffers(BindSlot, 1, &TextColorBuffer_);
 
 		Context->DrawIndexed(static_cast<uint32_t>(CharacterIndex_.size()), 0, 0);
 
@@ -129,6 +142,20 @@ HRESULT Text2DRenderShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
 	EveryFrameBufferDesc.StructureByteStride = 0;
 
 	return Device->CreateBuffer(&EveryFrameBufferDesc, nullptr, &EveryFramBuffer_);
+}
+
+HRESULT Text2DRenderShader::CreateTextColorConstantBuffer(ID3D11Device* Device)
+{
+	D3D11_BUFFER_DESC TextColorBufferDesc = {};
+
+	TextColorBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	TextColorBufferDesc.ByteWidth = sizeof(TextColorConstantBuffer);
+	TextColorBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	TextColorBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	TextColorBufferDesc.MiscFlags = 0;
+	TextColorBufferDesc.StructureByteStride = 0;
+
+	return Device->CreateBuffer(&TextColorBufferDesc, nullptr, &TextColorBuffer_);
 }
 
 HRESULT Text2DRenderShader::CreateVertexBuffer(ID3D11Device* Device, const std::vector<CharacterVertex>& Vertices, ID3D11Buffer** VertexBuffer)

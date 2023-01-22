@@ -34,6 +34,15 @@ public:
 	};
 
 
+	/**
+	 * @brief 텍스트의 색상을 나타내는 상수 버퍼입니다.
+	 */
+	struct TextColorConstantBuffer
+	{
+		Vec4f TextColor;
+	};
+
+
 public:
 	/**
 	 * @brief 셰이더를 컴파일하고 정점 셰이더와 픽셀 셰이더를 생성합니다.
@@ -92,8 +101,9 @@ public:
 	 * @param FontResource 텍스트를 렌더링할 때 참조할 폰트 리소스입니다.
 	 * @param Text 렌더링할 텍스트입니다.
 	 * @param Center 텍스처의 중심 좌표입니다.
+	 * @param Color 텍스트의 색상입니다.
 	 */
-	void RenderText2D(ID3D11DeviceContext* Context, Font& FontResource, const std::wstring& Text, const Vec3f& Center);
+	void RenderText2D(ID3D11DeviceContext* Context, Font& FontResource, const std::wstring& Text, const Vec3f& Center, const Vec4f& Color);
 
 
 private:
@@ -105,6 +115,16 @@ private:
 	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
 	 */
 	HRESULT CreateEveryFrameConstantBuffer(ID3D11Device* Device);
+
+
+	/**
+	 * @brief 텍스트 색상을 나타내는 상수 버퍼를 생성합니다.
+	 * 
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * 
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateTextColorConstantBuffer(ID3D11Device* Device);
 
 
 	/**
@@ -152,6 +172,18 @@ private:
 	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
 	ID3D11Buffer* EveryFramBuffer_ = nullptr;
+
+
+	/**
+	 * @brief 텍스트 색상입니다.
+	 */
+	TextColorConstantBuffer TextColorBufferResource_;
+
+
+	/**
+	 * @brief 텍스트 색상을 나타내는 상수 버퍼입니다.
+	 */
+	ID3D11Buffer* TextColorBuffer_ = nullptr;
 
 
 	/**
