@@ -231,7 +231,8 @@ public:
 				GraphicsManager::Get().GetContext(),
 				*Font_.get(),
 				L"Hello World",
-				Vec3f(0.0f, 0.0f, 0.0f)
+				Vec3f(0.0f, 0.0f, 0.0f),
+				Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
 			);
 
 			GraphicsManager::Get().Present();
