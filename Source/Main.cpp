@@ -1,4 +1,5 @@
 #include "CommandLineManager.h"
+#include "Color.h"
 #include "Debug.h"
 #include "Font.h"
 #include "GameFramework.h"
@@ -36,10 +37,6 @@ public:
 	{
 		Font_.reset();
 		Texture_.reset();
-
-		Text2DRenderShader_.reset();
-		Texture2DRenderShader_.reset();
-		Primitive2DRenderShader_.reset();
 
 		GraphicsManager::Get().Cleanup();
 		Window_.reset();
@@ -107,7 +104,9 @@ public:
 				bIsDone_ = true;
 			}
 
-			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
+			GraphicsManager::Get().Clear(BLACK);
+
+			GraphicsManager::Get().DrawText2D(*Font_.get(), L"Hello World", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
 		}
@@ -143,24 +142,6 @@ private:
 	 * @brief 폰트 리소스입니다.
 	 */
 	std::unique_ptr<Font> Font_ = nullptr;
-
-
-	/**
-	 * @brief 기본 도형을 렌더링 하기 위한 셰이더입니다.
-	 */
-	std::unique_ptr<Primitive2DRenderShader> Primitive2DRenderShader_ = nullptr;
-
-
-	/**
-	 * @brief 텍스처를 렌더링하기 위한 셰이더입니다.
-	 */
-	std::unique_ptr<Texture2DRenderShader> Texture2DRenderShader_ = nullptr;
-
-
-	/**
-	 * @brief 텍스트를 렌더링 하기 위한 셰이더입니다.
-	 */
-	std::unique_ptr<Text2DRenderShader> Text2DRenderShader_ = nullptr;
 };
 
 
