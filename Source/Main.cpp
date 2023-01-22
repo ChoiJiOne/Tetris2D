@@ -82,8 +82,8 @@ public:
 		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
 
-		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Banana.png");
-		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\JetBrainsMono-Bold.ttf", 0x20, 0x7E, 32.0f);
+		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Texture\\Space.png");
+		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Font\\JetBrainsMono-Bold.ttf", 0x20, 0x7E, 32.0f);
  	}
 
 
@@ -106,6 +106,7 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
+			GraphicsManager::Get().DrawTexture2D(*Texture_.get(), Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
 			GraphicsManager::Get().DrawText2D(*Font_.get(), L"Hello World", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
