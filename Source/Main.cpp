@@ -72,30 +72,6 @@ public:
 			EWindowEvent::RESIZE,
 			[&]() {
 				GraphicsManager::Get().Resize();
-				GraphicsManager::Get().SetScreenViewport();
-
-				float Width = 0.0f, Height = 0.0f;
-				Window_->GetSize<float>(Width, Height);
-				Primitive2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
-
-				Texture2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
-
-				Text2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
 			}
 		);
 
@@ -103,78 +79,11 @@ public:
 			EWindowEvent::MAXIMIZED,
 			[&]() {
 				GraphicsManager::Get().Resize();
-				GraphicsManager::Get().SetScreenViewport();
-
-				float Width = 0.0f, Height = 0.0f;
-				Window_->GetSize<float>(Width, Height);
-				Primitive2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
-
-				Texture2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
-
-				Text2DRenderShader_->SetProjectionMatrix(
-					GetOrthographicMatrix(
-						Width, Height,
-						0.0001f, 100.0f
-					)
-				);
 			}
-		);
-
-		GraphicsManager::Get().SetScreenViewport();
-
-		Primitive2DRenderShader_ = std::make_unique<Primitive2DRenderShader>(
-			GraphicsManager::Get().GetDevice(),
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderVS.hlsl",
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Primitive2DRenderPS.hlsl"
-		);
-
-		Texture2DRenderShader_ = std::make_unique<Texture2DRenderShader>(
-			GraphicsManager::Get().GetDevice(),
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Texture2DRenderVS.hlsl",
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Texture2DRenderPS.hlsl"
-		);
-
-		Text2DRenderShader_ = std::make_unique<Text2DRenderShader>(
-			GraphicsManager::Get().GetDevice(),
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Text2DRenderVS.hlsl",
-			L"D:\\work\\Tetris2D\\Source\\Shader\\Text2DRenderPS.hlsl"
 		);
 
 		GraphicsManager::Get().SetZBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
-
-		float Width = 0.0f, Height = 0.0f;
-		Window_->GetSize<float>(Width, Height);
-		Primitive2DRenderShader_->SetProjectionMatrix(
-			GetOrthographicMatrix(
-				Width, Height,
-				0.0001f, 100.0f
-			)
-		);
-
-		Texture2DRenderShader_->SetProjectionMatrix(
-			GetOrthographicMatrix(
-				Width, Height,
-				0.0001f, 100.0f
-			)
-		);
-
-		Text2DRenderShader_->SetProjectionMatrix(
-			GetOrthographicMatrix(
-				Width, Height,
-				0.0001f, 100.0f
-			)
-		);
 
 		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Banana.png");
 		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\JetBrainsMono-Bold.ttf", 0x20, 0x7E, 32.0f);
@@ -199,41 +108,6 @@ public:
 			}
 
 			GraphicsManager::Get().Clear(0.0f, 0.0f, 0.0f, 1.0f);
-
-			/*Texture2DRenderShader_->RenderTexture2D(
-				GraphicsManager::Get().GetContext(),
-				*Texture_.get(),
-				Vec3f(0.0f, 0.0f, 0.0f),
-				400.0f, 300.0f
-			);*/
-
-			Primitive2DRenderShader_->RenderLine(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(0.0f, 400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-				Vec3f(0.0f, -400.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-			);
-
-			Primitive2DRenderShader_->RenderLine(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(-500.0f, 0.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-				Vec3f(500.0f, 0.0f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-			);
-
-			Primitive2DRenderShader_->RenderWireframeQuad(
-				GraphicsManager::Get().GetContext(),
-				Vec3f(-77.0f, +9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-				Vec3f(+77.0f, +9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-				Vec3f(+77.0f, -9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f),
-				Vec3f(-77.0f, -9.5f, 0.0f), Vec4f(1.0f, 1.0f, 1.0f, 1.0f)
-			);
-
-			Text2DRenderShader_->RenderText2D(
-				GraphicsManager::Get().GetContext(),
-				*Font_.get(),
-				L"Hello World",
-				Vec3f(0.0f, 0.0f, 0.0f),
-				Vec4f(0.0f, 0.0f, 1.0f, 1.0f)
-			);
 
 			GraphicsManager::Get().Present();
 		}
