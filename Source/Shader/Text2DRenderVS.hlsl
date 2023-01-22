@@ -1,8 +1,6 @@
 cbuffer cbEveryFrame : register(b0)
 {
-    matrix World;
-    matrix View;
-    matrix Project;
+    matrix Projection;
 };
 
 struct VS_INPUT
@@ -21,9 +19,7 @@ VS_OUTPUT main(VS_INPUT Input)
 {
     VS_OUTPUT Output;
     
-    Output.Position = mul(float4(Input.Position, 1.0f), World);
-    Output.Position = mul(Output.Position, View);
-    Output.Position = mul(Output.Position, Project);
+    Output.Position = mul(float4(Input.Position, 1.0f), Projection);
     
     Output.UV = Input.UV;
     

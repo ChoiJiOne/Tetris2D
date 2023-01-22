@@ -12,8 +12,6 @@ Primitive2DRenderShader::Primitive2DRenderShader(ID3D11Device* Device, const std
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
 	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFrameBuffer_), "failed to every frame constant buffer");
 
-	EveryFrameBufferResource_.World.Identify();
-	EveryFrameBufferResource_.View.Identify();
 	EveryFrameBufferResource_.Projection.Identify();
 
 	std::vector<PrimitiveVertex> Vertices;
@@ -238,9 +236,7 @@ void Primitive2DRenderShader::RenderPrimitive(ID3D11DeviceContext* Context, cons
 	if (SUCCEEDED(Context->Map(EveryFrameBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
 	{
 		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
-
-		Buffer->World = EveryFrameBufferResource_.World;
-		Buffer->View = EveryFrameBufferResource_.View;
+		
 		Buffer->Projection = EveryFrameBufferResource_.Projection;
 
 		Context->Unmap(EveryFrameBuffer_, 0);

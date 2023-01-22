@@ -29,7 +29,6 @@ public:
 	struct EveryFramConstantBuffer
 	{
 		Matrix4x4F World;
-		Matrix4x4F View;
 		Matrix4x4F Projection;
 	};
 
@@ -67,14 +66,6 @@ public:
 	 * @param World 설정할 월드 행렬입니다.
 	 */
 	void SetWorldMatrix(const Matrix4x4F& World) { EveryFrameBufferResource_.World = World; }
-
-
-	/**
-	 * @brief 셰이더에서 사용하는 시야 행렬을 설정합니다.
-	 *
-	 * @param View 설정할 시야 행렬입니다.
-	 */
-	void SetViewMatrix(const Matrix4x4F& View) { EveryFrameBufferResource_.View = View; }
 
 
 	/**

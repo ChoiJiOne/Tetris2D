@@ -15,7 +15,6 @@ Texture2DRenderShader::Texture2DRenderShader(ID3D11Device* Device, const std::ws
 	CHECK_HR(CreateLinearTextureSampler(Device, &LinearSampler_), "failed to create texture sampler");
 
 	EveryFrameBufferResource_.World.Identify();
-	EveryFrameBufferResource_.View.Identify();
 	EveryFrameBufferResource_.Projection.Identify();
 
 	QuadTextureVertex_ = std::vector<QuadTextureVertex>(4);
@@ -81,7 +80,6 @@ void Texture2DRenderShader::RenderTexture2D(ID3D11DeviceContext* Context, Textur
 		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
 
 		Buffer->World = EveryFrameBufferResource_.World;
-		Buffer->View = EveryFrameBufferResource_.View;
 		Buffer->Projection = EveryFrameBufferResource_.Projection;
 
 		Context->Unmap(EveryFrameBuffer_, 0);

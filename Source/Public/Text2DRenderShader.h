@@ -28,8 +28,6 @@ public:
 	 */
 	struct EveryFramConstantBuffer
 	{
-		Matrix4x4F World;
-		Matrix4x4F View;
 		Matrix4x4F Projection;
 	};
 
@@ -68,22 +66,6 @@ public:
 	 * @brief 복사 생성자와 대입 연산자를 명시적으로 삭제합니다.
 	 */
 	DISALLOW_COPY_AND_ASSIGN(Text2DRenderShader);
-
-
-	/**
-	 * @brief 셰이더에서 사용하는 월드 행렬을 설정합니다.
-	 *
-	 * @param World 설정할 월드 행렬입니다.
-	 */
-	void SetWorldMatrix(const Matrix4x4F& World) { EveryFrameBufferResource_.World = World; }
-
-
-	/**
-	 * @brief 셰이더에서 사용하는 시야 행렬을 설정합니다.
-	 *
-	 * @param View 설정할 시야 행렬입니다.
-	 */
-	void SetViewMatrix(const Matrix4x4F& View) { EveryFrameBufferResource_.View = View; }
 
 
 	/**

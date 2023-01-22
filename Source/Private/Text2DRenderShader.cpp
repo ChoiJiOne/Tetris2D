@@ -15,8 +15,6 @@ Text2DRenderShader::Text2DRenderShader(ID3D11Device* Device, const std::wstring&
 	CHECK_HR(CreateDynamicConstantBuffer<TextColorConstantBuffer>(Device, &TextColorBuffer_), "failed to text color constant buffer");
 	CHECK_HR(CreateLinearTextureSampler(Device, &LinearSampler_), "failed to create texture sampler");
 
-	EveryFrameBufferResource_.World.Identify();
-	EveryFrameBufferResource_.View.Identify();
 	EveryFrameBufferResource_.Projection.Identify();
 
 	CharacterVertex_ = std::vector<CharacterVertex>(4);
@@ -96,8 +94,6 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 		{
 			EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
 
-			Buffer->World = EveryFrameBufferResource_.World;
-			Buffer->View = EveryFrameBufferResource_.View;
 			Buffer->Projection = EveryFrameBufferResource_.Projection;
 
 			Context->Unmap(EveryFrameBuffer_, 0);
