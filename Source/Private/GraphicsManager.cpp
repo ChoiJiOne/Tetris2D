@@ -1,5 +1,13 @@
 #include "GraphicsManager.h"
+#include "CommandLineManager.h"
+#include "Font.h"
 #include "Window.h"
+#include "Shader.h"
+#include "Math.hpp"
+#include "Texture2D.h"
+#include "Primitive2DRenderShader.h"
+#include "Texture2DRenderShader.h"
+#include "Text2DRenderShader.h"
 
 #include <array>
 #include <cstdint>
@@ -18,6 +26,41 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	CHECK_HR(CreateBlendState(), "failed to create alpha blend state");
 	CHECK_HR(CreateRasterizerState(), "failed to create default rasterizer state");
 
+	std::wstring ShaderPath = CommandLineManager::Get().GetValue(L"-Shader");
+
+	Shader_["Primitive"] = std::make_unique<Primitive2DRenderShader>(
+		Device_,
+		ShaderPath + L"Primitive2DRenderVS.hlsl",
+		ShaderPath + L"Primitive2DRenderPS.hlsl"
+	);
+
+	Shader_["Texture"] = std::make_unique<Texture2DRenderShader>(
+		Device_,
+		ShaderPath + L"Texture2DRenderVS.hlsl",
+		ShaderPath + L"Texture2DRenderPS.hlsl"
+	);
+
+	Shader_["Text"] = std::make_unique<Text2DRenderShader>(
+		Device_,
+		ShaderPath + L"Text2DRenderVS.hlsl",
+		ShaderPath + L"Text2DRenderPS.hlsl"
+	);
+
+	float Width = 0.0f, Height = 0.0f;
+	RenderTargetWindow_->GetSize<float>(Width, Height);
+	SetViewport(0.0f, 0.0f, Width, Height);
+
+	Matrix4x4F OrthoMatrix = GetOrthographicMatrix(Width, Height, 0.0001f, 100.0f);
+
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+	PrimitiveShader->SetProjectionMatrix(OrthoMatrix);
+
+	Texture2DRenderShader* TextureShader = reinterpret_cast<Texture2DRenderShader*>(Shader_["Texture"].get());
+	TextureShader->SetProjectionMatrix(OrthoMatrix);
+
+	Text2DRenderShader* TextShader = reinterpret_cast<Text2DRenderShader*>(Shader_["Text"].get());
+	TextShader->SetProjectionMatrix(OrthoMatrix);
+
 	Context_->OMSetDepthStencilState(EnableZDepthStencilState_, 1);
 	Context_->OMSetBlendState(AlphaBlend_, nullptr, 0xFFFFFFFF);
 	Context_->RSSetState(RasterizerState_);
@@ -28,6 +71,11 @@ void GraphicsManager::Cleanup()
 	if (RenderTargetWindow_->IsFullScreen() && SwapChain_)
 	{
 		CHECK_HR(SwapChain_->SetFullscreenState(false, nullptr), "failed to set full screen state");
+	}
+
+	for (auto& ManageShader : Shader_)
+	{
+		ManageShader.second.reset();
 	}
 
 	SAFE_RELEASE(AlphaBlend_);
@@ -61,6 +109,24 @@ void GraphicsManager::Resize()
 	CHECK_HR(SwapChain_->ResizeBuffers(BackBufferCount, BackBufferWidth, BackBufferHeight,BackBufferFormat, 0), "failed to resize buffer");
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view");
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view");
+
+	SetViewport(0.0f, 0.0f, static_cast<float>(BackBufferWidth), static_cast<float>(BackBufferHeight));
+
+	Matrix4x4F OrthoMatrix = GetOrthographicMatrix(
+		static_cast<float>(BackBufferWidth), 
+		static_cast<float>(BackBufferHeight),
+		0.0001f, 
+		100.0f
+	);
+
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+	PrimitiveShader->SetProjectionMatrix(OrthoMatrix);
+
+	Texture2DRenderShader* TextureShader = reinterpret_cast<Texture2DRenderShader*>(Shader_["Texture"].get());
+	TextureShader->SetProjectionMatrix(OrthoMatrix);
+
+	Text2DRenderShader* TextShader = reinterpret_cast<Text2DRenderShader*>(Shader_["Text"].get());
+	TextShader->SetProjectionMatrix(OrthoMatrix);
 }
 
 void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, float Height, float MinDepth, float MaxDepth)
@@ -77,14 +143,6 @@ void GraphicsManager::SetViewport(float TopLeftX, float TopLeftY, float Width, f
 	Context_->RSSetViewports(1, &Viewport);
 }
 
-void GraphicsManager::SetScreenViewport(float MinDepth, float MaxDepth)
-{
-	float Width = 0.0f, Height = 0.0f;
-	RenderTargetWindow_->GetSize<float>(Width, Height);
-
-	SetViewport(0.0f, 0.0f, Width, Height, MinDepth, MaxDepth);
-}
-
 void GraphicsManager::SetZBuffer(bool bIsEnable)
 {
 	ID3D11DepthStencilState* DepthStencilState = bIsEnable ? EnableZDepthStencilState_ : DisableZDepthStencilState_;
@@ -99,11 +157,11 @@ void GraphicsManager::SetAlphaBlend(bool bIsEnable)
 	Context_->OMSetBlendState(BlendState, nullptr, 0xFFFFFFFF);
 }
 
-void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha, float Depth, uint8_t Stencil)
+void GraphicsManager::Clear(const LinearColor& Color, float Depth, uint8_t Stencil)
 {
 	Context_->OMSetRenderTargets(1, &RenderTargetView_, DepthStencilView_);
 
-	float ColorRGBA[4] = { Red, Green, Blue, Alpha };
+	float ColorRGBA[4] = { Color.x, Color.y, Color.z, Color.w };
 
 	Context_->ClearRenderTargetView(RenderTargetView_, ColorRGBA);
 	Context_->ClearDepthStencilView(DepthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, Depth, Stencil);
@@ -112,6 +170,89 @@ void GraphicsManager::Clear(float Red, float Green, float Blue, float Alpha, flo
 void GraphicsManager::Present(bool bIsVSync)
 {
 	CHECK_HR(SwapChain_->Present(static_cast<uint32_t>(bIsVSync), 0), "failed to present backbuffer");
+}
+
+void GraphicsManager::DrawPoint2D(const Vec2f& Position, const LinearColor& Color)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderPoint(Context_, Vec3f(Position.x, Position.y, 0.0f), Color);
+}
+
+void GraphicsManager::DrawLine2D(const Vec2f& PositionFrom, const LinearColor& ColorFrom, const Vec2f& PositionTo, const LinearColor& ColorTo)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderLine(
+		Context_,
+		Vec3f(PositionFrom.x, PositionFrom.y, 0.0f), ColorFrom,
+		Vec3f(  PositionTo.x,   PositionTo.y, 0.0f), ColorTo
+	);
+}
+
+void GraphicsManager::DrawFillTriangle2D(const Vec2f& PositionFrom, const LinearColor& ColorFrom, const Vec2f& PositionBy, const LinearColor& ColorBy, const Vec2f& PositionTo, const LinearColor& ColorTo)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderFillTriangle(
+		Context_,
+		Vec3f(PositionFrom.x, PositionFrom.y, 0.0f), ColorFrom,
+		Vec3f(  PositionBy.x,   PositionBy.y, 0.0f), ColorBy,
+		Vec3f(  PositionTo.x,   PositionTo.y, 0.0f), ColorTo
+	);
+}
+
+void GraphicsManager::DrawWireframeTriangle2D(const Vec2f& PositionFrom, const LinearColor& ColorFrom, const Vec2f& PositionBy, const LinearColor& ColorBy, const Vec2f& PositionTo, const LinearColor& ColorTo)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderWireframeTriangle(
+		Context_,
+		Vec3f(PositionFrom.x, PositionFrom.y, 0.0f), ColorFrom,
+		Vec3f(  PositionBy.x,   PositionBy.y, 0.0f), ColorBy,
+		Vec3f(  PositionTo.x,   PositionTo.y, 0.0f), ColorTo
+	);
+}
+
+void GraphicsManager::DrawFillQuad2D(const Vec2f& PositionFrom, const LinearColor& ColorFrom, const Vec2f& PositionBy0, const LinearColor& ColorBy0, const Vec2f& PositionBy1, const LinearColor& ColorBy1, const Vec2f& PositionTo, const LinearColor& ColorTo)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderFillQuad(
+		Context_,
+		Vec3f(PositionFrom.x, PositionFrom.y, 0.0f), ColorFrom,
+		Vec3f( PositionBy0.x,  PositionBy0.y, 0.0f), ColorBy0,
+		Vec3f( PositionBy1.x,  PositionBy1.y, 0.0f), ColorBy1,
+		Vec3f(  PositionTo.x,   PositionTo.y, 0.0f), ColorTo
+	);
+}
+
+void GraphicsManager::DrawWireframeQuad2D(const Vec2f& PositionFrom, const LinearColor& ColorFrom, const Vec2f& PositionBy0, const LinearColor& ColorBy0, const Vec2f& PositionBy1, const LinearColor& ColorBy1, const Vec2f& PositionTo, const LinearColor& ColorTo)
+{
+	Primitive2DRenderShader* PrimitiveShader = reinterpret_cast<Primitive2DRenderShader*>(Shader_["Primitive"].get());
+
+	PrimitiveShader->RenderWireframeQuad(
+		Context_,
+		Vec3f(PositionFrom.x, PositionFrom.y, 0.0f), ColorFrom,
+		Vec3f( PositionBy0.x,  PositionBy0.y, 0.0f), ColorBy0,
+		Vec3f( PositionBy1.x,  PositionBy1.y, 0.0f), ColorBy1,
+		Vec3f(  PositionTo.x,   PositionTo.y, 0.0f), ColorTo
+	);
+}
+
+void GraphicsManager::DrawTexture2D(Texture2D& Texture, const Vec2f& Center, float Width, float Height, float Rotate)
+{
+	Texture2DRenderShader* TextureShader = reinterpret_cast<Texture2DRenderShader*>(Shader_["Texture"].get());
+
+	TextureShader->SetWorldMatrix(GetRotateMatrix(Rotate));
+	TextureShader->RenderTexture2D(Context_, Texture, Vec3f(Center.x, Center.y, 0.0f), Width, Height);
+}
+
+void GraphicsManager::DrawText2D(Font& FontResource, const std::wstring& Text, const Vec2f& Center, const LinearColor& Color)
+{
+	Text2DRenderShader* TextShader = reinterpret_cast<Text2DRenderShader*>(Shader_["Text"].get());
+
+	TextShader->RenderText2D(Context_, FontResource, Text, Vec3f(Center.x, Center.y, 0.0f), Color);
 }
 
 GraphicsManager::~GraphicsManager()

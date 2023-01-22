@@ -1,11 +1,16 @@
 #pragma once
 
 #include "Macro.h"
+#include "Color.h"
+
+#include <unordered_map>
 
 #include <d3d11.h>
 
 class Window;
-
+class Texture2D;
+class Font;
+class Shader;
 
 /**
  * @brief 그래픽 관련 처리를 수행합니다.
@@ -87,15 +92,6 @@ public:
 
 
 	/**
-	 * @brief 뷰 포트를 윈도우 창에 맞게 설정합니다.
-	 * 
-	 * @param MinDepth 뷰 포트의 최소 깊이입니다. 기본 값은 0.0 입니다.
-	 * @param MaxDepth 뷰 포트의 최대 깊이입니다. 기본 값은 1.0 입니다.
-	 */
-	void SetScreenViewport(float MinDepth = 0.0f, float MaxDepth = 1.0f);
-
-
-	/**
 	 * @brief Z 버퍼 활성화 여부를 설정합니다.
 	 * 
 	 * @param bIsEnable Z 버퍼 활성화 여부입니다.
@@ -114,14 +110,11 @@ public:
 	/**
 	 * @brief 백 버퍼를 초기화합니다.
 	 * 
-	 * @param Red 백 버퍼의 초기화할 빨강 색상입니다.
-	 * @param Green 백 버퍼의 초기화할 초록 색상입니다.
-	 * @param Blue 백 버퍼의 초기화할 파랑 색상입니다.
-	 * @param Alpha 백 버퍼의 초기화할 알파 색상입니다.
+	 * @param Color 초기화 할 색상입니다.
 	 * @param Depth 깊이 버퍼의 초기화 할 값입니다. 기본 값은 1.0 입니다.
 	 * @param Stencil 스텐실 버퍼의 초기화 할 값입니다. 기본 값은 0입니다.
 	 */
-	void Clear(float Red, float Green, float Blue, float Alpha, float Depth = 1.0f, uint8_t Stencil = 0);
+	void Clear(const LinearColor& Color, float Depth = 1.0f, uint8_t Stencil = 0);
 
 
 	/**
@@ -134,6 +127,128 @@ public:
 	 * @throws 백 버퍼와 프론트 버퍼의 교환에 실패하면 C++ 표준 예외를 던집니다.
 	 */
 	void Present(bool bIsVSync = true);
+
+
+	/**
+	 * @brief 화면에 2D 점을 그립니다.
+	 * 
+	 * @param Position 점의 위치입니다.
+	 * @param Color 점의 색상입니다.
+	 */
+	void DrawPoint2D(const Vec2f& Position, const LinearColor& Color);
+
+
+	/**
+	 * @brief 화면에 2D 선을 그립니다.
+	 * 
+	 * @param PositionFrom 선의 시작점입니다.
+	 * @param ColorFrom 선의 시작점 색상입니다.
+	 * @param PositionTo 선의 끝점입니다.
+	 * @param ColorTo 선의 끝점 색상입니다.
+	 */
+	void DrawLine2D(
+		const Vec2f& PositionFrom, const LinearColor& ColorFrom,
+		const Vec2f& PositionTo, const LinearColor& ColorTo
+	);
+
+
+	/**
+	 * @brief 화면에 2D 채움 삼각형을 그립니다.
+	 * 
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy 삼각형 정점의 중간점입니다.
+	 * @param ColorBy 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void DrawFillTriangle2D(
+		const Vec2f& PositionFrom, const LinearColor& ColorFrom,
+		const Vec2f& PositionBy, const LinearColor& ColorBy,
+		const Vec2f& PositionTo, const LinearColor& ColorTo
+	);
+
+
+	/**
+	 * @brief 화면에 2D 와이어 프레임 삼각형을 그립니다.
+	 *
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy 삼각형 정점의 중간점입니다.
+	 * @param ColorBy 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void DrawWireframeTriangle2D(
+		const Vec2f& PositionFrom, const LinearColor& ColorFrom,
+		const Vec2f& PositionBy, const LinearColor& ColorBy,
+		const Vec2f& PositionTo, const LinearColor& ColorTo
+	);
+
+
+	/**
+	 * @brief 화면에 2D 채움 사각형을 그립니다.
+	 * 
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy0 삼각형 정점의 중간점입니다.
+	 * @param ColorBy0 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionBy1 삼각형 정점의 중간점입니다.
+	 * @param ColorBy1 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void DrawFillQuad2D(
+		const Vec2f& PositionFrom, const LinearColor& ColorFrom,
+		const Vec2f& PositionBy0, const LinearColor& ColorBy0,
+		const Vec2f& PositionBy1, const LinearColor& ColorBy1,
+		const Vec2f& PositionTo, const LinearColor& ColorTo
+	);
+
+
+	/**
+	 * @brief 화면에 2D 와이어 프레임 사각형을 그립니다.
+	 *
+	 * @param PositionFrom 삼각형 정점의 시작점입니다.
+	 * @param ColorFrom 삼각형 정점의 시작점 색상입니다.
+	 * @param PositionBy0 삼각형 정점의 중간점입니다.
+	 * @param ColorBy0 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionBy1 삼각형 정점의 중간점입니다.
+	 * @param ColorBy1 삼각형 정점의 중간점 색상입니다.
+	 * @param PositionTo 삼각형 정점의 끝점입니다.
+	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
+	 */
+	void DrawWireframeQuad2D(
+		const Vec2f& PositionFrom, const LinearColor& ColorFrom,
+		const Vec2f& PositionBy0, const LinearColor& ColorBy0,
+		const Vec2f& PositionBy1, const LinearColor& ColorBy1,
+		const Vec2f& PositionTo, const LinearColor& ColorTo
+	);
+
+
+	/**
+	 * @brief 화면에 2D 텍스처를 그립니다.
+	 * 
+	 * @ntoe 회전각은 라디안 기준입니다.
+	 * 
+	 * @param Texture 렌더링 대상이 되는 2D 텍스처입니다.
+	 * @param Center 텍스처의 중심 좌표입니다.
+	 * @param Width 텍스처의 가로 크기입니다.
+	 * @param Height 텍스처의 세로 크기입니다.
+	 * @param Rotate 텍스처의 회전 각도입니다. 기본 값은 0.0입니다.
+	 */
+	void DrawTexture2D(Texture2D& Texture, const Vec2f& Center, float Width, float Height, float Rotate = 0.0f);
+
+
+	/**
+	 * @brief 화면에 2D 텍스트를 그립니다.
+	 * 
+	 * @param FontResource 텍스트를 렌더링할 때 참조할 폰트 리소스입니다.
+	 * @param Text 렌더링할 텍스트입니다.
+	 * @param Center 텍스처의 중심 좌표입니다.
+	 * @param Color 텍스트의 색상입니다.
+	 */
+	void DrawText2D(Font& FontResource, const std::wstring& Text, const Vec2f& Center, const LinearColor& Color);
 
 
 private:
@@ -307,4 +422,10 @@ private:
 	 * @brief 디폴트 레스터라이저 상태입니다.
 	 */
 	ID3D11RasterizerState* RasterizerState_ = nullptr;
+
+
+	/**
+	 * @brief 렌더링 시 사용할 셰이더입니다.
+	 */
+	std::unordered_map<std::string, std::unique_ptr<Shader>> Shader_;
 };
