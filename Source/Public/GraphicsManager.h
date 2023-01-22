@@ -96,7 +96,7 @@ public:
 	 * 
 	 * @param bIsEnable Z 버퍼 활성화 여부입니다.
 	 */
-	void SetZBuffer(bool bIsEnable);
+	void SetDepthBuffer(bool bIsEnable);
 
 
 	/**
@@ -303,30 +303,38 @@ private:
 
 
 	/**
-	 * @brief 디폴트 깊이 스텐실 상태를 생성합니다.
+	 * @brief 깊이 스텐실 상태를 생성합니다.
 	 * 
 	 * @param DepthStencilState 생성한 깊이 스텐실 상태를 저장할 포인터입니다.
-	 * @param bIsEnableZ 깊이 버퍼 활성화 여부입니다.
+	 * @param bIsEnableDepth 깊이 버퍼 활성화 여부입니다.
+	 * @param bIsEnableStencil 스텐실 버퍼 활성화 여부입니다.
 	 * 
 	 * @return 깊이 스텐실 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateDepthStencilState(ID3D11DepthStencilState**DepthStencilState, bool bIsEnableZ);
+	HRESULT CreateDepthStencilState(ID3D11DepthStencilState**DepthStencilState, bool bIsEnableDepth, bool bIsEnableStencil);
 
 
 	/**
-	 * @brief 알파 블랜딩을 위한 블랜드 상태를 생성합니다.
+	 * @brief 블랜딩을 위한 블랜드 상태를 생성합니다.
 	 * 
-	 * @return 알파 블랜딩 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 * @param BlendState 생성한 블랜드 상태를 저장할 포인터입니다.
+	 * @param bIsEnable 블랜드 상태 활성화 여부입니다.
+	 * 
+	 * @return 블랜딩 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateBlendState();
+	HRESULT CreateBlendState(ID3D11BlendState** BlendState, bool bIsEnable);
 
 
 	/**
-	 * @brief 디폴트 레스터라이저 상태를 생성합니다.
+	 * @brief 레스터라이저 상태를 생성합니다.
+	 * 
+	 * @param RasterizerState 생성한 레스터라이저 상태를 저장할 포인터입니다.
+	 * @param bIsEnableCull 컬링을 수행 여부입니다.
+	 * @param bIsEnableFill 렌더링 시 채움 모드 수행 여부입니다.
 	 * 
 	 * @return 레스터라이저 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateRasterizerState();
+	HRESULT CreateRasterizerState(ID3D11RasterizerState** RasterizerState, bool bIsEnableCull, bool bIsEnableFill);
 
 
 private:
@@ -401,27 +409,21 @@ private:
 
 
 	/**
-	 * @brief Z버퍼가 활성화된 깊이 스텐실 상태입니다.
+	 * @brief 렌더링 시 사용할 깊이 스텐실 상태입니다.
 	 */
-	ID3D11DepthStencilState* EnableZDepthStencilState_ = nullptr;
+	std::unordered_map<std::string, ID3D11DepthStencilState*> DepthStencilState_;
 
 
 	/**
-	 * @brief Z버퍼가 비활성화된 깊이 스텐실 상태입니다.
+	 * @brief 렌더링 시 사용할 블랜딩 상태입니다.
 	 */
-	ID3D11DepthStencilState* DisableZDepthStencilState_ = nullptr;
+	std::unordered_map<std::string, ID3D11BlendState*> BlendState_;
 
 
 	/**
-	 * @brief 알파 블랜딩 모드입니다.
+	 * @brief 렌더링 시 사용할 레스터라이저 상태입니다.
 	 */
-	ID3D11BlendState* AlphaBlend_ = nullptr;
-
-
-	/**
-	 * @brief 디폴트 레스터라이저 상태입니다.
-	 */
-	ID3D11RasterizerState* RasterizerState_ = nullptr;
+	std::unordered_map<std::string, ID3D11RasterizerState*> RasterizerState_;
 
 
 	/**
