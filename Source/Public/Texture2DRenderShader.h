@@ -99,40 +99,6 @@ public:
 
 private:
 	/**
-	 * @brief 매 프레임 사용할 상수 버퍼를 생성합니다.
-	 *
-	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
-	 *
-	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
-	 */
-	HRESULT CreateEveryFrameConstantBuffer(ID3D11Device* Device);
-
-
-	/**
-	 * @brief 파이프라인에서 사용할 정점 버퍼를 생성합니다.
-	 *
-	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
-	 * @param Vertices 정점 버퍼를 생성할 때 참조할 정점 목록입니다.
-	 * @param VertexBuffer 생성된 정점 버퍼입니다.
-	 *
-	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
-	 */
-	HRESULT CreateVertexBuffer(ID3D11Device* Device, const std::vector<QuadTextureVertex>& Vertices, ID3D11Buffer** VertexBuffer);
-
-
-	/**
-	 * @brief 파이프라인에서 사용할 인덱스 버퍼를 생성합니다.
-	 *
-	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
-	 * @param Indices 인덱스 버퍼를 생성할 때 참조할 인덱스 목록입니다.
-	 * @param IndexBuffer 생성된 인덱스 버퍼입니다.
-	 *
-	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
-	 */
-	HRESULT CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer);
-
-
-	/**
 	 * @brief 텍스처를 샘플링할 텍스처 샘플러를 생성합니다.
 	 * 
 	 * @param Device 샘플러를 생성할 때 사용할 디바이스입니다.
@@ -152,7 +118,7 @@ private:
 	/**
 	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
-	ID3D11Buffer* EveryFramBuffer_ = nullptr;
+	ID3D11Buffer* EveryFrameBuffer_ = nullptr;
 
 
 	/**

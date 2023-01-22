@@ -229,7 +229,7 @@ private:
 	/**
 	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
-	ID3D11Buffer* EveryFramBuffer_ = nullptr;
+	ID3D11Buffer* EveryFrameBuffer_ = nullptr;
 
 
 	/**

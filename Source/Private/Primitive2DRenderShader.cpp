@@ -10,7 +10,7 @@ Primitive2DRenderShader::Primitive2DRenderShader(ID3D11Device* Device, const std
 	CHECK_HR(CreateVertexShaderFromFile(Device, VertexShaderSourcePath), "failed to create vertex shader");
 	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
-	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFramBuffer_), "failed to every frame constant buffer");
+	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFrameBuffer_), "failed to every frame constant buffer");
 
 	EveryFrameBufferResource_.World.Identify();
 	EveryFrameBufferResource_.View.Identify();
@@ -74,7 +74,7 @@ Primitive2DRenderShader::~Primitive2DRenderShader()
 		SAFE_RELEASE(IndexBuffer.second);
 	}
 
-	SAFE_RELEASE(EveryFramBuffer_);
+	SAFE_RELEASE(EveryFrameBuffer_);
 }
 
 void Primitive2DRenderShader::RenderPoint(ID3D11DeviceContext* Context, const Vec3f& Position, const Vec4f& Color)
@@ -235,7 +235,7 @@ void Primitive2DRenderShader::RenderPrimitive(ID3D11DeviceContext* Context, cons
 
 	D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
 
-	if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+	if (SUCCEEDED(Context->Map(EveryFrameBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
 	{
 		EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
 
@@ -243,11 +243,11 @@ void Primitive2DRenderShader::RenderPrimitive(ID3D11DeviceContext* Context, cons
 		Buffer->View = EveryFrameBufferResource_.View;
 		Buffer->Projection = EveryFrameBufferResource_.Projection;
 
-		Context->Unmap(EveryFramBuffer_, 0);
+		Context->Unmap(EveryFrameBuffer_, 0);
 	}
 
 	uint32_t BindSlot = 0;
-	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+	Context->VSSetConstantBuffers(BindSlot, 1, &EveryFrameBuffer_);
 
 	Context->DrawIndexed(static_cast<uint32_t>(PrimitiveIndex_[PrimitiveSignature].size()), 0, 0);
 }

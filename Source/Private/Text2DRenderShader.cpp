@@ -11,8 +11,8 @@ Text2DRenderShader::Text2DRenderShader(ID3D11Device* Device, const std::wstring&
 	CHECK_HR(CreateVertexShaderFromFile(Device, VertexShaderSourcePath), "failed to create vertex shader");
 	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
-	CHECK_HR(CreateEveryFrameConstantBuffer(Device), "failed to every frame constant buffer");
-	CHECK_HR(CreateTextColorConstantBuffer(Device), "failed to text color constant buffer");
+	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFrameBuffer_), "failed to every frame constant buffer");
+	CHECK_HR(CreateDynamicConstantBuffer<TextColorConstantBuffer>(Device, &TextColorBuffer_), "failed to text color constant buffer");
 	CHECK_HR(CreateTextureSampler(Device), "failed to create texture sampler");
 
 	EveryFrameBufferResource_.World.Identify();
@@ -22,7 +22,7 @@ Text2DRenderShader::Text2DRenderShader(ID3D11Device* Device, const std::wstring&
 	CharacterVertex_ = std::vector<CharacterVertex>(4);
 	CharacterIndex_ = std::vector<uint32_t>{ 0, 1, 2, 0, 2, 3 };
 
-	CHECK_HR(CreateVertexBuffer(Device, CharacterVertex_, &CharacterVertexBuffer_), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer<CharacterVertex>(Device, CharacterVertex_, &CharacterVertexBuffer_), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, CharacterIndex_, &CharacterIndexBuffer_), "failed to create index buffer");
 }
 
@@ -32,7 +32,7 @@ Text2DRenderShader::~Text2DRenderShader()
 	SAFE_RELEASE(CharacterIndexBuffer_);
 	SAFE_RELEASE(CharacterVertexBuffer_);
 	SAFE_RELEASE(TextColorBuffer_);
-	SAFE_RELEASE(EveryFramBuffer_);
+	SAFE_RELEASE(EveryFrameBuffer_);
 }
 
 void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontResource, const std::wstring& Text, const Vec3f& Center, const Vec4f& Color)
@@ -92,7 +92,7 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 
 		D3D11_MAPPED_SUBRESOURCE ConstantBufferMappedResource;
 
-		if (SUCCEEDED(Context->Map(EveryFramBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
+		if (SUCCEEDED(Context->Map(EveryFrameBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
 		{
 			EveryFramConstantBuffer* Buffer = reinterpret_cast<EveryFramConstantBuffer*>(ConstantBufferMappedResource.pData);
 
@@ -100,7 +100,7 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 			Buffer->View = EveryFrameBufferResource_.View;
 			Buffer->Projection = EveryFrameBufferResource_.Projection;
 
-			Context->Unmap(EveryFramBuffer_, 0);
+			Context->Unmap(EveryFrameBuffer_, 0);
 		}
 
 		if (SUCCEEDED(Context->Map(TextColorBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMappedResource)))
@@ -113,7 +113,7 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 		}
 
 		uint32_t BindSlot = 0;
-		Context->VSSetConstantBuffers(BindSlot, 1, &EveryFramBuffer_);
+		Context->VSSetConstantBuffers(BindSlot, 1, &EveryFrameBuffer_);
 
 		uint32_t SamplerBindSlot = 0;
 		Context->PSSetSamplers(SamplerBindSlot, 1, &LinearSampler_);
@@ -128,72 +128,6 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 
 		Position.x += UnicodeInfo.XAdvance;
 	}
-}
-
-HRESULT Text2DRenderShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
-{
-	D3D11_BUFFER_DESC EveryFrameBufferDesc = {};
-
-	EveryFrameBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	EveryFrameBufferDesc.ByteWidth = sizeof(EveryFramConstantBuffer);
-	EveryFrameBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	EveryFrameBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	EveryFrameBufferDesc.MiscFlags = 0;
-	EveryFrameBufferDesc.StructureByteStride = 0;
-
-	return Device->CreateBuffer(&EveryFrameBufferDesc, nullptr, &EveryFramBuffer_);
-}
-
-HRESULT Text2DRenderShader::CreateTextColorConstantBuffer(ID3D11Device* Device)
-{
-	D3D11_BUFFER_DESC TextColorBufferDesc = {};
-
-	TextColorBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	TextColorBufferDesc.ByteWidth = sizeof(TextColorConstantBuffer);
-	TextColorBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	TextColorBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	TextColorBufferDesc.MiscFlags = 0;
-	TextColorBufferDesc.StructureByteStride = 0;
-
-	return Device->CreateBuffer(&TextColorBufferDesc, nullptr, &TextColorBuffer_);
-}
-
-HRESULT Text2DRenderShader::CreateVertexBuffer(ID3D11Device* Device, const std::vector<CharacterVertex>& Vertices, ID3D11Buffer** VertexBuffer)
-{
-	D3D11_BUFFER_DESC VertexBufferDesc = {};
-
-	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	VertexBufferDesc.ByteWidth = sizeof(CharacterVertex) * static_cast<uint32_t>(Vertices.size());
-	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	VertexBufferDesc.MiscFlags = 0;
-	VertexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA VertexData;
-	VertexData.pSysMem = reinterpret_cast<const void*>(&Vertices[0]);
-	VertexData.SysMemPitch = 0;
-	VertexData.SysMemSlicePitch = 0;
-
-	return Device->CreateBuffer(&VertexBufferDesc, &VertexData, VertexBuffer);
-}
-
-HRESULT Text2DRenderShader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer)
-{
-	D3D11_BUFFER_DESC IndexBufferDesc;
-
-	IndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	IndexBufferDesc.ByteWidth = sizeof(uint32_t) * static_cast<uint32_t>(Indices.size());
-	IndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	IndexBufferDesc.CPUAccessFlags = 0;
-	IndexBufferDesc.MiscFlags = 0;
-	IndexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA IndexData;
-	IndexData.pSysMem = reinterpret_cast<const void*>(&Indices[0]);
-	IndexData.SysMemPitch = 0;
-	IndexData.SysMemSlicePitch = 0;
-
-	return Device->CreateBuffer(&IndexBufferDesc, &IndexData, IndexBuffer);
 }
 
 HRESULT Text2DRenderShader::CreateTextureSampler(ID3D11Device* Device)
