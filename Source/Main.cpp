@@ -79,7 +79,7 @@ public:
 			}
 		);
 
-		GraphicsManager::Get().SetZBuffer(false);
+		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
 
 		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Banana.png");
