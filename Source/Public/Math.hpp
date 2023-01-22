@@ -150,3 +150,24 @@ inline Matrix4x4F GetOrthographicMatrix(float ViewWidth, float ViewHeight, float
 		            0.0f,              0.0f, -Range * NearZ, 1.0f
 	);
 }
+
+
+/**
+ * @brief 2D 평면 상의 원점 중심 회전 행렬을 얻습니다.
+ * 
+ * @param Angle 라디안 각도 기준의 회전 각입니다.
+ * 
+ * @return 회전 행렬을 얻습니다.
+ */
+inline Matrix4x4F GetRotateMatrix(float Angle)
+{
+	float Sin = std::sin(Angle);
+	float Cos = std::cos(Angle);
+
+	return Matrix4x4F(
+		+Cos,   -Sin, 0.0f, 0.0f,
+		+Sin,   +Cos, 0.0f, 0.0f,
+		 0.0f,  0.0f, 1.0f, 0.0f,
+		 0.0f,  0.0f, 0.0f, 1.0f
+	);
+}
