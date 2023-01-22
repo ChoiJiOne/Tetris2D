@@ -119,7 +119,7 @@ public:
 	 * @param PositionTo 삼각형 정점의 끝점입니다.
 	 * @param ColorTo 삼각형 정점의 끝점 색상입니다.
 	 */
-	void RenderFillTriangle (
+	void RenderFillTriangle(
 		ID3D11DeviceContext* Context,
 		const Vec3f& PositionFrom, const Vec4f& ColorFrom,
 		const Vec3f& PositionBy, const Vec4f& ColorBy,
