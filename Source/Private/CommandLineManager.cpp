@@ -5,26 +5,59 @@
 
 CommandLineManager::CommandLineManager()
 {
-	CommandLine_ = GetCommandLineA();
-	Arguments_ = Split(CommandLine_, " ");
+	CommandLineA_ = GetCommandLineA();
+	CommandLineW_ = GetCommandLineW();
 
-	for (const auto& Argument : Arguments_)
+	ParseCommandLineA();
+	ParseCommandLineW();
+}
+
+void CommandLineManager::ParseCommandLineA()
+{
+	ArgumentsA_ = Split(CommandLineA_, " ");
+
+	for (const auto& Argument : ArgumentsA_)
 	{
 		if (Argument.find("=") != std::string::npos)
 		{
 			std::vector<std::string> Tokens = Split(Argument, "=");
-			Options_.insert({ Tokens.front(), Tokens.back() });
+			OptionsA_.insert({ Tokens.front(), Tokens.back() });
 		}
 	}
 }
 
-bool CommandLineManager::HaveOption(const std::string& InOption)
+void CommandLineManager::ParseCommandLineW()
 {
-	return Options_.find(InOption) != Options_.end();
+	ArgumentsW_ = Split(CommandLineW_, L" ");
+
+	for (const auto& Argument : ArgumentsW_)
+	{
+		if (Argument.find(L"=") != std::wstring::npos)
+		{
+			std::vector<std::wstring> Tokens = Split(Argument, L"=");
+			OptionsW_.insert({ Tokens.front(), Tokens.back() });
+		}
+	}
 }
 
-std::string CommandLineManager::GetValue(const std::string& InOption)
+bool CommandLineManager::HaveOption(const std::string& Option)
 {
-	CHECK(HaveOption(InOption), "can't find command line option");
-	return Options_.at(InOption);
+	return OptionsA_.find(Option) != OptionsA_.end();
+}
+
+bool CommandLineManager::HaveOption(const std::wstring& Option)
+{
+	return OptionsW_.find(Option) != OptionsW_.end();
+}
+
+std::string CommandLineManager::GetValue(const std::string& Option)
+{
+	CHECK(HaveOption(Option), "can't find command line option");
+	return OptionsA_.at(Option);
+}
+
+std::wstring CommandLineManager::GetValue(const std::wstring& Option)
+{
+	CHECK(HaveOption(Option), "can't find command line option");
+	return OptionsW_.at(Option);
 }

@@ -33,15 +33,23 @@ public:
 
 
 	/**
-	 * @brief 전체 커맨드 라인을 얻습니다.
+	 * @brief 아스키 코드 기반의 전체 커맨드 라인을 얻습니다.
 	 *
-	 * @return 전체 커맨드 라인 문자열을 반환합니다.
+	 * @return 아스키 코드 기반의 전체 커맨드 라인 문자열을 반환합니다.
 	 */
-	const std::string& GetCommanLine() { return CommandLine_; }
+	const std::string& GetFullCommanLineA() { return CommandLineA_; }
 
 
 	/**
-	 * @brief 커맨드 라인에 옵션이 존재하는지 확인합니다.
+	 * @brief 유니 코드 기반의 전체 커맨드 라인을 얻습니다.
+	 *
+	 * @return 유니 코드 기반의 전체 커맨드 라인 문자열을 반환합니다.
+	 */
+	const std::wstring& GetFullCommanLineW() { return CommandLineW_; }
+
+
+	/**
+	 * @brief 아스키 코드 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
 	 *
 	 * @param Option 존재하는지 확인할 옵션입니다.
 	 *
@@ -50,14 +58,35 @@ public:
 	bool HaveOption(const std::string& Option);
 
 
+
 	/**
-	 * @brief 옵션에 해당하는 값을 얻습니다.
+	 * @brief 유니 코드 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
+	 *
+	 * @param Option 존재하는지 확인할 옵션입니다.
+	 *
+	 * @return 옵션이 존재하면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	bool HaveOption(const std::wstring& Option);
+
+
+	/**
+	 * @brief 아스키 코드 기반의 옵션에 해당하는 값을 얻습니다.
 	 *
 	 * @param Option 옵션입니다.
 	 *
 	 * @return 옵션에 대응하는 값을 반환합니다. 옵션에 대응하는 값이 존재하지 않는다면, 빈 문자열을 반환합니다.
 	 */
 	std::string GetValue(const std::string& Option);
+
+
+	/**
+	 * @brief 유니 코드 기반의 옵션에 해당하는 값을 얻습니다.
+	 *
+	 * @param Option 옵션입니다.
+	 *
+	 * @return 옵션에 대응하는 값을 반환합니다. 옵션에 대응하는 값이 존재하지 않는다면, 빈 문자열을 반환합니다.
+	 */
+	std::wstring GetValue(const std::wstring& Option);
 
 
 private:
@@ -73,21 +102,51 @@ private:
 	virtual ~CommandLineManager() = default;
 
 
+	/**
+	 * @brief 유니 코드 기반의 초기화를 수행합니다. 
+	 */
+	void ParseCommandLineA();
+
+
+	/**
+	 * @brief 유니 코드 기반의 초기화를 수행합니다.
+	 */
+	void ParseCommandLineW();
+
+
 private:
 	/**
-	 * 게임 실행 시 전달 받은 전체 커맨드 라인입니다.
+	 * @brief 게임 실행 시 전달 받은 아스키 코드 커맨드 라인입니다.
 	 */
-	std::string CommandLine_;
+	std::string CommandLineA_;
 
 
 	/**
-	 * 게임 실행 시에 전달 받은 커맨드 라인의 인자입니다.
+	 * @brief 게임 실행 시 전달 받은 유니 코드 커맨드 라인입니다.
 	 */
-	std::vector<std::string> Arguments_;
+	std::wstring CommandLineW_;
 
 
 	/**
-	 * 커맨드 라인 입력으로 받은 옵션입니다.
+	 * @brief 게임 실행 시 전달 받은 아스키 코드 커맨드 라인 인자입니다.
 	 */
-	std::unordered_map<std::string, std::string> Options_;
+	std::vector<std::string> ArgumentsA_;
+
+
+	/**
+	 * @brief 게임 실행 시 전달 받은 유니 코드 커맨드 라인 인자입니다.
+	 */
+	std::vector<std::wstring> ArgumentsW_;
+
+
+	/**
+	 * @brief 커맨드 라인 입력으로 받은 아스키 코드 옵션입니다.
+	 */
+	std::unordered_map<std::string, std::string> OptionsA_;
+
+
+	/**
+	 * @brief 커맨드 라인 입력으로 받은 유니 코드 옵션입니다.
+	 */
+	std::unordered_map<std::wstring, std::wstring> OptionsW_;
 };
