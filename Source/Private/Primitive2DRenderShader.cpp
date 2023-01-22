@@ -10,7 +10,7 @@ Primitive2DRenderShader::Primitive2DRenderShader(ID3D11Device* Device, const std
 	CHECK_HR(CreateVertexShaderFromFile(Device, VertexShaderSourcePath), "failed to create vertex shader");
 	CHECK_HR(CreatePixelShaderFromFile(Device, PixelShaderSourcePath), "failed to create pixel shader");
 	CHECK_HR(CreateInputLayout(Device, InputLayoutElements), "failed to create input layout");
-	CHECK_HR(CreateEveryFrameConstantBuffer(Device), "failed to every frame constant buffer");
+	CHECK_HR(CreateDynamicConstantBuffer<EveryFramConstantBuffer>(Device, &EveryFramBuffer_), "failed to every frame constant buffer");
 
 	EveryFrameBufferResource_.World.Identify();
 	EveryFrameBufferResource_.View.Identify();
@@ -23,42 +23,42 @@ Primitive2DRenderShader::Primitive2DRenderShader(ID3D11Device* Device, const std
 	Indices = { 0 };
 	PrimitiveVertex_["Point"] = Vertices;
 	PrimitiveIndex_["Point"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Point"], &PrimitiveVertexBuffer_["Point"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["Point"], &PrimitiveVertexBuffer_["Point"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Point"], &PrimitiveIndexBuffer_["Point"]), "failed to create index buffer");
 
 	Vertices.resize(2);
 	Indices = { 0, 1 };
 	PrimitiveVertex_["Line"] = Vertices;
 	PrimitiveIndex_["Line"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Line"], &PrimitiveVertexBuffer_["Line"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["Line"], &PrimitiveVertexBuffer_["Line"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Line"], &PrimitiveIndexBuffer_["Line"]), "failed to create index buffer");
 
 	Vertices.resize(3);
 	Indices = { 0, 1, 2 };
 	PrimitiveVertex_["Triangle"] = Vertices;
 	PrimitiveIndex_["Triangle"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Triangle"], &PrimitiveVertexBuffer_["Triangle"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["Triangle"], &PrimitiveVertexBuffer_["Triangle"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Triangle"], &PrimitiveIndexBuffer_["Triangle"]), "failed to create index buffer");
 
 	Vertices.resize(3);
 	Indices = { 0, 1, 1, 2, 2, 0 };
 	PrimitiveVertex_["WireframeTriangle"] = Vertices;
 	PrimitiveIndex_["WireframeTriangle"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["WireframeTriangle"], &PrimitiveVertexBuffer_["WireframeTriangle"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["WireframeTriangle"], &PrimitiveVertexBuffer_["WireframeTriangle"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["WireframeTriangle"], &PrimitiveIndexBuffer_["WireframeTriangle"]), "failed to create index buffer");
 
 	Vertices.resize(4);
 	Indices = { 0, 1, 2, 0, 2, 3};
 	PrimitiveVertex_["Quad"] = Vertices;
 	PrimitiveIndex_["Quad"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["Quad"], &PrimitiveVertexBuffer_["Quad"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["Quad"], &PrimitiveVertexBuffer_["Quad"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["Quad"], &PrimitiveIndexBuffer_["Quad"]), "failed to create index buffer");
 
 	Vertices.resize(4);
 	Indices = {0, 1, 1, 2, 2, 3, 3, 0};
 	PrimitiveVertex_["WireframeQuad"] = Vertices;
 	PrimitiveIndex_["WireframeQuad"] = Indices;
-	CHECK_HR(CreateVertexBuffer(Device, PrimitiveVertex_["WireframeQuad"], &PrimitiveVertexBuffer_["WireframeQuad"]), "failed to create vertex buffer");
+	CHECK_HR(CreateDynamicVertexBuffer(Device, PrimitiveVertex_["WireframeQuad"], &PrimitiveVertexBuffer_["WireframeQuad"]), "failed to create vertex buffer");
 	CHECK_HR(CreateIndexBuffer(Device, PrimitiveIndex_["WireframeQuad"], &PrimitiveIndexBuffer_["WireframeQuad"]), "failed to create index buffer");
 }
 
@@ -182,58 +182,6 @@ void Primitive2DRenderShader::RenderWireframeQuad(
 	PrimitiveVertex_["WireframeQuad"][3].Color = ColorTo;
 
 	RenderPrimitive(Context, "WireframeQuad", ERenderType::LINE);
-}
-
-HRESULT Primitive2DRenderShader::CreateEveryFrameConstantBuffer(ID3D11Device* Device)
-{
-	D3D11_BUFFER_DESC EveryFrameBufferDesc = {};
-
-	EveryFrameBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	EveryFrameBufferDesc.ByteWidth = sizeof(EveryFramConstantBuffer);
-	EveryFrameBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	EveryFrameBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	EveryFrameBufferDesc.MiscFlags = 0;
-	EveryFrameBufferDesc.StructureByteStride = 0;
-
-	return Device->CreateBuffer(&EveryFrameBufferDesc, nullptr, &EveryFramBuffer_);
-}
-
-HRESULT Primitive2DRenderShader::CreateVertexBuffer(ID3D11Device* Device, const std::vector<PrimitiveVertex>& Vertices, ID3D11Buffer** VertexBuffer)
-{
-	D3D11_BUFFER_DESC VertexBufferDesc = {};
-
-	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	VertexBufferDesc.ByteWidth = sizeof(PrimitiveVertex) * static_cast<uint32_t>(Vertices.size());
-	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	VertexBufferDesc.MiscFlags = 0;
-	VertexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA VertexData;
-	VertexData.pSysMem = reinterpret_cast<const void*>(&Vertices[0]);
-	VertexData.SysMemPitch = 0;
-	VertexData.SysMemSlicePitch = 0;
-
-	return Device->CreateBuffer(&VertexBufferDesc, &VertexData, VertexBuffer);
-}
-
-HRESULT Primitive2DRenderShader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer)
-{
-	D3D11_BUFFER_DESC IndexBufferDesc;
-
-	IndexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	IndexBufferDesc.ByteWidth = sizeof(uint32_t) * static_cast<uint32_t>(Indices.size());
-	IndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	IndexBufferDesc.CPUAccessFlags = 0;
-	IndexBufferDesc.MiscFlags = 0;
-	IndexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA IndexData;
-	IndexData.pSysMem = reinterpret_cast<const void*>(&Indices[0]);
-	IndexData.SysMemPitch = 0;
-	IndexData.SysMemSlicePitch = 0;
-
-	return Device->CreateBuffer(&IndexBufferDesc, &IndexData, IndexBuffer);
 }
 
 void Primitive2DRenderShader::RenderPrimitive(ID3D11DeviceContext* Context, const std::string& PrimitiveSignature, const ERenderType& RenderType)

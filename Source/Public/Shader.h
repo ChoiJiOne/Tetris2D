@@ -82,6 +82,72 @@ protected:
 	HRESULT CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& InputLayoutElements);
 
 
+	/**
+	 * @brief 파이프라인에서 사용할 다이나믹 정점 버퍼를 생성합니다.
+	 * 
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param Vertices 정점 버퍼를 생성할 때 참조할 정점 목록입니다.
+	 * @param VertexBuffer 생성된 정점 버퍼입니다.
+	 * 
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	template<typename Vertex>
+	HRESULT CreateDynamicVertexBuffer(ID3D11Device* Device, const std::vector<Vertex>& Vertices, ID3D11Buffer** VertexBuffer)
+	{
+		D3D11_BUFFER_DESC VertexBufferDesc = {};
+
+		VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		VertexBufferDesc.ByteWidth = sizeof(Vertex) * static_cast<uint32_t>(Vertices.size());
+		VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		VertexBufferDesc.MiscFlags = 0;
+		VertexBufferDesc.StructureByteStride = 0;
+
+		D3D11_SUBRESOURCE_DATA VertexData;
+		VertexData.pSysMem = reinterpret_cast<const void*>(&Vertices[0]);
+		VertexData.SysMemPitch = 0;
+		VertexData.SysMemSlicePitch = 0;
+
+		return Device->CreateBuffer(&VertexBufferDesc, &VertexData, VertexBuffer);
+	}
+
+
+	/**
+	 * @brief 파이프라인에서 사용할 인덱스 버퍼를 생성합니다.
+	 * 
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param Vertices 인덱스 버퍼를 생성할 때 참조할 인덱스 목록입니다.
+	 * @param IndexBuffer 생성된 인덱스 버퍼입니다.
+	 *
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer);
+
+
+	/**
+	 * @brief 다이나믹 상수 버퍼를 생성합니다.
+	 *
+	 * @param Device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param ConstantBuffer 생성된 상수 버퍼입니다
+	 *
+	 * @return 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	template <typename T>
+	HRESULT CreateDynamicConstantBuffer(ID3D11Device* Device, ID3D11Buffer** ConstantBuffer)
+	{
+		D3D11_BUFFER_DESC ConstantBufferDesc = {};
+
+		ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		ConstantBufferDesc.ByteWidth = sizeof(T);
+		ConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		ConstantBufferDesc.MiscFlags = 0;
+		ConstantBufferDesc.StructureByteStride = 0;
+
+		return Device->CreateBuffer(&ConstantBufferDesc, nullptr, ConstantBuffer);
+	}
+
+
 protected:
 	/**
 	 * @brief 정점 셰이더 소스 리소스입니다.

@@ -83,3 +83,22 @@ HRESULT Shader::CreateInputLayout(ID3D11Device* Device, const std::vector<D3D11_
 		&InputLayout_
 	);
 }
+
+HRESULT Shader::CreateIndexBuffer(ID3D11Device* Device, const std::vector<uint32_t>& Indices, ID3D11Buffer** IndexBuffer)
+{
+	D3D11_BUFFER_DESC IndexBufferDesc;
+
+	IndexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	IndexBufferDesc.ByteWidth = sizeof(uint32_t) * static_cast<uint32_t>(Indices.size());
+	IndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	IndexBufferDesc.CPUAccessFlags = 0;
+	IndexBufferDesc.MiscFlags = 0;
+	IndexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA IndexData;
+	IndexData.pSysMem = reinterpret_cast<const void*>(&Indices[0]);
+	IndexData.SysMemPitch = 0;
+	IndexData.SysMemSlicePitch = 0;
+
+	return Device->CreateBuffer(&IndexBufferDesc, &IndexData, IndexBuffer);
+}
