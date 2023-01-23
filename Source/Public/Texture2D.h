@@ -3,6 +3,7 @@
 #include "Macro.h"
 
 #include <vector>
+#include <array>
 
 #include <d3d11.h>
 
@@ -12,6 +13,27 @@
  */
 class Texture2D
 {
+public:
+	/**
+	 * @brief 텍스처의 크기입니다.
+	 * 
+	 * @see https://docs.unrealengine.com/4.27/en-US/RenderingAndGraphics/Textures/SupportAndSettings/
+	 */
+	enum class EResolution
+	{
+		SIZE_16X16     = 16,
+		SIZE_32X32     = 32,
+		SIZE_64X64     = 64,
+		SIZE_128X128   = 128,
+		SIZE_256X256   = 256,
+		SIZE_512X512   = 512,
+		SIZE_1024X1024 = 1024,
+		SIZE_2048X2048 = 2048,
+		SIZE_4096X4096 = 4096,
+		SIZE_8192X8192 = 8192,
+	};
+	
+
 public:
 	/**
 	 * @brief 2D 텍스처 리소스 생성자입니다.
@@ -89,6 +111,35 @@ private:
 	HRESULT CreateTextureResource(ID3D11Device* Device, std::vector<uint8_t>& Buffer, int32_t Format, int32_t Width, int32_t Height);
 
 
+	/**
+	 * @brief 텍스처 크기로부터 해상도를 얻습니다.
+	 * 
+	 * @param 텍스처의 가로 크기입니다.
+	 * @param 텍스처의 세로 크기입니다.
+	 * 
+	 * @return 텍스처의 해상도를 반환합니다.
+	 */
+	EResolution GetResolutionFromSize(int32_t Width, int32_t Height);
+
+
+	/**
+	 * @brief 텍스처 버퍼를 해상도를 기준으로 변경합니다.
+	 * 
+	 * @param OldBuffer 변경하기 이전의 버퍼입니다.
+	 * @param OldWidth 변경하기 이전의 버퍼 가로 크기입니다.
+	 * @param OldHeight 변경하기 이전의 버퍼 세로 크기입니다.
+	 * @param NewBuffer[out] 변경 이후의 버퍼입니다.
+	 * @param NewWidth[out] 변경 이후의 버퍼 가로 크기입니다.
+	 * @param NewHeight[out] 변경 이후의 버퍼 세로 크기입니다.
+	 * 
+	 * @return 버퍼 변경에 성공하면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool ResizeTextureBuffer(
+		std::vector<uint8_t>& OldBuffer, int32_t OldWidth, int32_t OldHeight,
+		std::vector<uint8_t>& NewBuffer, int32_t& NewWidth, int32_t& NewHeight
+	);
+
+
 private:
 	/**
 	 * @brief 2D 텍스처 데이터입니다.
@@ -102,4 +153,10 @@ private:
 	 * @brief 셰이더에 바인딩할 2D 텍스처 리소스 뷰입니다.
 	 */
 	ID3D11ShaderResourceView* TextureView_ = nullptr;
+
+
+	/**
+	 * @brief 텍스처의 해상도 크기입니다.
+	 */
+	static std::array<int32_t, 10> Resolutions_;
 };

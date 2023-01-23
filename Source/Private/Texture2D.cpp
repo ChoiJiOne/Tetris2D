@@ -1,8 +1,15 @@
 #include "Texture2D.h"
 
+#include <array>
+
 // @third party code - BEGIN
 #include <stb/stb_image.h>
+#include <stb/stb_image_resize.h>
 // @third party code - END
+
+std::array<int32_t, 10> Texture2D::Resolutions_ = {
+	16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192 
+};
 
 Texture2D::Texture2D(ID3D11Device* Device, const std::string& ResourcePath)
 {
@@ -32,7 +39,32 @@ bool Texture2D::LoadTextureFromFile(const std::string& ResourcePath, std::vector
 	stbi_image_free(ResourceBuffer);
 	ResourceBuffer = nullptr;
 
-	return true;
+	bool bIsResizeBuffer = true;
+	if (Width == Height)
+	{
+		for (std::size_t Index = 0; Index < Resolutions_.size(); ++Index)
+		{
+			if (Resolutions_[Index] == Width)
+			{
+				bIsResizeBuffer = false;
+			}
+		}
+	}
+
+	bool bIsSuccessed = true;
+	if (bIsResizeBuffer)
+	{
+		std::vector<uint8_t> NewResizeBuffer;
+		int32_t NewWidth = 0, NewHeight = 0;
+
+		bIsSuccessed = ResizeTextureBuffer(Buffer, Width, Height, NewResizeBuffer, NewWidth, NewHeight);
+
+		Buffer = NewResizeBuffer;
+		Width = NewWidth;
+		Height = NewHeight;
+	}
+
+	return bIsSuccessed;
 }
 
 HRESULT Texture2D::CreateTextureResource(ID3D11Device* Device, std::vector<uint8_t>& Buffer, int32_t Format, int32_t Width, int32_t Height)
@@ -75,4 +107,42 @@ HRESULT Texture2D::CreateTextureResource(ID3D11Device* Device, std::vector<uint8
 	}
 
 	return HR;
+}
+
+Texture2D::EResolution Texture2D::GetResolutionFromSize(int32_t Width, int32_t Height)
+{
+	int32_t TextureSize = (Width > Height) ? Width : Height;
+	EResolution TextureResolution = EResolution::SIZE_8192X8192;
+
+	for (std::size_t Index = 0; Index < Resolutions_.size() - 1; ++Index)
+	{
+		if (Resolutions_[Index] <= TextureSize && TextureSize <= Resolutions_[Index + 1])
+		{
+			int32_t Diff0 = TextureSize - Resolutions_[Index];
+			int32_t Diff1 = Resolutions_[Index + 1] - TextureSize;
+
+			TextureResolution = (Diff0 < Diff1) ? static_cast<EResolution>(Resolutions_[Index]) : static_cast<EResolution>(Resolutions_[Index + 1]);
+			break;
+		}
+	}
+	
+	return TextureResolution;
+}
+
+bool Texture2D::ResizeTextureBuffer(std::vector<uint8_t>& OldBuffer, int32_t OldWidth, int32_t OldHeight, std::vector<uint8_t>& NewBuffer, int32_t& NewWidth, int32_t& NewHeight)
+{
+	EResolution TextureResolution = GetResolutionFromSize(OldWidth, OldHeight);
+
+	NewWidth = static_cast<int32_t>(TextureResolution);
+	NewHeight = static_cast<int32_t>(TextureResolution);
+
+	NewBuffer.resize(NewWidth * NewHeight * STBI_rgb_alpha);
+
+	int32_t Success = stbir_resize_uint8(
+		&OldBuffer[0], OldWidth, OldHeight, 0,
+		&NewBuffer[0], NewWidth, NewHeight, 0,
+		STBI_rgb_alpha
+	);
+
+	return (Success != 0);
 }
