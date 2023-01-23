@@ -44,15 +44,13 @@ bool Font::HasCodePointInRange(int32_t CodePoint) const
 
 bool Font::LoadTrueTypeFontFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer)
 {
-	Buffer.resize(1 << 25);
+	HANDLE FontFileHandle = CreateFileA(ResourcePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+	DWORD FileSize = GetFileSize(FontFileHandle, nullptr);
+	Buffer.resize(FileSize);
+	DWORD BytesRead;
 
-	FILE* FontFile = nullptr;
-	fopen_s(&FontFile, ResourcePath.c_str(), "rb");
-
-	if (!FontFile) return false;
-
-	fread(&Buffer[0], 1, 1 << 25, FontFile);
-	fclose(FontFile);
+	CHECK(ReadFile(FontFileHandle, &Buffer[0], FileSize, &BytesRead, NULL), "failed to read font file");
+	CHECK(CloseHandle(FontFileHandle), "failed to close font file");
 
 	return true;
 }
@@ -104,7 +102,7 @@ std::shared_ptr<uint8_t[]> Font::GenerateTextureAtlasBitmap(
 
 	for (std::size_t Index = 0; Index < Packedchars.size(); ++Index)
 	{
-		CharacterInfos[Index].CodePoint = Index + BeginCodePoint;
+		CharacterInfos[Index].CodePoint = static_cast<int32_t>(Index + BeginCodePoint);
 
 		CharacterInfos[Index].Position0 = Vec2i(Packedchars[Index].x0, Packedchars[Index].y0);
 		CharacterInfos[Index].Position1 = Vec2i(Packedchars[Index].x1, Packedchars[Index].y1);
