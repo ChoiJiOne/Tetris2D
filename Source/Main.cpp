@@ -106,7 +106,9 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			GraphicsManager::Get().DrawTexture2D(*Texture_.get(), Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
+			float Width = 0.0f, Height = 0.0f;
+			Window_->GetSize<float>(Width, Height);
+			GraphicsManager::Get().DrawTexture2D(*Texture_.get(), Vec2f(0.0f, 0.0f), Width, Height);
 			GraphicsManager::Get().DrawText2D(*Font_.get(), L"Hello World", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
