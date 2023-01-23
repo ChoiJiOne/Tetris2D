@@ -8,6 +8,7 @@
 #include "Macro.h"
 #include "Math.hpp"
 #include "Random.h"
+#include "Sound.h"
 #include "Texture2D.h"
 #include "Timer.h"
 #include "Vector.hpp"
@@ -87,9 +88,7 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 
 		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Texture\\Space.png");
-		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Font\\JetBrainsMono-Bold.ttf", 0x20, 0x7E, 32.0f);
-
-		ma_engine_init(NULL, &engine);
+		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Font\\SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);
  	}
 
 
@@ -98,9 +97,9 @@ public:
 	 */
 	virtual void Run() override
 	{
-		ma_sound title, play;
-		ma_sound_init_from_file(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Title.wav", 0, nullptr, nullptr, &title);
-		ma_sound_init_from_file(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Play.wav", 0, nullptr, nullptr, &play);
+		ma_engine_init(NULL, &engine);
+		Sound title(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Title.wav");
+		Sound play(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Play.wav");
 
 		Timer_.Reset();
 
@@ -116,22 +115,21 @@ public:
 
 			if (InputManager::Get().GetKeyPressState(VK_LEFT) == EPressState::PRESSED)
 			{
-				ma_sound_start(&title);
+				title.Play();
 			}
 
 			if (InputManager::Get().GetKeyPressState(0x41) == EPressState::PRESSED)
 			{
-				ma_sound_stop(&title);
+				title.Stop();
 			}
 
 			if (InputManager::Get().GetKeyPressState(VK_RIGHT) == EPressState::PRESSED)
 			{
-				ma_sound_start(&play);
+				title.Reset();
 			}
 
 			if (InputManager::Get().GetKeyPressState(0x53) == EPressState::PRESSED)
 			{
-				ma_sound_stop(&play);
 			}
 
 			GraphicsManager::Get().Clear(BLACK);
@@ -139,13 +137,10 @@ public:
 			float Width = 0.0f, Height = 0.0f;
 			Window_->GetSize<float>(Width, Height);
 			GraphicsManager::Get().DrawTexture2D(*Texture_.get(), Vec2f(0.0f, 0.0f), Width, Height);
-			GraphicsManager::Get().DrawText2D(*Font_.get(), L"Hello World", Vec2f(0.0f, 0.0f), MAGENTA);
+			GraphicsManager::Get().DrawText2D(*Font_.get(), L"한글 출력 확인", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
 		}
-
-		ma_sound_uninit(&title);
-		ma_sound_uninit(&play);
 	}
 
 
