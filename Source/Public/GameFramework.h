@@ -14,13 +14,13 @@ public:
 	/**
 	 * @brief 게임 프레임워크의 생성자입니다.
 	 */
-	GameFramework();
+	GameFramework() = default;
 
 
 	/**
 	 * @brief 게임 프레임워크의 가상 소멸자입니다.
 	 */
-	virtual ~GameFramework();
+	virtual ~GameFramework() = default;
 
 
 	/**
