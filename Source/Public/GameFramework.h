@@ -13,10 +13,8 @@ class GameFramework
 public:
 	/**
 	 * @brief 게임 프레임워크의 생성자입니다.
-	 * 
-	 * @note 이 생성자는 아무런 초기화도 수행하지 않습니다.
 	 */
-	GameFramework() = default;
+	GameFramework();
 
 
 	/**
