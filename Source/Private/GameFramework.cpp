@@ -5,7 +5,7 @@
 
 GameFramework::GameFramework()
 {
-	CHECK_HR(CoInitializeEx(nullptr, COINIT_MULTITHREADED), "failed to com initialize");
+	CHECK_HR(CoInitializeEx(nullptr, COINIT_MULTITHREADED), "failed to initialize for component object model resource");
 }
 
 GameFramework::~GameFramework()
