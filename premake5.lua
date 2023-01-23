@@ -57,6 +57,7 @@ workspace "Tetris2D"
             "%{source}/Shader/*",
 
             "%{thirdparty}/stb/*",
+            "%{thirdparty}/miniaudio/*",
         }
 
         -- 빌드의 구성 요소별 설정을 수행합니다.
@@ -71,7 +72,6 @@ workspace "Tetris2D"
             "d3d11.lib",
             "dxgi.lib",
             "d3dcompiler.lib",
-            "XAudio2.lib",
         }
 
         filter "configurations:Release"
@@ -85,7 +85,6 @@ workspace "Tetris2D"
             "d3d11.lib",
             "dxgi.lib",
             "d3dcompiler.lib",
-            "XAudio2.lib",
         }
 
         filter "configurations:Shipping"
@@ -99,5 +98,4 @@ workspace "Tetris2D"
             "d3d11.lib",
             "dxgi.lib",
             "d3dcompiler.lib",
-            "XAudio2.lib",
         }
