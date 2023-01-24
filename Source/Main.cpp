@@ -1,4 +1,5 @@
 #include "CommandLineManager.h"
+#include "ContentManager.h"
 #include "Color.h"
 #include "Debug.h"
 #include "Font.h"
@@ -18,8 +19,6 @@
 #include "Texture2DRenderShader.h"
 #include "Text2DRenderShader.h"
 
-#include <miniaudio/miniaudio.h>
-
 
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다.
@@ -38,11 +37,6 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-		ma_engine_uninit(&engine);
-
-		Font_.reset();
-		Texture_.reset();
-
 		GraphicsManager::Get().Cleanup();
 		Window_.reset();
 	}
@@ -88,8 +82,8 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 
-		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Texture\\Space.png");
-		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Font\\SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);
+		ContentManager::Get().LoadTexture2D("Background", "Space.png");
+		ContentManager::Get().LoadFont("Font32", "SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);
  	}
 
 
@@ -98,10 +92,6 @@ public:
 	 */
 	virtual void Run() override
 	{
-		ma_engine_init(NULL, &engine);
-		//Sound title(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Title.wav");
-		//Sound play(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Play.wav");
-
 		Timer_.Reset();
 
 		while (!bIsDone_)
@@ -118,8 +108,8 @@ public:
 
 			float Width = 0.0f, Height = 0.0f;
 			Window_->GetSize<float>(Width, Height);
-			GraphicsManager::Get().DrawTexture2D(*Texture_.get(), Vec2f(0.0f, 0.0f), Width, Height);
-			GraphicsManager::Get().DrawText2D(*Font_.get(), L"한글 출력 확인", Vec2f(0.0f, 0.0f), MAGENTA);
+			GraphicsManager::Get().DrawTexture2D(ContentManager::Get().GetTexture2D("Background"), Vec2f(0.0f, 0.0f), Width, Height);
+			GraphicsManager::Get().DrawText2D(ContentManager::Get().GetFont("Font32"), L"한글 출력 확인", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
 		}
@@ -143,21 +133,6 @@ private:
 	 * @brief 윈도우 창입니다.
 	 */
 	std::unique_ptr<Window> Window_ = nullptr;
-
-
-	/**
-	 * @brief 텍스처 리소스입니다.
-	 */
-	std::unique_ptr<Texture2D> Texture_ = nullptr;
-
-
-	/**
-	 * @brief 폰트 리소스입니다.
-	 */
-	std::unique_ptr<Font> Font_ = nullptr;
-
-
-	ma_engine engine;
 };
 
 
