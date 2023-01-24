@@ -20,6 +20,9 @@ workspace "Tetris2D"
    -- 외부 라이브러리 경로를 설정합니다.
    thirdparty="%{wks.location}/../ThirdParty"
 
+   -- 컨텐츠 경로를 설정합니다.
+   content="%{wks.location}/../Content"
+
    -- Tetris2D 프로젝트입니다.
    project "Tetris2D"
 
@@ -58,6 +61,11 @@ workspace "Tetris2D"
 
             "%{thirdparty}/stb/*",
             "%{thirdparty}/miniaudio/*",
+
+            "%{content}/Audio/*",
+            "%{content}/Config/*",
+            "%{content}/Font/*",
+            "%{content}/Texture/*",
         }
 
         -- 빌드의 구성 요소별 설정을 수행합니다.
