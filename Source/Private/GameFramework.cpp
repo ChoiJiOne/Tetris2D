@@ -25,6 +25,7 @@ void GameFramework::CreateWindowFromConfig()
 	Config& WindowConfig = ContentManager::Get().LoadConfig("Window", "Window.config");
 
 	WindowConstructorParam Param;
+
 	Param.Title = Convert(WindowConfig.GetValue("title"));
 	Param.PositionX = std::stoi(WindowConfig.GetValue("x"));
 	Param.PositionY = std::stoi(WindowConfig.GetValue("y"));

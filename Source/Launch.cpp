@@ -11,14 +11,11 @@
 #include "Math.hpp"
 #include "Random.h"
 #include "Sound.h"
+#include "Shader.h"
 #include "Texture2D.h"
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
-
-#include "Primitive2DRenderShader.h"
-#include "Texture2DRenderShader.h"
-#include "Text2DRenderShader.h"
 
 
 /**
