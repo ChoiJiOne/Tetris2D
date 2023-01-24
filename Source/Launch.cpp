@@ -28,23 +28,12 @@ class Tetris : public GameFramework
 {
 public:
 	/**
-	 * @brief 테트리스 게임의 기본 생성자입니다.
+	 * @brief 테트리스 게임의 생성자입니다.
+	 * 
+	 * @throws 
+	 * 초기화에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	Tetris() = default;
-
-
-	/**
-	 * @brief 테트리스 게임의 가상 소멸자입니다.
-	 */
-	virtual ~Tetris()
-	{
-	}
-
-
-	/**
-	 * @brief 테트리스 게임을 초기화합니다.
-	 */
-	virtual void Init() override
+	Tetris()
 	{
 		InputManager::Get().RegisterWindowEvent(
 			EWindowEvent::CLOSE,
@@ -73,7 +62,15 @@ public:
 
 		ContentManager::Get().LoadTexture2D("Background", "Space.png");
 		ContentManager::Get().LoadFont("Font32", "SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);
- 	}
+	}
+
+
+	/**
+	 * @brief 테트리스 게임의 가상 소멸자입니다.
+	 */
+	virtual ~Tetris()
+	{
+	}
 
 
 	/**
@@ -128,7 +125,6 @@ private:
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR CmdLine, int32_t CmdShow)
 {
 	auto Game = std::make_unique<Tetris>();
-	Game->Init();
 	Game->Run();
 
 	return 0;
