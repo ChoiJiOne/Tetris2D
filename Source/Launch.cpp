@@ -38,8 +38,6 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-		GraphicsManager::Get().Cleanup();
-		Window_.reset();
 	}
 
 
@@ -48,25 +46,6 @@ public:
 	 */
 	virtual void Init() override
 	{
-		SetUnhandledExceptionFilter(UnhandledExceptionHandler);
-
-		Config& WindowConfig = ContentManager::Get().LoadConfig("Window", "Window.config");
-
-		int x = std::stoi("1000");
-
-		Window_ = std::make_unique<Window>(
-			WindowConstructorParamA {
-				WindowConfig.GetValue("title"), 
-				std::stoi(WindowConfig.GetValue("x")),
-				std::stoi(WindowConfig.GetValue("y")),
-				std::stoi(WindowConfig.GetValue("width")),
-				std::stoi(WindowConfig.GetValue("height")),
-				std::stoi(WindowConfig.GetValue("fullscreen")) ? true : false
-			}
-		);
-
-		GraphicsManager::Get().Init(Window_.get());
-
 		InputManager::Get().RegisterWindowEvent(
 			EWindowEvent::CLOSE,
 			[&]() {
@@ -128,21 +107,9 @@ public:
 
 private:
 	/**
-	 * @brief 게임 루프를 수행할 지 확인합니다.
-	 */
-	bool bIsDone_ = false;
-
-
-	/**
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
-
-
-	/**
-	 * @brief 윈도우 창입니다.
-	 */
-	std::unique_ptr<Window> Window_ = nullptr;
 };
 
 
