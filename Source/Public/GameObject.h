@@ -1,0 +1,164 @@
+#pragma once
+
+#include "Macro.h"
+
+#include <unordered_map>
+#include <memory>
+
+class Camera2D;
+class Component;
+
+
+/**
+ * @brief 게임 오브젝트 클래스입니다.
+ * 
+ * @note 게임 내의 모든 오브젝트는 이 클래스를 상속 받아야 합니다.
+ */
+class GameObject
+{
+public:
+	/**
+	 * @brief 게임 오브젝트의 생성자입니다.
+	 * 
+	 * @param Signature 게임 오브젝트를 구분하기 위한 시그니처 문자열입니다.
+	 */
+	GameObject(const std::string& Signature);
+
+
+	/**
+	 * @brief 게임 오브젝트의 가상 소멸자입니다.
+	 */
+	virtual ~GameObject();
+
+
+	/**
+	 * @brief 게임 오브젝트의 복사 생성자 및 대입 연산자를 명시적으로 삭제합니다.
+	 */
+	DISALLOW_COPY_AND_ASSIGN(GameObject);
+
+
+	/**
+	 * @brief 게임 오브젝트를 업데이트합니다.
+	 *
+	 * @param DeltaTime 초단위 델타 시간값입니다.
+	 */
+	virtual void Update(float DeltaSeconds) = 0;
+
+
+	/**
+	 * @brief 게임 오브젝트를 화면에 그립니다.
+	 * 
+	 * @param Camera 게임의 시야 처리를 위한 카메라입니다.
+	 */
+	virtual void Render(Camera2D& Camera) = 0;
+	
+
+	/**
+	 * 게임 오브젝트에 컴포넌트를 추가합니다.
+	 * 이때, 키 값에 대응하는 컴포넌트가 존재한다면 아무런 동작도 수행하지 않습니다.
+	 *
+	 * @param Key 추가할 컴포넌트의 키값입니다.
+	 * @param Args 컴포넌트에 필요한 가변 인자입니다.
+	 */
+	template<typename T, typename... Types>
+	void AddComponent(const std::string& Key, Types... Args)
+	{
+		if (IsExistComponent(Key)) return;
+
+		std::unique_ptr<T> NewComponent = std::make_unique<T>(this, Args...);
+		Components_.insert({ Key, std::move(NewComponent) });
+	}
+
+
+	/**
+	 * 게임 오브젝트가 소유하고 있는 컴포넌트를 얻습니다.
+	 *
+	 * @param Key - 게임 오브젝트가 소유하고 있는 컴포넌트의 키 값입니다.
+	 *
+	 * @return 키 값에 대응하는 컴포넌트가 존재하면 주소 값을 반환, 그렇지 않으면 nullptr를 반환합니다.
+	 */
+	template<typename T>
+	T* GetComponent(const std::string& Key)
+	{
+		if (!IsExistComponent(Key)) return nullptr;
+
+		return reinterpret_cast<T*>(Components_.at(Key).get());
+	}
+
+
+	/**
+	 * @brief 게임 오브젝트가 소유하고 있는 컴포넌트를 삭제합니다.
+	 * 
+	 * @note 키 값에 대응하는 컴포넌트가 존재하지 않는다면, 아무런 동작도 하지 않습니다.
+	 *
+	 * @param Key 게임 오브젝트가 소유하고 있는 컴포넌트의 키 값입니다.
+	 */
+	template<typename T>
+	void RemoveComponent(const std::string& Key)
+	{
+		if (IsExistComponent(InKey))
+		{
+			Remove<std::string, std::unique_ptr<Component>>(Key, Components_);
+		}
+	}
+
+
+	/**
+	 * @brief 키 값에 대응하는 컴포넌트가 존재하는지 검사합니다.
+	 *
+	 * @param Key 검사를 수행할 키 값입니다.
+	 *
+	 * @return 키 값에 대응하는 컴포넌트가 존재하면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsExistComponent(const std::string& Key)
+	{
+		return IsExistKey<std::string, std::unique_ptr<Component>>(Key, Components_);
+	}
+
+
+private:
+	/**
+	 * @brief 키 값이 존재하는지 확인합니다.
+	 *
+	 * @param Key 충돌하는지 확인할 키 값입니다.
+	 * @param KeyValueResource 키-값 쌍의 자료구조입니다.
+	 *
+	 * @return 이미 키 값에 대응하는 값이 존재하면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	template<typename TKey, typename TValue>
+	bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
+	{
+		return KeyValueResource.find(Key) != KeyValueResource.end();
+	}
+
+
+	/**
+	 * @brief 키 값에 대응하는 값을 삭제합니다.
+	 *
+	 * @note 키 값에 대응하는 값이 존재하지 않는다면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param Key 삭제할 데이터의 키 값입니다.
+	 * @param KeyValueResource 삭제할 키-값 쌍의 자료구조입니다.
+	 */
+	template <typename TKey, typename TValue>
+	void Remove(const TKey& Key, std::unordered_map<TKey, TValue>& KeyValueResourc)
+	{
+		if (IsExistKey<TKey, TValue>(Key, KeyValueResourc))
+		{
+			KeyValueResourc.erase(Key);
+		}
+	}
+
+
+protected:
+	/**
+	 * @brief 게임 오브젝트의 시그니처입니다.
+	 */
+	std::string Signature_;
+
+
+	/**
+	 * @brief 게임 오브젝트가 소유하고 있는 컴포넌트입니다.
+	 */
+	std::unordered_map<std::string, std::unique_ptr<Component>> Components_;
+};
