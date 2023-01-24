@@ -108,7 +108,7 @@ void InputManager::Tick()
 	UpdateMousePosition();
 }
 
-EPressState InputManager::GetKeyPressState(int32_t KeyCode) const
+EPressState InputManager::GetKeyPressState(const EKeyCode& KeyCode) const
 {
 	EPressState PressState = EPressState::NONE;
 
@@ -162,9 +162,9 @@ void InputManager::UpdateKeyboardState()
 	CHECK(GetKeyboardState(&CurrKeyboardState_[0]), "failed to get keyboard state");
 }
 
-bool InputManager::IsPressKey(const std::vector<uint8_t>& KeyboardState, int32_t KeyCode) const
+bool InputManager::IsPressKey(const std::vector<uint8_t>& KeyboardState, const EKeyCode& KeyCode) const
 {
-	return (KeyboardState[KeyCode] & 0x80);
+	return (KeyboardState[static_cast<int32_t>(KeyCode)] & 0x80);
 }
 
 Vec2i InputManager::GetMousePositionFromScreen()
