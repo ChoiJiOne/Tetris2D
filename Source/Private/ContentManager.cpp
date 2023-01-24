@@ -46,8 +46,8 @@ ContentManager::~ContentManager()
 
 Texture2D& ContentManager::LoadTexture2D(const std::string& Signature, const std::string& FileName)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
-	CHECK(!bIsCollision, "collision texture signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
+	CHECK(!bIsExist, "collision texture signature");
 
 	const std::string& Path = ContentPath_ + "Texture\\" + FileName;
 	Textures_[Signature] = std::make_unique<Texture2D>(DeviceForTexture_, Path);
@@ -57,8 +57,8 @@ Texture2D& ContentManager::LoadTexture2D(const std::string& Signature, const std
 
 Texture2D& ContentManager::GetTexture2D(const std::string& Signature)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
-	CHECK(bIsCollision, "doesn't exist texture signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
+	CHECK(bIsExist, "doesn't exist texture signature");
 	
 	return *Textures_[Signature].get();
 }
@@ -70,8 +70,8 @@ void ContentManager::RemoveTexture2D(const std::string& Signature)
 
 Font& ContentManager::LoadFont(const std::string& Signature, const std::string& FileName, int32_t BeginCodePoint, int32_t EndCodePoint, float FontSize)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
-	CHECK(!bIsCollision, "collision font signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
+	CHECK(!bIsExist, "collision font signature");
 
 	const std::string& Path = ContentPath_ + "Font\\" + FileName;
 	Fonts_[Signature] = std::make_unique<Font>(DeviceForTexture_, Path, BeginCodePoint, EndCodePoint, FontSize);
@@ -81,8 +81,8 @@ Font& ContentManager::LoadFont(const std::string& Signature, const std::string& 
 
 Font& ContentManager::GetFont(const std::string& Signature)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
-	CHECK(bIsCollision, "doesn't exist font signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
+	CHECK(bIsExist, "doesn't exist font signature");
 
 	return *Fonts_[Signature].get();
 }
@@ -94,8 +94,8 @@ void ContentManager::RemoveFont(const std::string& Signature)
 
 Sound& ContentManager::LoadSound(const std::string& Signature, const std::string& FileName)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
-	CHECK(!bIsCollision, "collision sound signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
+	CHECK(!bIsExist, "collision sound signature");
 
 	const std::string& Path = ContentPath_ + "Sound\\" + FileName;
 	Sounds_[Signature] = std::make_unique<Sound>(AudioEngine_.get(), Path);
@@ -105,8 +105,8 @@ Sound& ContentManager::LoadSound(const std::string& Signature, const std::string
 
 Sound& ContentManager::GetSound(const std::string& Signature)
 {
-	bool bIsCollision = IsExistKey<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
-	CHECK(bIsCollision, "doesn't exist sound signature");
+	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
+	CHECK(bIsExist, "doesn't exist sound signature");
 
 	return *Sounds_[Signature].get();
 }
