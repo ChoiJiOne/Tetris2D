@@ -4,8 +4,6 @@
 #include "Vector.hpp"
 #include "Matrix.hpp"
 
-#include <windows.h>
-
 
 /**
  * @brief float 타입의 파이(π) 값입니다.
