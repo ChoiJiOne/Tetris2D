@@ -49,7 +49,7 @@ bool Font::LoadTrueTypeFontFromFile(const std::string& ResourcePath, std::vector
 	Buffer.resize(FileSize);
 	DWORD BytesRead;
 
-	CHECK(ReadFile(FontFileHandle, &Buffer[0], FileSize, &BytesRead, NULL), "failed to read font file");
+	CHECK(ReadFile(FontFileHandle, &Buffer[0], FileSize, &BytesRead, nullptr), "failed to read font file");
 	CHECK(CloseHandle(FontFileHandle), "failed to close font file");
 
 	return true;
