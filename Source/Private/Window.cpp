@@ -20,15 +20,20 @@ LRESULT CALLBACK WindowProc(HWND WindowHandle, uint32_t Message, WPARAM WParam, 
 	return InputManager::Get().WindowMessageHandler(WindowHandle, Message, WParam, LParam);
 }
 
-Window::Window(const WindowConstructorParam& ConstructorParam)
+Window::Window(const WindowConstructorParamA& ConstructorParam)
 	: Window(ConstructorParam.Title, ConstructorParam.PositionX, ConstructorParam.PositionY, ConstructorParam.Width, ConstructorParam.Height, ConstructorParam.bIsFullScreen)
 {
 }
 
-Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, int32_t Width, int32_t Height, bool bIsFullScreen)
+Window::Window(const WindowConstructorParamW& ConstructorParam)
+	: Window(ConstructorParam.Title, ConstructorParam.PositionX, ConstructorParam.PositionY, ConstructorParam.Width, ConstructorParam.Height, ConstructorParam.bIsFullScreen)
+{
+}
+
+Window::Window(const std::string& Title, int32_t PositionX, int32_t PositionY, int32_t Width, int32_t Height, bool bIsFullScreen)
 	: bIsFullScreen_(bIsFullScreen)
 {
-	RegisterWindowClass(Title);
+	RegisterWindowClassA(Title);
 
 	DWORD WindowStyle = WS_VISIBLE;
 	int32_t WindowPositionX = 0;
@@ -64,7 +69,60 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 		WindowHeight = Rect.bottom - Rect.top;
 	}
 
-	WindowHandle_ = CreateWindow(
+	WindowHandle_ = CreateWindowA(
+		Title.c_str(),
+		Title.c_str(),
+		WindowStyle,
+		WindowPositionX, WindowPositionY, WindowWidth, WindowHeight,
+		nullptr,
+		nullptr,
+		GetModuleHandle(nullptr),
+		nullptr
+	);
+
+	CHECK((WindowHandle_ != nullptr), "failed to create window");
+}
+
+Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, int32_t Width, int32_t Height, bool bIsFullScreen)
+	: bIsFullScreen_(bIsFullScreen)
+{
+	RegisterWindowClassW(Title);
+
+	DWORD WindowStyle = WS_VISIBLE;
+	int32_t WindowPositionX = 0;
+	int32_t WindowPositionY = 0;
+	int32_t WindowWidth = 0;
+	int32_t WindowHeight = 0;
+
+	if (bIsFullScreen_)
+	{
+		WindowWidth = GetSystemMetrics(SM_CXSCREEN);
+		WindowHeight = GetSystemMetrics(SM_CYSCREEN);
+		WindowStyle |= WS_POPUP;
+
+		DEVMODE ScreenSettings = {};
+
+		ScreenSettings.dmSize = sizeof(DEVMODE);
+		ScreenSettings.dmPelsWidth = static_cast<DWORD>(WindowWidth);
+		ScreenSettings.dmPelsHeight = static_cast<DWORD>(WindowHeight);
+		ScreenSettings.dmBitsPerPel = 32;
+		ScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+		ChangeDisplaySettings(&ScreenSettings, CDS_FULLSCREEN);
+	}
+	else
+	{
+		RECT Rect = { 0, 0, Width, Height };
+		CHECK(AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW | WS_VISIBLE, false), "failed to adjust window size");
+
+		WindowStyle |= WS_OVERLAPPEDWINDOW;
+		WindowPositionX = PositionX;
+		WindowPositionY = PositionY;
+		WindowWidth = Rect.right - Rect.left;
+		WindowHeight = Rect.bottom - Rect.top;
+	}
+
+	WindowHandle_ = CreateWindowW(
 		Title.c_str(),
 		Title.c_str(),
 		WindowStyle,
@@ -82,11 +140,11 @@ Window::~Window()
 {
 }
 
-void Window::RegisterWindowClass(const std::wstring& ClassTitle)
+void Window::RegisterWindowClassA(const std::string& ClassTitle)
 {
-	WNDCLASSEX WindowClass = {};
+	WNDCLASSEXA WindowClass = {};
 
-	WindowClass.cbSize = sizeof(WNDCLASSEX);
+	WindowClass.cbSize = sizeof(WNDCLASSEXA);
 	WindowClass.style = CS_HREDRAW | CS_VREDRAW;
 	WindowClass.lpfnWndProc = WindowProc;
 	WindowClass.cbClsExtra = 0;
@@ -99,5 +157,25 @@ void Window::RegisterWindowClass(const std::wstring& ClassTitle)
 	WindowClass.lpszClassName = ClassTitle.c_str();
 	WindowClass.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 
-	CHECK((RegisterClassEx(&WindowClass) != 0), "failed to register window class");
+	CHECK((RegisterClassExA(&WindowClass) != 0), "failed to register window class");
+}
+
+void Window::RegisterWindowClassW(const std::wstring& ClassTitle)
+{
+	WNDCLASSEXW WindowClass = {};
+
+	WindowClass.cbSize = sizeof(WNDCLASSEXW);
+	WindowClass.style = CS_HREDRAW | CS_VREDRAW;
+	WindowClass.lpfnWndProc = WindowProc;
+	WindowClass.cbClsExtra = 0;
+	WindowClass.cbWndExtra = 0;
+	WindowClass.hInstance = GetModuleHandle(nullptr);
+	WindowClass.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+	WindowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	WindowClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	WindowClass.lpszMenuName = nullptr;
+	WindowClass.lpszClassName = ClassTitle.c_str();
+	WindowClass.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+
+	CHECK((RegisterClassExW(&WindowClass) != 0), "failed to register window class");
 }

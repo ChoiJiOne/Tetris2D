@@ -11,7 +11,21 @@
 /**
  * @brief 윈도우 클래스의 생성자 파라미터입니다.
  */
-struct WindowConstructorParam
+struct WindowConstructorParamA
+{
+	const std::string Title;
+	int32_t PositionX;
+	int32_t PositionY;
+	int32_t Width;
+	int32_t Height;
+	bool bIsFullScreen; /* 풀 스크린 모드 활성화 시 타이틀을 제외한 요소는 무시됩니다. */
+};
+
+
+/**
+ * @brief 윈도우 클래스의 생성자 파라미터입니다.
+ */
+struct WindowConstructorParamW
 {
 	const std::wstring Title;
 	int32_t PositionX;
@@ -31,17 +45,53 @@ public:
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 *
+	 * @note 문자열의 타입이 아스키 코드입니다.
+	 * 
 	 * @param ConstructorParam 윈도우 클래스의 생성 파라미터입니다.
 	 * 
 	 * @throws 윈도우 창 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	explicit Window(const WindowConstructorParam& ConstructorParam);
+	explicit Window(const WindowConstructorParamA& ConstructorParam);
+
+
+	/**
+	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
+	 * 
+	 * @note 문자열의 타입이 유니코드입니다.
+	 *
+	 * @param ConstructorParam 윈도우 클래스의 생성 파라미터입니다.
+	 *
+	 * @throws 윈도우 창 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	explicit Window(const WindowConstructorParamW& ConstructorParam);
 
 
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 *
-	 * @param Title 윈도우의 타이틀입니다.
+	 * @param Title 아스키 코드 기반의 윈도우의 타이틀입니다.
+	 * @param PositionX 윈도우 왼쪽 상단의 X좌표입니다.
+	 * @param PositionY 윈도우 왼쪽 상단의 Y좌표입니다.
+	 * @param Width 윈도우의 가로 크기입니다.
+	 * @param Height 윈도우의 세로 크기입니다.
+	 * @param bIsFullScreen 윈도우의 풀 스크린 모드 여부입니다. 활성화 되었다면 타이틀을 제외한 요소는 무시됩니다.
+	 *
+	 * @throws 윈도우 창 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	explicit Window(
+		const std::string& Title,
+		int32_t PositionX,
+		int32_t PositionY,
+		int32_t Width,
+		int32_t Height,
+		bool bIsFullScreen
+	);
+
+
+	/**
+	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
+	 *
+	 * @param Title 유니 코드 기반의 윈도우의 타이틀입니다.
 	 * @param PositionX 윈도우 왼쪽 상단의 X좌표입니다.
 	 * @param PositionY 윈도우 왼쪽 상단의 Y좌표입니다.
 	 * @param Width 윈도우의 가로 크기입니다.
@@ -126,12 +176,22 @@ public:
 private:
 	/**
 	 * @brief 윈도우 클래스를 등록합니다.
+	 *
+	 * @param ClassTitle 윈도우 클래스의 타이틀입니다.
+	 *
+	 * @throws 윈도우 클래스 등록에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void RegisterWindowClassA(const std::string& ClassTitle);
+
+
+	/**
+	 * @brief 윈도우 클래스를 등록합니다.
 	 * 
 	 * @param ClassTitle 윈도우 클래스의 타이틀입니다.
 	 * 
 	 * @throws 윈도우 클래스 등록에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void RegisterWindowClass(const std::wstring& ClassTitle);
+	void RegisterWindowClassW(const std::wstring& ClassTitle);
 
 
 private:
