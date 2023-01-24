@@ -98,8 +98,8 @@ public:
 	virtual void Run() override
 	{
 		ma_engine_init(NULL, &engine);
-		Sound title(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Title.wav");
-		Sound play(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Play.wav");
+		//Sound title(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Title.wav");
+		//Sound play(&engine, "D:\\work\\Tetris2D\\Content\\Audio\\Play.wav");
 
 		Timer_.Reset();
 
@@ -108,28 +108,9 @@ public:
 			Timer_.Tick();
 			InputManager::Get().Tick();
 
-			if (InputManager::Get().GetKeyPressState(VK_ESCAPE) == EPressState::PRESSED)
+			if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_ESCAPE) == EPressState::PRESSED)
 			{
 				bIsDone_ = true;
-			}
-
-			if (InputManager::Get().GetKeyPressState(VK_LEFT) == EPressState::PRESSED)
-			{
-				title.Play();
-			}
-
-			if (InputManager::Get().GetKeyPressState(0x41) == EPressState::PRESSED)
-			{
-				title.Stop();
-			}
-
-			if (InputManager::Get().GetKeyPressState(VK_RIGHT) == EPressState::PRESSED)
-			{
-				title.Reset();
-			}
-
-			if (InputManager::Get().GetKeyPressState(0x53) == EPressState::PRESSED)
-			{
 			}
 
 			GraphicsManager::Get().Clear(BLACK);
