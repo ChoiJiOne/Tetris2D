@@ -96,7 +96,7 @@ public:
 	template<typename T>
 	void RemoveComponent(const std::string& Key)
 	{
-		if (IsExistComponent(InKey))
+		if (IsExistComponent(Key))
 		{
 			Remove<std::string, std::unique_ptr<Component>>(Key, Components_);
 		}
