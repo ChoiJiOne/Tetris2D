@@ -13,7 +13,7 @@ bool WorldManager::IsRegisterObject(const std::string& Key)
 	return IsExistKey<std::string, GameObject*>(Key, GameObjects_);
 }
 
-GameObject* WorldManager::GetObject(const std::string& Key)
+GameObject* WorldManager::GetGameObject(const std::string& Key)
 {
 	if (!IsRegisterObject(Key)) return nullptr;
 

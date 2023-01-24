@@ -59,7 +59,7 @@ public:
 	 *
 	 * @return 키 값에 대응하는 게임 월드의 오브젝트가 존재하면 오브젝트의 포인터 값을, 그렇지 않으면 nullptr를 반환합니다.
 	 */
-	GameObject* GetObject(const std::string& Key);
+	GameObject* GetGameObject(const std::string& Key);
 
 
 	/**
