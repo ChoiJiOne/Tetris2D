@@ -86,6 +86,7 @@ public:
 
 		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
+		GraphicsManager::Get().SetFillMode(true);
 
 		Texture_ = std::make_unique<Texture2D>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Texture\\Space.png");
 		Font_ = std::make_unique<Font>(GraphicsManager::Get().GetDevice(), "D:\\work\\Tetris2D\\Content\\Font\\SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);

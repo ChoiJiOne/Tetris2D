@@ -25,6 +25,8 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	CHECK_HR(CreateDepthStencilState(&DepthStencilState_["DisableZ"], false, true), "failed to create disable z depth stencil state");
 	CHECK_HR(CreateBlendState(&BlendState_["Alpha"], true), "failed to create alpha blend state");
 	CHECK_HR(CreateRasterizerState(&RasterizerState_["Fill"], false, true), "failed to create fill mode rasterizer state");
+	CHECK_HR(CreateRasterizerState(&RasterizerState_["Wireframe"], false, false), "failed to create wireframe mode rasterizer state");
+
 
 	std::wstring ShaderPath = CommandLineManager::Get().GetValue(L"-Shader");
 
@@ -60,10 +62,6 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 
 	Text2DRenderShader* TextShader = reinterpret_cast<Text2DRenderShader*>(Shader_["Text"].get());
 	TextShader->SetProjectionMatrix(OrthoMatrix);
-
-	Context_->OMSetDepthStencilState(DepthStencilState_["EnableZ"], 1);
-	Context_->OMSetBlendState(BlendState_["Alpha"], nullptr, 0xFFFFFFFF);
-	Context_->RSSetState(RasterizerState_["Fill"]);
 }
 
 void GraphicsManager::Cleanup()
@@ -166,6 +164,13 @@ void GraphicsManager::SetAlphaBlend(bool bIsEnable)
 	ID3D11BlendState* BlendState = bIsEnable ? BlendState_["Alpha"] : nullptr;
 	
 	Context_->OMSetBlendState(BlendState, nullptr, 0xFFFFFFFF);
+}
+
+void GraphicsManager::SetFillMode(bool bIsEnable)
+{
+	ID3D11RasterizerState* RasterizerState = bIsEnable ? RasterizerState_["Fill"] : RasterizerState_["Wireframe"];
+
+	Context_->RSSetState(RasterizerState);
 }
 
 void GraphicsManager::Clear(const LinearColor& Color, float Depth, uint8_t Stencil)
