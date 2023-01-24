@@ -5,6 +5,8 @@
 #include <memory>
 #include <stdexcept>
 
+#include <windows.h>
+
 
 /**
  * @brief 형식화된 문자열을 반환합니다. 이 메서드는 snprintf를 대체하기 위한 메서드입니다.
@@ -95,4 +97,36 @@ inline std::vector<std::wstring> Split(std::wstring Text, const std::wstring& De
 
 	Tokens.push_back(Text);
 	return Tokens;
+}
+
+
+/**
+ * @brief UTF-8 문자열을 UTF-16 문자열로 변환합니다.
+ * 
+ * @param UTF8Text UTF-8 기반의 문자열입니다.
+ * 
+ * @return 변환된 UTF-16 문자열을 반환합니다.
+ */
+inline std::wstring Convert(const std::string UTF8Text)
+{
+	int32_t Size = MultiByteToWideChar(CP_UTF8, 0, &UTF8Text[0], static_cast<int32_t>(UTF8Text.size()), nullptr, 0);
+	std::wstring UTF16Text(Size, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &UTF8Text[0], static_cast<int32_t>(UTF8Text.size()), &UTF16Text[0], Size);
+	return UTF16Text;
+}
+
+
+/**
+ * @brief UTF-16 문자열을 UTF-8 문자열로 변환합니다.
+ * 
+ * @param UTF16Text UTF-16 기반의 문자열입니다.
+ * 
+ * @return 변환된 UTF-8 문자열을 반환합니다.
+ */
+inline std::string Convert(const std::wstring& UTF16Text)
+{
+	int Size = WideCharToMultiByte(CP_ACP, 0, &UTF16Text[0], static_cast<int32_t>(UTF16Text.size()), nullptr, 0, nullptr, nullptr);
+	std::string UTF8Text(Size, 0);
+	WideCharToMultiByte(CP_UTF8, 0, &UTF16Text[0], static_cast<int32_t>(UTF16Text.size()), &UTF8Text[0], Size, nullptr, nullptr);
+	return UTF8Text;
 }
