@@ -178,7 +178,7 @@ private:
 	 * @return 이미 키 값에 대응하는 값이 존재하면 true, 그렇지 않으면 false를 반환합니다.
 	 */
 	template<typename TKey, typename TValue>
-	bool IsCollision(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
+	bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
 	{
 		return KeyValueResource.find(Key) != KeyValueResource.end();
 	}
@@ -195,7 +195,7 @@ private:
 	template <typename TKey, typename TValue>
 	void Remove(const TKey& Key, std::unordered_map<TKey, TValue>& KeyValueResourc)
 	{
-		if (IsCollision<TKey, TValue>(Key, KeyValueResourc))
+		if (IsExistKey<TKey, TValue>(Key, KeyValueResourc))
 		{
 			KeyValueResourc.erase(Key);
 		}
