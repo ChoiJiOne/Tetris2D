@@ -5,8 +5,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include <d3d11.h>
-
+class Config;
 class Texture2D;
 class Font;
 class Sound;
@@ -168,6 +167,45 @@ public:
 	void RemoveSound(const std::string& Signature);
 
 
+	/**
+	 * @brief 설정 파일을 로딩합니다.
+	 * 
+	 * @param Signature 사운드를 구분하기 위한 시그니처 문자열입니다.
+	 * @param FileName 사운드 파일의 이름입니다. 이때, 이름은 확장자를 포함한 이름입니다.
+	 * 
+	 * @throws
+	 * 설정 오브젝트를 구분하는 시그니처 값이 충돌하면 C++ 표준 예외를 던집니다.
+	 * 올바른 경로를 전달하지 않으면 C++ 표준 예외를 던집니다.
+	 * 설정 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 *
+	 * @return 생성한 설정 오브젝트 리소스의 참조자를 반환합니다.
+	 */
+	Config& LoadConfig(const std::string& Signature, const std::string& FileName);
+
+
+	/**
+	 * @brief 컨텐츠 메니저가 관리하는 설정 오브젝트를 얻습니다.
+	 *
+	 * @param Signature 컨텐츠 메니저가 관리하는 설정 오브젝트의 시그니처 값입니다.
+	 *
+	 * @throws
+	 * 시그니처 값에 대응하는 설정 오브젝트가 존재하지 않으면 C++ 표준 예외를 던집니다.
+	 *
+	 * @return 시그니처 값에 대응하는 설정 오브젝트의 참조자를 반환합니다.
+	 */
+	Config& GetConfig(const std::string& Signature);
+
+
+	/**
+	 * @brief 컨텐츠 메니저가 관리하는 설정 오브젝트를 삭제합니다.
+	 *
+	 * @note 시그니처 값에 대응하는 설정 오브젝트가 존재하지 않으면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param Signature 컨텐츠 메니저가 관리하는 설정 오브젝트의 시그니처 값입니다.
+	 */
+	void RemoveConfig(const std::string& Signature);
+
+
 private:
 	/**
 	 * @brief 키 값이 존재하는지 확인합니다.
@@ -217,12 +255,6 @@ private:
 
 private:
 	/**
-	 * @brief 텍스처 리소스를 생성하기 위한 Direct3D 11 디바이스입니다.
-	 */
-	ID3D11Device* DeviceForTexture_ = nullptr;
-	
-
-	/**
 	 * @brief 오디오 리소스 생성을 위한 miniaudio 엔진입니다.
 	 */
 	std::unique_ptr<ma_engine> AudioEngine_ = nullptr;
@@ -250,4 +282,10 @@ private:
 	 * @brief 컨텐츠 메니저가 관리하는 사운드입니다.
 	 */
 	std::unordered_map<std::string, std::unique_ptr<Sound>> Sounds_;
+
+
+	/**
+	 * @brief 컨텐츠 메니저가 관리하는 설정 오브젝트입니다.
+	 */
+	std::unordered_map<std::string, std::unique_ptr<Config>> Configs_;
 };
