@@ -18,7 +18,10 @@ Config::~Config()
 
 const std::string& Config::GetValue(const std::string& Key)
 {
-	return IsExistKey<std::string, std::string>(Key, Config_) ? Config_.at(Key) : "";
+	bool bIsExist = IsExistKey<std::string, std::string>(Key, Config_);
+	CHECK(bIsExist, "failed to get value in config");
+
+	return Config_.at(Key);
 }
 
 bool Config::LoadConfigFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer)
