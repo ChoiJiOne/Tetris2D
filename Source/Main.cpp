@@ -1,5 +1,6 @@
 #include "CommandLineManager.h"
 #include "ContentManager.h"
+#include "Config.h"
 #include "Color.h"
 #include "Debug.h"
 #include "Font.h"
@@ -49,9 +50,18 @@ public:
 	{
 		SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
+		Config& WindowConfig = ContentManager::Get().LoadConfig("Window", "Window.config");
+
+		int x = std::stoi("1000");
+
 		Window_ = std::make_unique<Window>(
-			WindowConstructorParam {
-				L"Tetris2D", 200, 200, 1000, 800, false
+			WindowConstructorParamA {
+				WindowConfig.GetValue("title"), 
+				std::stoi(WindowConfig.GetValue("x")),
+				std::stoi(WindowConfig.GetValue("y")),
+				std::stoi(WindowConfig.GetValue("width")),
+				std::stoi(WindowConfig.GetValue("height")),
+				std::stoi(WindowConfig.GetValue("fullscreen")) ? true : false
 			}
 		);
 
