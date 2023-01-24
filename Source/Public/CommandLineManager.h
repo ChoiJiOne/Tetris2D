@@ -33,23 +33,23 @@ public:
 
 
 	/**
-	 * @brief 아스키 코드 기반의 전체 커맨드 라인을 얻습니다.
+	 * @brief UTF-8 기반의 전체 커맨드 라인을 얻습니다.
 	 *
-	 * @return 아스키 코드 기반의 전체 커맨드 라인 문자열을 반환합니다.
+	 * @return UTF-8 기반의 전체 커맨드 라인 문자열을 반환합니다.
 	 */
 	const std::string& GetFullCommanLineA() { return CommandLineA_; }
 
 
 	/**
-	 * @brief 유니 코드 기반의 전체 커맨드 라인을 얻습니다.
+	 * @brief UTF-16 기반의 전체 커맨드 라인을 얻습니다.
 	 *
-	 * @return 유니 코드 기반의 전체 커맨드 라인 문자열을 반환합니다.
+	 * @return UTF-16 기반의 전체 커맨드 라인 문자열을 반환합니다.
 	 */
 	const std::wstring& GetFullCommanLineW() { return CommandLineW_; }
 
 
 	/**
-	 * @brief 아스키 코드 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
+	 * @brief UTF-8 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
 	 *
 	 * @param Option 존재하는지 확인할 옵션입니다.
 	 *
@@ -60,7 +60,7 @@ public:
 
 
 	/**
-	 * @brief 유니 코드 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
+	 * @brief UTF-16 기반의 커맨드 라인에 옵션이 존재하는지 확인합니다.
 	 *
 	 * @param Option 존재하는지 확인할 옵션입니다.
 	 *
@@ -70,7 +70,7 @@ public:
 
 
 	/**
-	 * @brief 아스키 코드 기반의 옵션에 해당하는 값을 얻습니다.
+	 * @brief UTF-8 기반의 옵션에 해당하는 값을 얻습니다.
 	 *
 	 * @param Option 옵션입니다.
 	 *
@@ -80,7 +80,7 @@ public:
 
 
 	/**
-	 * @brief 유니 코드 기반의 옵션에 해당하는 값을 얻습니다.
+	 * @brief UTF-16 기반의 옵션에 해당하는 값을 얻습니다.
 	 *
 	 * @param Option 옵션입니다.
 	 *
@@ -103,50 +103,50 @@ private:
 
 
 	/**
-	 * @brief 유니 코드 기반의 초기화를 수행합니다. 
+	 * @brief UTF-16 기반의 초기화를 수행합니다. 
 	 */
 	void ParseCommandLineA();
 
 
 	/**
-	 * @brief 유니 코드 기반의 초기화를 수행합니다.
+	 * @brief UTF-16 기반의 초기화를 수행합니다.
 	 */
 	void ParseCommandLineW();
 
 
 private:
 	/**
-	 * @brief 게임 실행 시 전달 받은 아스키 코드 커맨드 라인입니다.
+	 * @brief 게임 실행 시 전달 받은 UTF-8 커맨드 라인입니다.
 	 */
 	std::string CommandLineA_;
 
 
 	/**
-	 * @brief 게임 실행 시 전달 받은 유니 코드 커맨드 라인입니다.
+	 * @brief 게임 실행 시 전달 받은 UTF-16 커맨드 라인입니다.
 	 */
 	std::wstring CommandLineW_;
 
 
 	/**
-	 * @brief 게임 실행 시 전달 받은 아스키 코드 커맨드 라인 인자입니다.
+	 * @brief 게임 실행 시 전달 받은 UTF-8 커맨드 라인 인자입니다.
 	 */
 	std::vector<std::string> ArgumentsA_;
 
 
 	/**
-	 * @brief 게임 실행 시 전달 받은 유니 코드 커맨드 라인 인자입니다.
+	 * @brief 게임 실행 시 전달 받은 UTF-16 커맨드 라인 인자입니다.
 	 */
 	std::vector<std::wstring> ArgumentsW_;
 
 
 	/**
-	 * @brief 커맨드 라인 입력으로 받은 아스키 코드 옵션입니다.
+	 * @brief 커맨드 라인 입력으로 받은 UTF-8 옵션입니다.
 	 */
 	std::unordered_map<std::string, std::string> OptionsA_;
 
 
 	/**
-	 * @brief 커맨드 라인 입력으로 받은 유니 코드 옵션입니다.
+	 * @brief 커맨드 라인 입력으로 받은 UTF-16 옵션입니다.
 	 */
 	std::unordered_map<std::wstring, std::wstring> OptionsW_;
 };

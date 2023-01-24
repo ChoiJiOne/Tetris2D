@@ -10,6 +10,8 @@
 
 /**
  * @brief 윈도우 클래스의 생성자 파라미터입니다.
+ * 
+ * @note 타이틀의 문자열 형식이 UTF-8 입니다.
  */
 struct WindowConstructorParamA
 {
@@ -24,6 +26,8 @@ struct WindowConstructorParamA
 
 /**
  * @brief 윈도우 클래스의 생성자 파라미터입니다.
+ * 
+ * @note 타이틀의 문자열 형식이 UTF-16 입니다.
  */
 struct WindowConstructorParamW
 {
@@ -45,7 +49,7 @@ public:
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 *
-	 * @note 문자열의 타입이 아스키 코드입니다.
+	 * @note 타이틀의 문자열 형식이 UTF-8 입니다.
 	 * 
 	 * @param ConstructorParam 윈도우 클래스의 생성 파라미터입니다.
 	 * 
@@ -57,7 +61,7 @@ public:
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 * 
-	 * @note 문자열의 타입이 유니코드입니다.
+	 * @note 타이틀의 문자열 형식이 UTF-16 입니다.
 	 *
 	 * @param ConstructorParam 윈도우 클래스의 생성 파라미터입니다.
 	 *
@@ -69,7 +73,7 @@ public:
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 *
-	 * @param Title 아스키 코드 기반의 윈도우의 타이틀입니다.
+	 * @param Title UTF-8 기반의 윈도우의 타이틀입니다.
 	 * @param PositionX 윈도우 왼쪽 상단의 X좌표입니다.
 	 * @param PositionY 윈도우 왼쪽 상단의 Y좌표입니다.
 	 * @param Width 윈도우의 가로 크기입니다.
@@ -91,7 +95,7 @@ public:
 	/**
 	 * @brief 윈도우 창을 생성 및 관리하는 클래스의 생성자입니다.
 	 *
-	 * @param Title 유니 코드 기반의 윈도우의 타이틀입니다.
+	 * @param Title UTF-16 기반의 윈도우의 타이틀입니다.
 	 * @param PositionX 윈도우 왼쪽 상단의 X좌표입니다.
 	 * @param PositionY 윈도우 왼쪽 상단의 Y좌표입니다.
 	 * @param Width 윈도우의 가로 크기입니다.
@@ -177,7 +181,7 @@ private:
 	/**
 	 * @brief 윈도우 클래스를 등록합니다.
 	 *
-	 * @param ClassTitle 윈도우 클래스의 타이틀입니다.
+	 * @param ClassTitle UTF-8 기반의 윈도우 클래스의 타이틀입니다.
 	 *
 	 * @throws 윈도우 클래스 등록에 실패하면 C++ 표준 예외를 던집니다.
 	 */
@@ -187,7 +191,7 @@ private:
 	/**
 	 * @brief 윈도우 클래스를 등록합니다.
 	 * 
-	 * @param ClassTitle 윈도우 클래스의 타이틀입니다.
+	 * @param ClassTitle UTF-16 기반의 윈도우 클래스의 타이틀입니다.
 	 * 
 	 * @throws 윈도우 클래스 등록에 실패하면 C++ 표준 예외를 던집니다.
 	 */
