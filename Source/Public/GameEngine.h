@@ -6,27 +6,27 @@ class Window;
 
 
 /**
- * @brief 게임 프레임워크입니다.
+ * @brief 게임 엔진입니다.
  * 
- * @note 게임이 구현되는 클래스는 이 프레임워크를 반드시 상속받아야 합니다.
+ * @note 게임이 구현되는 클래스는 이 엔진을 반드시 상속받아야 합니다.
  */
-class GameFramework
+class GameEngine
 {
 public:
 	/**
-	 * @brief 게임 프레임워크의 생성자입니다.
+	 * @brief 게임 엔진의 생성자입니다.
 	 */
-	GameFramework();
+	GameEngine();
 
 
 	/**
-	 * @brief 게임 프레임워크의 가상 소멸자입니다.
+	 * @brief 게임 엔진의 가상 소멸자입니다.
 	 */
-	virtual ~GameFramework();
+	virtual ~GameEngine();
 
 
 	/**
-	 * @brief 게임 프레임워크를 실행합니다.
+	 * @brief 게임 엔진를 실행합니다.
 	 * 
 	 * @note 가상 함수로, 반드시 하위 클래스에서 구현해야 합니다.
 	 */
