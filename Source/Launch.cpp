@@ -4,7 +4,7 @@
 #include "Color.h"
 #include "Debug.h"
 #include "Font.h"
-#include "GameFramework.h"
+#include "GameEngine.h"
 #include "GraphicsManager.h"
 #include "InputManager.h"
 #include "Macro.h"
@@ -21,7 +21,7 @@
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다.
  */
-class Tetris : public GameFramework
+class Tetris : public GameEngine
 {
 public:
 	/**
