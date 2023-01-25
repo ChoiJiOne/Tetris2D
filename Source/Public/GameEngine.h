@@ -44,6 +44,36 @@ private:
 	void CreateWindowFromConfig();
 
 
+	/**
+	 * @brief 설정 파일로부터 폰트 파일을 로딩합니다.
+	 * 
+	 * @throws
+	 * 설정 파일 로딩 및 파싱에 실패하면 C++ 표준 예외를 던집니다.
+	 * 폰트 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadFontFromConfig();
+
+
+	/**
+	 * @brief 설정 파일로부터 텍스처 파일을 로딩합니다.
+	 * 
+	 * @throws
+	 * 설정 파일 로딩 및 파싱에 실패하면 C++ 표준 예외를 던집니다.
+	 * 텍스처 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadTextureFromConfig();
+
+
+	/**
+	 * @brief 설정 파일로부터 오디오 파일을 로딩합니다.
+	 * 
+	 * @throws
+	 * 설정 파일 로딩 및 파싱에 실패하면 C++ 표준 예외를 던집니다.
+	 * 오디오 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadAudioFromConfig();
+
+
 protected:
 	/**
 	 * @brief 윈도우 창입니다.

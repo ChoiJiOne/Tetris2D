@@ -56,9 +56,6 @@ public:
 		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
-
-		ContentManager::Get().LoadTexture2D("Background", "Space.png");
-		ContentManager::Get().LoadFont("Font32", "SeoulNamsanEB.ttf", 0x20, 0xD7A3, 32.0f);
 	}
 
 
