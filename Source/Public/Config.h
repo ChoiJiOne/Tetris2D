@@ -47,14 +47,21 @@ public:
 	const std::string& GetValue(const std::string& Key);
 
 
+	/**
+	 * @brief 설정 오브젝트의 키-값 쌍의 참조자를 얻습니다.
+	 * 
+	 * @return 설정 오브젝트의 키-값 쌍의 참조자를 반환합니다.
+	 */
+	const std::unordered_map<std::string, std::string>& GetConfigObject() const { return Config_; }
+
+
 private:
 	/**
 	 * @brief 설정 파일의 버퍼를 파싱합니다.
 	 * 
 	 * @param Buffer 설정 파일의 버퍼입니다.
 	 * 
-	 * @throws
-	 * 파
+	 * @throws 파싱에 실패하면 C++ 표준 예외를 던집니다.
 	 * 
 	 * @return 키-값 쌍 기반의 파싱 결과를 반환합니다.
 	 */
