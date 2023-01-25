@@ -76,7 +76,7 @@ private:
 
 protected:
 	/**
-	 * @brief 윈도우 창입니다.
+	 * @brief 게임 엔진이 관리하는 윈도우 창입니다.
 	 */
 	std::unique_ptr<Window> Window_ = nullptr;
 
