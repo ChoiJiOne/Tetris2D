@@ -208,40 +208,6 @@ public:
 
 private:
 	/**
-	 * @brief 키 값이 존재하는지 확인합니다.
-	 * 
-	 * @param Key 충돌하는지 확인할 키 값입니다.
-	 * @param KeyValueResource 키-값 쌍의 자료구조입니다.
-	 * 
-	 * @return 이미 키 값에 대응하는 값이 존재하면 true, 그렇지 않으면 false를 반환합니다.
-	 */
-	template<typename TKey, typename TValue>
-	bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
-	{
-		return KeyValueResource.find(Key) != KeyValueResource.end();
-	}
-
-	
-	/**
-	 * @brief 키 값에 대응하는 값을 삭제합니다.
-	 * 
-	 * @note 키 값에 대응하는 값이 존재하지 않는다면 아무 동작도 수행하지 않습니다.
-	 * 
-	 * @param Key 삭제할 데이터의 키 값입니다.
-	 * @param KeyValueResource 삭제할 키-값 쌍의 자료구조입니다.
-	 */
-	template <typename TKey, typename TValue>
-	void Remove(const TKey& Key, std::unordered_map<TKey, TValue>& KeyValueResourc)
-	{
-		if (IsExistKey<TKey, TValue>(Key, KeyValueResourc))
-		{
-			KeyValueResourc.erase(Key);
-		}
-	}
-
-
-private:
-	/**
 	 * @brief 컨텐츠를 관리하는 클래스의 생성자입니다.
 	 */
 	ContentManager();

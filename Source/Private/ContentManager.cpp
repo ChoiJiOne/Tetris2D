@@ -6,6 +6,7 @@
 #include "Sound.h"
 #include "Shader.h"
 #include "Texture2D.h"
+#include "Utility.hpp"
 
 // @third party code - BEGIN
 #include <miniaudio/miniaudio.h>
@@ -63,7 +64,7 @@ Texture2D& ContentManager::GetTexture2D(const std::string& Signature)
 
 void ContentManager::RemoveTexture2D(const std::string& Signature)
 {
-	Remove<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
+	RemoveValue<std::string, std::unique_ptr<Texture2D>>(Signature, Textures_);
 }
 
 Font& ContentManager::LoadFont(const std::string& Signature, const std::string& FileName, int32_t BeginCodePoint, int32_t EndCodePoint, float FontSize)
@@ -87,7 +88,7 @@ Font& ContentManager::GetFont(const std::string& Signature)
 
 void ContentManager::RemoveFont(const std::string& Signature)
 {
-	Remove<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
+	RemoveValue<std::string, std::unique_ptr<Font>>(Signature, Fonts_);
 }
 
 Sound& ContentManager::LoadSound(const std::string& Signature, const std::string& FileName)
@@ -111,7 +112,7 @@ Sound& ContentManager::GetSound(const std::string& Signature)
 
 void ContentManager::RemoveSound(const std::string& Signature)
 {
-	Remove<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
+	RemoveValue<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
 }
 
 Config& ContentManager::LoadConfig(const std::string& Signature, const std::string& FileName)
@@ -135,5 +136,5 @@ Config& ContentManager::GetConfig(const std::string& Signature)
 
 void ContentManager::RemoveConfig(const std::string& Signature)
 {
-	Remove<std::string, std::unique_ptr<Config>>(Signature, Configs_);
+	RemoveValue<std::string, std::unique_ptr<Config>>(Signature, Configs_);
 }

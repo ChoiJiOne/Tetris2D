@@ -49,30 +49,6 @@ public:
 
 private:
 	/**
-	 * @brief 키 값이 존재하는지 확인합니다.
-	 *
-	 * @param Key 충돌하는지 확인할 키 값입니다.
-	 * @param KeyValueResource 키-값 쌍의 자료구조입니다.
-	 *
-	 * @return 이미 키 값에 대응하는 값이 존재하면 true, 그렇지 않으면 false를 반환합니다.
-	 */
-	template<typename TKey, typename TValue>
-	bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
-	{
-		return KeyValueResource.find(Key) != KeyValueResource.end();
-	}
-
-
-	/**
-	 * @brief 설정 파일을 로딩합니다.
-	 * 
-	 * @param ResourcePath 설정 파일의 경로입니다.
-	 * @param Buffer[out] 설정 파일 버퍼입니다.
-	 */
-	bool LoadConfigFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer);
-
-
-	/**
 	 * @brief 설정 파일의 버퍼를 파싱합니다.
 	 * 
 	 * @param Buffer 설정 파일의 버퍼입니다.

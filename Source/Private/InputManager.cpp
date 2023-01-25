@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include "Utility.hpp"
 
 LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
@@ -95,10 +96,7 @@ void InputManager::RegisterWindowEvent(const EWindowEvent& WindowEvent, const st
 
 void InputManager::UnregisterWindowEvent(const EWindowEvent& WindowEvent)
 {
-	if (WindowEvents_.find(WindowEvent) != WindowEvents_.end())
-	{
-		WindowEvents_.erase(WindowEvent);
-	}
+	RemoveValue<EWindowEvent, std::function<void()>>(WindowEvent, WindowEvents_);
 }
 
 void InputManager::Tick()
@@ -196,7 +194,7 @@ void InputManager::UpdateMousePosition()
 
 void InputManager::HandleWindowEvent(const EWindowEvent& WindowEvent)
 {
-	if (WindowEvents_.find(WindowEvent) != WindowEvents_.end())
+	if (IsExistKey<EWindowEvent, std::function<void()>>(WindowEvent, WindowEvents_))
 	{
 		WindowEvents_.at(WindowEvent)();
 	}

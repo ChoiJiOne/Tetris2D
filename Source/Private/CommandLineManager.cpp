@@ -1,5 +1,6 @@
 #include "CommandLineManager.h"
 #include "Text.hpp"
+#include "Utility.hpp"
 
 #include <Windows.h>
 
@@ -42,12 +43,12 @@ void CommandLineManager::ParseCommandLineW()
 
 bool CommandLineManager::HaveOption(const std::string& Option)
 {
-	return OptionsA_.find(Option) != OptionsA_.end();
+	return IsExistKey<std::string, std::string>(Option, OptionsA_);
 }
 
 bool CommandLineManager::HaveOption(const std::wstring& Option)
 {
-	return OptionsW_.find(Option) != OptionsW_.end();
+	return IsExistKey<std::wstring, std::wstring>(Option, OptionsW_);
 }
 
 std::string CommandLineManager::GetValue(const std::string& Option)

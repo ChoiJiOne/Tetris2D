@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "Text.hpp"
+#include "Utility.hpp"
 
 #include  <vector>
 
@@ -8,7 +9,7 @@
 Config::Config(const std::string& ResourcePath)
 {
 	std::vector<uint8_t> FileBuffer;
-	CHECK(LoadConfigFromFile(ResourcePath, FileBuffer), "failed to load config");
+	ReadBufferFromFile(ResourcePath, FileBuffer);
 	Config_ = ParseConfigFromBuffer(FileBuffer);
 }
 
@@ -22,20 +23,6 @@ const std::string& Config::GetValue(const std::string& Key)
 	CHECK(bIsExist, "failed to get value in config");
 
 	return Config_.at(Key);
-}
-
-bool Config::LoadConfigFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer)
-{
-	HANDLE ConfigFileHandle = CreateFileA(ResourcePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-	DWORD FileSize = GetFileSize(ConfigFileHandle, nullptr);
-
-	Buffer.resize(FileSize);
-
-	bool bIsSuccessed = true;
-	bIsSuccessed = ReadFile(ConfigFileHandle, &Buffer[0], FileSize, nullptr, nullptr);
-	bIsSuccessed = CloseHandle(ConfigFileHandle);
-
-	return bIsSuccessed;
 }
 
 std::unordered_map<std::string, std::string> Config::ParseConfigFromBuffer(const std::vector<uint8_t>& Buffer)

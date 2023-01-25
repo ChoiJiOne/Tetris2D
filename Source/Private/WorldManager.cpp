@@ -1,5 +1,6 @@
 #include "WorldManager.h"
 #include "GameObject.h"
+#include "Utility.hpp"
 
 void WorldManager::RegisterOjbect(GameObject* Object, const std::string& Key)
 {
@@ -22,5 +23,5 @@ GameObject* WorldManager::GetGameObject(const std::string& Key)
 
 void WorldManager::UnregisterObject(const std::string& Key)
 {
-	Remove<std::string, GameObject*>(Key, GameObjects_);
+	RemoveValue<std::string, GameObject*>(Key, GameObjects_);
 }

@@ -142,17 +142,6 @@ public:
 
 private:
 	/**
-	 * @brief 트루 타입 폰트를 로딩 합니다.
-	 *
-	 * @param ResourcePath 로딩할 트루 타입 폰트 리소스의 경로입니다.
-	 * @param Buffer[out] 트루 타입 폰트의 리소스 버퍼입니다.
-	 *
-	 * @return 트루 타입 폰트 로딩에 성공하면 true, 그렇지 않으면 false를 반환합니다.
-	 */
-	bool LoadTrueTypeFontFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer);
-
-
-	/**
 	 * @brief 텍스처 아틀라스 비트맵을 생성합니다.
 	 * 
 	 * @note 텍스처 아틀라스의 가로 세로 크기는 같습니다.

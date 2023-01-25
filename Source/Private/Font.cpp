@@ -1,4 +1,5 @@
 #include "Font.h"
+#include "Utility.hpp"
 
 // @third party code - BEGIN
 #include <stb/stb_rect_pack.h>
@@ -10,7 +11,7 @@ Font::Font(ID3D11Device* Device, const std::string& ResourcePath, int32_t BeginC
 	, EndCodePoint_(EndCodePoint)
 {
 	std::vector<uint8_t> Buffer;
-	CHECK((LoadTrueTypeFontFromFile(ResourcePath, Buffer)), "failed to load trye type font");
+	ReadBufferFromFile(ResourcePath, Buffer);
 
 	stbtt_fontinfo Info;
 	CHECK((stbtt_InitFont(
@@ -40,19 +41,6 @@ const CharacterInfo& Font::GetCharacterInfo(int32_t CodePoint) const
 bool Font::HasCodePointInRange(int32_t CodePoint) const
 {
 	return (BeginCodePoint_ <= CodePoint) && (CodePoint <= EndCodePoint_);
-}
-
-bool Font::LoadTrueTypeFontFromFile(const std::string& ResourcePath, std::vector<uint8_t>& Buffer)
-{
-	HANDLE FontFileHandle = CreateFileA(ResourcePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-	DWORD FileSize = GetFileSize(FontFileHandle, nullptr);
-	Buffer.resize(FileSize);
-	DWORD BytesRead;
-
-	CHECK(ReadFile(FontFileHandle, &Buffer[0], FileSize, &BytesRead, nullptr), "failed to read font file");
-	CHECK(CloseHandle(FontFileHandle), "failed to close font file");
-
-	return true;
 }
 
 std::shared_ptr<uint8_t[]> Font::GenerateTextureAtlasBitmap(
