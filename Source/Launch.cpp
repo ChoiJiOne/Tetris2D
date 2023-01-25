@@ -70,8 +70,10 @@ public:
 
 	/**
 	 * @brief 테트리스 게임을 실행합니다.
+	 * 
+	 * @return 다른 프로그램에 전달할 수 있는 상태 코드를 반환합니다.
 	 */
-	virtual void Run() override
+	virtual int32_t Run() override
 	{
 		Timer_.Reset();
 
@@ -93,6 +95,8 @@ public:
 
 			GraphicsManager::Get().Present();
 		}
+
+		return 0;
 	}
 
 
@@ -119,7 +123,5 @@ private:
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR CmdLine, int32_t CmdShow)
 {
 	auto Game = std::make_unique<Tetris>();
-	Game->Run();
-
-	return 0;
+	return Game->Run();
 }
