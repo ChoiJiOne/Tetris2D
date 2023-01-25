@@ -96,7 +96,7 @@ Sound& ContentManager::LoadSound(const std::string& Signature, const std::string
 	bool bIsExist = IsExistKey<std::string, std::unique_ptr<Sound>>(Signature, Sounds_);
 	CHECK(!bIsExist, "collision sound signature");
 
-	const std::string& Path = ContentPath_ + "Sound\\" + FileName;
+	const std::string& Path = ContentPath_ + "Audio\\" + FileName;
 	Sounds_[Signature] = std::make_unique<Sound>(AudioEngine_.get(), Path);
 
 	return *Sounds_[Signature].get();
