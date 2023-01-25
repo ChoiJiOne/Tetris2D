@@ -1,3 +1,4 @@
+#include "Camera2D.h"
 #include "CommandLineManager.h"
 #include "ContentManager.h"
 #include "Config.h"
@@ -89,7 +90,6 @@ public:
 			float Width = 0.0f, Height = 0.0f;
 			Window_->GetSize<float>(Width, Height);
 			GraphicsManager::Get().DrawTexture2D(ContentManager::Get().GetTexture2D("Background"), Vec2f(0.0f, 0.0f), Width, Height);
-			GraphicsManager::Get().DrawText2D(ContentManager::Get().GetFont("Font32"), L"한글 출력 확인", Vec2f(0.0f, 0.0f), MAGENTA);
 
 			GraphicsManager::Get().Present();
 		}
