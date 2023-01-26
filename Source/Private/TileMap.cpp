@@ -44,12 +44,7 @@ TileMap::TileMap(
 	}
 }
 
-void TileMap::Update(float DeltaSeconds)
-{
-
-}
-
-void TileMap::Render(Camera2D& Camera)
+void TileMap::Tick(float DeltaSeconds)
 {
 	int32_t TileMapWidth = ColSize_ * TileSize_;
 	int32_t TileMapHeight = RowSize_ * TileSize_;

@@ -15,6 +15,7 @@ public:
 	/**
 	 * @brief 2D 타일맵의 생성자입니다.
 	 * 
+	 * @param Signature 타일 맵의 식별자입니다.
 	 * @param CenterPosition 2D 월드 상의 타일맵의 중싱 좌표입니다.
 	 * @param RowSize 타일맵의 가로 크기입니다.
 	 * @param ColSize 타일맵의 세로 크기입니다.
@@ -42,19 +43,11 @@ public:
 
 
 	/**
-	 * @brief 타일 맵의 상태를 업데이트합니다.
+	 * @brief 타일 맵을 업데이트합니다.
 	 * 
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
-	virtual void Update(float DeltaSeconds) override;
-
-
-	/**
-	 * @brief 타일 맵을 화면에 그립니다.
-	 * 
-	 * @param Camera 게임의 시야 처리를 위한 카메라입니다.
-	 */
-	virtual void Render(Camera2D& Camera) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 
 	/**
