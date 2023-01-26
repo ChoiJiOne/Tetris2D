@@ -49,7 +49,7 @@ void GraphicsManager::Init(Window* RenderTargetWindow)
 	);
 
 	float Width = 0.0f, Height = 0.0f;
-	RenderTargetWindow_->GetSize<float>(Width, Height);
+	GetBackBufferSize(Width, Height);
 	SetViewport(0.0f, 0.0f, Width, Height);
 
 	Matrix4x4F OrthoMatrix = GetOrthographicMatrix(Width, Height, 0.0001f, 100.0f);
@@ -103,6 +103,11 @@ void GraphicsManager::Cleanup()
 
 	SAFE_RELEASE(Context_);
 	SAFE_RELEASE(Device_);
+}
+
+void GraphicsManager::GetBackBufferSize(float& Width, float& Height)
+{
+	RenderTargetWindow_->GetSize<float>(Width, Height);
 }
 
 void GraphicsManager::Resize()

@@ -72,6 +72,15 @@ public:
 
 
 	/**
+	 * @brief 백버퍼의 크기를 얻습니다.
+	 * 
+	 * @param Width[out] 벡버퍼의 가로 크기입니다.
+	 * @param Height[out] 벡버퍼의 세로 크기입니다. 
+	 */
+	void GetBackBufferSize(float& Width, float& Height);
+
+
+	/**
 	 * @brief 내부 버퍼 리소스의 크기를 변경합니다.
 	 * 
 	 * @throws 버퍼의 크기 변경에 실패하면 C++ 표준 예외를 던집니다.
