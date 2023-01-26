@@ -40,7 +40,7 @@ public:
 	/**
 	 * @brief 게임 오브젝트를 업데이트합니다.
 	 *
-	 * @param DeltaTime 초단위 델타 시간값입니다.
+	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Update(float DeltaSeconds) = 0;
 
