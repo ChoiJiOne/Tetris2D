@@ -27,4 +27,10 @@ Camera2D& WorldManager::GetMainCamera()
 
 WorldManager::~WorldManager()
 {
+	MainCamera_.reset();
+
+	for (auto& RemoveObject : GameObjects_)
+	{
+		RemoveObject.second.reset();
+	}
 }
