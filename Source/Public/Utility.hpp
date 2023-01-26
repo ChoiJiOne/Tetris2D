@@ -92,3 +92,22 @@ inline void ReadBufferFromFile(const std::wstring& Path, std::vector<uint8_t>& B
 	CHECK(ReadFile(FileHandle, &Buffer[0], FileSize, &BytesRead, nullptr), "failed read file");
 	CHECK(CloseHandle(FileHandle), "failed to close file");
 }
+
+
+/**
+ * @brief 2차원 배열의 버퍼 Offset을 얻습니다.
+ * 
+ * @param Col 2차원 배열의 가로 위치입니다.
+ * @param Row 2차원 배열의 세로 위치입니다.
+ * @param Width 2차원 배열의 가로 크기입니다.
+ * @param Height 2차원 배열의 세로 크기입니다.
+ * 
+ * @thows 배열의 범위를 벗어나면 C++ 표준 예외를 던집니다.
+ * 
+ * @return 배열의 Offset을 반환합니다.
+ */
+int32_t GetOffset(int32_t Col, int32_t Row, int32_t Width, int32_t Height)
+{
+	CHECK((0 <= Col && Col < Width && 0 <= Row && Row < Height), "out of range 2d buffer");
+	return Row * Width + Col;
+}
