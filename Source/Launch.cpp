@@ -18,6 +18,8 @@
 #include "Vector.hpp"
 #include "Window.h"
 
+#include "TileMap.h"
+
 
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다.
@@ -57,6 +59,37 @@ public:
 		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
+
+		Camera_ = std::make_unique<Camera2D>(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
+		TileMap_ = std::make_unique<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 20, 20, 30);
+
+		Tile tile;
+
+		for (int32_t Row = 0; Row < TileMap_->GetRowSize(); ++Row)
+		{
+			if (Row == 0 || Row == TileMap_->GetRowSize() - 1)
+			{
+				for (int32_t Col = 0; Col < TileMap_->GetColSize(); ++Col)
+				{
+					tile.SetPositionInMap(Vec2i(Col, Row));
+					tile.SetState(Tile::EState::WALL);
+					tile.SetColor(Tile::EColor::GRAY);
+					TileMap_->WriteTileInMap(tile);
+				}
+			}
+			else
+			{
+				tile.SetPositionInMap(Vec2i(0, Row));
+				tile.SetState(Tile::EState::WALL);
+				tile.SetColor(Tile::EColor::GRAY);
+				TileMap_->WriteTileInMap(tile);
+
+				tile.SetPositionInMap(Vec2i(TileMap_->GetColSize() - 1, Row));
+				tile.SetState(Tile::EState::WALL);
+				tile.SetColor(Tile::EColor::GRAY);
+				TileMap_->WriteTileInMap(tile);
+			}
+		}
 	}
 
 
@@ -65,6 +98,8 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		TileMap_.reset();
+		Camera_.reset();
 	}
 
 
@@ -93,6 +128,9 @@ public:
 			Window_->GetSize<float>(Width, Height);
 			GraphicsManager::Get().DrawTexture2D(ContentManager::Get().GetTexture2D("Background"), Vec2f(0.0f, 0.0f), Width, Height);
 
+			TileMap_->Update(Timer_.GetDeltaTime());
+			TileMap_->Render(*Camera_);
+
 			GraphicsManager::Get().Present();
 		}
 
@@ -105,6 +143,18 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
+
+
+	/**
+	 * @brief 게임 카메라입니다.
+	 */
+	std::unique_ptr<Camera2D> Camera_ = nullptr;
+
+
+	/**
+	 * @brief 2D 타일맵입니다.
+	 */
+	std::unique_ptr<TileMap> TileMap_ = nullptr;
 };
 
 
