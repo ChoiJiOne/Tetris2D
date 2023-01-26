@@ -95,6 +95,12 @@ public:
 	Tile& ReadTileInMap(const Vec2i& Position);
 
 
+	/**
+	 * @brief 타일맵을 초기화합니다.
+	 */
+	void ClearMap();
+
+
 private:
 	/**
 	 * @brief 2D 월드 상의 타일맵의 중심 위치입니다.

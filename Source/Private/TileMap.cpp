@@ -36,6 +36,7 @@ TileMap::TileMap(
 		for (int32_t Col = 0; Col < ColSize_; ++Col)
 		{
 			int32_t Offset = GetOffset(Col, Row, ColSize_, RowSize_);
+
 			Tiles_[Offset].SetPositionInMap(Vec2i(Col, Row));
 			Tiles_[Offset].SetState(Tile::EState::EMPTY);
 			Tiles_[Offset].SetColor(Tile::EColor::NONE);
@@ -91,4 +92,18 @@ Tile& TileMap::ReadTileInMap(const Vec2i& Position)
 {
 	CHECK((0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_), "out of range in tile map");
 	return Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)];
+}
+
+void TileMap::ClearMap()
+{
+	for (int32_t Row = 0; Row < RowSize_; ++Row)
+	{
+		for (int32_t Col = 0; Col < ColSize_; ++Col)
+		{
+			int32_t Offset = GetOffset(Col, Row, ColSize_, RowSize_);
+
+			Tiles_[Offset].SetState(Tile::EState::EMPTY);
+			Tiles_[Offset].SetColor(Tile::EColor::NONE);
+		}
+	}
 }
