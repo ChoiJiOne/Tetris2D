@@ -1,3 +1,4 @@
+#include "Background.h"
 #include "Camera2D.h"
 #include "CommandLineManager.h"
 #include "ContentManager.h"
@@ -17,6 +18,7 @@
 #include "Timer.h"
 #include "Vector.hpp"
 #include "Window.h"
+#include "WorldManager.h"
 
 #include "TileMap.h"
 
@@ -60,21 +62,22 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 
-		Camera_ = std::make_unique<Camera2D>(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
-		TileMap_ = std::make_unique<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 20, 20, 30);
+		TileMap* Object = WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 20, 20, 30);
+		WorldManager::Get().CreateGameObject<Background>("Background");
+		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
 
 		Tile tile;
 
-		for (int32_t Row = 0; Row < TileMap_->GetRowSize(); ++Row)
+		for (int32_t Row = 0; Row < Object->GetRowSize(); ++Row)
 		{
-			if (Row == 0 || Row == TileMap_->GetRowSize() - 1)
+			if (Row == 0 || Row == Object->GetRowSize() - 1)
 			{
-				for (int32_t Col = 0; Col < TileMap_->GetColSize(); ++Col)
+				for (int32_t Col = 0; Col < Object->GetColSize(); ++Col)
 				{
 					tile.SetPositionInMap(Vec2i(Col, Row));
 					tile.SetState(Tile::EState::WALL);
 					tile.SetColor(Tile::EColor::GRAY);
-					TileMap_->WriteTileInMap(tile);
+					Object->WriteTileInMap(tile);
 				}
 			}
 			else
@@ -82,12 +85,12 @@ public:
 				tile.SetPositionInMap(Vec2i(0, Row));
 				tile.SetState(Tile::EState::WALL);
 				tile.SetColor(Tile::EColor::GRAY);
-				TileMap_->WriteTileInMap(tile);
+				Object->WriteTileInMap(tile);
 
-				tile.SetPositionInMap(Vec2i(TileMap_->GetColSize() - 1, Row));
+				tile.SetPositionInMap(Vec2i(Object->GetColSize() - 1, Row));
 				tile.SetState(Tile::EState::WALL);
 				tile.SetColor(Tile::EColor::GRAY);
-				TileMap_->WriteTileInMap(tile);
+				Object->WriteTileInMap(tile);
 			}
 		}
 	}
@@ -98,8 +101,6 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-		TileMap_.reset();
-		Camera_.reset();
 	}
 
 
@@ -124,12 +125,8 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			float Width = 0.0f, Height = 0.0f;
-			Window_->GetSize<float>(Width, Height);
-			GraphicsManager::Get().DrawTexture2D(ContentManager::Get().GetTexture2D("Background"), Vec2f(0.0f, 0.0f), Width, Height);
-
-			TileMap_->Update(Timer_.GetDeltaTime());
-			TileMap_->Render(*Camera_);
+			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
+			WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -143,18 +140,6 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
-
-
-	/**
-	 * @brief 게임 카메라입니다.
-	 */
-	std::unique_ptr<Camera2D> Camera_ = nullptr;
-
-
-	/**
-	 * @brief 2D 타일맵입니다.
-	 */
-	std::unique_ptr<TileMap> TileMap_ = nullptr;
 };
 
 
