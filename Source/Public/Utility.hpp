@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Macro.h"
+#include "Math.hpp"
 
+#include <array>
 #include <vector>
 #include <unordered_map>
 
@@ -110,4 +112,34 @@ inline int32_t GetOffset(int32_t Col, int32_t Row, int32_t Width, int32_t Height
 {
 	CHECK((0 <= Col && Col < Width && 0 <= Row && Row < Height), "out of range 2d array buffer");
 	return Row * Width + Col;
+}
+
+
+/**
+ * @brief 정적 배열(array)에서 임의의 원소를 추출합니다.
+ * 
+ * @param Elements 임의의 원소를 추출할 배열입니다.
+ * 
+ * @return 배열 범위 내의 선택된 임의의 원소를 반환합니다.
+ */
+template <typename T, int32_t N>
+inline const T& GetRandomElement(const std::array<T, N>& Elements)
+{
+	int32_t Index = GenerateRandomInt(0, static_cast<int32_t>(Elements.size()) - 1);
+	return Elements[Index];
+}
+
+
+/**
+ * @brief 동적 배열(vector)에서 임의의 원소를 추출합니다.
+ * 
+ * @param Elements 임의의 원소를 추출할 배열입니다.
+ * 
+ * @return 배열 범위 내의 선택된 임의의 원소를 반환합니다.
+ */
+template <typename T>
+inline const T& GetRandomElement(const std::vector<T>& Elements)
+{
+	int32_t Index = GenerateRandomInt(0, static_cast<int32_t>(Elements.size()) - 1);
+	return Elements[Index];
 }
