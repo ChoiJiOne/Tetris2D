@@ -42,20 +42,13 @@ public:
 	 *
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
-	virtual void Update(float DeltaSeconds) = 0;
+	virtual void Tick(float DeltaSeconds) = 0;
 
 
 	/**
-	 * @brief 게임 오브젝트를 화면에 그립니다.
+	 * @brief 게임 오브젝트에 컴포넌트를 추가합니다.
 	 * 
-	 * @param Camera 게임의 시야 처리를 위한 카메라입니다.
-	 */
-	virtual void Render(Camera2D& Camera) = 0;
-	
-
-	/**
-	 * 게임 오브젝트에 컴포넌트를 추가합니다.
-	 * 이때, 키 값에 대응하는 컴포넌트가 존재한다면 아무런 동작도 수행하지 않습니다.
+	 * @note 키 값에 대응하는 컴포넌트가 존재한다면 아무런 동작도 수행하지 않습니다.
 	 *
 	 * @param Key 추가할 컴포넌트의 키값입니다.
 	 * @param Args 컴포넌트에 필요한 가변 인자입니다.
@@ -71,9 +64,9 @@ public:
 
 
 	/**
-	 * 게임 오브젝트가 소유하고 있는 컴포넌트를 얻습니다.
+	 * @brief 게임 오브젝트가 소유하고 있는 컴포넌트를 얻습니다.
 	 *
-	 * @param Key - 게임 오브젝트가 소유하고 있는 컴포넌트의 키 값입니다.
+	 * @param Key 게임 오브젝트가 소유하고 있는 컴포넌트의 키 값입니다.
 	 *
 	 * @return 키 값에 대응하는 컴포넌트가 존재하면 주소 값을 반환, 그렇지 않으면 nullptr를 반환합니다.
 	 */

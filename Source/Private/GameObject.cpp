@@ -6,10 +6,8 @@
 GameObject::GameObject(const std::string& Signature)
 	: Signature_(Signature)
 {
-	WorldManager::Get().RegisterOjbect(this, Signature_);
 }
 
 GameObject::~GameObject()
 {
-	WorldManager::Get().UnregisterObject(Signature_);
 }
