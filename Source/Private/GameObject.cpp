@@ -10,4 +10,8 @@ GameObject::GameObject(const std::string& Signature)
 
 GameObject::~GameObject()
 {
+	for (auto& component : Components_)
+	{
+		component.second.reset();
+	}
 }
