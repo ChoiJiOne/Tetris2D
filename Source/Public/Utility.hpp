@@ -106,8 +106,8 @@ inline void ReadBufferFromFile(const std::wstring& Path, std::vector<uint8_t>& B
  * 
  * @return 배열의 Offset을 반환합니다.
  */
-int32_t GetOffset(int32_t Col, int32_t Row, int32_t Width, int32_t Height)
+inline int32_t GetOffset(int32_t Col, int32_t Row, int32_t Width, int32_t Height)
 {
-	CHECK((0 <= Col && Col < Width && 0 <= Row && Row < Height), "out of range 2d buffer");
+	CHECK((0 <= Col && Col < Width && 0 <= Row && Row < Height), "out of range 2d array buffer");
 	return Row * Width + Col;
 }
