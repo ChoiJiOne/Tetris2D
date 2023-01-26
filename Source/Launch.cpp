@@ -20,6 +20,8 @@
 #include "Window.h"
 #include "WorldManager.h"
 
+#include "Board.h"
+#include "Tetromino.h"
 #include "TileMap.h"
 
 
@@ -62,37 +64,10 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 
-		TileMap* Object = WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 20, 20, 30);
+		WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 24, 24, 30);
+		WorldManager::Get().CreateGameObject<Board>("Board", Vec2i(0, 0), 12, 22);
 		WorldManager::Get().CreateGameObject<Background>("Background");
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
-
-		Tile tile;
-
-		for (int32_t Row = 0; Row < Object->GetRowSize(); ++Row)
-		{
-			if (Row == 0 || Row == Object->GetRowSize() - 1)
-			{
-				for (int32_t Col = 0; Col < Object->GetColSize(); ++Col)
-				{
-					tile.SetPositionInMap(Vec2i(Col, Row));
-					tile.SetState(Tile::EState::WALL);
-					tile.SetColor(Tile::EColor::GRAY);
-					Object->WriteTileInMap(tile);
-				}
-			}
-			else
-			{
-				tile.SetPositionInMap(Vec2i(0, Row));
-				tile.SetState(Tile::EState::WALL);
-				tile.SetColor(Tile::EColor::GRAY);
-				Object->WriteTileInMap(tile);
-
-				tile.SetPositionInMap(Vec2i(Object->GetColSize() - 1, Row));
-				tile.SetState(Tile::EState::WALL);
-				tile.SetColor(Tile::EColor::GRAY);
-				Object->WriteTileInMap(tile);
-			}
-		}
 	}
 
 
@@ -126,6 +101,7 @@ public:
 			GraphicsManager::Get().Clear(BLACK);
 
 			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
+			WorldManager::Get().GetGameObject<Board>("Board")->Tick(Timer_.GetDeltaTime());
 			WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
