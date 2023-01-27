@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Macro.h"
-#include "Math.hpp"
+#include "Random.h"
 
 #include <array>
 #include <vector>
