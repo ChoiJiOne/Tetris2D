@@ -15,16 +15,13 @@ Board::Board(const std::string& Signature, const Vec2i& TilePosition, const int3
 	, Height_(Height)
 {
 	Tiles_ = CreateBoardTile(TilePosition_, Width_, Height_);
+
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+	Object->AddTilesInMap(Tiles_);
 }
 
 void Board::Tick(float DeltaSeconds)
 {
-	TileMap* TileMapObject = WorldManager::Get().GetGameObject<TileMap>("TileMap");
-
-	for (auto& BoardTile : Tiles_)
-	{
-		TileMapObject->WriteTileInMap(BoardTile);
-	}
 }
 
 std::vector<Tile> Board::CreateBoardTile(const Vec2i& TilePosition, const int32_t& Width, const int32_t& Height)
