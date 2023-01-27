@@ -69,6 +69,8 @@ public:
 		WorldManager::Get().CreateGameObject<Tetromino>("Tetromino", Vec2i(10, 1));
 		WorldManager::Get().CreateGameObject<Background>("Background");
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
+
+		WorldManager::Get().GetGameObject<Tetromino>("Tetromino")->SetState(Tetromino::EState::ACTIVE);
 	}
 
 
