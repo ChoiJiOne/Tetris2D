@@ -130,14 +130,27 @@ private:
 
 
 	/**
-	 * @brief 테트로미노를 특정 방향을 움직입니다.
+	 * @brief 테트로미노를 특정 방향으로 움직입니다.
 	 * 
 	 * @param TilePosition 타일 맵 상의 움직일 테트로미노의 왼쪽 상단 좌표입니다.
 	 * @param Tiles 테트로미노의 타일입니다.
 	 * @param Shape 테트로미노의 모양입니다.
 	 * @param Direction 테트로미노가 움직일 방향입니다.
 	 */
-	static void Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection Direction);
+	static void Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection& Direction);
+
+
+	/**
+	 * @brief 테트로미노를 특정 방향으로 움직일 수 있는지 확인합니다.
+	 * 
+	 * @param TilePosition 타일 맵 상의 움직일 테트로미노의 왼쪽 상단 좌표입니다.
+	 * @param Tiles 테트로미노의 타일입니다.
+	 * @param Shape 테트로미노의 모양입니다.
+	 * @param Direction 테트로미노가 움직일 방향입니다.
+	 * 
+	 * @return 테트로미노를 움직일 수 있다면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	static bool CanMove(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection& Direction);
 
 
 	/**
@@ -182,5 +195,17 @@ private:
 	/**
 	 * @brief 테트로미노의 상태입니다.
 	 */
-	EState State_ = EState::WAIT;
+	EState State_ = EState::ACTIVE;
+
+
+	/**
+	 * @brief 테트로미노의 업데이트 누적 시간입니다. 
+	 */
+	float AccrueTickTime_ = 0.0f;
+
+
+	/**
+	 * @brief 테트로미노의 최대 업데이트 누적 시간입니다.
+	 */
+	static float MaxAccrueTickTime_;
 };

@@ -1,4 +1,5 @@
 #include "Tetromino.h"
+#include "Board.h"
 #include "ContentManager.h"
 #include "Camera2D.h"
 #include "GraphicsManager.h"
@@ -8,6 +9,8 @@
 #include "TileMap.h"
 #include "Utility.hpp"
 #include "WorldManager.h"
+
+float Tetromino::MaxAccrueTickTime_ = 1.0f;
 
 static const std::array<Tetromino::EShape, 7> SHAPES = {
 	Tetromino::EShape::I,
@@ -43,37 +46,60 @@ Tetromino::Tetromino(const std::string& Signature, const Vec2i& TilePosition, co
 
 void Tetromino::Tick(float DeltaSeconds)
 {
-	EDirection Direction = EDirection::NONE;
-
-	static std::unordered_map<EKeyCode, EDirection> KeyDirections = {
-		{ EKeyCode::CODE_LEFT,  EDirection::LEFT },
-		{ EKeyCode::CODE_RIGHT, EDirection::RIGHT },
-		{ EKeyCode::CODE_UP,    EDirection::CW },
-		{ EKeyCode::CODE_DOWN,  EDirection::DOWN },
-		{ EKeyCode::CODE_SPACE, EDirection::JUMP },
-	};
-
-	for (const auto& KeyDirection : KeyDirections)
+	if (State_ == EState::ACTIVE)
 	{
-		if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
+		AccrueTickTime_ += DeltaSeconds;
+
+		EDirection Direction = EDirection::NONE;
+
+		static std::unordered_map<EKeyCode, EDirection> KeyDirections = {
+			{ EKeyCode::CODE_LEFT,  EDirection::LEFT },
+			{ EKeyCode::CODE_RIGHT, EDirection::RIGHT },
+			{ EKeyCode::CODE_UP,    EDirection::CW },
+			{ EKeyCode::CODE_DOWN,  EDirection::DOWN },
+			{ EKeyCode::CODE_SPACE, EDirection::JUMP },
+		};
+
+		for (const auto& KeyDirection : KeyDirections)
 		{
-			Direction = KeyDirection.second;
+			if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
+			{
+				Direction = KeyDirection.second;
+			}
+		}
+
+		TileMap* TileMapObject = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+		TileMapObject->RemoveTilesInMap(Tiles_);
+
+		if (CanMove(TilePosition_, Tiles_, Shape_, Direction))
+		{
+			Move(TilePosition_, Tiles_, Shape_, Direction);
+
+			if (Direction == EDirection::JUMP)
+			{
+				State_ = EState::WAIT;
+			}
+
+			TileMapObject->AddTilesInMap(Tiles_);
+		}
+		else
+		{
+			if (Direction == EDirection::DOWN)
+			{
+				Board* BoardObject = WorldManager::Get().GetGameObject<Board>("Board");
+				BoardObject->AddTiles(Tiles_);
+				State_ = EState::WAIT;
+			}
+			else
+			{
+				TileMapObject->AddTilesInMap(Tiles_);
+			}
 		}
 	}
-
-	if (Direction != EDirection::NONE)
+	else // 대기중일 경우...
 	{
-		TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
-		Object->RemoveTilesInMap(Tiles_);
-
-		Move(TilePosition_, Tiles_, Shape_, Direction);
-
-		if (Object->IsCollisionTilesInMap(Tiles_))
-		{
-			Move(TilePosition_, Tiles_, Shape_, GetCountDirection(Direction));
-		}
-
-		Object->AddTilesInMap(Tiles_);
+		/*TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+		Object->AddTilesInMap(Tiles_);*/
 	}
 }
 
@@ -139,7 +165,7 @@ std::vector<Tile> Tetromino::CreateTetrominoTile(const Vec2i& TilePosition, cons
 	return Tiles;
 }
 
-void Tetromino::Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection Direction)
+void Tetromino::Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection& Direction)
 {
 	switch (Direction)
 	{
@@ -187,15 +213,27 @@ void Tetromino::Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape
 		break;
 
 	case EDirection::JUMP:
-		//while (!IsCollision(InTetrominoBlocks))
-		//{
-		//	Move(InConsolePosition, InTetrominoBlocks, InShape, EDirection::DOWN);
-		//}
+		while (CanMove(TilePosition, Tiles, Shape, EDirection::DOWN))
+		{
+			Move(TilePosition, Tiles, Shape, EDirection::DOWN);
+		}
 		break;
 
 	default:
 		ENFORCE_THROW_EXCEPTION("undefined tetromino type...");
 	}
+}
+
+bool Tetromino::CanMove(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection& Direction)
+{
+	bool bCanMove = true;
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Move(TilePosition, Tiles, Shape, Direction);
+	bCanMove = !Object->IsCollisionTilesInMap(Tiles);
+	Move(TilePosition, Tiles, Shape, GetCountDirection(Direction));
+
+	return bCanMove;
 }
 
 int32_t Tetromino::GetBoundSize(const EShape& Shape)
