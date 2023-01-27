@@ -67,31 +67,116 @@ public:
 
 
 	/**
-	 * @brief 타일 맵의 타일을 씁니다.
+	 * @brief 타일이 타일 맵 범위를 벗어나는지 확인합니다.
 	 * 
-	 * @param 타일 맵을 쓸 타일입니다.
+	 * @param TargetTile 검사를 수행할 타일입니다.
 	 * 
-	 * @throws 타일 맵의 범위를 벗어날 경우, C++ 표준 예외를 던집니다.
+	 * @return 범위를 벗어나면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	void WriteTileInMap(const Tile& WriteTile);
+	bool IsOutOfRangeTileInMap(const Tile& TargetTile);
 
 
 	/**
-	 * @brief 특정 위치의 타일 맵을 읽습니다.
+	 * @brief 타일 맵에 타일을 추가합니다.
 	 * 
-	 * @param Position 타일 맵을 읽을 위치입니다.
+	 * @note 추가할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
 	 * 
-	 * @throws 타일 맵의 범위를 벗어날 경우, C++ 표준 예외를 던집니다.
-	 * 
-	 * @return 원하는 위치의 타일의 참조자를 반환합니다.
+	 * @param AddTile 타일 맵에 추가할 타일입니다.
 	 */
-	Tile& ReadTileInMap(const Vec2i& Position);
+	void AddTileInMap(const Tile& AddTile);
+
+
+	/**
+	 * @brief 타일 맵 상의 타일을 삭제합니다.
+	 * 
+	 * @note 삭제할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param RemoveTile 타일 맵에 삭제할 타일입니다.
+	 */
+	void RemoveTileInMap(const Tile& RemoveTile);
+
+
+	/**
+	 * @brief 타일 맵 상의 타일과 충돌을 검사합니다.
+	 * 
+	 * @note 범위를 벗어나는 행위도 충돌 처리됩니다.
+	 * 
+	 * @param CollisionTile 충돌하는지 검사할 타일입니다.
+	 * 
+	 * @return 타일 맵 상의 타일과 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollisionTileInMap(const Tile& CollisionTile);
+
+
+	/**
+	 * @brief 타일들이 타일 맵을 벗어나는지 확인합니다.
+	 * 
+	 * @param Tiles 검사를 수행할 타일입니다.
+	 * 
+	 * @return 범위를 벗어나면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsOutOfRangeTilesInMap(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 타일 맵에 타일들을 추가합니다.
+	 * 
+	 * @note 추가할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param Tiles 타일 맵에 추가할 타일들입니다.
+	 */
+	void AddTilesInMap(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 타일 맵 상의 타일들을 삭제합니다.
+	 * 
+	 * @note 삭제할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param Tiles 타일 맵에 삭제할 타일들입니다.
+	 */
+	void RemoveTilesInMap(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 타일 맵 상의 타일들과 충돌을 검사합니다.
+	 *
+	 * @note 범위를 벗어나는 행위도 충돌 처리됩니다.
+	 *
+	 * @param Tiles 충돌하는지 검사할 타일입니다.
+	 *
+	 * @return 타일 맵 상의 타일과 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollisionTilesInMap(const std::vector<Tile>& Tiles);
 
 
 	/**
 	 * @brief 타일맵을 초기화합니다.
 	 */
 	void ClearMap();
+
+
+private:
+	/**
+	 * @brief 타일 맵에 타일을 추가합니다.
+	 *
+	 * @note 추가할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param AddTile 타일 맵에 추가할 타일입니다.
+	 * @param bIsCheckRange 범위 검사 수행 여부입니다.
+	 */
+	void AddTileInMap(const Tile& AddTile, bool bIsCheckRange);
+
+
+	/**
+	 * @brief 타일 맵 상의 타일을 삭제합니다.
+	 *
+	 * @note 삭제할 타일이 타일 맵 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param RemoveTile 타일 맵에 삭제할 타일입니다.
+	 * @param bIsCheckRange 범위 검사 수행 여부입니다.
+	 */
+	void RemoveTileInMap(const Tile& RemoveTile, bool bIsCheckRange);
 
 
 private:

@@ -51,7 +51,7 @@ void TileMap::Tick(float DeltaSeconds)
 	
 	Vec2f TileLTPosition(
 		CenterPosition_.x - static_cast<float>(TileMapWidth) / 2.0f + static_cast<float>(TileSize_) / 2.0f,
-		CenterPosition_.y - static_cast<float>(TileMapHeight) / 2.0f + static_cast<float>(TileSize_) / 2.0f
+		CenterPosition_.y + static_cast<float>(TileMapHeight) / 2.0f + static_cast<float>(TileSize_) / 2.0f
 	);
 
 	for (int32_t Row = 0; Row < RowSize_; ++Row)
@@ -64,8 +64,8 @@ void TileMap::Tick(float DeltaSeconds)
 			if (CurrentTile.GetState() == Tile::EState::FILL || CurrentTile.GetState() == Tile::EState::WALL)
 			{
 				Vec2f Position = TileLTPosition + Vec2f(
-					static_cast<float>(Col * TileSize_),
-					static_cast<float>(Row * TileSize_)
+					+static_cast<float>(Col * TileSize_),
+					-static_cast<float>(Row * TileSize_)
 				);
 
 				Texture2D& Texture = ContentManager::Get().GetTexture2D(TileColorSignature_[CurrentTile.GetColor()]);
@@ -75,18 +75,92 @@ void TileMap::Tick(float DeltaSeconds)
 	}
 }
 
-void TileMap::WriteTileInMap(const Tile& WriteTile)
+bool TileMap::IsOutOfRangeTileInMap(const Tile& TargetTile)
 {
-	const Vec2i& Position = WriteTile.GetPositionInMap();
-	CHECK((0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_), "out of range in tile map");
-
-	Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)] = WriteTile;
+	const Vec2i& Position = TargetTile.GetPositionInMap();
+	return !(0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_);
 }
 
-Tile& TileMap::ReadTileInMap(const Vec2i& Position)
+void TileMap::AddTileInMap(const Tile& AddTile)
 {
-	CHECK((0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_), "out of range in tile map");
-	return Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)];
+	AddTileInMap(AddTile, true);
+}
+
+void TileMap::RemoveTileInMap(const Tile& RemoveTile)
+{
+	RemoveTileInMap(RemoveTile, true);
+}
+
+bool TileMap::IsCollisionTileInMap(const Tile& CollisionTile)
+{
+	if (IsOutOfRangeTileInMap(CollisionTile)) return true;
+
+	const Vec2i Position = CollisionTile.GetPositionInMap();
+	const Tile& CompareTile = Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)];
+
+	if (CompareTile.GetState() == Tile::EState::EMPTY || CompareTile.GetState() == Tile::EState::NONE)
+	{
+		return false;
+	}
+	else
+	{
+		if (CollisionTile.GetState() == Tile::EState::EMPTY || CollisionTile.GetState() == Tile::EState::NONE)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+}
+
+bool TileMap::IsOutOfRangeTilesInMap(const std::vector<Tile>& Tiles)
+{
+	for (const auto& TargetTile : Tiles)
+	{
+		if (IsOutOfRangeTileInMap(TargetTile))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void TileMap::AddTilesInMap(const std::vector<Tile>& Tiles)
+{
+	if (!IsOutOfRangeTilesInMap(Tiles))
+	{
+		for (const auto& AddTile : Tiles)
+		{
+			AddTileInMap(AddTile, false);
+		}
+	}
+}
+
+void TileMap::RemoveTilesInMap(const std::vector<Tile>& Tiles)
+{
+	if (!IsOutOfRangeTilesInMap(Tiles))
+	{
+		for (const auto& RemoveTile : Tiles)
+		{
+			RemoveTileInMap(RemoveTile, false);
+		}
+	}
+}
+
+bool TileMap::IsCollisionTilesInMap(const std::vector<Tile>& Tiles)
+{
+	for (const auto& CollisionTile : Tiles)
+	{
+		if (IsCollisionTileInMap(CollisionTile))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void TileMap::ClearMap()
@@ -101,4 +175,30 @@ void TileMap::ClearMap()
 			Tiles_[Offset].SetColor(Tile::EColor::NONE);
 		}
 	}
+}
+
+void TileMap::AddTileInMap(const Tile& AddTile, bool bIsCheckRange)
+{
+	if (bIsCheckRange && IsOutOfRangeTileInMap(AddTile))
+	{
+		return;
+	}
+
+	const Vec2i& Position = AddTile.GetPositionInMap();
+	Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)] = AddTile;
+}
+
+void TileMap::RemoveTileInMap(const Tile& RemoveTile, bool bIsCheckRange)
+{
+	if (bIsCheckRange && IsOutOfRangeTileInMap(RemoveTile))
+	{
+		return;
+	}
+
+	Tile RemoveNewTile = RemoveTile;
+	RemoveNewTile.SetColor(Tile::EColor::NONE);
+	RemoveNewTile.SetState(Tile::EState::EMPTY);
+
+	const Vec2i& Position = RemoveNewTile.GetPositionInMap();
+	Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)] = RemoveNewTile;
 }
