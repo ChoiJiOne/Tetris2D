@@ -155,7 +155,7 @@ void InputManager::PollEventMessage()
 
 void InputManager::UpdateKeyboardState()
 {
-	std::copy(PrevKeyboardState_.begin(), PrevKeyboardState_.end(), CurrKeyboardState_.begin());
+	std::copy(CurrKeyboardState_.begin(), CurrKeyboardState_.end(), PrevKeyboardState_.begin());
 
 	CHECK(GetKeyboardState(&CurrKeyboardState_[0]), "failed to get keyboard state");
 }
