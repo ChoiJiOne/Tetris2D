@@ -100,6 +100,22 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 
+	/**
+	 * @brief 테트로미노의 상태를 얻습니다.
+	 * 
+	 * @return 테트로미노의 상태를 반환합니다.
+	 */
+	EState GetState() const { return State_; }
+
+
+	/**
+	 * @brief 테트로미노의 상태를 설정합니다.
+	 * 
+	 * @param State 설정할 테트로미노의 상태입니다.
+	 */
+	void SetState(const EState& State) { State_ = State; }
+
+
 private:
 	/**
 	 * @brief 테트로미노 타일을 생성합니다.
@@ -110,7 +126,38 @@ private:
 	 * 
 	 * @return 생성된 테트로미노 타일의 벡터를 반환합니다.
 	 */
-	std::vector<Tile> CreateTetrominoTile(const Vec2i& TilePosition, const EShape& Shape, const Tile::EColor& Color);
+	static std::vector<Tile> CreateTetrominoTile(const Vec2i& TilePosition, const EShape& Shape, const Tile::EColor& Color);
+
+
+	/**
+	 * @brief 테트로미노를 특정 방향을 움직입니다.
+	 * 
+	 * @param TilePosition 타일 맵 상의 움직일 테트로미노의 왼쪽 상단 좌표입니다.
+	 * @param Tiles 테트로미노의 타일입니다.
+	 * @param Shape 테트로미노의 모양입니다.
+	 * @param Direction 테트로미노가 움직일 방향입니다.
+	 */
+	static void Move(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection Direction);
+
+
+	/**
+	 * @brief 테트로미노 모양에 따른 영역의 크기를 얻습니다.
+	 * 
+	 * @param Shape 테트로미노 모양입니다.
+	 * 
+	 * @return 테트로미노의 영역 크기를 반환합니다.
+	 */
+	static int32_t GetBoundSize(const EShape& Shape);
+
+
+	/**
+	 * 테트로미노 움직임의 반대 방향을 얻습니다.
+	 *
+	 * @param Direction 반대 방향을 알고 싶은 움직임입니다.
+	 *
+	 * @return 움직임의 반대 방향을 반환합니다.
+	 */
+	static EDirection GetCountDirection(const EDirection& Direction);
 
 
 private:
