@@ -194,8 +194,10 @@ private:
 
 	/**
 	 * @brief 테트로미노의 상태입니다.
+	 * 
+	 * @note 기본 상태는 대기중인 상태입니다.
 	 */
-	EState State_ = EState::ACTIVE;
+	EState State_ = EState::WAIT;
 
 
 	/**
