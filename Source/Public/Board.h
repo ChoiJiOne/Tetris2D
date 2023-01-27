@@ -55,6 +55,48 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 
+	/**
+	 * @brief 타일들이 보드를 벗어나는지 확인합니다.
+	 *
+	 * @param Tiles 검사를 수행할 타일들입니다.
+	 *
+	 * @return 범위를 벗어나면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsOutOfRangeTiles(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 보드에 타일들을 추가합니다.
+	 *
+	 * @note 추가할 타일들이 보드 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param Tiles 보드에 추가할 타일들입니다.
+	 */
+	void AddTiles(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 보드 상의 타일들을 삭제합니다.
+	 *
+	 * @note 삭제할 타일이 보드 범위를 벗어나면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param Tiles 보드에서 삭제할 타일들입니다.
+	 */
+	void RemoveTiles(const std::vector<Tile>& Tiles);
+
+
+	/**
+	 * @brief 보드 상의 타일들과 충돌을 검사합니다.
+	 *
+	 * @note 범위를 벗어나는 행위도 충돌 처리됩니다.
+	 *
+	 * @param Tiles 충돌하는지 검사할 타일입니다.
+	 *
+	 * @return 보드 상의 타일과 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollisionTiles(const std::vector<Tile>& Tiles);
+
+
 private:
 	/**
 	 * @brief 비어있는 테트리스 보드의 타일을 생성합니다.
@@ -66,6 +108,16 @@ private:
 	 * @return 생성된 테트리스 보드 타일의 벡터를 반환합니다.
 	 */
 	std::vector<Tile> CreateBoardTile(const Vec2i& TilePosition, const int32_t& Width, const int32_t& Height);
+
+
+	/**
+	 * @brief 좌표가 테트리스 보드 내에 있는지 검사합니다.
+	 * 
+	 * @param Position 검사를 수행할 좌표입니다.
+	 * 
+	 * @return 좌표가 테트리스 보드 내에 있지 않다면 true, 보드 내에 있다면 false를 반환합니다.
+	 */
+	bool IsOutOfRangePosition(const Vec2i& Position);
 
 
 private:
@@ -97,4 +149,10 @@ private:
 	 * @brief 보드의 현재 상태입니다.
 	 */
 	EState State_ = EState::ACTIVE;
+
+
+	/**
+	 * @brief 보드의 업데이트 필요 여부입니다.
+	 */
+	bool bIsNeedUpdate_ = false;
 };

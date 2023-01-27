@@ -22,6 +22,79 @@ Board::Board(const std::string& Signature, const Vec2i& TilePosition, const int3
 
 void Board::Tick(float DeltaSeconds)
 {
+	if (bIsNeedUpdate_)
+	{
+		TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+		Object->AddTilesInMap(Tiles_);
+		bIsNeedUpdate_ = false;
+	}
+}
+
+bool Board::IsOutOfRangeTiles(const std::vector<Tile>& Tiles)
+{
+	for (const auto& TargetTile : Tiles)
+	{
+		if (IsOutOfRangePosition(TargetTile.GetPositionInMap()))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Board::AddTiles(const std::vector<Tile>& Tiles)
+{
+	if (IsCollisionTiles(Tiles)) return;
+
+	bIsNeedUpdate_ = true;
+	Vec2i BoardPosition;
+
+	for (const auto& AddTile : Tiles)
+	{
+		BoardPosition = AddTile.GetPositionInMap() - TilePosition_;
+		Tile& BoardTile = Tiles_[GetOffset(BoardPosition.x, BoardPosition.y, Width_, Height_)];
+
+		BoardTile = AddTile;
+	}
+}
+
+void Board::RemoveTiles(const std::vector<Tile>& Tiles)
+{
+	if (IsCollisionTiles(Tiles)) return;
+
+	bIsNeedUpdate_ = true;
+	Vec2i BoardPosition;
+
+	for (const auto& RemoveTile : Tiles)
+	{
+		BoardPosition = RemoveTile.GetPositionInMap() - TilePosition_;
+		Tile& BoardTile = Tiles_[GetOffset(BoardPosition.x, BoardPosition.y, Width_, Height_)];
+
+		BoardTile.SetColor(Tile::EColor::NONE);
+		BoardTile.SetState(Tile::EState::EMPTY);
+	}
+}
+
+bool Board::IsCollisionTiles(const std::vector<Tile>& Tiles)
+{
+	if (IsOutOfRangeTiles(Tiles)) return true;
+
+	Vec2i BoardPosition;
+
+	for (const auto& TargetTile : Tiles)
+	{
+		BoardPosition = TargetTile.GetPositionInMap() - TilePosition_;
+		Tile& BoardTile = Tiles_[GetOffset(BoardPosition.x, BoardPosition.y, Width_, Height_)];
+
+		if ((BoardTile.GetState() == Tile::EState::WALL || BoardTile.GetState() == Tile::EState::FILL) &&
+			(TargetTile.GetState() == Tile::EState::WALL || TargetTile.GetState() == Tile::EState::FILL))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 std::vector<Tile> Board::CreateBoardTile(const Vec2i& TilePosition, const int32_t& Width, const int32_t& Height)
@@ -58,4 +131,10 @@ std::vector<Tile> Board::CreateBoardTile(const Vec2i& TilePosition, const int32_
 	}
 
 	return Tiles;
+}
+
+bool Board::IsOutOfRangePosition(const Vec2i& Position)
+{
+	Vec2i RelativePosition = Position - TilePosition_;
+	return !(0 <= RelativePosition.x && RelativePosition.x < Width_ && 0 <= RelativePosition.y && RelativePosition.y < Height_);
 }
