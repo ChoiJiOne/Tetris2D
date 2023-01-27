@@ -98,21 +98,8 @@ bool TileMap::IsCollisionTileInMap(const Tile& CollisionTile)
 	const Vec2i Position = CollisionTile.GetPositionInMap();
 	const Tile& CompareTile = Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)];
 
-	if (CompareTile.GetState() == Tile::EState::EMPTY || CompareTile.GetState() == Tile::EState::NONE)
-	{
-		return false;
-	}
-	else
-	{
-		if (CollisionTile.GetState() == Tile::EState::EMPTY || CollisionTile.GetState() == Tile::EState::NONE)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+	return ((CompareTile.GetState() == Tile::EState::WALL || CompareTile.GetState() == Tile::EState::FILL) 
+		&& (CollisionTile.GetState() == Tile::EState::WALL || CollisionTile.GetState() == Tile::EState::FILL));
 }
 
 bool TileMap::IsOutOfRangeTilesInMap(const std::vector<Tile>& Tiles)
