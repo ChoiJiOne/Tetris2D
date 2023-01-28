@@ -54,22 +54,45 @@ Tetromino::Tetromino(const std::string& Signature, const Vec2i& TilePosition, co
 
 void Tetromino::Tick(float DeltaSeconds)
 {
-	EDirection Direction = EDirection::NONE;
-
-	for (const auto& KeyDirection : KEY_DIRECTIONS)
+	if (State_ == EState::ACTIVE)
 	{
-		if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
+		AccrueTickTime_ += DeltaSeconds;
+		EDirection Direction = EDirection::NONE;
+
+		for (const auto& KeyDirection : KEY_DIRECTIONS)
 		{
-			Direction = KeyDirection.second;
+			if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
+			{
+				Direction = KeyDirection.second;
+			}
+		}
+
+		if (AccrueTickTime_ >= MaxAccrueTickTime_)
+		{
+			Direction = EDirection::DOWN;
+			AccrueTickTime_ = 0.0f;
+		}
+
+		if (CanMove(Direction))
+		{
+			State_ = (Direction == EDirection::JUMP) ? EState::DONE : EState::ACTIVE;
+			Move(Direction);
+		}
+		else
+		{
+			State_ = (Direction == EDirection::DOWN) ? EState::DONE : EState::ACTIVE;
+		}
+
+	} 
+	else if (State_ == EState::WAIT)
+	{
+		TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+		if (!Object->IsCollisionTilesInMap(Tiles_))
+		{
+			Object->AddTilesInMap(Tiles_);
 		}
 	}
-
-	if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_Q) == EPressState::PRESSED)
-	{
-		Teleport(Vec2i(10, 1));
-	}
-
-	Move(Direction);
 }
 
 void Tetromino::Move(const EDirection& Direction)
