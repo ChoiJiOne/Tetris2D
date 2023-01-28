@@ -33,6 +33,14 @@ static const std::array<Tile::EColor, 8> COLORS = {
 	Tile::EColor::YELLOW,
 };
 
+static const std::unordered_map<EKeyCode, Tetromino::EDirection> KEY_DIRECTIONS = {
+	{ EKeyCode::CODE_LEFT,  Tetromino::EDirection::LEFT },
+	{ EKeyCode::CODE_RIGHT, Tetromino::EDirection::RIGHT },
+	{ EKeyCode::CODE_UP,    Tetromino::EDirection::CW },
+	{ EKeyCode::CODE_DOWN,  Tetromino::EDirection::DOWN },
+	{ EKeyCode::CODE_SPACE, Tetromino::EDirection::JUMP },
+};
+
 Tetromino::Tetromino(const std::string& Signature, const Vec2i& TilePosition)
 	: Tetromino(Signature, TilePosition, GetRandomElement<EShape, 7>(SHAPES), GetRandomElement<Tile::EColor, 8>(COLORS)) {}
 
@@ -46,61 +54,33 @@ Tetromino::Tetromino(const std::string& Signature, const Vec2i& TilePosition, co
 
 void Tetromino::Tick(float DeltaSeconds)
 {
-	if (State_ == EState::ACTIVE)
+	EDirection Direction = EDirection::NONE;
+
+	static std::unordered_map<EKeyCode, EDirection> KeyDirections = {
+		{ EKeyCode::CODE_LEFT,  EDirection::LEFT },
+		{ EKeyCode::CODE_RIGHT, EDirection::RIGHT },
+		{ EKeyCode::CODE_UP,    EDirection::UP },
+		{ EKeyCode::CODE_DOWN,  EDirection::DOWN },
+		{ EKeyCode::CODE_SPACE, EDirection::JUMP },
+	};
+
+	for (const auto& KeyDirection : KeyDirections)
 	{
-		AccrueTickTime_ += DeltaSeconds;
-
-		EDirection Direction = EDirection::NONE;
-
-		static std::unordered_map<EKeyCode, EDirection> KeyDirections = {
-			{ EKeyCode::CODE_LEFT,  EDirection::LEFT },
-			{ EKeyCode::CODE_RIGHT, EDirection::RIGHT },
-			{ EKeyCode::CODE_UP,    EDirection::CW },
-			{ EKeyCode::CODE_DOWN,  EDirection::DOWN },
-			{ EKeyCode::CODE_SPACE, EDirection::JUMP },
-		};
-
-		for (const auto& KeyDirection : KeyDirections)
+		if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
 		{
-			if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
-			{
-				Direction = KeyDirection.second;
-			}
-		}
-
-		TileMap* TileMapObject = WorldManager::Get().GetGameObject<TileMap>("TileMap");
-		TileMapObject->RemoveTilesInMap(Tiles_);
-
-		if (CanMove(TilePosition_, Tiles_, Shape_, Direction))
-		{
-			Move(TilePosition_, Tiles_, Shape_, Direction);
-
-			if (Direction == EDirection::JUMP)
-			{
-				State_ = EState::WAIT;
-			}
-
-			TileMapObject->AddTilesInMap(Tiles_);
-		}
-		else
-		{
-			if (Direction == EDirection::DOWN)
-			{
-				Board* BoardObject = WorldManager::Get().GetGameObject<Board>("Board");
-				BoardObject->AddTiles(Tiles_);
-				State_ = EState::WAIT;
-			}
-			else
-			{
-				TileMapObject->AddTilesInMap(Tiles_);
-			}
+			Direction = KeyDirection.second;
 		}
 	}
-	else // 대기중일 경우...
+
+	TileMap* TileMapObject = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+	TileMapObject->RemoveTilesInMap(Tiles_);
+
+	if (CanMove(TilePosition_, Tiles_, Shape_, Direction))
 	{
-		/*TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
-		Object->AddTilesInMap(Tiles_);*/
+		Move(TilePosition_, Tiles_, Shape_, Direction);
 	}
+
+	TileMapObject->AddTilesInMap(Tiles_);
 }
 
 std::vector<Tile> Tetromino::CreateTetrominoTile(const Vec2i& TilePosition, const EShape& Shape, const Tile::EColor& Color)
