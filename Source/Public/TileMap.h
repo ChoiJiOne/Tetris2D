@@ -97,6 +97,18 @@ public:
 
 
 	/**
+	 * @brief 타일 맵 상의 타일을 얻습니다.
+	 * 
+	 * @param Position 타일 맵 상의 위치입니다.
+	 * 
+	 * @throws 좌표가 타일 맵을 벗어나면 C++ 표준예외를 던집니다.
+	 * 
+	 * @return 타일 맵 상의 위치에 대응하는 타일을 반환합니다.
+	 */
+	Tile& GetTileInMap(const Vec2i& Position);
+
+
+	/**
 	 * @brief 타일 맵 상의 타일과 충돌을 검사합니다.
 	 * 
 	 * @note 범위를 벗어나는 행위도 충돌 처리됩니다.
@@ -157,6 +169,16 @@ public:
 
 
 private:
+	/**
+	 * @brief 좌표가 타일 맵의 범위를 벗어났는지 검사합니다.
+	 * 
+	 * @param Position 검사를 수행할 좌표입니다.
+	 * 
+	 * @return 좌표가 타일 범위를 벗어났다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsOutOfRangePositionInMap(const Vec2i& Position);
+
+
 	/**
 	 * @brief 타일 맵에 타일을 추가합니다.
 	 *

@@ -77,8 +77,7 @@ void TileMap::Tick(float DeltaSeconds)
 
 bool TileMap::IsOutOfRangeTileInMap(const Tile& TargetTile)
 {
-	const Vec2i& Position = TargetTile.GetPositionInMap();
-	return !(0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_);
+	return IsOutOfRangePositionInMap(TargetTile.GetPositionInMap());
 }
 
 void TileMap::AddTileInMap(const Tile& AddTile)
@@ -89,6 +88,12 @@ void TileMap::AddTileInMap(const Tile& AddTile)
 void TileMap::RemoveTileInMap(const Tile& RemoveTile)
 {
 	RemoveTileInMap(RemoveTile, true);
+}
+
+Tile& TileMap::GetTileInMap(const Vec2i& Position)
+{
+	CHECK(!IsOutOfRangePositionInMap(Position), "out of range position in tile map");
+	return Tiles_[GetOffset(Position.x, Position.y, ColSize_, RowSize_)];
 }
 
 bool TileMap::IsCollisionTileInMap(const Tile& CollisionTile)
@@ -162,6 +167,11 @@ void TileMap::ClearMap()
 			Tiles_[Offset].SetColor(Tile::EColor::NONE);
 		}
 	}
+}
+
+bool TileMap::IsOutOfRangePositionInMap(const Vec2i& Position)
+{
+	return !(0 <= Position.x && Position.x < ColSize_ && 0 <= Position.y && Position.y < RowSize_);
 }
 
 void TileMap::AddTileInMap(const Tile& AddTile, bool bIsCheckRange)
