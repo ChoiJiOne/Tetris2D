@@ -64,13 +64,18 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 
-		WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 22, 24, 30);
-		WorldManager::Get().CreateGameObject<Board>("Board", Vec2i(6, 0), 12, 22);
-		WorldManager::Get().CreateGameObject<Tetromino>("Tetromino", Vec2i(10, 1));
-		WorldManager::Get().CreateGameObject<Background>("Background");
-		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
+		StartPosition_ = Vec2i(10, 1);
+		WaitPosition_ = Vec2i(19, 2);
 
-		WorldManager::Get().GetGameObject<Tetromino>("Tetromino")->SetState(Tetromino::EState::ACTIVE);
+		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
+		WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 22, 24, 30);
+		WorldManager::Get().CreateGameObject<Background>("Background");
+
+		WorldManager::Get().CreateGameObject<Board>("Board", Vec2i(6, 0), 12, 22);
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_);
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
+
+		WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
 	}
 
 
@@ -104,9 +109,31 @@ public:
 			GraphicsManager::Get().Clear(BLACK);
 
 			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
-			WorldManager::Get().GetGameObject<Tetromino>("Tetromino")->Tick(Timer_.GetDeltaTime());
+			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Tick(Timer_.GetDeltaTime());
+			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1))->Tick(Timer_.GetDeltaTime());
 			WorldManager::Get().GetGameObject<Board>("Board")->Tick(Timer_.GetDeltaTime());
 			WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(Timer_.GetDeltaTime());
+
+			if (WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->GetState() == Tetromino::EState::DONE)
+			{
+				if (WorldManager::Get().GetGameObject<Board>("Board")->GetState() == Board::EState::ACTIVE)
+				{
+					WorldManager::Get().GetGameObject<Board>("Board")->SetState(Board::EState::WAIT);
+				}
+				else
+				{
+					WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
+
+					WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+					if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
+					{
+						bIsDone_ = true;
+					}
+
+					WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_);
+					WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
+				}
+			}
 
 			GraphicsManager::Get().Present();
 		}
@@ -120,6 +147,30 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
+
+
+	/**
+	 * @brief 테트로미노의 시작 위치입니다.
+	 */
+	Vec2i StartPosition_;
+
+
+	/**
+	 * @brief 테트로미노의 대기 위치입니다.
+	 */
+	Vec2i WaitPosition_;
+
+
+	/**
+	 * @brief 생성된 테트로미노 수입니다.
+	 */
+	int32_t CountOfTetromino_ = 0;
+
+
+	/**
+	 * @brief 현재 테트로미노의 번호입니다.
+	 */
+	int32_t CurrentTetromino_ = 0;
 };
 
 
