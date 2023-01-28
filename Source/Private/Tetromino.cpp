@@ -56,15 +56,7 @@ void Tetromino::Tick(float DeltaSeconds)
 {
 	EDirection Direction = EDirection::NONE;
 
-	static std::unordered_map<EKeyCode, EDirection> KeyDirections = {
-		{ EKeyCode::CODE_LEFT,  EDirection::LEFT },
-		{ EKeyCode::CODE_RIGHT, EDirection::RIGHT },
-		{ EKeyCode::CODE_UP,    EDirection::UP },
-		{ EKeyCode::CODE_DOWN,  EDirection::DOWN },
-		{ EKeyCode::CODE_SPACE, EDirection::JUMP },
-	};
-
-	for (const auto& KeyDirection : KeyDirections)
+	for (const auto& KeyDirection : KEY_DIRECTIONS)
 	{
 		if (InputManager::Get().GetKeyPressState(KeyDirection.first) == EPressState::PRESSED)
 		{
@@ -72,15 +64,64 @@ void Tetromino::Tick(float DeltaSeconds)
 		}
 	}
 
-	TileMap* TileMapObject = WorldManager::Get().GetGameObject<TileMap>("TileMap");
-	TileMapObject->RemoveTilesInMap(Tiles_);
+	if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_Q) == EPressState::PRESSED)
+	{
+		Teleport(Vec2i(10, 1));
+	}
+
+	Move(Direction);
+}
+
+void Tetromino::Move(const EDirection& Direction)
+{
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Object->RemoveTilesInMap(Tiles_);
 
 	if (CanMove(TilePosition_, Tiles_, Shape_, Direction))
 	{
 		Move(TilePosition_, Tiles_, Shape_, Direction);
 	}
 
-	TileMapObject->AddTilesInMap(Tiles_);
+	Object->AddTilesInMap(Tiles_);
+}
+
+bool Tetromino::CanMove(const EDirection& Direction)
+{
+	bool bCanMove = true;
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Object->RemoveTilesInMap(Tiles_);
+	bCanMove = CanMove(TilePosition_, Tiles_, Shape_, Direction);
+	Object->AddTilesInMap(Tiles_);
+
+	return bCanMove;
+}
+
+void Tetromino::Teleport(const Vec2i& Position)
+{
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Object->RemoveTilesInMap(Tiles_);
+
+	if (CanTeleport(TilePosition_, Tiles_, Position))
+	{
+		Teleport(TilePosition_, Tiles_, Position);
+	}
+
+	Object->AddTilesInMap(Tiles_);
+}
+
+bool Tetromino::CanTeleport(const Vec2i& Position)
+{
+	bool bCanTeleport = true;
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Object->RemoveTilesInMap(Tiles_);
+	bCanTeleport = CanTeleport(TilePosition_, Tiles_, Position);
+	Object->AddTilesInMap(Tiles_);
+
+	return bCanTeleport;
 }
 
 std::vector<Tile> Tetromino::CreateTetrominoTile(const Vec2i& TilePosition, const EShape& Shape, const Tile::EColor& Color)
@@ -214,6 +255,32 @@ bool Tetromino::CanMove(Vec2i& TilePosition, std::vector<Tile>& Tiles, const ESh
 	Move(TilePosition, Tiles, Shape, GetCountDirection(Direction));
 
 	return bCanMove;
+}
+
+void Tetromino::Teleport(Vec2i& TilePosition, std::vector<Tile>& Tiles, const Vec2i& Position)
+{
+	for (auto& TeleportTile : Tiles)
+	{
+		Vec2i OriginTilePosition = TeleportTile.GetPositionInMap();
+		OriginTilePosition -= TilePosition;
+		OriginTilePosition += Position;
+
+		TeleportTile.SetPositionInMap(OriginTilePosition);
+	}
+
+	TilePosition = Position;
+}
+
+bool Tetromino::CanTeleport(Vec2i& TilePosition, std::vector<Tile>& Tiles, const Vec2i& Position)
+{
+	bool bCanTeleport = true;
+	TileMap* Object = WorldManager::Get().GetGameObject<TileMap>("TileMap");
+
+	Teleport(TilePosition, Tiles,  Position);
+	bCanTeleport = !Object->IsCollisionTilesInMap(Tiles);
+	Teleport(TilePosition, Tiles, -Position);
+
+	return bCanTeleport;
 }
 
 int32_t Tetromino::GetBoundSize(const EShape& Shape)

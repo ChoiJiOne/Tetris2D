@@ -51,7 +51,8 @@ public:
 	{
 		NONE   = 0,
 		WAIT   = 1,
-		ACTIVE = 2
+		ACTIVE = 2,
+		DONE   = 3,
 	};
 
 
@@ -116,6 +117,46 @@ public:
 	void SetState(const EState& State) { State_ = State; }
 
 
+	/**
+	 * @brief 테트로미노를 특정 방향으로 이동시킵니다.
+	 * 
+	 * @note 해당 방향으로 이동할 수 없다면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param Direction 테트로미노를 이동 시킬 방향입니다.
+	 */
+	void Move(const EDirection& Direction);
+
+
+	/**
+	 * @brief 테트로미노를 특정 방향으로 이동시킬 수 있는지 확인합니다.
+	 * 
+	 * @param Direction 검사를 수행할 방향입니다.
+	 * 
+	 * @return 이동할 수 있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool CanMove(const EDirection& Direction);
+
+
+	/**
+	 * @brief 테트로미노를 특정 위치로 이동시킵니다.
+	 * 
+	 * @note 해당 방향으로 이동할 수 없다면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param Position 테트로미노를 이동 시킬 타일 맵 상의 위치입니다.
+	 */
+	void Teleport(const Vec2i& Position);
+
+
+	/**
+	 * @brief 테트로미노를 특정 위치로 이동시킬 수 있는지 검사합니다.
+	 * 
+	 * @param Position 검사할 위치입니다.
+	 * 
+	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool CanTeleport(const Vec2i& Position);
+
+
 private:
 	/**
 	 * @brief 테트로미노 타일을 생성합니다.
@@ -151,6 +192,32 @@ private:
 	 * @return 테트로미노를 움직일 수 있다면 true, 그렇지 않다면 false를 반환합니다.
 	 */
 	static bool CanMove(Vec2i& TilePosition, std::vector<Tile>& Tiles, const EShape& Shape, const EDirection& Direction);
+
+
+	/**
+	 * @brief 테트로미노를 특정 위치로 이동시킵니다.
+	 * 
+	 * @note 해당 방향으로 이동할 수 없다면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param TilePosition 타일 맵 상의 움직일 테트로미노의 왼쪽 상단 좌표입니다.
+	 * @param Tiles 테트로미노의 타일입니다.
+	 * @param Position 테트로미노가 이동할 위치입니다.
+	 * 
+	 * @param Position 테트로미노를 이동 시킬 타일 맵 상의 위치입니다.
+	 */
+	static void Teleport(Vec2i& TilePosition, std::vector<Tile>& Tiles, const Vec2i& Position);
+
+
+	/**
+	 * @brief 테트로미노를 특정 위치로 이동시킬 수 있는지 검사합니다.
+	 *
+	 * @param TilePosition 타일 맵 상의 움직일 테트로미노의 왼쪽 상단 좌표입니다.
+	 * @param Tiles 테트로미노의 타일입니다.
+	 * @param Position 검사할 위치입니다.
+	 *
+	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	static bool CanTeleport(Vec2i& TilePosition, std::vector<Tile>& Tiles, const Vec2i& Position);
 
 
 	/**
