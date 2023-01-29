@@ -50,21 +50,26 @@ void GameEngine::LoadFontFromConfig()
 {
 	Config& FontConfig = ContentManager::Get().LoadConfig("Font", "Font.config");
 
-	const std::vector<std::string>& FontInfo = Split(FontConfig.GetValue("Font32"), ",");
+	const std::unordered_map<std::string, std::string>& FontKeyValues = FontConfig.GetConfigObject();
 
-	const std::string& FontName = FontInfo[0];
-	int32_t FontStartCodePoint = std::stoi(FontInfo[1]);
-	int32_t FontEndCodePoint = std::stoi(FontInfo[2]);
-	float FontSize = std::stof(FontInfo[3]);
+	for (const auto& FontKeyValue : FontKeyValues)
+	{
+		const std::vector<std::string>& FontInfo = Split(FontKeyValue.second, ",");
 
-	ContentManager::Get().LoadFont("Font32", FontName, FontStartCodePoint, FontEndCodePoint, FontSize);
+		const std::string& FontName = FontInfo[0];
+		int32_t FontStartCodePoint = std::stoi(FontInfo[1]);
+		int32_t FontEndCodePoint = std::stoi(FontInfo[2]);
+		float FontSize = std::stof(FontInfo[3]);
+
+		ContentManager::Get().LoadFont(FontKeyValue.first, FontName, FontStartCodePoint, FontEndCodePoint, FontSize);
+	}
 }
 
 void GameEngine::LoadTextureFromConfig()
 {
 	Config& TextureConfig = ContentManager::Get().LoadConfig("Texture", "Texture.config");
 
-	const std::unordered_map<std::string, std::string> TextureKeyValyes = TextureConfig.GetConfigObject();
+	const std::unordered_map<std::string, std::string>& TextureKeyValyes = TextureConfig.GetConfigObject();
 
 	for (auto& TextureKeyValye : TextureKeyValyes)
 	{
