@@ -8,7 +8,7 @@
 #include "Utility.hpp"
 #include "WorldManager.h"
 
-float Board::MaxAccrueTickTime_ = 1.0f;
+float Board::MaxAccrueTickTime_ = 0.5f;
 
 Board::Board(const std::string& Signature, const Vec2i& TilePosition, const int32_t& Width, const int32_t& Height)
 	: GameObject(Signature)
