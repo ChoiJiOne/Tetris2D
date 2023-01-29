@@ -1,6 +1,7 @@
 #include "StartScene.h"
 #include "Background.h"
 #include "InputManager.h"
+#include "GameTitle.h"
 #include "WorldManager.h"
 
 StartScene::~StartScene()
@@ -15,4 +16,5 @@ void StartScene::Tick(float DeltaSeconds)
 	}
 
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
+	WorldManager::Get().GetGameObject<GameTitle>("Title")->Tick(DeltaSeconds);
 }

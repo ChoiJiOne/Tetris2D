@@ -1,30 +1,16 @@
 #include "Background.h"
-#include "Camera2D.h"
-#include "CommandLineManager.h"
-#include "ContentManager.h"
-#include "Config.h"
 #include "Color.h"
-#include "Debug.h"
-#include "Font.h"
 #include "GameEngine.h"
 #include "GraphicsManager.h"
+#include "GameTitle.h"
 #include "InputManager.h"
-#include "Macro.h"
-#include "Math.hpp"
-#include "Random.h"
-#include "Sound.h"
 #include "Shader.h"
-#include "Texture2D.h"
 #include "Timer.h"
-#include "Vector.hpp"
-#include "Window.h"
 #include "WorldManager.h"
 
+#include "StartScene.h"
 #include "PlayScene.h"
 
-#include "Board.h"
-#include "Tetromino.h"
-#include "TileMap.h"
 
 
 /**
@@ -65,8 +51,17 @@ public:
 		GraphicsManager::Get().SetDepthBuffer(false);
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
-
+		
+		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
+
+		StartScene_ = std::make_unique<StartScene>();
+		StartScene_->SetSwitchEvent(
+			[&]() {
+				CurrentScene = PlayScene_.get();
+				PlayScene_->Reset();
+			}
+		);
 
 		PlayScene_ = std::make_unique<PlayScene>();
 		PlayScene_->SetSwitchEvent(
@@ -74,7 +69,8 @@ public:
 				bIsDone_ = true;
 			}
 		);
-		PlayScene_->Reset();
+
+		CurrentScene = StartScene_.get();
 	}
 
 
@@ -103,7 +99,7 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			PlayScene_->Tick(Timer_.GetDeltaTime());
+			CurrentScene->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -117,6 +113,18 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
+
+
+	/**
+	 * @brief 현재 실행 중인 씬입니다.
+	 */
+	Scene* CurrentScene = nullptr;
+
+
+	/**
+	 * @brief 시작 씬입니다.
+	 */
+	std::unique_ptr<StartScene> StartScene_ = nullptr;
 
 	
 	/**
