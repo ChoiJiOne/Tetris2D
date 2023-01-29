@@ -41,7 +41,7 @@ public:
 
 
 	/**
-	 * @brief 게임 씬을 업데이트합니다.
+	 * @brief 게임 플레이 씬을 업데이트합니다.
 	 * 
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
