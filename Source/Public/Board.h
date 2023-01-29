@@ -71,6 +71,16 @@ public:
 	void SetState(const EState& State) { State_ = State; }
 
 
+	/**
+	 * @brief 보드의 최대 누적 시간을 설정합니다.
+	 *
+	 * @note 시간은 초단위 입니다.
+	 *
+	 * @param MaxAccrueTickTime 설정할 최대 누적 시간입니다.
+	 */
+	static void SetMaxAccrueTickTime(const float& MaxAccrueTickTime);
+
+
 private:
 	/**
 	 * @brief 비어있는 테트리스 보드의 타일을 생성합니다.

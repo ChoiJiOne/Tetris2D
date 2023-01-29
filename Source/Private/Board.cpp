@@ -60,6 +60,11 @@ void Board::Tick(float DeltaSeconds)
 	}
 }
 
+void Board::SetMaxAccrueTickTime(const float& MaxAccrueTickTime)
+{
+	MaxAccrueTickTime_ = std::abs(MaxAccrueTickTime);
+}
+
 std::vector<Tile> Board::CreateBoardTile(const Vec2i& TilePosition, const int32_t& Width, const int32_t& Height)
 {
 	std::vector<Tile> Tiles(Width * Height);

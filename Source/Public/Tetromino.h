@@ -157,6 +157,16 @@ public:
 	bool CanTeleport(const Vec2i& Position);
 
 
+	/**
+	 * @brief 테트로미노의 최대 누적 시간을 설정합니다.
+	 * 
+	 * @note 시간은 초단위 입니다.
+	 * 
+	 * @param MaxAccrueTickTime 설정할 최대 누적 시간입니다.
+	 */
+	static void SetMaxAccrueTickTime(const float& MaxAccrueTickTime);
+
+
 private:
 	/**
 	 * @brief 테트로미노 타일을 생성합니다.

@@ -152,6 +152,11 @@ bool Tetromino::CanTeleport(const Vec2i& Position)
 	return bCanTeleport;
 }
 
+void Tetromino::SetMaxAccrueTickTime(const float& MaxAccrueTickTime)
+{
+	MaxAccrueTickTime_ = std::abs(MaxAccrueTickTime);
+}
+
 std::vector<Tile> Tetromino::CreateTetrominoTile(const Vec2i& TilePosition, const EShape& Shape, const Tile::EColor& Color)
 {
 	std::vector<Tile> Tiles(4);
