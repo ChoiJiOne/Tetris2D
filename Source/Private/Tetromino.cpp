@@ -75,7 +75,12 @@ void Tetromino::Tick(float DeltaSeconds)
 
 		if (CanMove(Direction))
 		{
-			State_ = (Direction == EDirection::JUMP) ? EState::DONE : EState::ACTIVE;
+			if (Direction == EDirection::JUMP)
+			{
+				State_ = EState::DONE;
+				WorldManager::Get().GetGameObject<Board>("Board")->SetState(Board::EState::WAIT);
+			}
+
 			Move(Direction);
 		}
 		else

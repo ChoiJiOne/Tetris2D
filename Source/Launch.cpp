@@ -114,25 +114,19 @@ public:
 			WorldManager::Get().GetGameObject<Board>("Board")->Tick(Timer_.GetDeltaTime());
 			WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(Timer_.GetDeltaTime());
 
-			if (WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->GetState() == Tetromino::EState::DONE)
+			if ((WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->GetState() == Tetromino::EState::DONE) && 
+				(WorldManager::Get().GetGameObject<Board>("Board")->GetState() == Board::EState::ACTIVE))
 			{
-				if (WorldManager::Get().GetGameObject<Board>("Board")->GetState() == Board::EState::ACTIVE)
-				{
-					WorldManager::Get().GetGameObject<Board>("Board")->SetState(Board::EState::WAIT);
-				}
-				else
-				{
-					WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
+				WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
 
-					WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
-					if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
-					{
-						bIsDone_ = true;
-					}
-
-					WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_);
-					WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
+				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+				if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
+				{
+					bIsDone_ = true;
 				}
+
+				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_);
+				WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
 			}
 
 			GraphicsManager::Get().Present();
