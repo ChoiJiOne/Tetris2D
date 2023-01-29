@@ -20,6 +20,8 @@
 #include "Window.h"
 #include "WorldManager.h"
 
+#include "PlayScene.h"
+
 #include "Board.h"
 #include "Tetromino.h"
 #include "TileMap.h"
@@ -64,18 +66,15 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 
-		StartPosition_ = Vec2i(10, 1);
-		WaitPosition_ = Vec2i(19, 2);
-
-		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
-		WorldManager::Get().CreateGameObject<TileMap>("TileMap", Vec2f(0.0f, 0.0f), 22, 24, 30);
 		WorldManager::Get().CreateGameObject<Background>("Background");
 
-		WorldManager::Get().CreateGameObject<Board>("Board", Vec2i(6, 0), 12, 22);
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_);
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
-
-		WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+		PlayScene_ = std::make_unique<PlayScene>();
+		PlayScene_->SetSwitchEvent(
+			[&]() {
+				bIsDone_ = true;
+			}
+		);
+		PlayScene_->Reset();
 	}
 
 
@@ -84,6 +83,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		PlayScene_.reset();
 	}
 
 
@@ -101,33 +101,9 @@ public:
 			Timer_.Tick();
 			InputManager::Get().Tick();
 
-			if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_ESCAPE) == EPressState::PRESSED)
-			{
-				bIsDone_ = true;
-			}
-
 			GraphicsManager::Get().Clear(BLACK);
 
-			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
-			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Tick(Timer_.GetDeltaTime());
-			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1))->Tick(Timer_.GetDeltaTime());
-			WorldManager::Get().GetGameObject<Board>("Board")->Tick(Timer_.GetDeltaTime());
-			WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(Timer_.GetDeltaTime());
-
-			if ((WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->GetState() == Tetromino::EState::DONE) && 
-				(WorldManager::Get().GetGameObject<Board>("Board")->GetState() == Board::EState::ACTIVE))
-			{
-				WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
-
-				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
-				if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
-				{
-					bIsDone_ = true;
-				}
-
-				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_);
-				WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
-			}
+			PlayScene_->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -142,29 +118,11 @@ private:
 	 */
 	Timer Timer_;
 
-
+	
 	/**
-	 * @brief 테트로미노의 시작 위치입니다.
+	 * @brief 플레이 씬입니다.
 	 */
-	Vec2i StartPosition_;
-
-
-	/**
-	 * @brief 테트로미노의 대기 위치입니다.
-	 */
-	Vec2i WaitPosition_;
-
-
-	/**
-	 * @brief 생성된 테트로미노 수입니다.
-	 */
-	int32_t CountOfTetromino_ = 0;
-
-
-	/**
-	 * @brief 현재 테트로미노의 번호입니다.
-	 */
-	int32_t CurrentTetromino_ = 0;
+	std::unique_ptr<PlayScene> PlayScene_ = nullptr;
 };
 
 
