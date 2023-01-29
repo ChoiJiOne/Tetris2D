@@ -19,20 +19,20 @@ void PlayScene::Tick(float DeltaSeconds)
 		RunSwitchEvent();
 	}
 
-	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
+	Background* BackgroundObject = WorldManager::Get().GetGameObject<Background>("Background");
+	Tetromino* CurrTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
+	Tetromino* NextTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1));
 
-	Tetromino* CurrTetromino = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
-	Tetromino* NextTetromino = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1));
+	BackgroundObject->Tick(DeltaSeconds);
+	CurrTetrominoObject->Tick(DeltaSeconds);
+	NextTetrominoObject->Tick(DeltaSeconds);
 
-	CurrTetromino->Tick(DeltaSeconds);
-	NextTetromino->Tick(DeltaSeconds);
-
-	Board* TetrisBoard = WorldManager::Get().GetGameObject<Board>("Board");
-	TetrisBoard->Tick(DeltaSeconds);
+	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("Board");
+	BoardObject->Tick(DeltaSeconds);
 
 	WorldManager::Get().GetGameObject<TileMap>("TileMap")->Tick(DeltaSeconds);
 
-	if ((CurrTetromino->GetState() == Tetromino::EState::DONE) && (TetrisBoard->GetState() == Board::EState::ACTIVE))
+	if ((CurrTetrominoObject->GetState() == Tetromino::EState::DONE) && (BoardObject->GetState() == Board::EState::ACTIVE))
 	{
 		WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
 
