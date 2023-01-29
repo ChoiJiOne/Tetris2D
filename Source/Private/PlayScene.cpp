@@ -13,15 +13,15 @@ PlayScene::~PlayScene()
 
 void PlayScene::Tick(float DeltaSeconds)
 {
+	Background* BackgroundObject = WorldManager::Get().GetGameObject<Background>("Background");
+	Tetromino* CurrTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
+	Tetromino* NextTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1));
+
 	if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_ESCAPE) == EPressState::PRESSED)
 	{
 		CurrentState_ = EState::WAIT;
 		RunSwitchEvent();
 	}
-
-	Background* BackgroundObject = WorldManager::Get().GetGameObject<Background>("Background");
-	Tetromino* CurrTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
-	Tetromino* NextTetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_ + 1));
 
 	BackgroundObject->Tick(DeltaSeconds);
 	CurrTetrominoObject->Tick(DeltaSeconds);
