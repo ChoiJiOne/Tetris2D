@@ -13,7 +13,7 @@ void WorldManager::UnregisterObject(const std::string& Key)
 
 Camera2D& WorldManager::CreateMainCamera(const Vec2f& Position, const float& Width, const float& Height, const float& Rotate, const float& Velocity)
 {
-	if (MainCamera_) MainCamera_.reset();
+	DestroyMainCamera();
 
 	MainCamera_ = std::make_unique<Camera2D>(Position, Width, Height, Rotate, Velocity);
 
@@ -23,6 +23,11 @@ Camera2D& WorldManager::CreateMainCamera(const Vec2f& Position, const float& Wid
 Camera2D& WorldManager::GetMainCamera()
 {
 	return *MainCamera_.get();
+}
+
+void WorldManager::DestroyMainCamera()
+{
+	if (MainCamera_) MainCamera_.reset();
 }
 
 WorldManager::~WorldManager()

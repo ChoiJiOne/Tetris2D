@@ -117,6 +117,12 @@ public:
 	 */
 	Camera2D& GetMainCamera();
 
+
+	/**
+	 * @brief 2D 월드의 카메라를 파괴합니다.
+	 */
+	void DestroyMainCamera();
+
 	
 private:
 	/**
