@@ -143,6 +143,14 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 
+	/**
+	 * @brief 버튼의 위치를 설정합니다.
+	 * 
+	 * @param Position 설정할 버튼의 위치입니다.
+	 */
+	void SetPosition(const Vec2f& Position) { Position_ = Position; }
+
+
 private:
 	/**
 	 * @brief 마우스가 범위 내에 있는지 확인합니다.
