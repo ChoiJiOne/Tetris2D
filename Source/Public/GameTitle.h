@@ -18,10 +18,17 @@ public:
 	 *
 	 * @param Signature 게임 타이틀의 식별자입니다.
 	 * @param Title 게임 타이틀입니다.
+	 * @param FontSignature 게임 타이틀 문자열의 폰트 시그니처입니다.
 	 * @param Position 화면 상의 게임 타이틀 위치입니다.
 	 * @param Color 타이틀의 색상입니다.
 	 */
-	GameTitle(const std::string& Signature, const std::wstring& Title, const Vec2f& Position, const LinearColor& Color);
+	GameTitle(
+		const std::string& Signature, 
+		const std::wstring& Title, 
+		const std::string& FontSignature,
+		const Vec2f& Position, 
+		const LinearColor& Color
+	);
 
 
 	/**
@@ -49,6 +56,12 @@ private:
 	 * @brief 화면에 표시될 게임 타이틀입니다.
 	 */
 	std::wstring Title_;
+
+
+	/**
+	 * @brief 게임 타이틀 문자열의 폰트 시그니처입니다.
+	 */
+	std::string FontSignature_;
 
 
 	/**

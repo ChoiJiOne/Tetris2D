@@ -62,7 +62,7 @@ public:
 		GraphicsManager::Get().SetFillMode(true);
 		
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
-		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", Vec2f(0.0f, 250.0f), CYAN);
+		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", "Font128", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
 		WorldManager::Get().CreateGameObject<Button>(
 			"PlayButton", 
