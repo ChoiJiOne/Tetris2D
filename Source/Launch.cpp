@@ -67,28 +67,27 @@ public:
 
 		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", "Font128", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
-		WorldManager::Get().CreateGameObject<Button>(
-			"Button", 
-			Vec2f(0.0f, 0.0f), 
-			200.0f, 
-			40.0f, 
-			"Button",
-			L"START",
-			MAGENTA,
-			"Font32",
-			EKeyCode::CODE_LBUTTON, 
-			[&]() {
-				CurrentScene = PlayScene_.get();
-				PlayScene_->Reset();
-			},
-			0.9f
-		);
 
 		StartScene_ = std::make_unique<StartScene>();
 		StartScene_->SetSwitchEvent(
 			[&]() {
-				CurrentScene = PlayScene_.get();
-				PlayScene_->Reset();
+				StartScene::ESelectState SelectState = StartScene_->GetSelectState();
+
+				switch (SelectState)
+				{
+				case StartScene::ESelectState::START:
+					CurrentScene = PlayScene_.get();
+					PlayScene_->Reset();
+					break;
+
+				case StartScene::ESelectState::SETTING:
+					bIsDone_ = true;
+					break;
+
+				case StartScene::ESelectState::QUIT:
+					bIsDone_ = true;
+					break;
+				}
 			}
 		);
 
@@ -108,6 +107,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		StartScene_.reset();
 		PlayScene_.reset();
 	}
 
