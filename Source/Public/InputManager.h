@@ -39,6 +39,7 @@ enum class EPressState
  */
 enum class EKeyCode
 {
+	CODE_NONE = 0x00,
 	CODE_LBUTTON = 0x01,
 	CODE_RBUTTON = 0x02,
 	CODE_CANCEL = 0x03,
