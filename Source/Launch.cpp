@@ -1,4 +1,5 @@
 #include "Background.h"
+#include "Button.h"
 #include "Color.h"
 #include "GameEngine.h"
 #include "GraphicsManager.h"
@@ -38,6 +39,10 @@ public:
 			EWindowEvent::RESIZE,
 			[&]() {
 				GraphicsManager::Get().Resize();
+
+				float Width = 0.0f, Height = 0.0f;
+				GraphicsManager::Get().GetBackBufferSize(Width, Height);
+				WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
 			}
 		);
 
@@ -45,6 +50,10 @@ public:
 			EWindowEvent::MAXIMIZED,
 			[&]() {
 				GraphicsManager::Get().Resize();
+
+				float Width = 0.0f, Height = 0.0f;
+				GraphicsManager::Get().GetBackBufferSize(Width, Height);
+				WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
 			}
 		);
 
@@ -52,8 +61,22 @@ public:
 		GraphicsManager::Get().SetAlphaBlend(true);
 		GraphicsManager::Get().SetFillMode(true);
 		
+		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), 1000.0f, 800.0f);
 		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
+		WorldManager::Get().CreateGameObject<Button>(
+			"PlayButton", 
+			Vec2f(0.0f, 0.0f), 
+			80.0f, 
+			80.0f, 
+			"Play",
+			EKeyCode::CODE_LBUTTON, 
+			[&]() {
+				CurrentScene = PlayScene_.get();
+				PlayScene_->Reset();
+			},
+			0.9f
+		);
 
 		StartScene_ = std::make_unique<StartScene>();
 		StartScene_->SetSwitchEvent(
