@@ -2,7 +2,6 @@
 #include "Background.h"
 #include "Button.h"
 #include "ContentManager.h"
-#include "InputManager.h"
 #include "GraphicsManager.h"
 #include "GameTitle.h"
 #include "Shader.h"
@@ -13,7 +12,7 @@ StartScene::StartScene()
 {
 	Buttons_ = {
 		WorldManager::Get().CreateGameObject<Button>(
-			"StartButtonInStartScene", Vec2f(0.0f, 100.0f), 300.0f, 50.0f, "Button", L"START", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"Start_StartScene", Vec2f(0.0f, 100.0f), 300.0f, 50.0f, "Button", L"START", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				CurrentSelectState_ = ESelectState::START;
 				RunSwitchEvent();
@@ -22,7 +21,7 @@ StartScene::StartScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"SettingButtonInStartScene", Vec2f(0.0f, 0.0f), 300.0f, 50.0f, "Button", L"SETTING", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"Setting_StartScene", Vec2f(0.0f, 0.0f), 300.0f, 50.0f, "Button", L"SETTING", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				CurrentSelectState_ = ESelectState::SETTING;
 				RunSwitchEvent();
@@ -31,7 +30,7 @@ StartScene::StartScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"QuitButtonInStartScene", Vec2f(0.0f, -100.0f), 300.0f, 50.0f, "Button", L"QUIT", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"Quit_StartScene", Vec2f(0.0f, -100.0f), 300.0f, 50.0f, "Button", L"QUIT", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				CurrentSelectState_ = ESelectState::QUIT;
 				RunSwitchEvent();
@@ -47,11 +46,6 @@ StartScene::~StartScene()
 
 void StartScene::Tick(float DeltaSeconds)
 {
-	if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_RETURN) == EPressState::PRESSED)
-	{
-		RunSwitchEvent();
-	}
-
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
 	WorldManager::Get().GetGameObject<GameTitle>("Title")->Tick(DeltaSeconds);
 
