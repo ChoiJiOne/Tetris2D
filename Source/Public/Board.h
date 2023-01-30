@@ -72,6 +72,14 @@ public:
 
 
 	/**
+	 * @brief 보드의 최대 누적 시간을 얻습니다.
+	 *
+	 * @return 보드의 최대 누적 시간을 반환합니다.
+	 */
+	static float GetMaxAccrueTickTime() { return MaxAccrueTickTime_; }
+
+
+	/**
 	 * @brief 보드의 최대 누적 시간을 설정합니다.
 	 *
 	 * @note 시간은 초단위 입니다.
