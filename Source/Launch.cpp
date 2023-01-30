@@ -10,6 +10,7 @@
 #include "WorldManager.h"
 
 #include "StartScene.h"
+#include "SettingScene.h"
 #include "PlayScene.h"
 
 
@@ -81,12 +82,25 @@ public:
 					break;
 
 				case StartScene::ESelectState::SETTING:
-					bIsDone_ = true;
+					CurrentScene = SettingScene_.get();
 					break;
 
 				case StartScene::ESelectState::QUIT:
 					bIsDone_ = true;
 					break;
+				}
+			}
+		);
+
+		SettingScene_ = std::make_unique<SettingScene>();
+		SettingScene_->SetSwitchEvent(
+			[&]() {
+				SettingScene::ESelectState SelectState = SettingScene_->GetSelectState();
+
+				switch (SelectState)
+				{
+				case SettingScene::ESelectState::BACK:
+					CurrentScene = StartScene_.get();
 				}
 			}
 		);
@@ -108,6 +122,7 @@ public:
 	virtual ~Tetris()
 	{
 		StartScene_.reset();
+		SettingScene_.reset();
 		PlayScene_.reset();
 	}
 
@@ -154,6 +169,12 @@ private:
 	 * @brief 시작 씬입니다.
 	 */
 	std::unique_ptr<StartScene> StartScene_ = nullptr;
+
+
+	/**
+	 * @brief 설정 씬입니다.
+	 */
+	std::unique_ptr<SettingScene> SettingScene_ = nullptr;
 
 	
 	/**
