@@ -22,5 +22,5 @@ void StartScene::Tick(float DeltaSeconds)
 
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
 	WorldManager::Get().GetGameObject<GameTitle>("Title")->Tick(DeltaSeconds);
-	WorldManager::Get().GetGameObject<Button>("PlayButton")->Tick(DeltaSeconds);
+	WorldManager::Get().GetGameObject<Button>("Button")->Tick(DeltaSeconds);
 }

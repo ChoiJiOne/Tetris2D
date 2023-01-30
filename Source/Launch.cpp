@@ -65,11 +65,14 @@ public:
 		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", "Font128", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
 		WorldManager::Get().CreateGameObject<Button>(
-			"PlayButton", 
+			"Button", 
 			Vec2f(0.0f, 0.0f), 
-			80.0f, 
-			80.0f, 
-			"Play",
+			200.0f, 
+			40.0f, 
+			"Button",
+			L"START",
+			MAGENTA,
+			"Font32",
 			EKeyCode::CODE_LBUTTON, 
 			[&]() {
 				CurrentScene = PlayScene_.get();
