@@ -10,10 +10,10 @@
 #include "WorldManager.h"
 
 #include "StartScene.h"
+#include "DoneScene.h"
 #include "SettingScene.h"
 #include "PlayScene.h"
 #include "PauseScene.h"
-
 
 
 /**
@@ -118,7 +118,7 @@ public:
 					break;
 
 				case PlayScene::EState::DONE:
-					bIsDone_ = true;
+					CurrentScene = DoneScene_.get();
 					break;
 				}
 			}
@@ -146,6 +146,29 @@ public:
 			}
 		);
 
+		DoneScene_ = std::make_unique<DoneScene>();
+		DoneScene_->SetSwitchEvent(
+			[&]() {
+				DoneScene::ESelectState SelectState = DoneScene_->GetSelectState();
+
+				switch (SelectState)
+				{
+				case DoneScene::ESelectState::REPLAY:
+					CurrentScene = PlayScene_.get();
+					PlayScene_->Reset();
+					break;
+
+				case DoneScene::ESelectState::RESET:
+					CurrentScene = StartScene_.get();
+					break;
+
+				case DoneScene::ESelectState::QUIT:
+					bIsDone_ = true;
+					break;
+				}
+			}
+		);
+
 		CurrentScene = StartScene_.get();
 	}
 
@@ -155,6 +178,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		DoneScene_.reset();
 		PauseScene_.reset();
 		StartScene_.reset();
 		SettingScene_.reset();
@@ -222,6 +246,12 @@ private:
 	 * @brief 중지 씬입니다.
 	 */
 	std::unique_ptr<PauseScene> PauseScene_ = nullptr;
+
+
+	/**
+	 * @brief 종료 씬입니다.
+	 */
+	std::unique_ptr<DoneScene> DoneScene_ = nullptr;
 };
 
 
