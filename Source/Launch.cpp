@@ -12,6 +12,7 @@
 #include "StartScene.h"
 #include "SettingScene.h"
 #include "PlayScene.h"
+#include "PauseScene.h"
 
 
 
@@ -108,7 +109,40 @@ public:
 		PlayScene_ = std::make_unique<PlayScene>();
 		PlayScene_->SetSwitchEvent(
 			[&]() {
-				bIsDone_ = true;
+				PlayScene::EState State = PlayScene_->GetCurrentState();
+
+				switch (State)
+				{
+				case PlayScene::EState::PAUSE:
+					CurrentScene = PauseScene_.get();
+					break;
+
+				case PlayScene::EState::DONE:
+					bIsDone_ = true;
+					break;
+				}
+			}
+		);
+
+		PauseScene_ = std::make_unique<PauseScene>();
+		PauseScene_->SetSwitchEvent(
+			[&]() {
+				PauseScene::ESelectState SelectState = PauseScene_->GetSelectState();
+
+				switch (SelectState)
+				{
+				case PauseScene::ESelectState::CONTINUE:
+					CurrentScene = PlayScene_.get();
+					break;
+
+				case PauseScene::ESelectState::RESET:
+					CurrentScene = StartScene_.get();
+					break;
+
+				case PauseScene::ESelectState::QUIT:
+					bIsDone_ = true;
+					break;
+				}
 			}
 		);
 
@@ -121,6 +155,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		PauseScene_.reset();
 		StartScene_.reset();
 		SettingScene_.reset();
 		PlayScene_.reset();
@@ -181,6 +216,12 @@ private:
 	 * @brief 플레이 씬입니다.
 	 */
 	std::unique_ptr<PlayScene> PlayScene_ = nullptr;
+
+	
+	/**
+	 * @brief 중지 씬입니다.
+	 */
+	std::unique_ptr<PauseScene> PauseScene_ = nullptr;
 };
 
 
