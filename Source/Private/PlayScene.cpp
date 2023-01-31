@@ -7,6 +7,10 @@
 #include "TileMap.h"
 #include "WorldManager.h"
 
+PlayScene::PlayScene()
+{
+}
+
 PlayScene::~PlayScene()
 {
 }

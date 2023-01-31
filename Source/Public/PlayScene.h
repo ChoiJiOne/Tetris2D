@@ -26,7 +26,7 @@ public:
 	/**
 	 * @brief 게임 플레이 씬의 기본 생성자입니다.
 	 */
-	PlayScene() = default;
+	PlayScene();
 
 
 	/**
