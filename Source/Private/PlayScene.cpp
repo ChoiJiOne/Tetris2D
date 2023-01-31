@@ -19,7 +19,7 @@ void PlayScene::Tick(float DeltaSeconds)
 
 	if (InputManager::Get().GetKeyPressState(EKeyCode::CODE_ESCAPE) == EPressState::PRESSED)
 	{
-		CurrentState_ = EState::WAIT;
+		CurrentState_ = EState::PAUSE;
 		RunSwitchEvent();
 	}
 
@@ -76,4 +76,6 @@ void PlayScene::Reset()
 	WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_);
 
 	WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+
+	CurrentState_ = EState::PLAY;
 }

@@ -15,9 +15,10 @@ public:
 	 */
 	enum class EState : int32_t
 	{
-		PLAY = 0,
-		WAIT = 1,
-		DONE = 2,
+		NONE  = 0,
+		PLAY  = 1,
+		PAUSE = 2,
+		DONE  = 3,
 	};
 
 
@@ -66,7 +67,7 @@ private:
 	/**
 	 * @brief 현재 게임 씬의 상태입니다.
 	 */
-	EState CurrentState_ = EState::WAIT;
+	EState CurrentState_ = EState::NONE;
 
 
 	/**
