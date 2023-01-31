@@ -38,13 +38,23 @@ public:
 		);
 
 		InputManager::Get().RegisterWindowEvent(
-			EWindowEvent::RESIZE,
+			EWindowEvent::ACTIVE,
 			[&]() {
-				GraphicsManager::Get().Resize();
+				
+			}
+		);
 
-				float Width = 0.0f, Height = 0.0f;
-				GraphicsManager::Get().GetBackBufferSize(Width, Height);
-				WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::INACTIVE,
+			[&]() {
+
+			}
+		);
+
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::MINIMZED,
+			[&]() {
+
 			}
 		);
 
@@ -56,6 +66,31 @@ public:
 				float Width = 0.0f, Height = 0.0f;
 				GraphicsManager::Get().GetBackBufferSize(Width, Height);
 				WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
+			}
+		);
+
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::RESIZE,
+			[&]() {
+				GraphicsManager::Get().Resize();
+
+				float Width = 0.0f, Height = 0.0f;
+				GraphicsManager::Get().GetBackBufferSize(Width, Height);
+				WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
+			}
+		);
+
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::ENTERSIZEMOVE,
+			[&]() {
+
+			}
+		);
+
+		InputManager::Get().RegisterWindowEvent(
+			EWindowEvent::EXITSIZEMOVE,
+			[&]() {
+
 			}
 		);
 
@@ -78,12 +113,12 @@ public:
 				switch (SelectState)
 				{
 				case StartScene::ESelectState::START:
-					CurrentScene = PlayScene_.get();
+					CurrScene = PlayScene_.get();
 					PlayScene_->Reset();
 					break;
 
 				case StartScene::ESelectState::SETTING:
-					CurrentScene = SettingScene_.get();
+					CurrScene = SettingScene_.get();
 					break;
 
 				case StartScene::ESelectState::QUIT:
@@ -101,7 +136,7 @@ public:
 				switch (SelectState)
 				{
 				case SettingScene::ESelectState::BACK:
-					CurrentScene = StartScene_.get();
+					CurrScene = StartScene_.get();
 				}
 			}
 		);
@@ -114,11 +149,11 @@ public:
 				switch (State)
 				{
 				case PlayScene::EState::PAUSE:
-					CurrentScene = PauseScene_.get();
+					CurrScene = PauseScene_.get();
 					break;
 
 				case PlayScene::EState::DONE:
-					CurrentScene = DoneScene_.get();
+					CurrScene = DoneScene_.get();
 					break;
 				}
 			}
@@ -132,11 +167,11 @@ public:
 				switch (SelectState)
 				{
 				case PauseScene::ESelectState::CONTINUE:
-					CurrentScene = PlayScene_.get();
+					CurrScene = PlayScene_.get();
 					break;
 
 				case PauseScene::ESelectState::RESET:
-					CurrentScene = StartScene_.get();
+					CurrScene = StartScene_.get();
 					break;
 
 				case PauseScene::ESelectState::QUIT:
@@ -154,12 +189,12 @@ public:
 				switch (SelectState)
 				{
 				case DoneScene::ESelectState::REPLAY:
-					CurrentScene = PlayScene_.get();
+					CurrScene = PlayScene_.get();
 					PlayScene_->Reset();
 					break;
 
 				case DoneScene::ESelectState::RESET:
-					CurrentScene = StartScene_.get();
+					CurrScene = StartScene_.get();
 					break;
 
 				case DoneScene::ESelectState::QUIT:
@@ -169,7 +204,8 @@ public:
 			}
 		);
 
-		CurrentScene = StartScene_.get();
+		CurrScene = StartScene_.get();
+		PrevScene = CurrScene;
 	}
 
 
@@ -202,7 +238,7 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			CurrentScene->Tick(Timer_.GetDeltaTime());
+			CurrScene->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -221,7 +257,13 @@ private:
 	/**
 	 * @brief 현재 실행 중인 씬입니다.
 	 */
-	Scene* CurrentScene = nullptr;
+	Scene* CurrScene = nullptr;
+
+
+	/**
+	 * @brief 변경되기 전의 씬입니다.
+	 */
+	Scene* PrevScene = nullptr;
 
 
 	/**

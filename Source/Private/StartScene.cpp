@@ -28,7 +28,7 @@ StartScene::StartScene()
 			},
 			0.9f
 		),
-
+				
 		WorldManager::Get().CreateGameObject<Button>(
 			"Quit_StartScene", Vec2f(0.0f, -100.0f), 300.0f, 50.0f, "Button", L"QUIT", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
