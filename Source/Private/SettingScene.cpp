@@ -15,7 +15,7 @@ SettingScene::SettingScene()
 {
 	Buttons_ = {
 		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.2_SettingScene", Vec2f(0.0f, 0.0f), 50.0f, 50.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"TetrominoSpeed0.2_SettingScene", Vec2f(0.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Tetromino::SetMaxAccrueTickTime(0.2f);
 			},
@@ -23,7 +23,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.4_SettingScene", Vec2f(100.0f, 0.0f), 50.0f, 50.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"TetrominoSpeed0.4_SettingScene", Vec2f(100.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Tetromino::SetMaxAccrueTickTime(0.4f);
 			},
@@ -31,7 +31,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.6_SettingScene", Vec2f(200.0f, 0.0f), 50.0f, 50.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"TetrominoSpeed0.6_SettingScene", Vec2f(200.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Tetromino::SetMaxAccrueTickTime(0.6f);
 			},
@@ -39,7 +39,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.8_SettingScene", Vec2f(300.0f, 0.0f), 50.0f, 50.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"TetrominoSpeed0.8_SettingScene", Vec2f(300.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Tetromino::SetMaxAccrueTickTime(0.8f);
 			},
@@ -48,7 +48,7 @@ SettingScene::SettingScene()
 
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed1.0_SettingScene", Vec2f(400.0f, 0.0f), 50.0f, 50.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"TetrominoSpeed1.0_SettingScene", Vec2f(400.0f, 0.0f), 60.0f, 60.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Tetromino::SetMaxAccrueTickTime(1.0f);
 			},
@@ -56,7 +56,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.2_SettingScene", Vec2f(0.0f, -100.0f), 50.0f, 50.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"BoardClear0.2_SettingScene", Vec2f(0.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Board::SetMaxAccrueTickTime(0.2f);
 			},
@@ -64,7 +64,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.4_SettingScene", Vec2f(100.0f, -100.0f), 50.0f, 50.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"BoardClear0.4_SettingScene", Vec2f(100.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Board::SetMaxAccrueTickTime(0.4f);
 			},
@@ -72,7 +72,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.6_SettingScene", Vec2f(200.0f, -100.0f), 50.0f, 50.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"BoardClear0.6_SettingScene", Vec2f(200.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Board::SetMaxAccrueTickTime(0.6f);
 			},
@@ -80,7 +80,7 @@ SettingScene::SettingScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.8_SettingScene", Vec2f(300.0f, -100.0f), 50.0f, 50.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"BoardClear0.8_SettingScene", Vec2f(300.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Board::SetMaxAccrueTickTime(0.8f);
 			},
@@ -89,7 +89,7 @@ SettingScene::SettingScene()
 
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear1.0_SettingScene", Vec2f(400.0f, -100.0f), 50.0f, 50.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
+			"BoardClear1.0_SettingScene", Vec2f(400.0f, -100.0f), 60.0f, 60.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				Board::SetMaxAccrueTickTime(1.0f);
 			},
