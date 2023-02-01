@@ -1,7 +1,11 @@
 #pragma once
 
+#include <array>
+
 #include "Vector.hpp"
 #include "Scene.h"
+
+class Button;
 
 
 /**
@@ -71,6 +75,14 @@ private:
 
 
 	/**
+	 * @brief 플레이 시간입니다.
+	 * 
+	 * @note 플레이 시간은 초단위입니다.
+	 */
+	float PlayTime_ = 0.0f;
+
+
+	/**
 	 * @brief 월드 상의 카메라 중심 위치입니다.
 	 */
 	Vec2f CameraPosition_;
@@ -104,4 +116,10 @@ private:
 	 * @brief 현재 테트로미노의 번호입니다.
 	 */
 	int32_t CurrentTetromino_ = 0;
+
+
+	/**
+	 * @brief 플레이 씬의 버튼입니다.
+	 */
+	std::array<Button*, 11> Buttons_;
 };
