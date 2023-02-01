@@ -14,15 +14,27 @@ class GameEngine
 {
 public:
 	/**
-	 * @brief 게임 엔진의 생성자입니다.
+	 * @brief 게임 엔진의 기본 생성자입니다.
+	 * 
+	 * @note 게임 엔진을 초기화 하기 위해서는 반드시 Initialize 메서드를 호출해야 합니다.
 	 */
-	GameEngine();
+	GameEngine() = default;
 
 
 	/**
 	 * @brief 게임 엔진의 가상 소멸자입니다.
 	 */
 	virtual ~GameEngine();
+
+
+	/**
+	 * @brief 게임 엔진을 초기화합니다.
+	 * 
+	 * @note 하위의 Initialize 메서드에서 이 메서드를 호출해야 합니다.
+	 * 
+	 * @throws 게임 엔진 초기화에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	virtual void Initialize();
 
 
 	/**

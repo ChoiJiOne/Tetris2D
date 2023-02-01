@@ -6,7 +6,13 @@
 #include "Shader.h"
 #include "Window.h"
 
-GameEngine::GameEngine()
+GameEngine::~GameEngine()
+{
+	GraphicsManager::Get().Cleanup();
+	Window_.reset();
+}
+
+void GameEngine::Initialize()
 {
 	SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
@@ -16,12 +22,11 @@ GameEngine::GameEngine()
 	LoadFontFromConfig();
 	LoadTextureFromConfig();
 	LoadAudioFromConfig();
-}
 
-GameEngine::~GameEngine()
-{
-	GraphicsManager::Get().Cleanup();
-	Window_.reset();
+	// 2D Graphics Setting...
+	GraphicsManager::Get().SetDepthBuffer(false);
+	GraphicsManager::Get().SetAlphaBlend(true);
+	GraphicsManager::Get().SetFillMode(true);
 }
 
 void GameEngine::CreateWindowFromConfig()
