@@ -5,7 +5,7 @@
 #include "ContentManager.h"
 #include "Font.h"
 #include "GraphicsManager.h"
-#include "GameTitle.h"
+#include "GameText.h"
 #include "Shader.h"
 #include "Texture2D.h"
 #include "Tetromino.h"
@@ -114,7 +114,7 @@ SettingScene::~SettingScene()
 void SettingScene::Tick(float DeltaSeconds)
 {
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
-	WorldManager::Get().GetGameObject<GameTitle>("Title")->Tick(DeltaSeconds);
+	WorldManager::Get().GetGameObject<GameText>("Title")->Tick(DeltaSeconds);
 
 	Font& Font32 = ContentManager::Get().GetFont("Font32");
 	GraphicsManager::Get().DrawText2D(Font32, Format(L"테트로미노 속도 : %.1f", Tetromino::GetMaxAccrueTickTime()), Vec2f(-250.0f,    0.0f), MAGENTA);

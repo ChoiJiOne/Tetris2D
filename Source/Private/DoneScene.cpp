@@ -3,7 +3,7 @@
 #include "Button.h"
 #include "ContentManager.h"
 #include "GraphicsManager.h"
-#include "GameTitle.h"
+#include "GameText.h"
 #include "Shader.h"
 #include "Texture2D.h"
 #include "WorldManager.h"
@@ -47,7 +47,7 @@ DoneScene::~DoneScene()
 void DoneScene::Tick(float DeltaSeconds)
 {
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
-	WorldManager::Get().GetGameObject<GameTitle>("Title")->Tick(DeltaSeconds);
+	WorldManager::Get().GetGameObject<GameText>("Title")->Tick(DeltaSeconds);
 
 	for (auto& SceneButton : Buttons_)
 	{

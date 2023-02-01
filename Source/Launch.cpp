@@ -3,7 +3,7 @@
 #include "Color.h"
 #include "GameEngine.h"
 #include "GraphicsManager.h"
-#include "GameTitle.h"
+#include "GameText.h"
 #include "InputManager.h"
 #include "Shader.h"
 #include "Timer.h"
@@ -102,7 +102,7 @@ public:
 		GraphicsManager::Get().GetBackBufferSize(Width, Height);
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), Width, Height);
 
-		WorldManager::Get().CreateGameObject<GameTitle>("Title", L"TETRIS 2D", "Font128", Vec2f(0.0f, 250.0f), CYAN);
+		WorldManager::Get().CreateGameObject<GameText>("Title", L"TETRIS 2D", "Font128", Vec2f(0.0f, 250.0f), CYAN);
 		WorldManager::Get().CreateGameObject<Background>("Background");
 
 		StartScene_ = std::make_unique<StartScene>();
