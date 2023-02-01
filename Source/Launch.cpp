@@ -141,20 +141,20 @@ private:
 	{
 		std::function<void()> StartSceneSwitchEvent = [&]() {
 			StartScene* StartScenePtr = reinterpret_cast<StartScene*>(Scenes_["Start"].get());
-			StartScene::ESelectState SelectState = StartScenePtr->GetSelectState();
+			StartScene::EState State = StartScenePtr->GetCurrentState();
 
-			switch (SelectState)
+			switch (State)
 			{
-			case StartScene::ESelectState::START:
+			case StartScene::EState::START:
 				CurrentScene_ = Scenes_["Play"].get();
 				reinterpret_cast<PlayScene*>(CurrentScene_)->Reset();
 				break;
 
-			case StartScene::ESelectState::SETTING:
+			case StartScene::EState::SETTING:
 				CurrentScene_ = Scenes_["Setting"].get();
 				break;
 
-			case StartScene::ESelectState::QUIT:
+			case StartScene::EState::QUIT:
 				bIsDone_ = true;
 				break;
 			}

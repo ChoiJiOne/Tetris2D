@@ -10,32 +10,73 @@
 
 StartScene::StartScene()
 {
-	Buttons_ = {
-		WorldManager::Get().CreateGameObject<Button>(
-			"Start_StartScene", Vec2f(0.0f, 100.0f), 300.0f, 50.0f, "Button", L"START", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				CurrentSelectState_ = ESelectState::START;
-				RunSwitchEvent();
-			},
-			0.9f
+	WorldManager& GlobalWorldManager = WorldManager::Get();
+
+	std::function<void()> StartSwitchEvent = [&]() {
+		CurrentState_ = EState::START;
+		RunSwitchEvent();
+	};
+
+	std::function<void()> SettingSwitchEvent = [&]() {
+		CurrentState_ = EState::SETTING;
+		RunSwitchEvent();
+	};
+
+	std::function<void()> QuitSwitchEvent = [&]() {
+		CurrentState_ = EState::QUIT;
+		RunSwitchEvent();
+	};
+
+	std::string TextureSignature = "Button";
+	std::string FontSignature = "Font32";
+	Vec2f ButtonPositon = Vec2f(0.0f, 100.0f);
+	float ButtonWidth = 300.0f;
+	float ButtonHeight = 50.0f;
+	float ButtonReduceRate = 0.9f;
+	LinearColor ButtonTextColor = MAGENTA;
+	float ButtonGap = 100.0f;
+
+	SceneButton_ = {
+		GlobalWorldManager.CreateGameObject<Button>(
+			"Start::StartScene", 
+			Vec2f(ButtonPositon.x, ButtonPositon.y),
+			ButtonWidth,
+			ButtonHeight,
+			TextureSignature, 
+			L"START", 
+			ButtonTextColor,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			StartSwitchEvent,
+			ButtonReduceRate
 		),
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"Setting_StartScene", Vec2f(0.0f, 0.0f), 300.0f, 50.0f, "Button", L"SETTING", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				CurrentSelectState_ = ESelectState::SETTING;
-				RunSwitchEvent();
-			},
-			0.9f
+		GlobalWorldManager.CreateGameObject<Button>(
+			"Setting::StartScene", 
+			Vec2f(ButtonPositon.x, ButtonPositon.y - ButtonGap),
+			ButtonWidth,
+			ButtonHeight,
+			TextureSignature, 
+			L"SETTING", 
+			ButtonTextColor,
+			FontSignature, 
+			EKeyCode::CODE_LBUTTON,
+			SettingSwitchEvent,
+			ButtonReduceRate
 		),
 				
-		WorldManager::Get().CreateGameObject<Button>(
-			"Quit_StartScene", Vec2f(0.0f, -100.0f), 300.0f, 50.0f, "Button", L"QUIT", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				CurrentSelectState_ = ESelectState::QUIT;
-				RunSwitchEvent();
-			},
-			0.9f
+		GlobalWorldManager.CreateGameObject<Button>(
+			"Quit::StartScene", 
+			Vec2f(ButtonPositon.x, ButtonPositon.y - 2.0f * ButtonGap),
+			ButtonWidth,
+			ButtonHeight,
+			TextureSignature,
+			L"QUIT", 
+			ButtonTextColor,
+			FontSignature, 
+			EKeyCode::CODE_LBUTTON,
+			QuitSwitchEvent,
+			ButtonReduceRate
 		)
 	};
 }
@@ -49,8 +90,5 @@ void StartScene::Tick(float DeltaSeconds)
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
 	WorldManager::Get().GetGameObject<GameText>("Title")->Tick(DeltaSeconds);
 
-	for (auto& SceneButton : Buttons_)
-	{
-		SceneButton->Tick(DeltaSeconds);
-	}
+	Scene::Tick(DeltaSeconds);
 }
