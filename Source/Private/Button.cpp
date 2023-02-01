@@ -18,7 +18,8 @@ Button::Button(const std::string& Signature, const ButtonParamWithText& Construc
 		ConstructorParam.FontSignature,
 		ConstructorParam.KeyCode,
 		ConstructorParam.ClickEvent,
-		ConstructorParam.ReduceRate
+		ConstructorParam.ReduceRate,
+		ConstructorParam.bIsMouseMode
 	) {}
 
 Button::Button(
@@ -32,7 +33,8 @@ Button::Button(
 	const std::string& FontSignature, 
 	const EKeyCode& KeyCode, 
 	const std::function<void()>& ClickEvent, 
-	const float ReduceRate
+	const float ReduceRate,
+	bool bIsMouseMode
 ) : GameObject(Signature),
 	bIsTextMode_(true),
 	Position_(Position),
@@ -44,7 +46,8 @@ Button::Button(
 	FontSignature_(FontSignature),
 	KeyCode_(KeyCode),
 	ClickEvent_(ClickEvent),
-	ReduceRate_(ReduceRate)
+	ReduceRate_(ReduceRate),
+	bIsMouseMode_(bIsMouseMode)
 {
 }
 
@@ -57,7 +60,8 @@ Button::Button(const std::string& Signature, const ButtonParamWithoutText& Const
 		ConstructorParam.TextureSignature,
 		ConstructorParam.KeyCode,
 		ConstructorParam.ClickEvent,
-		ConstructorParam.ReduceRate
+		ConstructorParam.ReduceRate,
+		ConstructorParam.bIsMouseMode
 	) {}
 
 Button::Button(
@@ -68,7 +72,8 @@ Button::Button(
 	const std::string& TextureSignature,
 	const EKeyCode& KeyCode, 
 	const std::function<void()>& ClickEvent,
-	const float ReduceRate
+	const float ReduceRate,
+	bool bIsMouseMode
 ) : GameObject(Signature),
 	bIsTextMode_(false),
 	Position_(Position),
@@ -77,7 +82,8 @@ Button::Button(
 	TextureSignature_(TextureSignature),
 	KeyCode_(KeyCode),
 	ClickEvent_(ClickEvent),
-	ReduceRate_(ReduceRate)
+	ReduceRate_(ReduceRate),
+	bIsMouseMode_(bIsMouseMode)
 {
 }
 
@@ -92,7 +98,25 @@ void Button::Tick(float DeltaSeconds)
 	float ButtonTextureWidth = Width_;
 	float ButtonTextureHeight = Height_;
 
-	if (bIsDetectMouse_)
+	if (bIsMouseMode_)
+	{
+		if (bIsDetectMouse_)
+		{
+			const EPressState& PressState = InputManager::Get().GetKeyPressState(KeyCode_);
+
+			if (PressState == EPressState::HELD || PressState == EPressState::PRESSED)
+			{
+				ButtonTextureWidth *= ReduceRate_;
+				ButtonTextureHeight *= ReduceRate_;
+			}
+
+			if (PressState == EPressState::RELEASED && ClickEvent_)
+			{
+				ClickEvent_();
+			}
+		}
+	}
+	else
 	{
 		const EPressState& PressState = InputManager::Get().GetKeyPressState(KeyCode_);
 

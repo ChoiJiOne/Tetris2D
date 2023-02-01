@@ -25,6 +25,7 @@ struct ButtonParamWithText
 	const EKeyCode& KeyCode;
 	const std::function<void()>& ClickEvent;
 	const float ReduceRate = 1.0f;
+	const bool bIsMouseMode = true;
 };
 
 
@@ -40,6 +41,7 @@ struct ButtonParamWithoutText
 	const EKeyCode& KeyCode;
 	const std::function<void()>& ClickEvent;
 	const float ReduceRate = 1.0f;
+	const bool bIsMouseMode = true;
 };
 
 
@@ -74,6 +76,7 @@ public:
 	 * @param KeyCode 버튼이 클릭됐을 때 실행할 키 코드 값입니다.
 	 * @param ClickEvent 버튼이 클릭됐을 때 실행할 이벤트입니다.
 	 * @param ReduceRate 버튼이 클릭됐을 때 줄어들 비율입니다. 기본 값은 1.0입니다.
+	 * @param bIsMouseMode 버튼에 마우스를 감지하는 모드인지 확인합니다. 기본적으로 확인합니다.
 	 */
 	Button(
 		const std::string& Signature,
@@ -86,7 +89,8 @@ public:
 		const std::string& FontSignature,
 		const EKeyCode& KeyCode,
 		const std::function<void()>& ClickEvent,
-		const float ReduceRate = 1.0f
+		const float ReduceRate = 1.0f,
+		bool bIsMouseMode = true
 	);
 
 
@@ -110,6 +114,7 @@ public:
 	 * @param KeyCode 버튼이 클릭됐을 때 실행할 키 코드 값입니다.
 	 * @param ClickEvent 버튼이 클릭됐을 때 실행할 이벤트입니다.
 	 * @param ReduceRate 버튼이 클릭됐을 때 줄어들 비율입니다. 기본 값은 1.0입니다.
+	 * @param bIsMouseMode 버튼에 마우스를 감지하는 모드인지 확인합니다. 기본적으로 확인합니다.
 	 */
 	Button(
 		const std::string& Signature,
@@ -119,7 +124,8 @@ public:
 		const std::string& TextureSignature,
 		const EKeyCode& KeyCode,
 		const std::function<void()>& ClickEvent,
-		const float ReduceRate = 1.0f
+		const float ReduceRate = 1.0f,
+		bool bIsMouseMode = true
 	);
 
 
@@ -235,4 +241,10 @@ private:
 	 * @brief 버튼 클릭 시 줄어드는 버튼의 비율입니다.
 	 */
 	float ReduceRate_ = 0.0f;
+
+
+	/**
+	 * @brief 버튼이 마우스를 감지하는 모드인지 확인합니다.
+	 */
+	bool bIsMouseMode_ = true;
 };
