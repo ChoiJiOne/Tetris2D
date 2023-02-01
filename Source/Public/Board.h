@@ -72,6 +72,14 @@ public:
 
 
 	/**
+	 * @brief 보드에 삭제된 라인 수를 얻습니다.
+	 * 
+	 * @return 보드에 삭제된 라인 수를 반환합니다.
+	 */
+	int32_t GetRemoveLine() const { return RemoveLine_; }
+
+
+	/**
 	 * @brief 보드의 최대 누적 시간을 얻습니다.
 	 *
 	 * @return 보드의 최대 누적 시간을 반환합니다.
