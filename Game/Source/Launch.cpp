@@ -162,11 +162,11 @@ private:
 
 		std::function<void()> SettingSceneSwitchEvent = [&]() {
 			SettingScene* SettingScenePtr = reinterpret_cast<SettingScene*>(Scenes_["Setting"].get());
-			SettingScene::ESelectState SelectState = SettingScenePtr->GetSelectState();
+			SettingScene::EState State = SettingScenePtr->GetCurrentState();
 
-			switch (SelectState)
+			switch (State)
 			{
-			case SettingScene::ESelectState::BACK:
+			case SettingScene::EState::BACK:
 				CurrentScene_ = Scenes_["Start"].get();
 			}
 		};

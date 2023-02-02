@@ -13,96 +13,216 @@
 
 SettingScene::SettingScene()
 {
-	Buttons_ = {
-		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.2_SettingScene", Vec2f(0.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Tetromino::SetMaxAccrueTickTime(0.2f);
-			},
-			0.9f
+	WorldManager& GWorld = WorldManager::Get();
+
+	std::function<void()> TetrominoSpeed2Event = [&]() {
+		Tetromino::SetMaxAccrueTickTime(0.2f);
+	};
+
+	std::function<void()> TetrominoSpeed4Event = [&]() {
+		Tetromino::SetMaxAccrueTickTime(0.4f);
+	};
+
+	std::function<void()> TetrominoSpeed6Event = [&]() {
+		Tetromino::SetMaxAccrueTickTime(0.6f);
+	};
+
+	std::function<void()> TetrominoSpeed8Event = [&]() {
+		Tetromino::SetMaxAccrueTickTime(0.8f);
+	};
+
+	std::function<void()> TetrominoSpeed10Event = [&]() {
+		Tetromino::SetMaxAccrueTickTime(1.0f);
+	};
+
+	std::function<void()> BoardClear2Event = [&]() {
+		Board::SetMaxAccrueTickTime(0.2f);
+	};
+
+	std::function<void()> BoardClear4Event = [&]() {
+		Board::SetMaxAccrueTickTime(0.4f);
+	};
+
+	std::function<void()> BoardClear6Event = [&]() {
+		Board::SetMaxAccrueTickTime(0.6f);
+	};
+
+	std::function<void()> BoardClear8Event = [&]() {
+		Board::SetMaxAccrueTickTime(0.8f);
+	};
+
+	std::function<void()> BoardClear10Event = [&]() {
+		Board::SetMaxAccrueTickTime(1.0f);
+	};
+
+	std::function<void()> OkEvent = [&]() {
+		CurrentState_ = EState::BACK;
+		RunSwitchEvent();
+	};
+
+	std::string TextureSignature = "Box";
+	std::string FontSignature = "Font32";
+	Vec2f Position = Vec2f(0.0f, 0.0f);
+	float Width = 60.0f;
+	float Height = 60.0f;
+	float ReduceRate = 0.9f;
+	LinearColor Color = MAGENTA;
+	float Gap = 100.0f;
+
+	SceneButton_ = {
+		GWorld.CreateGameObject<Button>(
+			"Speed2::SettingScene", 
+			Vec2f(Position.x, Position.y),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.2", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			TetrominoSpeed2Event,
+			ReduceRate
 		),
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.4_SettingScene", Vec2f(100.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Tetromino::SetMaxAccrueTickTime(0.4f);
-			},
-			0.9f
+		GWorld.CreateGameObject<Button>(
+			"Speed4::SettingScene",
+			Vec2f(Position.x + Gap, Position.y),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.4", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			TetrominoSpeed4Event,
+			ReduceRate
 		),
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.6_SettingScene", Vec2f(200.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Tetromino::SetMaxAccrueTickTime(0.6f);
-			},
-			0.9f
+		GWorld.CreateGameObject<Button>(
+			"Speed6::SettingScene",
+			Vec2f(Position.x + 2.0f * Gap, Position.y),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.6", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			TetrominoSpeed6Event,
+			ReduceRate
 		),
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed0.8_SettingScene", Vec2f(300.0f, 0.0f), 60.0f, 60.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Tetromino::SetMaxAccrueTickTime(0.8f);
-			},
-			0.9f
-		),
-
-
-		WorldManager::Get().CreateGameObject<Button>(
-			"TetrominoSpeed1.0_SettingScene", Vec2f(400.0f, 0.0f), 60.0f, 60.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Tetromino::SetMaxAccrueTickTime(1.0f);
-			},
-			0.9f
-		),
-
-		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.2_SettingScene", Vec2f(0.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.2", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Board::SetMaxAccrueTickTime(0.2f);
-			},
-			0.9f
-		),
-
-		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.4_SettingScene", Vec2f(100.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.4", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Board::SetMaxAccrueTickTime(0.4f);
-			},
-			0.9f
-		),
-
-		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.6_SettingScene", Vec2f(200.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.6", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Board::SetMaxAccrueTickTime(0.6f);
-			},
-			0.9f
-		),
-
-		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear0.8_SettingScene", Vec2f(300.0f, -100.0f), 60.0f, 60.0f, "Box", L"0.8", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Board::SetMaxAccrueTickTime(0.8f);
-			},
-			0.9f
+		GWorld.CreateGameObject<Button>(
+			"Speed8::SettingScene", 
+			Vec2f(Position.x + 3.0f * Gap, Position.y),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.8", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			TetrominoSpeed8Event,
+			ReduceRate
 		),
 
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"BoardClear1.0_SettingScene", Vec2f(400.0f, -100.0f), 60.0f, 60.0f, "Box", L"1.0", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				Board::SetMaxAccrueTickTime(1.0f);
-			},
-			0.9f
+		GWorld.CreateGameObject<Button>(
+			"Speed10::SettingScene", 
+			Vec2f(Position.x + 4.0f * Gap, Position.y),
+			Width,
+			Height,
+			TextureSignature,
+			L"1.0", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			TetrominoSpeed10Event,
+			ReduceRate
 		),
 
-		WorldManager::Get().CreateGameObject<Button>(
-			"Ok_SettingScene", Vec2f(0.0f, -200.0f), 300.0f, 50.0f, "Button", L"OK", MAGENTA, "Font32", EKeyCode::CODE_LBUTTON,
-			[&]() {
-				CurrentSelectState_ = ESelectState::BACK;
-				RunSwitchEvent();
-			},
-			0.9f
+		GWorld.CreateGameObject<Button>(
+			"Clear2::SettingScene", 
+			Vec2f(Position.x, Position.y - Gap),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.2", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			BoardClear2Event,
+			ReduceRate
+		),
+
+		GWorld.CreateGameObject<Button>(
+			"Clear4::SettingScene", 
+			Vec2f(Position.x + Gap, Position.y - Gap),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.4", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			BoardClear4Event,
+			ReduceRate
+		),
+
+		GWorld.CreateGameObject<Button>(
+			"Clear6::SettingScene", 
+			Vec2f(Position.x + 2.0f * Gap, Position.y - Gap),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.6", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			BoardClear6Event,
+			ReduceRate
+		),
+
+		GWorld.CreateGameObject<Button>(
+			"Clear8::SettingScene", 
+			Vec2f(Position.x + 3.0f * Gap, Position.y - Gap),
+			Width,
+			Height,
+			TextureSignature,
+			L"0.8", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			BoardClear8Event,
+			ReduceRate
+		),
+
+		GWorld.CreateGameObject<Button>(
+			"Clear10::SettingScene", 
+			Vec2f(Position.x + 4.0f * Gap, Position.y - Gap),
+			Width,
+			Height,
+			TextureSignature,
+			L"1.0", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			BoardClear10Event,
+			ReduceRate
+		),
+
+		GWorld.CreateGameObject<Button>(
+			"Ok::SettingScene", 
+			Vec2f(Position.x, Position.y - 2.0f * Gap),
+			300.0f, 
+			50.0f, 
+			"Button", 
+			L"OK", 
+			Color,
+			FontSignature,
+			EKeyCode::CODE_LBUTTON,
+			OkEvent,
+			ReduceRate
 		),
 	};
 }
@@ -120,8 +240,5 @@ void SettingScene::Tick(float DeltaSeconds)
 	GraphicsManager::Get().DrawText2D(Font32, Format(L"테트로미노 속도 : %.1f", Tetromino::GetMaxAccrueTickTime()), Vec2f(-250.0f,    0.0f), MAGENTA);
 	GraphicsManager::Get().DrawText2D(Font32, Format(L"보드 정리 속도 : %.1f", Board::GetMaxAccrueTickTime()), Vec2f(-250.0f, -100.0f), MAGENTA);
 
-	for (auto& SceneButton : Buttons_)
-	{
-		SceneButton->Tick(DeltaSeconds);
-	}
+	GameScene::Tick(DeltaSeconds);
 }
