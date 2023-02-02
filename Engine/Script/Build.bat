@@ -12,4 +12,4 @@ if not exist %project% (
     %engine%\\Bin\\premake5.exe vs2019
 )
 
-%build% %project%\\%project%.sln -property:Configuration=%option% -target:Rebuild
+%build% %project%\\%project%.sln -property:Configuration=%option% -target:Rebuild /p:SkipShaderCompile=true
