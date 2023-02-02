@@ -10,7 +10,7 @@
 
 StartScene::StartScene()
 {
-	WorldManager& GlobalWorldManager = WorldManager::Get();
+	WorldManager& GWorld = WorldManager::Get();
 
 	std::function<void()> StartSwitchEvent = [&]() {
 		CurrentState_ = EState::START;
@@ -29,54 +29,54 @@ StartScene::StartScene()
 
 	std::string TextureSignature = "Button";
 	std::string FontSignature = "Font32";
-	Vec2f ButtonPositon = Vec2f(0.0f, 100.0f);
-	float ButtonWidth = 300.0f;
-	float ButtonHeight = 50.0f;
-	float ButtonReduceRate = 0.9f;
-	LinearColor ButtonTextColor = MAGENTA;
-	float ButtonGap = 100.0f;
+	Vec2f Position = Vec2f(0.0f, 100.0f);
+	float Width = 300.0f;
+	float Height = 50.0f;
+	float ReduceRate = 0.9f;
+	LinearColor Color = MAGENTA;
+	float Gap = 100.0f;
 
 	SceneButton_ = {
-		GlobalWorldManager.CreateGameObject<Button>(
+		GWorld.CreateGameObject<Button>(
 			"Start::StartScene", 
-			Vec2f(ButtonPositon.x, ButtonPositon.y),
-			ButtonWidth,
-			ButtonHeight,
+			Vec2f(Position.x, Position.y),
+			Width,
+			Height,
 			TextureSignature, 
 			L"START", 
-			ButtonTextColor,
+			Color,
 			FontSignature,
 			EKeyCode::CODE_LBUTTON,
 			StartSwitchEvent,
-			ButtonReduceRate
+			ReduceRate
 		),
 
-		GlobalWorldManager.CreateGameObject<Button>(
+		GWorld.CreateGameObject<Button>(
 			"Setting::StartScene", 
-			Vec2f(ButtonPositon.x, ButtonPositon.y - ButtonGap),
-			ButtonWidth,
-			ButtonHeight,
+			Vec2f(Position.x, Position.y - Gap),
+			Width,
+			Height,
 			TextureSignature, 
 			L"SETTING", 
-			ButtonTextColor,
+			Color,
 			FontSignature, 
 			EKeyCode::CODE_LBUTTON,
 			SettingSwitchEvent,
-			ButtonReduceRate
+			ReduceRate
 		),
 				
-		GlobalWorldManager.CreateGameObject<Button>(
+		GWorld.CreateGameObject<Button>(
 			"Quit::StartScene", 
-			Vec2f(ButtonPositon.x, ButtonPositon.y - 2.0f * ButtonGap),
-			ButtonWidth,
-			ButtonHeight,
+			Vec2f(Position.x, Position.y - 2.0f * Gap),
+			Width,
+			Height,
 			TextureSignature,
 			L"QUIT", 
-			ButtonTextColor,
+			Color,
 			FontSignature, 
 			EKeyCode::CODE_LBUTTON,
 			QuitSwitchEvent,
-			ButtonReduceRate
+			ReduceRate
 		)
 	};
 }
