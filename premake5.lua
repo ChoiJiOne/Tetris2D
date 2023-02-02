@@ -59,6 +59,11 @@ workspace "Tetris2D"
             "%{thirdparty}/miniaudio/*",
             "%{thirdparty}/stb/*",
         }
+        
+        -- 엔진 빌드 시 셰이더 컴파일은 비활성화합니다.
+        filter { "files:**.hlsl" }
+            flags { "ExcludeFromBuild" }
+        filter { }
 
         -- 엔진 빌드의 구성 요소별 설정을 수행합니다.
         filter "configurations:Debug"
