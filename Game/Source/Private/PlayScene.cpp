@@ -3,7 +3,6 @@
 #include "Button.h"
 #include "Board.h"
 #include "ContentManager.h"
-#include "Camera2D.h"
 #include "GameText.h"
 #include "InputManager.h"
 #include "Sound.h"
@@ -15,7 +14,7 @@ PlayScene::PlayScene()
 {
 	Buttons_ = {
 		WorldManager::Get().CreateGameObject<Button>(
-			"ESC_PlayScene", Vec2f(-410.0f, +250.0f), 60.0f, 60.0f, "Box", L"ESC", MAGENTA, "Font32", EKeyCode::CODE_ESCAPE,
+			"ESC::PlayScene", Vec2f(-410.0f, +250.0f), 60.0f, 60.0f, "Box", L"ESC", MAGENTA, "Font32", EKeyCode::CODE_ESCAPE,
 			[&]() {
 				CurrentState_ = EState::PAUSE;
 				RunSwitchEvent();
@@ -24,14 +23,14 @@ PlayScene::PlayScene()
 			false
 		),
 
-		WorldManager::Get().CreateGameObject<Button>("LEFT_PlayScene", Vec2f(-410.0f, +180.0f), 60.0f, 60.0f, "Left", EKeyCode::CODE_LEFT, nullptr, 0.9f, false),
-		WorldManager::Get().CreateGameObject<Button>("DOWN_PlayScene", Vec2f(-340.0f, +180.0f), 60.0f, 60.0f, "Down", EKeyCode::CODE_DOWN, nullptr, 0.9f, false),
-		WorldManager::Get().CreateGameObject<Button>("UP_PlayScene", Vec2f(-340.0f, +250.0f), 60.0f, 60.0f, "Up", EKeyCode::CODE_UP, nullptr, 0.9f, false),
-		WorldManager::Get().CreateGameObject<Button>("Right_PlayScene", Vec2f(-270.0f, +180.0f), 60.0f, 60.0f, "Right", EKeyCode::CODE_RIGHT, nullptr, 0.9f, false),
-		WorldManager::Get().CreateGameObject<Button>("Space_PlayScene", Vec2f(-340.0f, +110.0f), 200.0f, 60.0f, "Button", L"SPACE", MAGENTA, "Font32", EKeyCode::CODE_SPACE, nullptr, 0.9f, false),
+		WorldManager::Get().CreateGameObject<Button>("LEFT::PlayScene", Vec2f(-410.0f, +180.0f), 60.0f, 60.0f, "Left", EKeyCode::CODE_LEFT, nullptr, 0.9f, false),
+		WorldManager::Get().CreateGameObject<Button>("DOWN::PlayScene", Vec2f(-340.0f, +180.0f), 60.0f, 60.0f, "Down", EKeyCode::CODE_DOWN, nullptr, 0.9f, false),
+		WorldManager::Get().CreateGameObject<Button>("UP::PlayScene", Vec2f(-340.0f, +250.0f), 60.0f, 60.0f, "Up", EKeyCode::CODE_UP, nullptr, 0.9f, false),
+		WorldManager::Get().CreateGameObject<Button>("Right::PlayScene", Vec2f(-270.0f, +180.0f), 60.0f, 60.0f, "Right", EKeyCode::CODE_RIGHT, nullptr, 0.9f, false),
+		WorldManager::Get().CreateGameObject<Button>("Space::PlayScene", Vec2f(-340.0f, +110.0f), 200.0f, 60.0f, "Button", L"SPACE", MAGENTA, "Font32", EKeyCode::CODE_SPACE, nullptr, 0.9f, false),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"Play_PlayScene", Vec2f(-410.0f, +40.0f), 60.0f, 60.0f, "Play", EKeyCode::CODE_LBUTTON,
+			"Play::PlayScene", Vec2f(-410.0f, +40.0f), 60.0f, 60.0f, "Play", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				ContentManager::Get().GetSound("Play").Play();
 			},
@@ -39,7 +38,7 @@ PlayScene::PlayScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"Stop_PlayScene", Vec2f(-340.0f, +40.0f), 60.0f, 60.0f, "Stop", EKeyCode::CODE_LBUTTON,
+			"Stop::PlayScene", Vec2f(-340.0f, +40.0f), 60.0f, 60.0f, "Stop", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				ContentManager::Get().GetSound("Play").Stop();
 			},
@@ -47,7 +46,7 @@ PlayScene::PlayScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"Reset_PlayScene", Vec2f(-270.0f, +40.0f), 60.0f, 60.0f, "Reset", EKeyCode::CODE_LBUTTON,
+			"Reset::PlayScene", Vec2f(-270.0f, +40.0f), 60.0f, 60.0f, "Reset", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				ContentManager::Get().GetSound("Play").Reset();
 			},
@@ -55,7 +54,7 @@ PlayScene::PlayScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"Voluble_PlayScene", Vec2f(-340.0f, -30.0f), 60.0f, 60.0f, "Voluble", EKeyCode::CODE_LBUTTON,
+			"Voluble::PlayScene", Vec2f(-340.0f, -30.0f), 60.0f, 60.0f, "Voluble", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				ContentManager::Get().GetSound("Play").SetVolume(1.0f);
 			},
@@ -63,7 +62,7 @@ PlayScene::PlayScene()
 		),
 
 		WorldManager::Get().CreateGameObject<Button>(
-			"Mute_PlayScene", Vec2f(-270.0f, -30.0f), 60.0f, 60.0f, "Mute", EKeyCode::CODE_LBUTTON,
+			"Mute::PlayScene", Vec2f(-270.0f, -30.0f), 60.0f, 60.0f, "Mute", EKeyCode::CODE_LBUTTON,
 			[&]() {
 				ContentManager::Get().GetSound("Play").SetVolume(0.0f);
 			},
@@ -71,7 +70,14 @@ PlayScene::PlayScene()
 		),
 	};
 
-	WorldManager::Get().CreateGameObject<GameText>("Next", L"NEXT", "Font32", Vec2f(250.0f, 330.0f), MAGENTA);
+	WorldManager::Get().CreateGameObject<GameText>(
+		"Next", 
+		L"NEXT", 
+		"Font32", 
+		Vec2f(250.0f, 330.0f), 
+		MAGENTA
+	);
+
 	WorldManager::Get().CreateGameObject<GameText>(
 		"Time", 
 		Format(L"TIME : %3d", static_cast<int32_t>(PlayTime_)),
@@ -79,6 +85,7 @@ PlayScene::PlayScene()
 		Vec2f(250.0f, 0.0f), 
 		MAGENTA
 	);
+
 	WorldManager::Get().CreateGameObject<GameText>(
 		"Line",
 		Format(L"LINE : %3d", 0),
@@ -146,8 +153,6 @@ void PlayScene::Reset()
 {
 	if (CountOfTetromino_ != 0) // 적어도 한번 초기화된 적 있을 때 ...
 	{
-		WorldManager::Get().DestroyMainCamera();
-
 		WorldManager::Get().UnregisterObject("TileMap");
 		WorldManager::Get().UnregisterObject("Board");
 		WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_));
@@ -161,8 +166,6 @@ void PlayScene::Reset()
 	TileMapPosition_ = Vec2f(0.0f, 0.0f);
 	StartPosition_ = Vec2i(10, 1);
 	WaitPosition_ = Vec2i(20, 2);
-
-	WorldManager::Get().CreateMainCamera(CameraPosition_, 1000.0f, 800.0f);
 
 	WorldManager::Get().CreateGameObject<TileMap>("TileMap", TileMapPosition_, 22, 26, 30);
 
