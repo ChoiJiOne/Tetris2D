@@ -209,20 +209,20 @@ private:
 
 		std::function<void()> DoneSceneSwitchEvent = [&]() {
 			DoneScene* DoneScenePtr = reinterpret_cast<DoneScene*>(Scenes_["Done"].get());
-			DoneScene::ESelectState SelectState = DoneScenePtr->GetSelectState();
+			DoneScene::EState SelectState = DoneScenePtr->GetCurrentState();
 
 			switch (SelectState)
 			{
-			case DoneScene::ESelectState::REPLAY:
+			case DoneScene::EState::REPLAY:
 				CurrentScene_ = Scenes_["Play"].get();
 				reinterpret_cast<PlayScene*>(CurrentScene_)->Reset();
 				break;
 
-			case DoneScene::ESelectState::RESET:
+			case DoneScene::EState::RESET:
 				CurrentScene_ = Scenes_["Start"].get();
 				break;
 
-			case DoneScene::ESelectState::QUIT:
+			case DoneScene::EState::QUIT:
 				bIsDone_ = true;
 				break;
 			}
