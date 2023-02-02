@@ -2,10 +2,7 @@
 
 #include "Macro.h"
 
-#include <vector>
 #include <functional>
-
-class Button;
 
 
 /**
@@ -21,7 +18,7 @@ public:
 
 
 	/**
-	 * @brief 게임 씬의  가상 소멸자입니다.
+	 * @brief 게임 씬의 가상 소멸자입니다.
 	 */
 	virtual ~Scene() = default;
 
@@ -33,11 +30,11 @@ public:
 
 
 	/**
-	 * @brief 게임 씬 내의 버튼을 업데이트합니다.
+	 * @brief 게임 씬을 업데이트합니다.
 	 * 
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
-	virtual void Tick(float DeltaSeconds);
+	virtual void Tick(float DeltaSeconds) = 0;
 
 
 	/**
@@ -54,13 +51,6 @@ protected:
 	{
 		if (SwitchEvent_) SwitchEvent_();
 	}
-
-
-protected:
-	/**
-	 * @brief 씬 내의 버튼입니다.
-	 */
-	std::vector<Button*> SceneButton_;
 
 
 private:
