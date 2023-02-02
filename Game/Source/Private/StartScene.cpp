@@ -90,5 +90,5 @@ void StartScene::Tick(float DeltaSeconds)
 	WorldManager::Get().GetGameObject<Background>("Background")->Tick(DeltaSeconds);
 	WorldManager::Get().GetGameObject<GameText>("Title")->Tick(DeltaSeconds);
 
-	Scene::Tick(DeltaSeconds);
+	GameScene::Tick(DeltaSeconds);
 }

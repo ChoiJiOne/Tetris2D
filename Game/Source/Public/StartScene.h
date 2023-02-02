@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Scene.h"
+#include "GameScene.h"
 
 
 /**
  * @brief 게임 시작 씬입니다.
  */
-class StartScene : public Scene
+class StartScene : public GameScene
 {
 public:
 	/**
