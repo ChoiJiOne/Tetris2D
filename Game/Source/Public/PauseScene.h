@@ -1,22 +1,18 @@
 #pragma once
 
-#include <array>
-
-#include "Scene.h"
-
-class Button;
+#include "GameScene.h"
 
 
 /**
  * @brief 게임 중지 씬입니다.
  */
-class PauseScene : public Scene
+class PauseScene : public GameScene
 {
 public:
 	/**
-	 * @brief 게임 중지 씬에서 선택할 수 있는 사항입니다.
+	 * @brief 게임 중지의 상태입니다.
 	 */
-	enum class ESelectState
+	enum class EState
 	{
 		NONE     = 0,
 		CONTINUE = 1,
@@ -53,24 +49,18 @@ public:
 
 
 	/**
-	 * @brief 게임 중지 씬의 선택 중인 상태를 얻습니다.
+	 * @brief 게임 중지 씬의 상태를 얻습니다.
 	 *
-	 * @return 게임 중지 씬의 선택 중인 상태를 반환합니다.
+	 * @return 게임 중지 씬의 상태를 반환합니다.
 	 */
-	ESelectState GetSelectState() const { return CurrentSelectState_; }
+	EState GetCurrentState() const { return CurrentState_; }
 
 
 private:
 	/**
-	 * @brief 현재 설정 중인 상태입니다.
+	 * @brief 게임 중지 씬의 상태입니다.
 	 *
 	 * @note 선택 중인 상태의 전환이 발생하면 씬 전환 이벤트가 실행됩니다.
 	 */
-	ESelectState CurrentSelectState_ = ESelectState::NONE;
-
-
-	/**
-	 * @brief 중지 씬의 버튼입니다.
-	 */
-	std::array<Button*, 3> Buttons_;
+	EState CurrentState_ = EState::NONE;
 };

@@ -189,19 +189,19 @@ private:
 
 		std::function<void()> PauseSceneSwitchEvent = [&]() {
 			PauseScene* PauseScenePtr = reinterpret_cast<PauseScene*>(Scenes_["Pause"].get());
-			PauseScene::ESelectState SelectState = PauseScenePtr->GetSelectState();
+			PauseScene::EState State = PauseScenePtr->GetCurrentState();
 
-			switch (SelectState)
+			switch (State)
 			{
-			case PauseScene::ESelectState::CONTINUE:
+			case PauseScene::EState::CONTINUE:
 				CurrentScene_ = Scenes_["Play"].get();
 				break;
 
-			case PauseScene::ESelectState::RESET:
+			case PauseScene::EState::RESET:
 				CurrentScene_ = Scenes_["Start"].get();
 				break;
 
-			case PauseScene::ESelectState::QUIT:
+			case PauseScene::EState::QUIT:
 				bIsDone_ = true;
 				break;
 			}
