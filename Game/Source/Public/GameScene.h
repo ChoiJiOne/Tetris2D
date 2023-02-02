@@ -3,7 +3,6 @@
 #include "Scene.h"
 
 #include <vector>
-#include <functional>
 
 class Button;
 
