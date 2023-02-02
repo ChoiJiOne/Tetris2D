@@ -45,6 +45,7 @@ workspace "Tetris2D"
             "%{engine}/Private",
             "%{engine}/Public",
             "%{engine}/Shader",
+            "%{engine}/Script",
             "%{thirdparty}",
         }
 
@@ -54,6 +55,7 @@ workspace "Tetris2D"
             "%{engine}/Private/*",
             "%{engine}/Public/*",
             "%{engine}/Shader/*",
+            "%{engine}/Script/*",
             "%{thirdparty}/miniaudio/*",
             "%{thirdparty}/stb/*",
         }
