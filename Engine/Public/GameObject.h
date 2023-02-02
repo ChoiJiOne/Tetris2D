@@ -5,7 +5,6 @@
 
 #include <memory>
 
-class Camera2D;
 class Component;
 
 
