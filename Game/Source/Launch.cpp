@@ -7,6 +7,8 @@
 #include "Window.h"
 #include "WorldManager.h"
 
+#include "Background.h"
+
 
 /**
  * @brief 테트리스 게임을 초기화 및 실행합니다./
@@ -42,6 +44,8 @@ public:
 		float Width = 0.0f, Height = 0.0f;
 		GraphicsManager::Get().GetBackBufferSize(Width, Height);
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), Width, Height);
+
+		WorldManager::Get().CreateGameObject<Background>("Background");
 	}
 
 
@@ -60,6 +64,8 @@ public:
 			InputManager::Get().Tick();
 
 			GraphicsManager::Get().Clear(BLACK);
+
+			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -104,18 +110,6 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
-
-
-	///**
-	// * @brief 현재 실행 중인 씬입니다.
-	// */
-	//Scene* CurrentScene_ = nullptr;
-
-
-	///**
-	// * @brief 테트리스 게임 내의 씬입니다.
-	// */
-	//std::unordered_map<std::string, std::unique_ptr<Scene>> Scenes_;
 };
 
 
