@@ -149,30 +149,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 
-	/**
-	 * @brief 버튼의 위치를 설정합니다.
-	 * 
-	 * @param Position 설정할 버튼의 위치입니다.
-	 */
-	void SetPosition(const Vec2f& Position) { Position_ = Position; }
-
-
 private:
-	/**
-	 * @brief 마우스가 범위 내에 있는지 확인합니다.
-	 * 
-	 * @return 마우스가 범위 내에 있다면 true, 그렇지 않으면 false를 반환합니다.
-	 */
-	bool IsDetectMouse() const;
-
-
-private:
-	/**
-	 * @brief 마우스가 버튼 내에 있는지 확인합니다.
-	 */
-	bool bIsDetectMouse_ = false;
-
-
 	/**
 	 * @brief 버튼 내에 텍스트가 있는지 확인합니다.
 	 */
@@ -180,27 +157,9 @@ private:
 
 
 	/**
-	 * @brief 월드 상의 사각형 버튼 중심 좌표입니다.
+	 * @brief 월드 상의 버튼 중심 좌표입니다.
 	 */
 	Vec2f Position_;
-
-
-	/**
-	 * @brief 사각형 버튼의 가로 크기입니다.
-	 */
-	float Width_ = 0.0f;
-
-
-	/**
-	 * @brief 사각형 버튼의 세로 크기입니다.
-	 */
-	float Height_ = 0.0f;
-
-
-	/**
-	 * @brief 버튼의 텍스처 시그니처입니다.
-	 */
-	std::string TextureSignature_;
 
 
 	/**
@@ -223,28 +182,4 @@ private:
 	 * @brief 사각형 텍스트의 폰트입니다.
 	 */
 	std::string FontSignature_;
-
-
-	/**
-	 * @brief 버튼에 대응하는 키 코드 값입니다.
-	 */
-	EKeyCode KeyCode_ = EKeyCode::CODE_NONE;
-
-
-	/**
-	 * @brief 버튼 클릭 시 발생할 이벤트입니다.
-	 */
-	std::function<void()> ClickEvent_ = nullptr;
-
-
-	/**
-	 * @brief 버튼 클릭 시 줄어드는 버튼의 비율입니다.
-	 */
-	float ReduceRate_ = 0.0f;
-
-
-	/**
-	 * @brief 버튼이 마우스를 감지하는 모드인지 확인합니다.
-	 */
-	bool bIsMouseMode_ = true;
 };
