@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Macro.h"
+#include "Utility.hpp"
 
 #include <functional>
 
@@ -34,22 +35,46 @@ public:
 	 * 
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
-	virtual void Tick(float DeltaSeconds) = 0;
+	virtual void Update(float DeltaSeconds) = 0;
 
 
 	/**
-	 * @brief 씬 전환이 발생했을 때, 실행할 이벤트를 설정합니다.
+	 * @brief 씬 전환이 발생했을 때, 실행할 이벤트를 추가합니다.
+	 * 
+	 * @note 키 값에 대응하는 이벤트가 존재하면 덮어 써집니다.
+	 * 
+	 * @param Key 이벤트의 키 값입니다.
+	 * @param SwitchEvent 씬 전환이 발생할 시 실행할 이벤트입니다.
 	 */
-	void SetSwitchEvent(const std::function<void()>& SwitchEvent) { SwitchEvent_ = SwitchEvent; }
+	void AddSwitchEvent(const std::string& Key, const std::function<void()>& SwitchEvent) 
+	{ 
+		SwitchEvents_.insert({ Key, SwitchEvent });
+	}
+
+
+	/**
+	 * @brief 씬 전환이 발생했을 때, 실행할 이벤트를 삭제합니다.
+	 * 
+	 * @param Key 이벤트의 키 값입니다.
+	 */
+	void RemoveSwitchEvent(const std::string& Key)
+	{
+		RemoveValue<std::string, std::function<void()>>(Key, SwitchEvents_);
+	}
 
 
 protected:
 	/**
 	 * @brief 씬 전환이 발생했을 때, 이벤트를 실행합니다.
+	 * 
+	 * @param Key 실행할 이벤트의 키 값입니다.
 	 */
-	void RunSwitchEvent()
+	void RunSwitchEvent(const std::string& Key)
 	{
-		if (SwitchEvent_) SwitchEvent_();
+		if (IsExistKey<std::string, std::function<void()>>(Key, SwitchEvents_))
+		{
+			SwitchEvents_.at(Key)();
+		}
 	}
 
 
@@ -57,5 +82,5 @@ private:
 	/**
 	 * @brief 씬 전환이 발생했을 때, 실행할 이벤트입니다.
 	 */
-	std::function<void()> SwitchEvent_;
+	std::unordered_map<std::string, std::function<void()>> SwitchEvents_;
 };
