@@ -10,6 +10,7 @@
 
 #include "Background.h"
 #include "StartScene.h"
+#include "PlayScene.h"
 
 
 /**
@@ -52,7 +53,8 @@ public:
 		StartScene_->AddSwitchEvent(
 			"START",
 			[&]() {
-				bIsDone_ = true;
+				PlayScene_->Reset();
+				CurrentGameScene_ = PlayScene_.get();
 			}
 		);
 		StartScene_->AddSwitchEvent(
@@ -61,6 +63,10 @@ public:
 				bIsDone_ = true;
 			}
 		);
+
+		PlayScene_ = std::make_unique<PlayScene>();
+
+		CurrentGameScene_ = StartScene_.get();
 	}
 
 
@@ -80,7 +86,7 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			StartScene_->Update(Timer_.GetDeltaTime());
+			CurrentGameScene_->Update(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -126,11 +132,23 @@ private:
 	 */
 	Timer Timer_;
 
+	
+	/**
+	 * @brief 현재 게임 씬입니다.
+	 */
+	Scene* CurrentGameScene_ = nullptr;
+
 
 	/**
 	 * @brief 테트리스 게임의 시작 씬입니다.
 	 */
 	std::unique_ptr<StartScene> StartScene_ = nullptr;
+
+
+	/**
+	 * @brief 테트리스 게임의 플레이 씬입니다.
+	 */
+	std::unique_ptr<PlayScene> PlayScene_ = nullptr;
 };
 
 
