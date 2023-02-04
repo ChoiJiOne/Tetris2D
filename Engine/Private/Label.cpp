@@ -1,10 +1,10 @@
-#include "GameText.h"
+#include "Label.h"
 #include "ContentManager.h"
 #include "Font.h"
 #include "GraphicsManager.h"
 #include "Shader.h"
 
-GameText::GameText(
+Label::Label(
 	const std::string& Signature, 
 	const std::wstring& Text, 
 	const std::string& FontSignature,
@@ -19,7 +19,7 @@ GameText::GameText(
 {
 }
 
-void GameText::Tick(float DeltaSeconds)
+void Label::Tick(float DeltaSeconds)
 {
 	Font& TitleFont = ContentManager::Get().GetFont(FontSignature_);
 	GraphicsManager::Get().DrawText2D(TitleFont, Text_, Position_, Color_);
