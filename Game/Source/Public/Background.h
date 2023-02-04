@@ -44,6 +44,12 @@ public:
 
 
 	/**
+	 * @brief 백그라운드 사운드를 초기화합니다.
+	 */
+	void ResetAudio();
+
+
+	/**
 	 * @brief 백그라운드 사운드를 활성화합니다.
 	 */
 	void ActiveAudio();

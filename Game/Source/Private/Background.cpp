@@ -18,6 +18,12 @@ void Background::Tick(float DeltaSeconds)
 	GetComponent<BackgroundRenderComponent>("BackgroundRenderer")->Tick();
 }
 
+void Background::ResetAudio()
+{
+	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	BackgroundAudio->Reset();
+}
+
 void Background::ActiveAudio()
 {
 	bIsActive_ = true;
