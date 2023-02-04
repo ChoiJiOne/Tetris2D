@@ -1,6 +1,7 @@
 #include "GameEngine.h"
+#include "Button.h"
 #include "GraphicsManager.h"
-#include "GameText.h"
+#include "Label.h"
 #include "InputManager.h"
 #include "Shader.h"
 #include "Timer.h"
@@ -8,6 +9,7 @@
 #include "WorldManager.h"
 
 #include "Background.h"
+#include "StartScene.h"
 
 
 /**
@@ -27,6 +29,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		StartScene_.reset();
 	}
 
 
@@ -45,7 +48,19 @@ public:
 		GraphicsManager::Get().GetBackBufferSize(Width, Height);
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), Width, Height);
 
-		WorldManager::Get().CreateGameObject<Background>("Background");
+		StartScene_ = std::make_unique<StartScene>();
+		StartScene_->AddSwitchEvent(
+			"START",
+			[&]() {
+				bIsDone_ = true;
+			}
+		);
+		StartScene_->AddSwitchEvent(
+			"QUIT",
+			[&]() {
+				bIsDone_ = true;
+			}
+		);
 	}
 
 
@@ -65,7 +80,7 @@ public:
 
 			GraphicsManager::Get().Clear(BLACK);
 
-			WorldManager::Get().GetGameObject<Background>("Background")->Tick(Timer_.GetDeltaTime());
+			StartScene_->Update(Timer_.GetDeltaTime());
 
 			GraphicsManager::Get().Present();
 		}
@@ -110,6 +125,12 @@ private:
 	 * @brief 게임 타이머입니다.
 	 */
 	Timer Timer_;
+
+
+	/**
+	 * @brief 테트리스 게임의 시작 씬입니다.
+	 */
+	std::unique_ptr<StartScene> StartScene_ = nullptr;
 };
 
 
