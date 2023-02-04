@@ -13,8 +13,14 @@ public:
 	 * @brief 백그라운드의 생성자입니다.
 	 *
 	 * @param Signature 백그라운드의 식별자입니다.
+	 * @param TextureSignature 백그라운드의 텍스처 시그니처 값입니다.
+	 * @param AudioSignatire 백그라운드의 오디오 시그니처 값입니다.
 	 */
-	Background(const std::string& Signature);
+	Background(
+		const std::string& Signature,
+		const std::string& TextureSignature,
+		const std::string& AudioSignatire
+	);
 
 
 	/**
@@ -35,4 +41,31 @@ public:
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Tick(float DeltaSeconds) override;
+
+
+	/**
+	 * @brief 백그라운드 사운드를 활성화합니다.
+	 */
+	void ActiveAudio();
+
+
+	/**
+	 * @brief 백그라운드 사운드를 비활성화합니다.
+	 */
+	void InactiveAudio();
+
+
+	/**
+	 * @brief 백그라운드 사운드의 플레이 활성화 여부를 얻습니다.
+	 * 
+	 * @return 백그라운드 사운드의 플레이 활성화 여부를 반환합니다.
+	 */
+	bool GetActiveAudio() const { return bIsActive_; }
+
+
+private:
+	/**
+	 * @brief 백그라운드 사운드의 플레이 활성화 여부입니다.
+	 */
+	bool bIsActive_ = false;
 };
