@@ -49,22 +49,18 @@ public:
 		GraphicsManager::Get().GetBackBufferSize(Width, Height);
 		WorldManager::Get().CreateMainCamera(Vec2f(0.0f, 0.0f), Width, Height);
 
+		auto QuitEvent = [&]() { bIsDone_ = true; };
+		auto ResetPlaySceneEvent = [&]() {
+			PlayScene_->Reset();
+			CurrentGameScene_ = PlayScene_.get();
+		};
+
 		StartScene_ = std::make_unique<StartScene>();
-		StartScene_->AddSwitchEvent(
-			"START",
-			[&]() {
-				PlayScene_->Reset();
-				CurrentGameScene_ = PlayScene_.get();
-			}
-		);
-		StartScene_->AddSwitchEvent(
-			"QUIT",
-			[&]() {
-				bIsDone_ = true;
-			}
-		);
+		StartScene_->AddSwitchEvent("START", ResetPlaySceneEvent);
+		StartScene_->AddSwitchEvent("QUIT", QuitEvent);
 
 		PlayScene_ = std::make_unique<PlayScene>();
+		PlayScene_->AddSwitchEvent("ESC", QuitEvent);
 
 		CurrentGameScene_ = StartScene_.get();
 	}
