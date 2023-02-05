@@ -39,3 +39,15 @@ void Background::InactiveAudio()
 	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
 	BackgroundAudio->Stop();
 }
+
+void Background::Voluble()
+{
+	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	BackgroundAudio->SetVolume(1.0f);
+}
+
+void Background::Mute()
+{
+	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	BackgroundAudio->SetVolume(0.0f);
+}
