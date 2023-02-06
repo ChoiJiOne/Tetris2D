@@ -1,4 +1,4 @@
-#include "StartScene.h"
+#include "TitleScene.h"
 #include "Background.h"
 #include "Button.h"
 #include "GameObject.h"
@@ -6,19 +6,19 @@
 #include "InputManager.h"
 #include "WorldManager.h"
 
-StartScene::StartScene()
+TitleScene::TitleScene()
 {
 	WorldManager& GWorld = WorldManager::Get();
 
 	SceneObjects_ = {		
 		GWorld.CreateGameObject<Background>(
-			"BACKGROUND::StartScene", 
+			"BACKGROUND::TitleScene", 
 			"Background", 
 			"Title"
 		),
 
 		GWorld.CreateGameObject<Label>(
-			"TITLE::StartScene",
+			"TITLE::TitleScene",
 			L"TETRIS 2D",
 			"Font128",
 			Vec2f(0.0f, 200.f),
@@ -26,7 +26,7 @@ StartScene::StartScene()
 		),
 
 		GWorld.CreateGameObject<Button>(
-			"START::StartScene",
+			"START::TitleScene",
 			Vec2f(0.0f, 0.0f),
 			400.0f,
 			100.0f,
@@ -44,7 +44,7 @@ StartScene::StartScene()
 		),
 			
 		GWorld.CreateGameObject<Button>(
-			"QUIT::StartScene",
+			"QUIT::TitleScene",
 			Vec2f(0.0f, -200.0f),
 			400.0f,
 			100.0f,
@@ -65,11 +65,11 @@ StartScene::StartScene()
 	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
 }
 
-StartScene::~StartScene()
+TitleScene::~TitleScene()
 {
 }
 
-void StartScene::Update(float DeltaSeconds)
+void TitleScene::Update(float DeltaSeconds)
 {
 	for (auto& SceneObject : SceneObjects_)
 	{

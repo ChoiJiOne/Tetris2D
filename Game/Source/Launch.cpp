@@ -9,7 +9,7 @@
 #include "WorldManager.h"
 
 #include "Background.h"
-#include "StartScene.h"
+#include "TitleScene.h"
 #include "PlayScene.h"
 
 
@@ -30,7 +30,7 @@ public:
 	 */
 	virtual ~Tetris()
 	{
-		StartScene_.reset();
+		TitleScene_.reset();
 	}
 
 
@@ -55,14 +55,14 @@ public:
 			CurrentGameScene_ = PlayScene_.get();
 		};
 
-		StartScene_ = std::make_unique<StartScene>();
-		StartScene_->AddSwitchEvent("START", ResetPlaySceneEvent);
-		StartScene_->AddSwitchEvent("QUIT", QuitEvent);
+		TitleScene_ = std::make_unique<TitleScene>();
+		TitleScene_->AddSwitchEvent("START", ResetPlaySceneEvent);
+		TitleScene_->AddSwitchEvent("QUIT", QuitEvent);
 
 		PlayScene_ = std::make_unique<PlayScene>();
 		PlayScene_->AddSwitchEvent("ESC", QuitEvent);
 
-		CurrentGameScene_ = StartScene_.get();
+		CurrentGameScene_ = TitleScene_.get();
 	}
 
 
@@ -136,9 +136,9 @@ private:
 
 
 	/**
-	 * @brief 테트리스 게임의 시작 씬입니다.
+	 * @brief 테트리스 게임의 타이틀 씬입니다.
 	 */
-	std::unique_ptr<StartScene> StartScene_ = nullptr;
+	std::unique_ptr<TitleScene> TitleScene_ = nullptr;
 
 
 	/**
