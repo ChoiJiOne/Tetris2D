@@ -9,6 +9,7 @@
 #include "WorldManager.h"
 
 #include "Background.h"
+#include "GameOverScene.h"
 #include "TitleScene.h"
 #include "PlayScene.h"
 
@@ -30,6 +31,8 @@ public:
 	 */
 	virtual ~Tetris()
 	{
+		GameOverScene_.reset();
+		PlayScene_.reset();
 		TitleScene_.reset();
 	}
 
@@ -51,8 +54,12 @@ public:
 
 		auto QuitEvent = [&]() { bIsDone_ = true; };
 		auto ResetPlaySceneEvent = [&]() {
-			PlayScene_->Reset();
 			CurrentGameScene_ = PlayScene_.get();
+			CurrentGameScene_->Reset();
+		};
+		auto GameOverEvent = [&]() {
+			CurrentGameScene_ = GameOverScene_.get();
+			CurrentGameScene_->Reset();
 		};
 
 		TitleScene_ = std::make_unique<TitleScene>();
@@ -61,8 +68,14 @@ public:
 
 		PlayScene_ = std::make_unique<PlayScene>();
 		PlayScene_->AddSwitchEvent("ESC", QuitEvent);
+		PlayScene_->AddSwitchEvent("GAMEOVER", GameOverEvent);
+
+		GameOverScene_ = std::make_unique<GameOverScene>();
+		GameOverScene_->AddSwitchEvent("REPLAY", ResetPlaySceneEvent);
+		GameOverScene_->AddSwitchEvent("QUIT", QuitEvent);
 
 		CurrentGameScene_ = TitleScene_.get();
+		CurrentGameScene_->Reset();
 	}
 
 
@@ -107,12 +120,12 @@ private:
 		};
 
 		const std::unordered_map<EWindowEvent, std::function<void()>> WindowEvents = {
-			{ EWindowEvent::CLOSE,         CloseEvent},
-			{ EWindowEvent::INACTIVE,      InactiveEvent},
-			{ EWindowEvent::MINIMZED,      InactiveEvent},
-			{ EWindowEvent::MAXIMIZED,     ResizeEvent},
-			{ EWindowEvent::RESIZE,        ResizeEvent},
-			{ EWindowEvent::ENTERSIZEMOVE, InactiveEvent},
+			{ EWindowEvent::CLOSE,         CloseEvent    },
+			{ EWindowEvent::INACTIVE,      InactiveEvent },
+			{ EWindowEvent::MINIMZED,      InactiveEvent },
+			{ EWindowEvent::MAXIMIZED,     ResizeEvent   },
+			{ EWindowEvent::RESIZE,        ResizeEvent   },
+			{ EWindowEvent::ENTERSIZEMOVE, InactiveEvent },
 		};
 
 		for (const auto& WindowEvent : WindowEvents)
@@ -145,6 +158,12 @@ private:
 	 * @brief 테트리스 게임의 플레이 씬입니다.
 	 */
 	std::unique_ptr<PlayScene> PlayScene_ = nullptr;
+
+
+	/**
+	 * @brief 테트리스 게임의 종료 씬입니다.
+	 */
+	std::unique_ptr<GameOverScene> GameOverScene_ = nullptr;
 };
 
 
