@@ -5,10 +5,11 @@
 Background::Background(
 	const std::string& Signature,
 	const std::string& TextureSignature,
-	const std::string& AudioSignatire
+	const std::string& AudioSignatire,
+	bool bIsLooping
 ) : GameObject(Signature)
 {
-	AddComponent<BackgroundAudioComponent>("BackgroundAudio", AudioSignatire);
+	AddComponent<BackgroundAudioComponent>("BackgroundAudio", AudioSignatire, bIsLooping);
 	AddComponent<BackgroundRenderComponent>("BackgroundRenderer", TextureSignature);
 }
 

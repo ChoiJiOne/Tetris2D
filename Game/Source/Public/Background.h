@@ -15,11 +15,13 @@ public:
 	 * @param Signature 백그라운드의 식별자입니다.
 	 * @param TextureSignature 백그라운드의 텍스처 시그니처 값입니다.
 	 * @param AudioSignatire 백그라운드의 오디오 시그니처 값입니다.
+	 * @param bIsLooping 백그라운드의 오디오 반복 여부입니다.
 	 */
 	Background(
 		const std::string& Signature,
 		const std::string& TextureSignature,
-		const std::string& AudioSignatire
+		const std::string& AudioSignatire,
+		bool bIsLooping
 	);
 
 
