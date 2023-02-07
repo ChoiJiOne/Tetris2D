@@ -14,7 +14,8 @@ TitleScene::TitleScene()
 		GWorld.CreateGameObject<Background>(
 			"BACKGROUND::TitleScene", 
 			"Background", 
-			"Title"
+			"Title",
+			false
 		),
 
 		GWorld.CreateGameObject<Label>(
@@ -61,8 +62,6 @@ TitleScene::TitleScene()
 			true
 		)
 	};
-
-	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
 }
 
 TitleScene::~TitleScene()
@@ -75,4 +74,10 @@ void TitleScene::Update(float DeltaSeconds)
 	{
 		SceneObject->Tick(DeltaSeconds);
 	}
+}
+
+void TitleScene::Reset()
+{
+	reinterpret_cast<Background*>(SceneObjects_[0])->ResetAudio();
+	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
 }

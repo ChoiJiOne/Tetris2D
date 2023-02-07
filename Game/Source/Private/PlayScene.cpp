@@ -36,7 +36,7 @@ PlayScene::PlayScene()
 	};
 
 	SceneObjects_ = {
-		GWorld.CreateGameObject<Background>("BACKGROUND::PlayScene", "Background", "Play"),
+		GWorld.CreateGameObject<Background>("BACKGROUND::PlayScene", "Background", "Play", true),
 
 		GWorld.CreateGameObject<Button>("ESC::PlayScene", Vec2f(-430.0f, +250.0f), 70.0f, 70.0f, "Box", L"ESC", MAGENTA, "Font32", EKeyCode::CODE_ESCAPE, PauseEvent, 0.9f, false),
 		GWorld.CreateGameObject<Button>("LEFT::PlayScene", Vec2f(-430.0f, +170.0f), 70.0f, 70.0f, "Left", EKeyCode::CODE_LEFT, nullptr, 0.9f, false),

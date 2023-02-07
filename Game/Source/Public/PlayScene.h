@@ -42,12 +42,8 @@ public:
 	/**
 	 * @brief 플레이 씬을 초기화합니다.
 	 */
-	void Reset();
+	virtual void Reset() override;
 
 
 private:
-	/**
-	 * @brief 플레이 씬의 오브젝트입니다.
-	 */
-	std::vector<GameObject*> SceneObjects_;
 };

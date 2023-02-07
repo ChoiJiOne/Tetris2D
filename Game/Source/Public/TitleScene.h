@@ -2,10 +2,6 @@
 
 #include "Scene.h"
 
-#include <vector>
-
-class GameObject;
-
 
 /**
  * @brief 테트리스 게임의 타이틀 씬입니다.
@@ -39,9 +35,8 @@ public:
 	virtual void Update(float DeltaSeconds) override;
 
 
-private:
 	/**
-	 * @brief 타이틀 씬의 오브젝트입니다.
+	 * @brief 타이틀 씬을 리셋합니다.
 	 */
-	std::vector<GameObject*> SceneObjects_;
+	virtual void Reset() override;
 };
