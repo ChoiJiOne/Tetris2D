@@ -45,5 +45,27 @@ public:
 	virtual void Reset() override;
 
 
+	/**
+	 * @brief 플레이 씬을 강제로 중지합니다.
+	 */
+	void EnforcePause();
+
+
 private:
+	/**
+	 * @brief 게임이 플레이 중인지 확인합니다.
+	 */
+	bool bIsPlaying = true;
+
+
+	/**
+	 * @brief 게임 중지 시 발생할 이벤트입니다.
+	 */
+	std::function<void()> PauseEvent_ = nullptr;
+
+
+	/**
+	 * @brief 게임을 더이상 진행할 수 없을 때 발생할 이벤트입니다.
+	 */
+	std::function<void()> GameOverEvent_ = nullptr;
 };

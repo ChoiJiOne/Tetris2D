@@ -10,9 +10,15 @@ PlayScene::PlayScene()
 {
 	WorldManager& GWorld = WorldManager::Get();
 
-	auto PauseEvent = [&]() {
+	PauseEvent_ = [&]() {
+		bIsPlaying = false;
 		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
-		RunSwitchEvent("ESC");
+	};
+
+	GameOverEvent_ = [&]() {
+		bIsPlaying = false;
+		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+		RunSwitchEvent("GAMEOVER");
 	};
 
 	auto PlayEvent = [&]() {
@@ -33,11 +39,6 @@ PlayScene::PlayScene()
 
 	auto MuteEvent = [&]() {
 		reinterpret_cast<Background*>(SceneObjects_[0])->Mute();
-	};
-
-	auto GameOverEvent = [&]() {
-		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
-		RunSwitchEvent("GAMEOVER");
 	};
 
 	SceneObjects_ = {
@@ -75,6 +76,13 @@ void PlayScene::Update(float DeltaSeconds)
 
 void PlayScene::Reset()
 {
+	bIsPlaying = true;
+
 	reinterpret_cast<Background*>(SceneObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
+}
+
+void PlayScene::EnforcePause()
+{
+	if (PauseEvent_) PauseEvent_();
 }

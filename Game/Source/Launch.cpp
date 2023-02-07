@@ -67,8 +67,8 @@ public:
 		TitleScene_->AddSwitchEvent("QUIT", QuitEvent);
 
 		PlayScene_ = std::make_unique<PlayScene>();
-		PlayScene_->AddSwitchEvent("ESC", QuitEvent);
 		PlayScene_->AddSwitchEvent("GAMEOVER", GameOverEvent);
+		PlayScene_->AddSwitchEvent("QUIT", QuitEvent);
 
 		GameOverScene_ = std::make_unique<GameOverScene>();
 		GameOverScene_->AddSwitchEvent("REPLAY", ResetPlaySceneEvent);
@@ -111,12 +111,22 @@ private:
 	void RegisterWindowEvent()
 	{
 		std::function<void()> CloseEvent = [&]() { bIsDone_ = true; };
-		std::function<void()> InactiveEvent = [&]() { };
+		std::function<void()> InactiveEvent = [&]() {
+			if (CurrentGameScene_ == PlayScene_.get())
+			{
+				reinterpret_cast<PlayScene*>(CurrentGameScene_)->EnforcePause();
+			}
+		};
 		std::function<void()> ResizeEvent = [&]() {
 			GraphicsManager::Get().Resize();
 			float Width = 0.0f, Height = 0.0f;
 			GraphicsManager::Get().GetBackBufferSize(Width, Height);
 			WorldManager::Get().GetMainCamera().SetSize<float>(Width, Height);
+
+			if (CurrentGameScene_ == PlayScene_.get())
+			{
+				reinterpret_cast<PlayScene*>(CurrentGameScene_)->EnforcePause();
+			}
 		};
 
 		const std::unordered_map<EWindowEvent, std::function<void()>> WindowEvents = {
