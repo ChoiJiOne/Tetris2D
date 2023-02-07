@@ -3,7 +3,10 @@
 #include "Macro.h"
 #include "Utility.hpp"
 
+#include <vector>
 #include <functional>
+
+class GameObject;
 
 
 /**
@@ -36,6 +39,12 @@ public:
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Update(float DeltaSeconds) = 0;
+
+	
+	/**
+	 * @brief 게임 씬을 리셋합니다.
+	 */
+	virtual void Reset() = 0;
 
 
 	/**
@@ -76,6 +85,12 @@ protected:
 			SwitchEvents_.at(Key)();
 		}
 	}
+
+
+	/**
+	 * @brief 씬 내의 게임 오브젝트입니다.
+	 */
+	std::vector<GameObject*> SceneObjects_;
 
 
 private:
