@@ -63,7 +63,7 @@ public:
 
 
 	/**
-	 * @brief 명시적으로 복사 생성자외 대입 연산자를 삭제합니다.
+	 * @brief 명시적으로 복사 생성자와 대입 연산자를 삭제합니다.
 	 */
 	DISALLOW_COPY_AND_ASSIGN(Tetromino);
 
@@ -74,6 +74,14 @@ public:
 	 * @param DeltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Tick(float DeltaSeconds) override;
+
+
+	/**
+	 * @brief 테트로미노의 블럭들을 얻습니다.
+	 * 
+	 * @return 테트로미노의 블럭들을 반환합니다.
+	 */
+	const std::array<BlockComponent*, 4>& GetBlocks() const { return Blocks_; }
 
 
 private:
