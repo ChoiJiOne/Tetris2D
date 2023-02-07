@@ -44,7 +44,7 @@ PlayScene::PlayScene()
 	SceneObjects_ = {
 		GWorld.CreateGameObject<Background>("BACKGROUND::PlayScene", "Background", "Play", true),
 
-		GWorld.CreateGameObject<Button>("ESC::PlayScene", Vec2f(-430.0f, +250.0f), 70.0f, 70.0f, "Box", L"ESC", MAGENTA, "Font32", EKeyCode::CODE_ESCAPE, GameOverEvent, 0.9f, false),
+		GWorld.CreateGameObject<Button>("ESC::PlayScene", Vec2f(-430.0f, +250.0f), 70.0f, 70.0f, "Box", L"ESC", MAGENTA, "Font32", EKeyCode::CODE_ESCAPE, GameOverEvent_, 0.9f, false),
 		GWorld.CreateGameObject<Button>("LEFT::PlayScene", Vec2f(-430.0f, +170.0f), 70.0f, 70.0f, "Left", EKeyCode::CODE_LEFT, nullptr, 0.9f, false),
 		GWorld.CreateGameObject<Button>("DOWN::PlayScene", Vec2f(-350.0f, +170.0f), 70.0f, 70.0f, "Down", EKeyCode::CODE_DOWN, nullptr, 0.9f, false),
 		GWorld.CreateGameObject<Button>("UP::PlayScene", Vec2f(-350.0f, +250.0f), 70.0f, 70.0f, "Up", EKeyCode::CODE_UP, nullptr, 0.9f, false),
