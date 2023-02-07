@@ -54,13 +54,13 @@ public:
 	/**
 	 * @brief 백그라운드 사운드를 활성화합니다.
 	 */
-	void ActiveAudio();
+	void PlayAudio();
 
 
 	/**
 	 * @brief 백그라운드 사운드를 비활성화합니다.
 	 */
-	void InactiveAudio();
+	void StopAudio();
 
 
 	/**
@@ -80,7 +80,7 @@ public:
 	 * 
 	 * @return 백그라운드 사운드의 플레이 활성화 여부를 반환합니다.
 	 */
-	bool GetActiveAudio() const { return bIsActive_; }
+	bool GetPlayAudio() const { return bIsActive_; }
 
 
 private:

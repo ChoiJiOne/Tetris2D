@@ -37,7 +37,7 @@ GameOverScene::GameOverScene()
 			"Font64",
 			EKeyCode::CODE_LBUTTON,
 			[&]() {
-				reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+				reinterpret_cast<Background*>(SceneObjects_[0])->StopAudio();
 				RunSwitchEvent("REPLAY");
 			},
 			0.9f,
@@ -55,7 +55,7 @@ GameOverScene::GameOverScene()
 			"Font64",
 			EKeyCode::CODE_LBUTTON,
 			[&]() {
-				reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+				reinterpret_cast<Background*>(SceneObjects_[0])->StopAudio();
 				RunSwitchEvent("QUIT");
 			},
 			0.9f,
@@ -79,5 +79,5 @@ void GameOverScene::Update(float DeltaSeconds)
 void GameOverScene::Reset()
 {
 	reinterpret_cast<Background*>(SceneObjects_[0])->ResetAudio();
-	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
+	reinterpret_cast<Background*>(SceneObjects_[0])->PlayAudio();
 }

@@ -25,7 +25,7 @@ void Background::ResetAudio()
 	BackgroundAudio->Reset();
 }
 
-void Background::ActiveAudio()
+void Background::PlayAudio()
 {
 	bIsActive_ = true;
 	
@@ -33,7 +33,7 @@ void Background::ActiveAudio()
 	BackgroundAudio->Play();
 }
 
-void Background::InactiveAudio()
+void Background::StopAudio()
 {
 	bIsActive_ = false;
 

@@ -13,21 +13,21 @@ PlayScene::PlayScene()
 
 	PauseEvent_ = [&]() {
 		bIsPlaying = false;
-		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+		reinterpret_cast<Background*>(SceneObjects_[0])->StopAudio();
 	};
 
 	GameOverEvent_ = [&]() {
 		bIsPlaying = false;
-		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+		reinterpret_cast<Background*>(SceneObjects_[0])->StopAudio();
 		RunSwitchEvent("GAMEOVER");
 	};
 
 	auto PlayEvent = [&]() {
-		reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
+		reinterpret_cast<Background*>(SceneObjects_[0])->PlayAudio();
 	};
 
 	auto StopEvent = [&]() {
-		reinterpret_cast<Background*>(SceneObjects_[0])->InactiveAudio();
+		reinterpret_cast<Background*>(SceneObjects_[0])->StopAudio();
 	};
 
 	auto ResetEvent = [&]() {
@@ -82,7 +82,7 @@ void PlayScene::Reset()
 	bIsPlaying = true;
 
 	reinterpret_cast<Background*>(SceneObjects_[0])->ResetAudio();
-	reinterpret_cast<Background*>(SceneObjects_[0])->ActiveAudio();
+	reinterpret_cast<Background*>(SceneObjects_[0])->PlayAudio();
 }
 
 void PlayScene::EnforcePause()
