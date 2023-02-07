@@ -14,8 +14,9 @@ public:
 	 * 
 	 * @param Object 이 컴포넌트를 소유한 오브젝트의 포인터 값입니다.
 	 * @param AudioSignature 플레이할 오디오의 시그니처 값입니다.
+	 * @param bIsLooping 플레이할 오디오의 반복 여부입니다.
 	 */
-	BackgroundAudioComponent(GameObject* Object, const std::string& AudioSignature);
+	BackgroundAudioComponent(GameObject* Object, const std::string& AudioSignature, bool bIsLooping);
 
 
 	/**
