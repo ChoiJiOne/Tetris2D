@@ -51,14 +51,18 @@ public:
 	 *
 	 * @param Key 추가할 컴포넌트의 키값입니다.
 	 * @param Args 컴포넌트에 필요한 가변 인자입니다.
+	 * 
+	 * @return 추가한 컴포넌트의 포인터 값을 반환합니다.
 	 */
 	template<typename T, typename... Types>
-	void AddComponent(const std::string& Key, Types... Args)
+	T* AddComponent(const std::string& Key, Types... Args)
 	{
-		if (IsExistComponent(Key)) return;
+		if (IsExistComponent(Key)) return nullptr;
 
 		std::unique_ptr<T> NewComponent = std::make_unique<T>(this, Args...);
 		Components_.insert({ Key, std::move(NewComponent) });
+
+		return reinterpret_cast<T*>(Components_[Key].get());
 	}
 
 
