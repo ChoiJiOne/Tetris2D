@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Label.h"
 #include "InputManager.h"
+#include "Tetromino.h"
 #include "WorldManager.h"
 
 PlayScene::PlayScene()
@@ -58,7 +59,9 @@ PlayScene::PlayScene()
 		GWorld.CreateGameObject<Button>("VOLUABLE::PlayScene", Vec2f(-390.0f, -70.0f), 70.0f, 70.0f, "Voluble", EKeyCode::CODE_LBUTTON, VolubleEvent, 0.9f),
 		GWorld.CreateGameObject<Button>("MUTE::PlayScene", Vec2f(-310.0f, -70.0f), 70.0f, 70.0f, "Mute", EKeyCode::CODE_LBUTTON, MuteEvent, 0.9f),
 
-		GWorld.CreateGameObject<Label>("NEXT::PlayScene", L"NEXT", "Font32", Vec2f(250.0f, 330.0f), MAGENTA)
+		GWorld.CreateGameObject<Label>("NEXT::PlayScene", L"NEXT", "Font32", Vec2f(250.0f, 330.0f), MAGENTA),
+
+		GWorld.CreateGameObject<Tetromino>("TETROMINO::PlayScene")
 	};
 }
 
