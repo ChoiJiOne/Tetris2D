@@ -61,7 +61,7 @@ PlayScene::PlayScene()
 
 		GWorld.CreateGameObject<Label>("NEXT::PlayScene", L"NEXT", "Font32", Vec2f(250.0f, 330.0f), MAGENTA),
 
-		GWorld.CreateGameObject<Tetromino>("TETROMINO::PlayScene")
+		GWorld.CreateGameObject<Tetromino>("TETROMINO::PlayScene", Vec2f(0.0f, 0.0f), 30.0f, 1.0f)
 	};
 }
 
