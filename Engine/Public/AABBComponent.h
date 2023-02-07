@@ -55,6 +55,54 @@ public:
 	bool IsCollision(const AABBComponent* BoundingBox);
 
 
+	/**
+	 * @brief AABB의 중심 좌표를 얻습니다.
+	 * 
+	 * @return AABB의 중심 좌표를 반환합니다.
+	 */
+	Vec2f GetCenter() const { return Center_; }
+
+
+	/**
+	 * @brief AABB의 중심 좌표를 설정합니다.
+	 * 
+	 * @param Center 설정할 중심 좌표입니다.
+	 */
+	void SetCenter(const Vec2f& Center) { Center_ = Center; }
+
+
+	/**
+	 * @brief AABB의 가로 크기를 얻습니다.
+	 * 
+	 * @return AABB의 가로 크기를 반환합니다.
+	 */
+	float GetWidth() const { return Width_; }
+
+
+	/**
+	 * @brief AABB의 가로 크기를 설정합니다.
+	 * 
+	 * @param Width 설정할 AABB의 가로 크기입니다.
+	 */
+	void SetWidth(float Width) { Width_ = Width; }
+
+
+	/**
+	 * @brief AABB의 세로 크기를 얻습니다.
+	 *
+	 * @return AABB의 세로 크기를 반환합니다.
+	 */
+	float GetHeight() const { return Height_; }
+
+
+	/**
+	 * @brief AABB의 세로 크기를 설정합니다.
+	 *
+	 * @param Height 설정할 AABB의 세로 크기입니다.
+	 */
+	void SetHeight(float Height) { Height_ = Height; }
+
+	
 private:
 	/**
 	 * @brief AABB의 LEFT BOTTON 위치를 얻습니다.
@@ -66,7 +114,7 @@ private:
 	 * │    │           │ ← AABB!
 	 * │    │           │
 	 * │ Min└───────────┘
-	 * │ (이 값 반환)
+	 * │ (이 값 반환!)
 	 * ┼────────────────────────+x
 	 */
 	inline Vec2f GetMinPosition() const
@@ -80,7 +128,7 @@ private:
 	 * 
 	 * @note 아래 그림의 Max 좌표 값을 반환
 	 * +y
-	 * │    ┌───────────┐Max (이 값 반환)
+	 * │    ┌───────────┐Max (이 값 반환!)
 	 * │    │           │
 	 * │    │           │ ← AABB!
 	 * │    │           │
