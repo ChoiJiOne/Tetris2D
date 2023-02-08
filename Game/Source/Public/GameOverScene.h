@@ -43,4 +43,12 @@ public:
 	 * @brief 종료 씬을 리셋합니다.
 	 */
 	virtual void Reset() override;
+
+
+private:
+	/**
+	 * @brief 씬 내의 게임 오브젝트입니다.
+	 */
+	std::vector<GameObject*> SceneObjects_;
+
 };

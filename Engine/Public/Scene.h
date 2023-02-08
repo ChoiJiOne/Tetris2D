@@ -87,12 +87,6 @@ protected:
 	}
 
 
-	/**
-	 * @brief 씬 내의 게임 오브젝트입니다.
-	 */
-	std::vector<GameObject*> SceneObjects_;
-
-
 private:
 	/**
 	 * @brief 씬 전환이 발생했을 때, 실행할 이벤트입니다.
