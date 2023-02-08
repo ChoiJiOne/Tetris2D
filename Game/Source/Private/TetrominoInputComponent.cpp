@@ -6,7 +6,7 @@
 static const std::unordered_map<EKeyCode, Tetromino::EDirection> KEY_DIRECTIONS = {
 	{ EKeyCode::CODE_LEFT,  Tetromino::EDirection::LEFT  },
 	{ EKeyCode::CODE_RIGHT, Tetromino::EDirection::RIGHT },
-	{ EKeyCode::CODE_UP,    Tetromino::EDirection::UP    }, // 수정 필요!
+	{ EKeyCode::CODE_UP,    Tetromino::EDirection::CW    },
 	{ EKeyCode::CODE_DOWN,  Tetromino::EDirection::DOWN  },
 };
 

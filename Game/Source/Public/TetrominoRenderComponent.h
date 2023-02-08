@@ -11,6 +11,8 @@ class TetrominoRenderComponent : public GraphicsComponent
 public:
 	/**
 	 * @brief 테트로미노를 화면에 렌더링하는 컴포넌트의 생성자입니다.
+	 * 
+	 * @param Object 이 컴포넌트를 소유한 게임 오브젝트의 포인터입니다.
 	 */
 	TetrominoRenderComponent(GameObject* Object);
 
