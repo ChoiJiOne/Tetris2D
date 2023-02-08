@@ -42,6 +42,18 @@ public:
 		UP    = 4,
 		CCW   = 5,
 		CW    = 6,
+		JUMP  = 7,
+	};
+
+
+	/**
+	 * @brief 테트로미노의 상태입니다.
+	 */
+	enum class EState : int32_t
+	{
+		WAIT   = 0,
+		ACTIVE = 1,
+		DONE   = 2,
 	};
 
 
@@ -103,8 +115,18 @@ public:
 
 
 	/**
-	 * @brief 테트로미노가 스스로 움직이는 시간을 얻습니다.
+	 * @brief 테트로미노를 특정 위치로 이동시킵니다.
 	 * 
+	 * @param LPPosition 테트로미노를 이동 시킬 특정 위치입니다.
+	 * 
+	 * @return 텔레포트시킨 위치에 충돌이 발생하지 않으면 true, 충돌이 발생하면 false를 반환합니다. 
+	 */
+	bool Teleport(const Vec2f& LPPosition);
+
+
+	/**
+	 * @brief 테트로미노가 스스로 움직이는 시간을 얻습니다.
+	 *
 	 * @return 테트로미노가 스스로 움직이는 시간을 반환합니다.
 	 */
 	float GetMoveStep() const { return MoveStep_; }
@@ -112,20 +134,46 @@ public:
 
 	/**
 	 * @brief 테트로미노의 블럭들을 얻습니다.
-	 * 
+	 *
 	 * @note 이 메서드를 사용할 경우, 블럭을 변경할 수 없습니다.
-	 * 
+	 *
 	 * @return 테트로미노의 블럭들을 반환합니다.
 	 */
 	const std::array<BlockComponent*, 4>& GetBlocks() const { return Blocks_; }
 
 
 	/**
-	 * @brief 테트로미노를 움직입니다.
-	 * 
-	 * @param Direction 테트로미노를 움직일 방향입니다.
+	 * @brief 테트로미노의 블럭들을 얻습니다.
+	 *
+	 * @note 이 메서드를 사용할 경우, 블럭을 변경할 수 있습니다.
+	 *
+	 * @return 테트로미노의 블럭들을 반환합니다.
 	 */
-	void Move(const EDirection& Direction);
+	std::array<BlockComponent*, 4>& GetBlocks() { return Blocks_; }
+
+
+	/**
+	 * @brief 테트로미노의 상태를 얻습니다.
+	 * 
+	 * @return 테트로미노의 상태를 반환합니다.
+	 */
+	EState GetState() const { return State_; }
+
+
+	/**
+	 * @brief 테트로미노의 상태를 설정합니다.
+	 * 
+	 * @param State 설정할 테트로미노의 상태입니다.
+	 */
+	void SetState(const EState& State) { State_ = State; }
+
+
+	/**
+	 * @brief 테트로미노의 모양을 얻습니다.
+	 * 
+	 * @return 테트로미노의 모양을 반환합니다.
+	 */
+	EShape GetShape() const { return Shape_; }
 
 
 private:
@@ -145,43 +193,17 @@ private:
 	);
 
 
-	/**
-	 * @brief 테트로미노 블럭들의 중심 위치를 계산합니다.
-	 * 
-	 * @param Shape 테트로미노의 모양입니다.
-	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
-	 * @param BlockSide 테트로미노 블럭의 크기입니다.
-	 * 
-	 * @return 테트로미노 블럭들의 중심 위치를 반환합니다.
-	 */
-	Vec2f CalculateBlocksCenter(const EShape& Shape, const Vec2f& LTPosition, const float& BlockSide);
-
-
 private:
-	/**
-	 * @brief 테트로미노의 왼쪽 상단 좌표입니다.
-	 * 
-	 * @note LT = Left Top을 의미합니다.
-	 */
-	Vec2f LTPosition_;
-
-
-	/**
-	 * @brief 테트로미노 블럭의 크기입니다.
-	 */
-	float BlockSide_ = 0.0f;
-
-
-	/**
-	 * @brief 테트로미노가 움직이는 거리입니다.
-	 */
-	float MoveLength_ = 0.0f;
-
-
 	/**
 	 * @brief 테트로미노가 스스로 움직이는 시간입니다.
 	 */
 	float MoveStep_ = 0.0f;
+
+
+	/**
+	 * @brief 테트로미노의 현재 상태입니다.
+	 */
+	EState State_ = EState::WAIT;
 
 
 	/**
