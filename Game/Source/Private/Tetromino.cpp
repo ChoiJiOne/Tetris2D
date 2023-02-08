@@ -1,7 +1,4 @@
 #include "Tetromino.h"
-#include "ContentManager.h"
-#include "GraphicsManager.h"
-#include "Shader.h"
 #include "TetrominoRenderComponent.h"
 #include "TetrominoInputComponent.h"
 #include "Utility.hpp"
@@ -46,13 +43,14 @@ Tetromino::Tetromino(
 	const EShape& Shape)
 	: GameObject(Signature)
 	, LTPosition_(LTPosition)
+	, BlockSide_(Side)
 	, MoveLength_(Side)
 	, MoveStep_(MoveStep)
 	, Shape_(Shape)
 {
 	AddComponent<TetrominoRenderComponent>("Renderer");
 	AddComponent<TetrominoInputComponent>("Input");
-	CreateTetrominoBlocks(LTPosition_, Side, Type, Shape_);
+	CreateTetrominoBlocks(LTPosition_, BlockSide_, Type, Shape_);
 }
 
 Tetromino::~Tetromino()
@@ -67,31 +65,52 @@ void Tetromino::Tick(float DeltaSeconds)
 
 void Tetromino::Move(const EDirection& Direction)
 {
+	Vec2f BlocksCenter;
 	Vec2f Center;
-	float Bias = (Direction == Tetromino::EDirection::LEFT || Direction == Tetromino::EDirection::DOWN) ? -1.0f : 1.0f;
+	float MoveBias = (Direction == EDirection::LEFT || Direction == EDirection::DOWN) ? -1.0f : 1.0f;
+	float SpinBias = (Direction == EDirection::CCW) ? -1.0f : 1.0f;
 
 	switch (Direction)
 	{
-	case Tetromino::EDirection::LEFT:
-	case Tetromino::EDirection::RIGHT:
-		LTPosition_.x += (Bias * MoveLength_);
+	case EDirection::LEFT:
+	case EDirection::RIGHT:
+		LTPosition_.x += (MoveBias * MoveLength_);
 
 		for (auto& Block : Blocks_)
 		{
 			Center = Block->GetCenter();
-			Center.x += (Bias * MoveLength_);
+			Center.x += (MoveBias * MoveLength_);
 			Block->SetCenter(Center);
 		}
 		break;
 
-	case Tetromino::EDirection::UP:
-	case Tetromino::EDirection::DOWN:
-		LTPosition_.y += (Bias * MoveLength_);
+	case EDirection::UP:
+	case EDirection::DOWN:
+		LTPosition_.y += (MoveBias * MoveLength_);
 
 		for (auto& Block : Blocks_)
 		{
 			Center = Block->GetCenter();
-			Center.y += (Bias * MoveLength_);
+			Center.y += (MoveBias * MoveLength_);
+			Block->SetCenter(Center);
+		}
+		break;
+
+	case EDirection::CW:
+	case EDirection::CCW:
+		BlocksCenter = CalculateBlocksCenter(Shape_, LTPosition_, BlockSide_);
+
+		for (auto& Block : Blocks_)
+		{
+			Center = Block->GetCenter();
+			Center -= BlocksCenter;
+
+			Center = Vec2f(
+				+SpinBias * Center.y,
+				-SpinBias * Center.x
+			);
+
+			Center += BlocksCenter;
 			Block->SetCenter(Center);
 		}
 		break;
@@ -168,4 +187,24 @@ void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side
 	default:
 		ENFORCE_THROW_EXCEPTION("undefined tetromino type...");
 	}
+}
+
+Vec2f Tetromino::CalculateBlocksCenter(const EShape& Shape, const Vec2f& LTPosition, const float& BlockSide)
+{
+	Vec2f BlocksCenter = LTPosition;
+	float Bias = 0.0f;
+
+	if (Shape == EShape::I || Shape == EShape::O)
+	{
+		Bias = (BlockSide * 3.0f) / 2.0f;
+	}
+	else
+	{
+		Bias = BlockSide;
+	}
+
+	BlocksCenter.x += Bias;
+	BlocksCenter.y -= Bias;
+
+	return BlocksCenter;
 }

@@ -103,45 +103,11 @@ public:
 
 
 	/**
-	 * @brief 테트로미노의 왼쪽 상단 위치를 얻습니다.
-	 * 
-	 * @return 테트로미노의 위치를 반환합니다.
-	 */
-	Vec2f GetLTPosition() const { return LTPosition_; }
-
-
-	/**
-	 * @brief 테트로미노의 위치를 설정합니다.
-	 * 
-	 * @note 이 메서드는 테트로미노의 왼쪽 상단의 위치만 변경합니다.
-	 * 
-	 * @param LTPosition 설정할 테트로미노의 왼쪽 상단 좌표입니다.
-	 */
-	void SetLTPosition(const Vec2f& LTPosition) { LTPosition_ = LTPosition; }
-
-
-	/**
-	 * @brief 테트로미노의 이동 거리를 얻습니다.
-	 * 
-	 * @return 테트로미노의 이동 거리를 반환합니다.
-	 */
-	float GetMoveLength() const { return MoveLength_; }
-
-
-	/**
 	 * @brief 테트로미노가 스스로 움직이는 시간을 얻습니다.
 	 * 
 	 * @return 테트로미노가 스스로 움직이는 시간을 반환합니다.
 	 */
 	float GetMoveStep() const { return MoveStep_; }
-
-
-	/**
-	 * @brief 테트로미노의 모양을 얻습니다.
-	 * 
-	 * @return 테트로미노의 모양을 반환합니다.
-	 */
-	EShape GetShape() const { return Shape_; }
 
 
 	/**
@@ -152,16 +118,6 @@ public:
 	 * @return 테트로미노의 블럭들을 반환합니다.
 	 */
 	const std::array<BlockComponent*, 4>& GetBlocks() const { return Blocks_; }
-
-
-	/**
-	 * @brief 테트로미노의 블럭들을 얻습니다.
-	 * 
-	 * @note 이 메서드를 사용할 경우, 블럭을 변경할 수 있습니다.
-	 * 
-	 * @return 테트로미노의 블럭들을 반환합니다.
-	 */
-	std::array<BlockComponent*, 4>& GetBlocks() { return Blocks_; }
 
 
 	/**
@@ -189,6 +145,18 @@ private:
 	);
 
 
+	/**
+	 * @brief 테트로미노 블럭들의 중심 위치를 계산합니다.
+	 * 
+	 * @param Shape 테트로미노의 모양입니다.
+	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
+	 * @param BlockSide 테트로미노 블럭의 크기입니다.
+	 * 
+	 * @return 테트로미노 블럭들의 중심 위치를 반환합니다.
+	 */
+	Vec2f CalculateBlocksCenter(const EShape& Shape, const Vec2f& LTPosition, const float& BlockSide);
+
+
 private:
 	/**
 	 * @brief 테트로미노의 왼쪽 상단 좌표입니다.
@@ -196,6 +164,12 @@ private:
 	 * @note LT = Left Top을 의미합니다.
 	 */
 	Vec2f LTPosition_;
+
+
+	/**
+	 * @brief 테트로미노 블럭의 크기입니다.
+	 */
+	float BlockSide_ = 0.0f;
 
 
 	/**
