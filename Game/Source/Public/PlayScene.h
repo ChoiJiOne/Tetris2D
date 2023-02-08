@@ -2,7 +2,8 @@
 
 #include "Scene.h"
 
-#include <vector>
+#include <array>
+#include <list>
 
 class GameObject;
 
@@ -53,9 +54,40 @@ public:
 
 private:
 	/**
+	 * @brief 게임 플레이 씬의 기본 오브젝트를 구성합니다.
+	 */
+	void ConstructBasicObjects();
+
+
+	/**
+	 * @brief 게임 중시 시 존재할 오브젝트를 구성합니다.
+	 */
+	void ConstructPauseObjects();
+
+
+private:
+	/**
+	 * @brief 게임 플레이 씬의 기본 오브젝트입니다.
+	 */
+	std::array<GameObject*, 13> BasicObjects_;
+
+
+	/**
+	 * @brief 게임 중지 시 표시할 오브젝트입니다.
+	 */
+	std::array<GameObject*, 5> PauseObjects_;
+
+
+	/**
+	 * @brief 게임 플레이 중 사용할 오브젝트입니다.
+	 */
+	std::list<GameObject*> PlayObjects_;
+
+
+	/**
 	 * @brief 게임이 플레이 중인지 확인합니다.
 	 */
-	bool bIsPlaying = true;
+	bool bIsPlaying_ = true;
 
 
 	/**
