@@ -3,6 +3,7 @@
 #include "GraphicsManager.h"
 #include "Shader.h"
 #include "TetrominoRenderComponent.h"
+#include "TetrominoInputComponent.h"
 #include "Utility.hpp"
 
 static const std::array<Tetromino::EShape, 7> SHAPES = {
@@ -45,10 +46,12 @@ Tetromino::Tetromino(
 	const EShape& Shape)
 	: GameObject(Signature)
 	, LTPosition_(LTPosition)
+	, MoveLength_(Side)
 	, MoveStep_(MoveStep)
 	, Shape_(Shape)
 {
 	AddComponent<TetrominoRenderComponent>("Renderer");
+	AddComponent<TetrominoInputComponent>("Input");
 	CreateTetrominoBlocks(LTPosition_, Side, Type, Shape_);
 }
 
@@ -58,7 +61,41 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float DeltaSeconds)
 {
+	reinterpret_cast<TetrominoInputComponent*>(GetComponent<TetrominoInputComponent>("Input"))->Tick(DeltaSeconds);
 	GetComponent<TetrominoRenderComponent>("Renderer")->Tick();
+}
+
+void Tetromino::Move(const EDirection& Direction)
+{
+	Vec2f Center;
+	float Bias = (Direction == Tetromino::EDirection::LEFT || Direction == Tetromino::EDirection::DOWN) ? -1.0f : 1.0f;
+
+	switch (Direction)
+	{
+	case Tetromino::EDirection::LEFT:
+	case Tetromino::EDirection::RIGHT:
+		LTPosition_.x += (Bias * MoveLength_);
+
+		for (auto& Block : Blocks_)
+		{
+			Center = Block->GetCenter();
+			Center.x += (Bias * MoveLength_);
+			Block->SetCenter(Center);
+		}
+		break;
+
+	case Tetromino::EDirection::UP:
+	case Tetromino::EDirection::DOWN:
+		LTPosition_.y += (Bias * MoveLength_);
+
+		for (auto& Block : Blocks_)
+		{
+			Center = Block->GetCenter();
+			Center.y += (Bias * MoveLength_);
+			Block->SetCenter(Center);
+		}
+		break;
+	}
 }
 
 void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side, const BlockComponent::EType& Type, const EShape& Shape)
