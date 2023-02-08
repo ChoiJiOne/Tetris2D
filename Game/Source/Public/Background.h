@@ -80,7 +80,7 @@ public:
 	 * 
 	 * @return 백그라운드 사운드의 플레이 활성화 여부를 반환합니다.
 	 */
-	bool GetPlayAudio() const { return bIsActive_; }
+	bool IsActiveAudio() const { return bIsActive_; }
 
 
 private:
