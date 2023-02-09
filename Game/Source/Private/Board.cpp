@@ -35,6 +35,17 @@ void Board::Tick(float DeltaSeconds)
 	GetComponent<BoardRenderComponent>("Renderer")->Tick();
 }
 
+void Board::AddBlocks(const std::array<BlockComponent*, 4>& Blocks)
+{
+	for (const auto& Block : Blocks)
+	{
+		CreateBlock(
+			CalculateColRowFromBlock(LTPosition_, Block, Block->GetWidth()),
+			Block->GetType()
+		);
+	}
+}
+
 void Board::CreateBoardWall()
 {
 	for (int32_t Row = 0; Row < RowBlockCount_; ++Row)

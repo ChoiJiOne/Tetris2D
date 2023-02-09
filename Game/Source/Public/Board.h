@@ -97,6 +97,14 @@ public:
 	const std::vector<BlockComponent*>& GetBlocks() const { return Blocks_; }
 
 
+	/**
+	 * @brief 보드의 블럭들을 추가합니다.
+	 * 
+	 * @param Blocks 추가할 블럭들입니다.
+	 */
+	void AddBlocks(const std::array<BlockComponent*, 4>& Blocks);
+
+
 private:
 	/**
 	 * @brief 보드의 벽을 생성합니다.
