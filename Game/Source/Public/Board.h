@@ -211,6 +211,12 @@ private:
 
 
 	/**
+	 * @brief 보드의 삭제한 라인 수입니다.
+	 */
+	int32_t RemoveLine_ = 0;
+
+
+	/**
 	 * @brief 보드의 정리 시간입니다.
 	 */
 	float ClearStep_ = 0.0f;
