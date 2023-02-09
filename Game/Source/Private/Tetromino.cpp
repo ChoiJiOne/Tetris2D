@@ -65,7 +65,10 @@ void Tetromino::Tick(float DeltaSeconds)
 		GetComponent<TetrominoPhysicComponent>("Physic")->Tick();
 	}
 
-	GetComponent<TetrominoRenderComponent>("Renderer")->Tick();
+	if (State_ != EState::DONE)
+	{
+		GetComponent<TetrominoRenderComponent>("Renderer")->Tick();
+	}
 }
 
 bool Tetromino::Teleport(const Vec2f& LTPosition)
