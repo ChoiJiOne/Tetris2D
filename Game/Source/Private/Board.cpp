@@ -32,6 +32,11 @@ Board::~Board()
 
 void Board::Tick(float DeltaSeconds)
 {
+	if (State_ == EState::ACTIVE)
+	{
+		State_ = EState::WAIT;
+	}
+
 	GetComponent<BoardRenderComponent>("Renderer")->Tick();
 }
 
