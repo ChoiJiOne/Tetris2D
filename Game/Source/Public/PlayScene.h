@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vector.hpp"
 #include "Scene.h"
 
 #include <array>
@@ -82,6 +83,42 @@ private:
 	 * @brief 게임 플레이 중 사용할 오브젝트입니다.
 	 */
 	std::list<GameObject*> PlayObjects_;
+
+
+	/**
+	 * @brief 보드의 위치입니다.
+	 */
+	Vec2f BoardPosition_;
+
+
+	/**
+	 * @brief 테트로미노의 시작 위치입니다.
+	 */
+	Vec2f StartPosition_;
+
+
+	/**
+	 * @brief 테트로미노의 대기 위치입니다.
+	 */
+	Vec2f WaitPosition_;
+
+
+	/**
+	 * @brief 보드의 정리 속도입니다.
+	 */
+	float BoardClearStep_ = 1.0f;
+
+
+	/**
+	 * @brief 현재 테트로미노입니다.
+	 */
+	int32_t CurrentTetromino_ = 0;
+
+
+	/**
+	 * @brief 생성된 테트로미노의 수입니다.
+	 */
+	int32_t CountOfTetromino_ = 0;
 
 
 	/**

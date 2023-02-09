@@ -10,6 +10,10 @@
 
 PlayScene::PlayScene()
 {
+	BoardPosition_ = Vec2f(-180.0f, 330.0f);
+	StartPosition_ = Vec2f(-60.0f, 300.0f);
+	WaitPosition_ = Vec2f(230.0f, 300.0f);
+
 	PauseEvent_ = [&]() {
 		bIsPlaying_ = false;
 		reinterpret_cast<Background*>(BasicObjects_[0])->StopAudio();
@@ -42,6 +46,24 @@ void PlayScene::Update(float DeltaSeconds)
 		{
 			PlayObject->Tick(DeltaSeconds);
 		}
+
+		Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
+		Tetromino* TetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
+
+		if (BoardObject->GetState() == Board::EState::WAIT && TetrominoObject->GetState() == Tetromino::EState::DONE)
+		{
+			PlayObjects_.remove(TetrominoObject);
+			WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
+
+			PlayObjects_.push_back(WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f));
+
+			if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_))
+			{
+				GameOverEvent_();
+			}
+
+			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+		}
 	}
 	else
 	{
@@ -59,9 +81,30 @@ void PlayScene::Reset()
 	reinterpret_cast<Background*>(BasicObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(BasicObjects_[0])->PlayAudio();
 
+	PlayObjects_.clear();
+	if (WorldManager::Get().IsRegisterObject("BOARD::PlayScene"))
+	{
+		WorldManager::Get().UnregisterObject("BOARD::PlayScene");
+	}
 
+	if (CountOfTetromino_ != 0)
+	{
+		while (CurrentTetromino_ < CountOfTetromino_)
+		{
+			WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
+		}
+		
+		CurrentTetromino_ = 0;
+		CountOfTetromino_ = 0;
+	}
 
-	//reinterpret_cast<Tetromino*>(SceneObjects_[13])->SetState(Tetromino::EState::ACTIVE);
+	PlayObjects_ = {
+		WorldManager::Get().CreateGameObject<Board>("BOARD::PlayScene", BoardPosition_, 22, 12, 30.0f, BoardClearStep_),
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_, 30.0f, 1.0f),
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f),
+	};
+
+	WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
 }
 
 void PlayScene::EnforcePause()
