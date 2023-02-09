@@ -7,6 +7,7 @@
 void TetrominoPhysicComponent::Tick()
 {
 	Tetromino* Object = reinterpret_cast<Tetromino*>(GetGameObject());
+	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
 	std::array<BlockComponent*, 4>& Blocks = Object->GetBlocks();
 	
 	TetrominoInputComponent* Input = Object->GetComponent<TetrominoInputComponent>("Input");
@@ -21,6 +22,8 @@ void TetrominoPhysicComponent::Tick()
 
 		Move(GetCountDirection(Direction), Object->GetShape(), Blocks);
 		Object->SetState(Tetromino::EState::DONE);
+		BoardObject->AddBlocks(Blocks);
+		BoardObject->SetState(Board::EState::ACTIVE);
 		Input->ResetAccrueFrameTime();
 	}
 	else
@@ -41,6 +44,8 @@ void TetrominoPhysicComponent::Tick()
 			{
 				Move(GetCountDirection(Tetromino::EDirection::DOWN), Object->GetShape(), Blocks);
 				Object->SetState(Tetromino::EState::DONE);
+				BoardObject->AddBlocks(Blocks);
+				BoardObject->SetState(Board::EState::ACTIVE);
 			}
 
 			Input->ResetAccrueFrameTime();
@@ -72,18 +77,21 @@ bool TetrominoPhysicComponent::IsCollision()
 	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
 	Tetromino* TetrominoObject = reinterpret_cast<Tetromino*>(GetGameObject());
 
-	const std::list<BlockComponent*>& BoardBlocks = BoardObject->GetBlocks();
+	const std::vector<BlockComponent*>& BoardBlocks = BoardObject->GetBlocks();
 	const std::array<BlockComponent*, 4>& TetrominoBlocks = TetrominoObject->GetBlocks();
 
 	for (const auto& BoardBlock : BoardBlocks)
 	{
-		for (const auto& TetrominoBlock : TetrominoBlocks)
+		if (BoardBlock != nullptr)
 		{
-			if (BoardBlock->IsCollision(TetrominoBlock))
+			for (const auto& TetrominoBlock : TetrominoBlocks)
 			{
-				return true;
+				if (BoardBlock->IsCollision(TetrominoBlock))
+				{
+					return true;
+				}
 			}
-		}
+		}/
 	}
 
 	return false;
