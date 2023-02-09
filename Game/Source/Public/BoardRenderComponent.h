@@ -1,6 +1,10 @@
 #pragma once
 
+#include <list>
+
 #include "GraphicsComponent.h"
+
+class BlockComponent;
 
 
 /**
@@ -33,4 +37,13 @@ public:
 	 * @brief 보드를 화면에 렌더링하는 컴포넌트를 업데이트합니다.
 	 */
 	void Tick();
+
+
+private:
+	/**
+	 * @brief 화면에 블럭을 렌더링합니다.
+	 * 
+	 * @param Blocks 화면에 그릴 블럭들입니다.
+	 */
+	void RenderBlocks(const std::list<BlockComponent*>& Blocks);
 };
