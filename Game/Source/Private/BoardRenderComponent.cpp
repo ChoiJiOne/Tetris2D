@@ -16,22 +16,25 @@ BoardRenderComponent::~BoardRenderComponent()
 
 void BoardRenderComponent::Tick()
 {
-	const std::list<BlockComponent*>& Blocks = reinterpret_cast<Board*>(GetGameObject())->GetBlocks();
+	const std::vector<BlockComponent*>& Blocks = reinterpret_cast<Board*>(GetGameObject())->GetBlocks();
 
 	Vec2f Position;
 	float Width = 0.0f, Height = 0.0f;
 
 	for (auto& Block : Blocks)
 	{
-		Position = Block->GetCenter();
-		Width = Block->GetWidth();
-		Height = Block->GetHeight();
+		if (Block != nullptr)
+		{
+			Position = Block->GetCenter();
+			Width = Block->GetWidth();
+			Height = Block->GetHeight();
 
-		GraphicsManager::Get().DrawTexture2D(
-			ContentManager::Get().GetTexture2D(Block->GetTypeTextureSignature()),
-			Position,
-			Width,
-			Height
-		);
+			GraphicsManager::Get().DrawTexture2D(
+				ContentManager::Get().GetTexture2D(Block->GetTypeTextureSignature()),
+				Position,
+				Width,
+				Height
+			);
+		}
 	}
 }
