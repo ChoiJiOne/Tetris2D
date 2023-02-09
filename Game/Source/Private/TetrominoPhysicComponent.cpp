@@ -69,7 +69,7 @@ bool TetrominoPhysicComponent::Teleport(const Vec2f& LTPosition)
 
 	LTPosition_ = LTPosition;
 
-	return IsCollision();
+	return !IsCollision();
 }
 
 bool TetrominoPhysicComponent::IsCollision()
@@ -91,7 +91,7 @@ bool TetrominoPhysicComponent::IsCollision()
 					return true;
 				}
 			}
-		}/
+		}
 	}
 
 	return false;
