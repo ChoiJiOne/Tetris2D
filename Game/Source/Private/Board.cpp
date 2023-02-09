@@ -34,7 +34,25 @@ void Board::Tick(float DeltaSeconds)
 {
 	if (State_ == EState::ACTIVE)
 	{
-		State_ = EState::WAIT;
+		AccrueFrameTime_ += DeltaSeconds;
+
+		if (AccrueFrameTime_ >= ClearStep_)
+		{
+			AccrueFrameTime_ = 0.0f;
+
+			int32_t RemoveLine = HaveRemoveLine();
+
+			if (RemoveLine == -1)
+			{
+				CleanupEmptyRowLine();
+				State_ = EState::WAIT;
+			}
+			else
+			{
+				RemoveRowLine(RemoveLine);
+				RemoveLine_++;
+			}
+		}
 	}
 
 	GetComponent<BoardRenderComponent>("Renderer")->Tick();
@@ -44,10 +62,7 @@ void Board::AddBlocks(const std::array<BlockComponent*, 4>& Blocks)
 {
 	for (const auto& Block : Blocks)
 	{
-		CreateBlock(
-			CalculateColRowFromBlock(LTPosition_, Block, Block->GetWidth()),
-			Block->GetType()
-		);
+		CreateBlock(CalculateColRowFromBlock(LTPosition_, Block, Block->GetWidth()), Block->GetType());
 	}
 }
 
@@ -94,6 +109,96 @@ bool Board::IsExistBlock(const ColRow& BlockColRow)
 {
 	int32_t Offset = GetOffset(BlockColRow.first, BlockColRow.second, ColBlockCount_, RowBlockCount_);
 	return (Blocks_[Offset] != nullptr);
+}
+
+bool Board::IsFullRowLine(const int32_t& RowLine)
+{
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		if (!IsExistBlock(ColRow(Col, RowLine)))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Board::IsEmptyRowLine(const int32_t& RowLine)
+{
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		if (IsExistBlock(ColRow(Col, RowLine)))
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+void Board::RemoveRowLine(const int32_t& RowLine)
+{
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		DestroyBlock(ColRow(Col, RowLine));
+	}
+}
+
+void Board::MoveRowLine(const int32_t& FromRowLine, const int32_t& ToRowLine)
+{
+	RemoveRowLine(ToRowLine);
+
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		if (IsExistBlock(ColRow(Col, ToRowLine)))
+		{
+			int32_t Offset = GetOffset(Col, FromRowLine, ColBlockCount_, RowBlockCount_);
+			BlockComponent* Block = Blocks_[Offset];
+			CreateBlock(ColRow(Col, ToRowLine), Block->GetType());
+		}
+	}
+
+	RemoveRowLine(FromRowLine);
+}
+
+int32_t Board::HaveRemoveLine()
+{
+	for (int32_t Row = RowBlockCount_ - 2; Row >= 1; --Row)
+	{
+		if (IsFullRowLine(Row))
+		{
+			return Row;
+		}
+	}
+
+	return -1;
+}
+
+void Board::CleanupEmptyRowLine()
+{
+	std::vector<int32_t> ExistRowLines;
+
+	for (int32_t Row = 1; Row < RowBlockCount_ - 1; ++Row)
+	{
+		if (!IsEmptyRowLine(Row))
+		{
+			ExistRowLines.push_back(Row);
+		}
+	}
+
+	if (ExistRowLines.empty()) return;
+
+	int32_t CurrentRowLine = RowBlockCount_ - 2;
+
+	for (auto ExistRowLine : ExistRowLines)
+	{
+		if (ExistRowLine != CurrentRowLine)
+		{
+			MoveRowLine(ExistRowLine, CurrentRowLine);
+		}
+		CurrentRowLine++;
+	}
 }
 
 Vec2f Board::CalculateBlockPositionFromColRow(const Vec2f& LTPosition, const ColRow& BlockColRow, const float& Side) const

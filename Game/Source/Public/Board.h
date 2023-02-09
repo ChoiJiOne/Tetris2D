@@ -140,6 +140,57 @@ private:
 
 
 	/**
+	 * @brief 보드의 라인이 채워져 있는지 검사합니다.
+	 * 
+	 * @param RowLine 검사를 수행할 행입니다.
+	 * 
+	 * @return 보드의 라인이 채워져있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsFullRowLine(const int32_t& RowLine);
+
+
+	/**
+	 * @brief 보드의 라인이 비워져있는지 검사합니다.
+	 * 
+	 * @param RowLine 검사를 수행할 행입니다.
+	 * 
+	 * @return 보드의 라인이 비워져있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsEmptyRowLine(const int32_t& RowLine);
+
+
+	/**
+	 * @brief 보드의 라인을 지웁니다.
+	 * 
+	 * @param RowLine 삭제할 라인입니다.
+	 */
+	void RemoveRowLine(const int32_t& RowLine);
+
+
+	/**
+	 * @brief 보드의 라인을 이동시킵니다.
+	 * 
+	 * @param FromRowLine 이동시킬 라인입니다.
+	 * @param ToRowLine 이동시킬 라인의 목적지입니다.
+	 */
+	void MoveRowLine(const int32_t& FromRowLine, const int32_t& ToRowLine);
+
+
+	/**
+	 * @brief 보드에 삭제할 라인이 있는지 검사합니다
+	 * 
+	 * @return 삭제할 라인 수를 반환합니다. 삭제할 라인이 없다면 -1을 반환합니다.
+	 */
+	int32_t HaveRemoveLine();
+
+
+	/**
+	 * @brief 보드의 비어있는 부분을 정리합니다.
+	 */
+	void CleanupEmptyRowLine();
+
+
+	/**
 	 * @brief 보드의 상대 좌표로부터 월드 상의 블럭 위치를 계산합니다.
 	 * 
 	 * @note
@@ -214,6 +265,12 @@ private:
 	 * @brief 보드의 삭제한 라인 수입니다.
 	 */
 	int32_t RemoveLine_ = 0;
+
+
+	/**
+	 * @brief 프레임 누적 시간입니다.
+	 */
+	float AccrueFrameTime_ = 0.0f;
 
 
 	/**
