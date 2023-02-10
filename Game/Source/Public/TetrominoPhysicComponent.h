@@ -76,6 +76,17 @@ private:
 
 
 	/**
+	 * @brief 서로 다른 블럭들의 충돌을 검사합니다.
+	 * 
+	 * @param LhsBlocks 비교할 블럭들입니다.
+	 * @param RhsBlocks 비교할 또 다른 블럭들입니다.
+	 * 
+	 * @return 서로 다른 블럭들이 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollisionBlocks(const std::list<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks);
+
+
+	/**
 	 * @brief 테트로미노 블럭들의 중심 위치를 계산합니다.
 	 *
 	 * @param Shape 테트로미노의 모양입니다.

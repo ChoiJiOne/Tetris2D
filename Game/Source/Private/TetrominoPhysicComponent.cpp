@@ -77,24 +77,10 @@ bool TetrominoPhysicComponent::IsCollision()
 	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
 	Tetromino* TetrominoObject = reinterpret_cast<Tetromino*>(GetGameObject());
 
-	const std::vector<BlockComponent*>& BoardBlocks = BoardObject->GetBlocks();
 	const std::array<BlockComponent*, 4>& TetrominoBlocks = TetrominoObject->GetBlocks();
 
-	for (const auto& BoardBlock : BoardBlocks)
-	{
-		if (BoardBlock != nullptr)
-		{
-			for (const auto& TetrominoBlock : TetrominoBlocks)
-			{
-				if (BoardBlock->IsCollision(TetrominoBlock))
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
+	return IsCollisionBlocks(BoardObject->GetWallBlocks(), TetrominoBlocks) 
+		|| IsCollisionBlocks(BoardObject->GetBlocks(), TetrominoBlocks);
 }
 
 void TetrominoPhysicComponent::Move(
@@ -153,6 +139,22 @@ void TetrominoPhysicComponent::Move(
 		}
 		break;
 	}
+}
+
+bool TetrominoPhysicComponent::IsCollisionBlocks(const std::list<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks)
+{
+	for (const auto& LhsBlock : LhsBlocks)
+	{
+		for (const auto& RhsBlock : RhsBlocks)
+		{
+			if (LhsBlock->IsCollision(RhsBlock))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 Vec2f TetrominoPhysicComponent::CalculateBlocksCenter(const Tetromino::EShape& Shape, const Vec2f& LTPosition, const float& BlockSide)

@@ -114,6 +114,35 @@ private:
 	void CreateBoardWall();
 
 
+	/**
+	 * @brief 
+	 */
+
+
+	/**
+	 * @brief 블럭의 키 값을 얻습니다.
+	 * 
+	 * @param Block 키 값을 조사할 블럭입니다.
+	 * 
+	 * @return 블럭의 키 값을 반환합니다.
+	 */
+	std::string GetBlockKey(const BlockComponent* Block);
+
+
+	/**
+	 * @brief 보드의 블럭들을 정렬합니다.
+	 */
+	void SortBlocks();
+
+
+	/**
+	 * @brief 보드에서 지워야 할 라인의 시작 위치들을 얻습니다.
+	 *  
+	 * @return 드에서 지워야 할 라인의 시작 위치들을 반환합니다.
+	 */
+	std::vector<Vec2f> GetRemoveLinePositions();
+
+
 private:
 	/**
 	 * @brief 보드의 상태입니다..
@@ -164,11 +193,11 @@ private:
 
 
 	/**
-	 * @brief 보드에서 생성한 블럭의 수입니다.
+	 * @brief 보드에서 삭제해야 할 라인입니다.
 	 */
-	int32_t CountOfBlock_ = 0;
+	std::vector<Vec2f> RemoveLinePositions_;
 
-	
+
 	/**
 	 * @brief 보드의 벽입니다.
 	 */

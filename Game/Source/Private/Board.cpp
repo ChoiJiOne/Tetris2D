@@ -38,7 +38,12 @@ void Board::Tick(float DeltaSeconds)
 		if (AccrueFrameTime_ >= ClearStep_)
 		{
 			AccrueFrameTime_ = 0.0f;
+			SortBlocks();
 
+			State_ = EState::WAIT;
+
+			
+			
 			//int32_t RemoveLine = HaveRemoveLine();
 
 			//if (RemoveLine == -1)
@@ -61,7 +66,12 @@ void Board::AddBlocks(const std::array<BlockComponent*, 4>& Blocks)
 {
 	for (const auto& Block : Blocks)
 	{
-		//CreateBlock(CalculateColRowFromBlock(LTPosition_, Block, Block->GetWidth()), Block->GetType());
+		Blocks_.push_back(
+			AddComponent<BlockComponent>(
+				GetBlockKey(Block), 
+				Block->GetCenter(), Block->GetWidth(), Block->GetType()
+			)
+		);
 	}
 }
 
@@ -84,9 +94,69 @@ void Board::CreateBoardWall()
 				WallBlocks_.push_back(
 					AddComponent<BlockComponent>(
 						Format("WALL%d", CountOfWall++),
-						BlockPosition, BlockSide_, BlockComponent::EType::GRAY)
+						BlockPosition, BlockSide_, BlockComponent::EType::GRAY
+					)
 				);
 			}
 		}
 	}
+}
+
+std::string Board::GetBlockKey(const BlockComponent* Block)
+{
+	Vec2f BlockPosition = Block->GetCenter();
+
+	int32_t Col = static_cast<int32_t>((BlockPosition.x - LTPosition_.x) / BlockSide_);
+	int32_t Row = static_cast<int32_t>((LTPosition_.y - BlockPosition.y) / BlockSide_);
+
+	return Format("%d:%d", Row, Col);
+}
+
+void Board::SortBlocks()
+{
+	auto BlockCompareFunc = [](BlockComponent* LhsBlock, BlockComponent* RhsBlock) {
+		Vec2f LhsBlockPosition = LhsBlock->GetCenter();
+		Vec2f RhsBlockPosition = RhsBlock->GetCenter();
+
+		if (LhsBlockPosition.y > RhsBlockPosition.y)
+		{
+			return true;
+		}
+		else if (LhsBlockPosition.y == RhsBlockPosition.y)
+		{
+			if (LhsBlockPosition.x < RhsBlockPosition.x)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	};
+
+	Blocks_.sort(BlockCompareFunc);
+}
+
+std::vector<Vec2f> Board::GetRemoveLinePositions()
+{
+	std::vector<Vec2f> RemoveLinePositions;
+	//Vec2f StartPosition = LTPosition_ + Vec2f(BlockSide_, BlockSide_);
+
+	//auto Iter = Blocks_.begin();
+
+	//while (StartPosition.y <= LTPosition_.y + (static_cast<float>(RowBlockCount_ - 2) * BlockSide_))
+	//{
+	//	StartPosition.y += BlockSide_;
+	//}
+
+	//IsExistComponent()
+
+
+
+	//return RemoveLinePositions;
 }
