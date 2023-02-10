@@ -115,6 +115,14 @@ public:
 
 
 	/**
+	 * @brief 테트리스 블럭의 색상을 설정합니다.
+	 *
+	 * @param State 설정할 테트리스 블럭의 색상입니다.
+	 */
+	void SetColor(const EColor& Color) { Color_ = Color; }
+
+
+	/**
 	 * @brief 테트리스 블럭 타입에 대응하는 텍스처 시그니처 값을 얻습니다.
 	 * 
 	 * @return 테트리스 블럭 타입에 대응하는 텍스처 시그니처 값을 반환합니다.
