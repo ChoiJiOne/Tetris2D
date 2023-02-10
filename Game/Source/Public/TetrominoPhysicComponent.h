@@ -83,7 +83,7 @@ private:
 	 * 
 	 * @return 서로 다른 블럭들이 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollisionBlocks(const std::list<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks);
+	bool IsCollisionBlocks(const std::vector<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks);
 
 
 	/**

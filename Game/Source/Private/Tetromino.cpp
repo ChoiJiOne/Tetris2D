@@ -14,15 +14,15 @@ static const std::array<Tetromino::EShape, 7> SHAPES = {
 	Tetromino::EShape::Z
 };
 
-static const std::array<BlockComponent::EType, 8> BLOCKCOLORS = {
-	BlockComponent::EType::BLUE,
-	BlockComponent::EType::CYAN,
-	BlockComponent::EType::GREEN,
-	BlockComponent::EType::ORANGE,
-	BlockComponent::EType::PINK,
-	BlockComponent::EType::PURPLE,
-	BlockComponent::EType::RED,
-	BlockComponent::EType::YELLOW,
+static const std::array<BlockComponent::EColor, 8> BLOCKCOLORS = {
+	BlockComponent::EColor::BLUE,
+	BlockComponent::EColor::CYAN,
+	BlockComponent::EColor::GREEN,
+	BlockComponent::EColor::ORANGE,
+	BlockComponent::EColor::PINK,
+	BlockComponent::EColor::PURPLE,
+	BlockComponent::EColor::RED,
+	BlockComponent::EColor::YELLOW,
 };
 
 Tetromino::Tetromino(const std::string& Signature, const Vec2f& LTPosition, const float& Side, const float& MoveStep)
@@ -30,7 +30,7 @@ Tetromino::Tetromino(const std::string& Signature, const Vec2f& LTPosition, cons
 		Signature,
 		LTPosition, 
 		Side, 
-		GetRandomElement<BlockComponent::EType, 8>(BLOCKCOLORS),
+		GetRandomElement<BlockComponent::EColor, 8>(BLOCKCOLORS),
 		MoveStep, 
 		GetRandomElement<EShape, 7>(SHAPES)
 	) {}
@@ -39,7 +39,7 @@ Tetromino::Tetromino(
 	const std::string& Signature,
 	const Vec2f& LTPosition,
 	const float& Side,
-	const BlockComponent::EType& Type,
+	const BlockComponent::EColor& Color,
 	const float& MoveStep,
 	const EShape& Shape)
 	: GameObject(Signature)
@@ -50,7 +50,7 @@ Tetromino::Tetromino(
 	AddComponent<TetrominoInputComponent>("Input");
 	AddComponent<TetrominoPhysicComponent>("Physic", LTPosition, Side, Side);
 
-	CreateTetrominoBlocks(LTPosition, Side, Type, Shape_);
+	CreateTetrominoBlocks(LTPosition, Side, Color, Shape_);
 }
 
 Tetromino::~Tetromino()
@@ -76,70 +76,70 @@ bool Tetromino::Teleport(const Vec2f& LTPosition)
 	return GetComponent<TetrominoPhysicComponent>("Physic")->Teleport(LTPosition);
 }
 
-void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side, const BlockComponent::EType& Type, const EShape& Shape)
+void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side, const BlockComponent::EColor& Color, const EShape& Shape)
 {
 	switch (Shape)
 	{
 	case EShape::I:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 3.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 3.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::O:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 2.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 2.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::T:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 2.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::J:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 2.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::L:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 2.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::S:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 0.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 0.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 0.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 0.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
 	case EShape::Z:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 0.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 0.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Type),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 0.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 0.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 

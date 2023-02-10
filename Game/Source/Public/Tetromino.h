@@ -80,7 +80,7 @@ public:
 	 * @param Signature 테트로미노의 식별자입니다.
 	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
 	 * @param Side 테트로미노 블럭의 크기입니다.
-	 * @param Type 테트로미노 블럭의 타입입니다.
+	 * @param Color 테트로미노 블럭의 색상입니다.
 	 * @param MoveStep 테트로미노가 한 번 움직일 때의 시간 입니다.
 	 * @param Shape 테트로미노의 모양입니다.
 	 */
@@ -88,7 +88,7 @@ public:
 		const std::string& Signature,
 		const Vec2f& LTPosition,
 		const float& Side,
-		const BlockComponent::EType& Type,
+		const BlockComponent::EColor& Color,
 		const float& MoveStep,
 		const EShape& Shape
 	);
@@ -182,13 +182,13 @@ private:
 	 * 
 	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
 	 * @param Side 테트로미노 블럭의 크기입니다.
-	 * @param Type 테트로미노 블럭의 타입입니다.
+	 * @param Color 테트로미노 블럭의 색상입니다.
 	 * @param Shape 테트로미노의 모양입니다.
 	 */
 	void CreateTetrominoBlocks(
 		const Vec2f& LTPosition,
 		const float& Side,
-		const BlockComponent::EType& Type,
+		const BlockComponent::EColor& Color,
 		const EShape& Shape
 	);
 

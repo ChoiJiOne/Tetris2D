@@ -24,14 +24,17 @@ void TetrominoRenderComponent::Tick()
 	for (const auto& Block : Blocks)
 	{
 		BlockPosition = Block->GetCenter();
-		BlockWidth = Block->GetWidth();
-		BlockHeight = Block->GetHeight();
+		BlockWidth    = Block->GetWidth();
+		BlockHeight   = Block->GetHeight();
 
-		GraphicsManager::Get().DrawTexture2D(
-			ContentManager::Get().GetTexture2D(Block->GetTypeTextureSignature()),
-			BlockPosition,
-			BlockWidth,
-			BlockHeight
-		);
+		if (Block->GetState() == BlockComponent::EState::FILL)
+		{
+			GraphicsManager::Get().DrawTexture2D(
+				ContentManager::Get().GetTexture2D(Block->GetColorTextureSignature()),
+				BlockPosition,
+				BlockWidth,
+				BlockHeight
+			);
+		}
 	}
 }

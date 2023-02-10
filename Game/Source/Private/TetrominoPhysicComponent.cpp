@@ -77,10 +77,7 @@ bool TetrominoPhysicComponent::IsCollision()
 	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
 	Tetromino* TetrominoObject = reinterpret_cast<Tetromino*>(GetGameObject());
 
-	const std::array<BlockComponent*, 4>& TetrominoBlocks = TetrominoObject->GetBlocks();
-
-	return IsCollisionBlocks(BoardObject->GetWallBlocks(), TetrominoBlocks) 
-		|| IsCollisionBlocks(BoardObject->GetBlocks(), TetrominoBlocks);
+	return IsCollisionBlocks(BoardObject->GetBlocks(), TetrominoObject->GetBlocks());
 }
 
 void TetrominoPhysicComponent::Move(
@@ -141,7 +138,7 @@ void TetrominoPhysicComponent::Move(
 	}
 }
 
-bool TetrominoPhysicComponent::IsCollisionBlocks(const std::list<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks)
+bool TetrominoPhysicComponent::IsCollisionBlocks(const std::vector<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks)
 {
 	for (const auto& LhsBlock : LhsBlocks)
 	{
