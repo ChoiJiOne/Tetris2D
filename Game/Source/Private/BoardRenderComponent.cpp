@@ -16,14 +16,11 @@ BoardRenderComponent::~BoardRenderComponent()
 
 void BoardRenderComponent::Tick()
 {
-	const std::list<BlockComponent*>& WallBlocks = reinterpret_cast<Board*>(GetGameObject())->GetWallBlocks();
-	const std::list<BlockComponent*>& Blocks = reinterpret_cast<Board*>(GetGameObject())->GetBlocks();
-
-	RenderBlocks(WallBlocks);
+	const std::vector<BlockComponent*>& Blocks = reinterpret_cast<Board*>(GetGameObject())->GetBlocks();
 	RenderBlocks(Blocks);
 }
 
-void BoardRenderComponent::RenderBlocks(const std::list<BlockComponent*>& Blocks)
+void BoardRenderComponent::RenderBlocks(const std::vector<BlockComponent*>& Blocks)
 {
 	Vec2f Position;
 	float Width = 0.0f, Height = 0.0f;
@@ -34,11 +31,14 @@ void BoardRenderComponent::RenderBlocks(const std::list<BlockComponent*>& Blocks
 		Width = Block->GetWidth();
 		Height = Block->GetHeight();
 
-		GraphicsManager::Get().DrawTexture2D(
-			ContentManager::Get().GetTexture2D(Block->GetTypeTextureSignature()),
-			Position,
-			Width,
-			Height
-		);
+		if (Block->GetState() == BlockComponent::EState::FILL && Block->GetColor() != BlockComponent::EColor::NONE)
+		{
+			GraphicsManager::Get().DrawTexture2D(
+				ContentManager::Get().GetTexture2D(Block->GetColorTextureSignature()),
+				Position,
+				Width,
+				Height
+			);
+		}
 	}
 }

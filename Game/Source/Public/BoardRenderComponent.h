@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 
 #include "GraphicsComponent.h"
 
@@ -45,5 +45,5 @@ private:
 	 * 
 	 * @param Blocks 화면에 그릴 블럭들입니다.
 	 */
-	void RenderBlocks(const std::list<BlockComponent*>& Blocks);
+	void RenderBlocks(const std::vector<BlockComponent*>& Blocks);
 };

@@ -18,11 +18,12 @@ Board::Board(
     BlockSide_(Side),
     RowBlockCount_(RowBlockCount),
     ColBlockCount_(ColBlockCount),
-    ClearStep_(ClearStep)
+    ClearStep_(ClearStep),
+	Blocks_(RowBlockCount_ * ColBlockCount)
 {
 	AddComponent<BoardRenderComponent>("Renderer");
 
-	CreateBoardWall();
+	CreateBoardBlocks();
 }
 
 Board::~Board()
@@ -38,24 +39,19 @@ void Board::Tick(float DeltaSeconds)
 		if (AccrueFrameTime_ >= ClearStep_)
 		{
 			AccrueFrameTime_ = 0.0f;
-			SortBlocks();
 
-			State_ = EState::WAIT;
+			int32_t RemoveLine = FindRemoveRowLine();
 
-			
-			
-			//int32_t RemoveLine = HaveRemoveLine();
-
-			//if (RemoveLine == -1)
-			//{
-			//	CleanupEmptyRowLine();
-			//	State_ = EState::WAIT;
-			//}
-			//else
-			//{
-			//	RemoveRowLine(RemoveLine);
-			//	RemoveLine_++;
-			//}
+			if (RemoveLine == -1)
+			{
+				CleanupEmptyRowLine();
+				State_ = EState::WAIT;
+			}
+			else
+			{
+				RemoveRowLine(RemoveLine);
+				CountOfRemoveLine_++;
+			}
 		}
 	}
 
@@ -66,19 +62,22 @@ void Board::AddBlocks(const std::array<BlockComponent*, 4>& Blocks)
 {
 	for (const auto& Block : Blocks)
 	{
-		Blocks_.push_back(
-			AddComponent<BlockComponent>(
-				GetBlockKey(Block), 
-				Block->GetCenter(), Block->GetWidth(), Block->GetType()
-			)
-		);
+		ColRow BoardColRow = CalculateColRowFromBlock(LTPosition_, Block, BlockSide_);
+
+		int32_t Offset = GetOffset(BoardColRow.first, BoardColRow.second, ColBlockCount_, RowBlockCount_);
+
+		Blocks_[Offset]->SetState(Block->GetState());
+		Blocks_[Offset]->SetColor(Block->GetColor());
 	}
 }
 
-void Board::CreateBoardWall()
+void Board::CreateBoardBlocks()
 {
 	int32_t CountOfWall = 0;
 	Vec2f BlockPosition;
+
+	BlockComponent::EState State;
+	BlockComponent::EColor Color;
 
 	for (int32_t Row = 0; Row < RowBlockCount_; ++Row)
 	{
@@ -86,77 +85,153 @@ void Board::CreateBoardWall()
 		{
 			if (Row == 0 || Row == RowBlockCount_ - 1 || Col == 0 || Col == ColBlockCount_ - 1)
 			{
-				BlockPosition = Vec2f(
-					LTPosition_.x + static_cast<float>(Col) * BlockSide_,
-					LTPosition_.y - static_cast<float>(Row) * BlockSide_
-				);
-
-				WallBlocks_.push_back(
-					AddComponent<BlockComponent>(
-						Format("WALL%d", CountOfWall++),
-						BlockPosition, BlockSide_, BlockComponent::EType::GRAY
-					)
-				);
+				State = BlockComponent::EState::FILL;
+				Color = BlockComponent::EColor::GRAY;
 			}
+			else
+			{
+				State = BlockComponent::EState::EMPTY;
+				Color = BlockComponent::EColor::NONE;
+			}
+
+			int32_t Offset = GetOffset(Col, Row, ColBlockCount_, RowBlockCount_);
+
+			Blocks_[Offset] = AddComponent<BlockComponent>(
+				Format("BOARD:%d", CountOfWall++), 
+				CalculateBlockPositionFromColRow(LTPosition_, ColRow(Col, Row), BlockSide_),
+				BlockSide_,
+				Color, 
+				State
+			);
 		}
 	}
 }
 
-std::string Board::GetBlockKey(const BlockComponent* Block)
+bool Board::IsFullRowLine(const int32_t& RowLine)
 {
-	Vec2f BlockPosition = Block->GetCenter();
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		int32_t Offset = GetOffset(Col, RowLine, ColBlockCount_, RowBlockCount_);
 
-	int32_t Col = static_cast<int32_t>((BlockPosition.x - LTPosition_.x) / BlockSide_);
-	int32_t Row = static_cast<int32_t>((LTPosition_.y - BlockPosition.y) / BlockSide_);
-
-	return Format("%d:%d", Row, Col);
-}
-
-void Board::SortBlocks()
-{
-	auto BlockCompareFunc = [](BlockComponent* LhsBlock, BlockComponent* RhsBlock) {
-		Vec2f LhsBlockPosition = LhsBlock->GetCenter();
-		Vec2f RhsBlockPosition = RhsBlock->GetCenter();
-
-		if (LhsBlockPosition.y > RhsBlockPosition.y)
-		{
-			return true;
-		}
-		else if (LhsBlockPosition.y == RhsBlockPosition.y)
-		{
-			if (LhsBlockPosition.x < RhsBlockPosition.x)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
+		if (Blocks_[Offset]->GetState() != BlockComponent::EState::FILL)
 		{
 			return false;
 		}
-	};
+	}
 
-	Blocks_.sort(BlockCompareFunc);
+	return true;
 }
 
-std::vector<Vec2f> Board::GetRemoveLinePositions()
+bool Board::IsEmptyRowLine(const int32_t& RowLine)
 {
-	std::vector<Vec2f> RemoveLinePositions;
-	//Vec2f StartPosition = LTPosition_ + Vec2f(BlockSide_, BlockSide_);
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		int32_t Offset = GetOffset(Col, RowLine, ColBlockCount_, RowBlockCount_);
 
-	//auto Iter = Blocks_.begin();
+		if (Blocks_[Offset]->GetState() != BlockComponent::EState::EMPTY)
+		{
+			return false;
+		}
+	}
 
-	//while (StartPosition.y <= LTPosition_.y + (static_cast<float>(RowBlockCount_ - 2) * BlockSide_))
-	//{
-	//	StartPosition.y += BlockSide_;
-	//}
+	return true;
+}
 
-	//IsExistComponent()
+void Board::RemoveRowLine(const int32_t& RowLine)
+{
+	for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+	{
+		int32_t Offset = GetOffset(Col, RowLine, ColBlockCount_, RowBlockCount_);
 
+		Blocks_[Offset]->SetState(BlockComponent::EState::EMPTY);
+		Blocks_[Offset]->SetColor(BlockComponent::EColor::NONE);
+	}
+}
 
+int32_t Board::FindRemoveRowLine()
+{
+	for (int32_t Row = RowBlockCount_ - 2; Row >= 1; --Row)
+	{
+		if (IsFullRowLine(Row))
+		{
+			return Row;
+		}
+	}
 
-	//return RemoveLinePositions;
+	return -1;
+}
+
+void Board::CleanupEmptyRowLine()
+{
+	std::vector<int32_t> ExistRowLines;
+
+	for (int32_t Row = RowBlockCount_ - 2; Row >= 1; --Row)
+	{
+		if (!IsEmptyRowLine(Row))
+		{
+			ExistRowLines.push_back(Row);
+		}
+	}
+
+	if (ExistRowLines.empty()) return;
+	
+	std::vector<BlockState> BloardBlocks = GetCopyBoardBlocks();
+	CleanupAllRowLine();
+
+	int32_t CurrentRowLine = RowBlockCount_ - 2;
+	for (auto ExistRowLine : ExistRowLines)
+	{
+		for (int32_t Col = 1; Col < ColBlockCount_ - 1; ++Col)
+		{
+			int32_t FromOffset = GetOffset(Col, ExistRowLine, ColBlockCount_, RowBlockCount_);
+			int32_t ToOffset = GetOffset(Col, CurrentRowLine, ColBlockCount_, RowBlockCount_);
+
+			Blocks_[ToOffset]->SetState(BloardBlocks[FromOffset].first);
+			Blocks_[ToOffset]->SetColor(BloardBlocks[FromOffset].second);
+		}
+
+		CurrentRowLine--;
+	}
+}
+
+void Board::CleanupAllRowLine()
+{
+	for (int32_t Row = 1; Row < RowBlockCount_ - 1; ++Row)
+	{
+		RemoveRowLine(Row);
+	}
+}
+
+std::vector<Board::BlockState> Board::GetCopyBoardBlocks()
+{
+	std::vector<BlockState> BloardBlocks(RowBlockCount_ * ColBlockCount_);
+
+	for (int32_t Row = 0; Row < RowBlockCount_; ++Row)
+	{
+		for (int32_t Col = 0; Col < ColBlockCount_; ++Col)
+		{
+			int32_t Offset = GetOffset(Col, Row, ColBlockCount_, RowBlockCount_);
+			BloardBlocks[Offset] = BlockState(Blocks_[Offset]->GetState(), Blocks_[Offset]->GetColor());
+		}
+	}
+
+	return BloardBlocks;
+}
+
+Vec2f Board::CalculateBlockPositionFromColRow(const Vec2f& LTPosition, const ColRow& BlockColRow, const float& Side) const
+{
+	return Vec2f(
+		LTPosition.x + static_cast<float>(BlockColRow.first) * Side,
+		LTPosition.y - static_cast<float>(BlockColRow.second) * Side
+	);
+}
+
+Board::ColRow Board::CalculateColRowFromBlock(const Vec2f& LTPosition, const BlockComponent* Block, const float& Side) const
+{
+	Vec2f BlockPosition = Block->GetCenter();
+
+	return ColRow(
+		static_cast<int32_t>((BlockPosition.x - LTPosition.x) / Side),
+		static_cast<int32_t>((LTPosition.y - BlockPosition.y) / Side)
+	);
 }
