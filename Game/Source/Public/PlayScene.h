@@ -16,6 +16,21 @@ class PlayScene : public Scene
 {
 public:
 	/**
+	 * @brief 유저의 레벨입니다.
+	 */
+	enum class ELevel : int32_t
+	{
+		LEVEL1 = 1,
+		LEVEL2 = 2,
+		LEVEL3 = 3,
+		LEVEL4 = 4,
+		LEVEL5 = 5,
+		LEVEL6 = 6
+	};
+
+
+public:
+	/**
 	 * @brief 테트리스 게임의 플레이 씬의 생성자입니다.
 	 */
 	PlayScene();
@@ -80,9 +95,15 @@ private:
 
 
 	/**
-	 * @brief 게임 플레이 중 사용할 오브젝트입니다.
+	 * @brief 테트리스의 보드입니다.
 	 */
-	std::list<GameObject*> PlayObjects_;
+	GameObject* BoardObject_ = nullptr;
+
+
+	/**
+	 * @brief 테트로미노 오브젝트입니다.
+	 */
+	std::list<GameObject*> TetrominoObjects_;
 
 
 	/**
@@ -104,9 +125,15 @@ private:
 
 
 	/**
-	 * @brief 보드의 정리 속도입니다.
+	 * @brief 보드의 업데이트 속도입니다.
 	 */
-	float BoardClearStep_ = 1.0f;
+	float BoardUpdateStep_ = 1.0f;
+
+
+	/**
+	 * @brief 테트로미노의 업데이트 속도입니다.
+	 */
+	float TetrominoUpdateStep_ = 1.0f;
 
 
 	/**

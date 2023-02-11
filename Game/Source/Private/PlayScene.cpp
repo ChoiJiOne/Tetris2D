@@ -42,27 +42,33 @@ void PlayScene::Update(float DeltaSeconds)
 			BasicObject->Tick(DeltaSeconds);
 		}
 
-		for (auto& PlayObject : PlayObjects_)
+		for (auto& TetrominoObject : TetrominoObjects_)
 		{
-			PlayObject->Tick(DeltaSeconds);
+			TetrominoObject->Tick(DeltaSeconds);
 		}
 
-		Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
+		BoardObject_->Tick(DeltaSeconds);
+
+		Board* BoardObject = reinterpret_cast<Board*>(BoardObject_);
 		Tetromino* TetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
 
 		if (BoardObject->GetState() == Board::EState::WAIT && TetrominoObject->GetState() == Tetromino::EState::DONE)
 		{
-			PlayObjects_.remove(TetrominoObject);
+			TetrominoObjects_.remove(TetrominoObject);
 			WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
 
-			PlayObjects_.push_back(WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f));
+			TetrominoObjects_.push_back(WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f));
 
-			if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_))
+			if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
 			{
+				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::DONE);
 				GameOverEvent_();
 			}
-
-			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+			else
+			{
+				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->Teleport(StartPosition_);
+				WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
+			}
 		}
 	}
 	else
@@ -81,7 +87,7 @@ void PlayScene::Reset()
 	reinterpret_cast<Background*>(BasicObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(BasicObjects_[0])->PlayAudio();
 
-	PlayObjects_.clear();
+	TetrominoObjects_.clear();
 	if (WorldManager::Get().IsRegisterObject("BOARD::PlayScene"))
 	{
 		WorldManager::Get().UnregisterObject("BOARD::PlayScene");
@@ -98,10 +104,11 @@ void PlayScene::Reset()
 		CountOfTetromino_ = 0;
 	}
 
-	PlayObjects_ = {
-		WorldManager::Get().CreateGameObject<Board>("BOARD::PlayScene", BoardPosition_, 22, 12, 30.0f, BoardClearStep_),
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_, 30.0f, 1.0f),
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f),
+	BoardObject_ = WorldManager::Get().CreateGameObject<Board>("BOARD::PlayScene", BoardPosition_, 22, 12, 30.0f, BoardUpdateStep_);
+
+	TetrominoObjects_ = {
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_, 30.0f, TetrominoUpdateStep_),
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, TetrominoUpdateStep_),
 	};
 
 	WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
