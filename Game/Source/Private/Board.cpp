@@ -14,12 +14,13 @@ Board::Board(
 	const int32_t& RowBlockCount, 
 	const int32_t& ColBlockCount, 
 	const float& Side, 
-	const float& UpdateStep
+	const float& UpdateStep,
+	const int32_t& LevelUpCondition
 ) : GameObject(Signature),
 	Blocks_(RowBlockCount * ColBlockCount)
 {
 	AddComponent<BoardRenderComponent>("Renderer");
-	AddComponent<BoardPhysicComponent>("Physic", LTPosition, RowBlockCount, ColBlockCount, Side, UpdateStep);
+	AddComponent<BoardPhysicComponent>("Physic", LTPosition, RowBlockCount, ColBlockCount, Side, LevelUpCondition);
 	AddComponent<GameAudioComponent>("LevelUp", "LevelUp", false);
 	AddComponent<GameAudioComponent>("RemoveLine", "RemoveLine", false);
 }

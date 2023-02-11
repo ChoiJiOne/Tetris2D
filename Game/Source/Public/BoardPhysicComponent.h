@@ -27,6 +27,12 @@ public:
 	 * @brief 보드의 물리 처리 컴포넌트 생성자입니다.
 	 * 
 	 * @param Object 이 컴포넌트를 소유하는 오브젝트의 포인터 값입니다.
+	 * @param LTPosition 보드의 왼쪽 상단 좌표입니다.
+	 * @param RowBlockCount 보드의 세로 블럭 수입니다.
+	 * @param ColBlockCount 보드의 가로 블럭 수입니다.
+	 * @param Side 보드 내의 블럭 크기입니다.
+	 * @param UpdateStep 보드의 업데이트 시간입니다.
+	 * @param LevelUpCondition 레벨업을 수행할 조건입니다.
 	 */
 	BoardPhysicComponent(
 		GameObject* Object,
@@ -34,7 +40,8 @@ public:
 		const int32_t& RowBlockCount,
 		const int32_t& ColBlockCount,
 		const float& Side,
-		const float& UpdateStep
+		const float& UpdateStep,
+		const int32_t& LevelUpCondition
 	);
 
 
@@ -235,6 +242,12 @@ private:
 	 * @brief 보드의 삭제한 라인 수입니다.
 	 */
 	int32_t CountOfRemoveLine_ = 0;
+
+
+	/**
+	 * @brief 레벨업 조건입니다.
+	 */
+	int32_t LevelUpCondition_ = 0;
 
 
 	/**

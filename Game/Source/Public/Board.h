@@ -34,6 +34,7 @@ public:
 	 * @param ColBlockCount 보드의 가로 블럭 수입니다.
 	 * @param Side 보드 내의 블럭 크기입니다.
 	 * @param UpdateStep 보드의 업데이트 시간입니다.
+	 * @param LevelUpCondition 레벨업 조건입니다.
 	 */
 	Board(
 		const std::string& Signature,
@@ -41,7 +42,8 @@ public:
 		const int32_t& RowBlockCount,
 		const int32_t& ColBlockCount,
 		const float& Side,
-		const float& UpdateStep
+		const float& UpdateStep,
+		const int32_t& LevelUpCondition
 	);
 
 
@@ -120,7 +122,7 @@ public:
 	/**
 	 * @brief 보드의 업데이트 시간을 설정합니다.
 	 * 
-	 * @param UpdateStep 설정할 업데이트 시간입니다.
+	 * @param UpdateStep 설정할 보드의 업데이트 시간입니다.
 	 */
 	void SetUpdateStep(const float& UpdateStep);
 

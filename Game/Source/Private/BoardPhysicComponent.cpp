@@ -1,6 +1,7 @@
 #include "BoardPhysicComponent.h"
 #include "Board.h"
 #include "GameAudioComponent.h"
+#include "Tetromino.h"
 
 BoardPhysicComponent::BoardPhysicComponent(
 	GameObject* Object,
@@ -8,13 +9,15 @@ BoardPhysicComponent::BoardPhysicComponent(
 	const int32_t& RowBlockCount,
 	const int32_t& ColBlockCount,
 	const float& Side,
-	const float& UpdateStep
+	const float& UpdateStep,
+	const int32_t& LevelUpCondition
 ) : PhysicComponent(Object),
     LTPosition_(LTPosition),
     BlockSide_(Side),
     RowBlockCount_(RowBlockCount),
     ColBlockCount_(ColBlockCount),
-    UpdateStep_(UpdateStep)
+	UpdateStep_(UpdateStep),
+	LevelUpCondition_(LevelUpCondition)
 {
 	Board* BoardObject = reinterpret_cast<Board*>(GetGameObject());
 	CreateBoardBlocks(BoardObject->GetBlocks());
@@ -52,7 +55,7 @@ void BoardPhysicComponent::Tick(float DeltaSeconds)
 		}
 	}
 
-	if (LevelRemoveLine_ >= 10)
+	if (LevelRemoveLine_ >= LevelUpCondition_)
 	{
 		LevelRemoveLine_ = 0;
 		GetGameObject()->GetComponent<GameAudioComponent>("LevelUp")->Play();
