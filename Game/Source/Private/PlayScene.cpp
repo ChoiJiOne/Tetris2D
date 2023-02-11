@@ -16,6 +16,7 @@ PlayScene::PlayScene()
 	StartPosition_ = Vec2f(-60.0f, 300.0f);
 	WaitPosition_ = Vec2f(230.0f, 300.0f);
 
+	LevelUpCondition_ = 30;
 	MappingLevelUpdateSteps_ = {
 		{ ELevel::LEVEL1, 1.0f },
 		{ ELevel::LEVEL2, 0.8f },
@@ -87,9 +88,6 @@ void PlayScene::Reset()
 	PlayTime_ = 0.0f;
 	Level_ = ELevel::LEVEL1;
 
-	BoardUpdateStep_ = MappingLevelUpdateSteps_[Level_];
-	TetrominoUpdateStep_ = MappingLevelUpdateSteps_[Level_];
-
 	reinterpret_cast<Background*>(BasicObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(BasicObjects_[0])->PlayAudio();
 
@@ -110,11 +108,11 @@ void PlayScene::Reset()
 		CountOfTetromino_ = 0;
 	}
 
-	BoardObject_ = WorldManager::Get().CreateGameObject<Board>("BOARD::PlayScene", BoardPosition_, 22, 12, 30.0f, BoardUpdateStep_);
+	BoardObject_ = WorldManager::Get().CreateGameObject<Board>("BOARD::PlayScene", BoardPosition_, 22, 12, 30.0f, MappingLevelUpdateSteps_[Level_], LevelUpCondition_);
 
 	TetrominoObjects_ = {
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_, 30.0f, TetrominoUpdateStep_),
-		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, TetrominoUpdateStep_),
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), StartPosition_, 30.0f, MappingLevelUpdateSteps_[Level_]),
+		WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, MappingLevelUpdateSteps_[Level_]),
 	};
 
 	WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
@@ -268,7 +266,7 @@ void PlayScene::UpdateNextTetromino()
 		TetrominoObjects_.remove(TetrominoObject);
 		WorldManager::Get().UnregisterObject(std::to_string(CurrentTetromino_++));
 
-		TetrominoObjects_.push_back(WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, 1.0f));
+		TetrominoObjects_.push_back(WorldManager::Get().CreateGameObject<Tetromino>(std::to_string(CountOfTetromino_++), WaitPosition_, 30.0f, MappingLevelUpdateSteps_[Level_]));
 
 		if (!WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->CanTeleport(StartPosition_))
 		{
@@ -289,7 +287,31 @@ void PlayScene::UpdateUserInfo()
 	Label* LineLavel = reinterpret_cast<Label*>(UserInfoObjects_[1]);
 	Label* LevelLavel = reinterpret_cast<Label*>(UserInfoObjects_[2]);
 
+	Tetromino* TetrominoObject = WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_));
+	Board* BoardObject = reinterpret_cast<Board*>(BoardObject_);
+
+	if (BoardObject->GetLevelRemoveLine() >= LevelUpCondition_)
+	{
+		BoardObject->ResetLevelRemoveLine();
+		LevelUp();
+
+		TetrominoObject->SetUpdateStep(MappingLevelUpdateSteps_[Level_]);
+		BoardObject->SetUpdateStep(MappingLevelUpdateSteps_[Level_]);
+	}
+
 	TimeLavel->SetText(Format(L"%6s%3d", L"TIME:", static_cast<int32_t>(PlayTime_)));
-	LineLavel->SetText(Format(L"%6s%3d", L"LINE:", reinterpret_cast<Board*>(BoardObject_)->GetRemoveLine()));
+	LineLavel->SetText(Format(L"%6s%3d", L"LINE:", BoardObject->GetRemoveLine()));
 	LevelLavel->SetText(Format(L"%6s%3d", L"LEVEL:", static_cast<int32_t>(Level_)));
+}
+
+void PlayScene::LevelUp()
+{
+	int32_t CurrentLevel = static_cast<int32_t>(Level_) + 1;
+
+	if (CurrentLevel > static_cast<int32_t>(ELevel::LEVEL6))
+	{
+		CurrentLevel = static_cast<int32_t>(ELevel::LEVEL6);
+	}
+
+	Level_ = static_cast<ELevel>(CurrentLevel);
 }

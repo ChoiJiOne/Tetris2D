@@ -16,7 +16,7 @@ class PlayScene : public Scene
 {
 public:
 	/**
-	 * @brief 유저의 레벨입니다.
+	 * @brief 플레이어의 레벨입니다.
 	 * 
 	 * @note
 	 * LEVEL1 => 업데이트 속도 1.0초
@@ -107,6 +107,12 @@ private:
 	void UpdateUserInfo();
 
 
+	/**
+	 * @brief 유저의 레벨을 증가시킵니다.
+	 */
+	void LevelUp();
+
+
 private:
 	/**
 	 * @brief 게임 플레이 씬의 기본 오브젝트입니다.
@@ -157,18 +163,6 @@ private:
 
 
 	/**
-	 * @brief 보드의 업데이트 속도입니다.
-	 */
-	float BoardUpdateStep_ = 1.0f;
-
-
-	/**
-	 * @brief 테트로미노의 업데이트 속도입니다.
-	 */
-	float TetrominoUpdateStep_ = 1.0f;
-
-
-	/**
 	 * @brief 현재 테트로미노입니다.
 	 */
 	int32_t CurrentTetromino_ = 0;
@@ -187,19 +181,25 @@ private:
 
 
 	/**
-	 * @brief 유저의 레벨입니다.
-	 */
-	ELevel Level_ = ELevel::LEVEL1;
-
-
-	/**
 	 * @brief 유저의 플레이 시간입니다.
 	 */
 	float PlayTime_ = 0.0f;
 
 
 	/**
-	 * @brief 레벨에 대응하는 업데이트 시간입니다.
+	 * @brief 유저의 레벨입니다.
+	 */
+	ELevel Level_ = ELevel::LEVEL1;
+
+
+	/**
+	 * @brief 유저의 레벨업 조건입니다.
+	 */
+	int32_t LevelUpCondition_ = 0;
+
+
+	/**
+	 * @brief 레벨 당 업데이트 해야 할 시간입니다.
 	 */
 	std::unordered_map<ELevel, float> MappingLevelUpdateSteps_;
 
