@@ -2,9 +2,11 @@
 #include "Background.h"
 #include "Board.h"
 #include "Button.h"
+#include "ContentManager.h"
 #include "GameObject.h"
 #include "Label.h"
 #include "InputManager.h"
+#include "Sound.h"
 #include "Tetromino.h"
 #include "WorldManager.h"
 
@@ -36,6 +38,7 @@ PlayScene::PlayScene()
 
 	ConstructBasicObjects();
 	ConstructPauseObjects();
+	ConstructUserInfoObjects();
 }
 
 PlayScene::~PlayScene()
@@ -46,6 +49,8 @@ void PlayScene::Update(float DeltaSeconds)
 {
 	if (bIsPlaying_)
 	{
+		PlayTime_ += DeltaSeconds;
+
 		for (auto& BasicObject : BasicObjects_)
 		{
 			BasicObject->Tick(DeltaSeconds);
@@ -57,8 +62,14 @@ void PlayScene::Update(float DeltaSeconds)
 		}
 
 		BoardObject_->Tick(DeltaSeconds);
+		
+		for (auto& UserInfoObject : UserInfoObjects_)
+		{
+			UserInfoObject->Tick(DeltaSeconds);
+		}
 
 		UpdateNextTetromino();
+		UpdateUserInfo();
 	}
 	else
 	{
@@ -73,8 +84,11 @@ void PlayScene::Reset()
 {
 	bIsPlaying_ = true;
 
-	BoardUpdateStep_ = MappingLevelUpdateSteps_[ELevel::LEVEL1];
-	TetrominoUpdateStep_ = MappingLevelUpdateSteps_[ELevel::LEVEL1];
+	PlayTime_ = 0.0f;
+	Level_ = ELevel::LEVEL1;
+
+	BoardUpdateStep_ = MappingLevelUpdateSteps_[Level_];
+	TetrominoUpdateStep_ = MappingLevelUpdateSteps_[Level_];
 
 	reinterpret_cast<Background*>(BasicObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(BasicObjects_[0])->PlayAudio();
@@ -233,6 +247,17 @@ void PlayScene::ConstructPauseObjects()
 	};
 }
 
+void PlayScene::ConstructUserInfoObjects()
+{
+	WorldManager& GWorld = WorldManager::Get();
+
+	UserInfoObjects_ = {
+		GWorld.CreateGameObject<Label>("TIME::PlayScene",  L"", "Font32", Vec2f(250.0f,  30.0f), MAGENTA),
+		GWorld.CreateGameObject<Label>("LINE::PlayScene",  L"", "Font32", Vec2f(250.0f, -10.0f), MAGENTA),
+		GWorld.CreateGameObject<Label>("LEVEL::PlayScene", L"", "Font32", Vec2f(250.0f, -50.0f), MAGENTA),
+	};
+}
+
 void PlayScene::UpdateNextTetromino()
 {
 	Board* BoardObject = reinterpret_cast<Board*>(BoardObject_);
@@ -256,4 +281,15 @@ void PlayScene::UpdateNextTetromino()
 			WorldManager::Get().GetGameObject<Tetromino>(std::to_string(CurrentTetromino_))->SetState(Tetromino::EState::ACTIVE);
 		}
 	}
+}
+
+void PlayScene::UpdateUserInfo()
+{
+	Label* TimeLavel = reinterpret_cast<Label*>(UserInfoObjects_[0]);
+	Label* LineLavel = reinterpret_cast<Label*>(UserInfoObjects_[1]);
+	Label* LevelLavel = reinterpret_cast<Label*>(UserInfoObjects_[2]);
+
+	TimeLavel->SetText(Format(L"%6s%3d", L"TIME:", static_cast<int32_t>(PlayTime_)));
+	LineLavel->SetText(Format(L"%6s%3d", L"LINE:", reinterpret_cast<Board*>(BoardObject_)->GetRemoveLine()));
+	LevelLavel->SetText(Format(L"%6s%3d", L"LEVEL:", static_cast<int32_t>(Level_)));
 }

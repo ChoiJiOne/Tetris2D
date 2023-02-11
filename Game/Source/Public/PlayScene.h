@@ -28,12 +28,12 @@ public:
 	 */
 	enum class ELevel : int32_t
 	{
-		LEVEL1 = 0,
-		LEVEL2 = 1,
-		LEVEL3 = 2,
-		LEVEL4 = 3,
-		LEVEL5 = 4,
-		LEVEL6 = 5
+		LEVEL1 = 1,
+		LEVEL2 = 2,
+		LEVEL3 = 3,
+		LEVEL4 = 4,
+		LEVEL5 = 5,
+		LEVEL6 = 6
 	};
 
 
@@ -90,9 +90,21 @@ private:
 
 
 	/**
+	 * @brief 유저의 플레이 정보를 표시할 오브젝트를 구성합니다.
+	 */
+	void ConstructUserInfoObjects();
+
+
+	/**
 	 * @brief 다음 테트로미노를 업데이트합니다.
 	 */
 	void UpdateNextTetromino();
+
+
+	/**
+	 * @brief 유저의 정보를 업데이트합니다.
+	 */
+	void UpdateUserInfo();
 
 
 private:
@@ -106,6 +118,12 @@ private:
 	 * @brief 게임 중지 시 표시할 오브젝트입니다.
 	 */
 	std::array<GameObject*, 5> PauseObjects_;
+
+
+	/**
+	 * @brief 유저의 플레이 정보를 표시할 오브젝트입니다.
+	 */
+	std::array<GameObject*, 3> UserInfoObjects_;
 
 
 	/**
@@ -166,6 +184,18 @@ private:
 	 * @brief 게임이 플레이 중인지 확인합니다.
 	 */
 	bool bIsPlaying_ = true;
+
+
+	/**
+	 * @brief 유저의 레벨입니다.
+	 */
+	ELevel Level_ = ELevel::LEVEL1;
+
+
+	/**
+	 * @brief 유저의 플레이 시간입니다.
+	 */
+	float PlayTime_ = 0.0f;
 
 
 	/**
