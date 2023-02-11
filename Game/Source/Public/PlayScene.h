@@ -89,6 +89,12 @@ private:
 	void ConstructPauseObjects();
 
 
+	/**
+	 * @brief 다음 테트로미노를 업데이트합니다.
+	 */
+	void UpdateNextTetromino();
+
+
 private:
 	/**
 	 * @brief 게임 플레이 씬의 기본 오브젝트입니다.
