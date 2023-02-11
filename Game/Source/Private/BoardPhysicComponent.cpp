@@ -57,7 +57,6 @@ void BoardPhysicComponent::Tick(float DeltaSeconds)
 
 	if (LevelRemoveLine_ >= LevelUpCondition_)
 	{
-		LevelRemoveLine_ = 0;
 		GetGameObject()->GetComponent<GameAudioComponent>("LevelUp")->Play();
 	}
 }

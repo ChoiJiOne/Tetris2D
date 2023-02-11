@@ -90,6 +90,20 @@ public:
 
 
 	/**
+	 * @brief 레벨업에 필요한 라인 수를 얻습니다.
+	 * 
+	 * @return 레벨업에 필요한 라인 수를 반환합니다.
+	 */
+	int32_t GetLevelRemoveLine() const { return LevelRemoveLine_; }
+
+
+	/**
+	 * @brief 레벨업에 필요한 라인 수를 초기화합니다.
+	 */
+	void ResetLevelRemoveLine() { LevelRemoveLine_ = 0; }
+
+
+	/**
 	 * @brief 보드의 블럭을 추가합니다.
 	 * 
 	 * @param BoardBlocks 보드의 블럭들입니다.

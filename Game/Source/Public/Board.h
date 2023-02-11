@@ -120,6 +120,20 @@ public:
 
 
 	/**
+	 * @brief 레벨업에 필요한 라인 수를 얻습니다.
+	 *
+	 * @return 레벨업에 필요한 라인 수를 반환합니다.
+	 */
+	int32_t GetLevelRemoveLine();
+
+
+	/**
+	 * @brief 레벨업에 필요한 라인 수를 초기화합니다.
+	 */
+	void ResetLevelRemoveLine();
+
+
+	/**
 	 * @brief 보드의 업데이트 시간을 설정합니다.
 	 * 
 	 * @param UpdateStep 설정할 보드의 업데이트 시간입니다.

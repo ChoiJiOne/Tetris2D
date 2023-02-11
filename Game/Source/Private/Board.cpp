@@ -20,7 +20,7 @@ Board::Board(
 	Blocks_(RowBlockCount * ColBlockCount)
 {
 	AddComponent<BoardRenderComponent>("Renderer");
-	AddComponent<BoardPhysicComponent>("Physic", LTPosition, RowBlockCount, ColBlockCount, Side, LevelUpCondition);
+	AddComponent<BoardPhysicComponent>("Physic", LTPosition, RowBlockCount, ColBlockCount, Side, UpdateStep, LevelUpCondition);
 	AddComponent<GameAudioComponent>("LevelUp", "LevelUp", false);
 	AddComponent<GameAudioComponent>("RemoveLine", "RemoveLine", false);
 }
@@ -47,6 +47,16 @@ void Board::AddBlocks(const std::array<BlockComponent*, 4>& NewBlocks)
 int32_t Board::GetRemoveLine()
 {
 	return GetComponent<BoardPhysicComponent>("Physic")->GetRemoveLine();
+}
+
+int32_t Board::GetLevelRemoveLine()
+{
+	return GetComponent<BoardPhysicComponent>("Physic")->GetLevelRemoveLine();
+}
+
+void Board::ResetLevelRemoveLine()
+{
+	GetComponent<BoardPhysicComponent>("Physic")->ResetLevelRemoveLine();
 }
 
 void Board::SetUpdateStep(const float& UpdateStep)
