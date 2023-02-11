@@ -76,6 +76,30 @@ public:
 	void EnforcePause();
 
 
+	/**
+	 * @brief 유저의 플레이 시간을 얻습니다.
+	 * 
+	 * @return 유저의 플레이 시간값을 반환합니다.
+	 */
+	float GetUserPlayTime() const { return PlayTime_; }
+	
+
+	/**
+	 * @brief 유저가 삭제한 라인 수를 얻습니다.
+	 * 
+	 * @return 유저가 삭제한 라인 수를 반환합니다.
+	 */
+	int32_t GetUserRemoveLine();
+
+
+	/**
+	 * @brief 유저의 레벨을 얻습니다.
+	 * 
+	 * @return 유저의 레벨을 반환합니다.
+	 */
+	int32_t GetUserLevel() { return static_cast<int32_t>(Level_); }
+
+
 private:
 	/**
 	 * @brief 게임 플레이 씬의 기본 오브젝트를 구성합니다.

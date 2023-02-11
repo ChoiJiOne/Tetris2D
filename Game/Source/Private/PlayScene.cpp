@@ -125,6 +125,11 @@ void PlayScene::EnforcePause()
 	if (PauseEvent_) PauseEvent_();
 }
 
+int32_t PlayScene::GetUserRemoveLine()
+{
+	return reinterpret_cast<Board*>(BoardObject_)->GetRemoveLine();
+}
+
 void PlayScene::ConstructBasicObjects()
 {
 	WorldManager& GWorld = WorldManager::Get();
