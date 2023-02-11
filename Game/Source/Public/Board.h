@@ -104,6 +104,14 @@ public:
 
 
 	/**
+	 * @brief 보드의 삭제된 라인 수를 얻습니다.
+	 * 
+	 * @return  보드의 삭제된 라인 수를 반환합니다.
+	 */
+	int32_t GetRemoveLine() const { return CountOfRemoveLine_; }
+
+
+	/**
 	 * @brief 보드의 블럭들을 추가합니다.
 	 * 
 	 * @param Blocks 추가할 블럭들입니다.
