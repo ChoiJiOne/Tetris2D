@@ -14,6 +14,15 @@ PlayScene::PlayScene()
 	StartPosition_ = Vec2f(-60.0f, 300.0f);
 	WaitPosition_ = Vec2f(230.0f, 300.0f);
 
+	MappingLevelUpdateSteps_ = {
+		{ ELevel::LEVEL1, 1.0f },
+		{ ELevel::LEVEL2, 0.8f },
+		{ ELevel::LEVEL3, 0.6f },
+		{ ELevel::LEVEL4, 0.4f },
+		{ ELevel::LEVEL5, 0.2f },
+		{ ELevel::LEVEL6, 0.1f },
+	};
+
 	PauseEvent_ = [&]() {
 		bIsPlaying_ = false;
 		reinterpret_cast<Background*>(BasicObjects_[0])->StopAudio();
@@ -83,6 +92,9 @@ void PlayScene::Update(float DeltaSeconds)
 void PlayScene::Reset()
 {
 	bIsPlaying_ = true;
+
+	BoardUpdateStep_ = MappingLevelUpdateSteps_[ELevel::LEVEL1];
+	TetrominoUpdateStep_ = MappingLevelUpdateSteps_[ELevel::LEVEL1];
 
 	reinterpret_cast<Background*>(BasicObjects_[0])->ResetAudio();
 	reinterpret_cast<Background*>(BasicObjects_[0])->PlayAudio();

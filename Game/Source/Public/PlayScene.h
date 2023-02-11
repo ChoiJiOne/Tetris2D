@@ -28,12 +28,12 @@ public:
 	 */
 	enum class ELevel : int32_t
 	{
-		LEVEL1 = 1,
-		LEVEL2 = 2,
-		LEVEL3 = 3,
-		LEVEL4 = 4,
-		LEVEL5 = 5,
-		LEVEL6 = 6
+		LEVEL1 = 0,
+		LEVEL2 = 1,
+		LEVEL3 = 2,
+		LEVEL4 = 3,
+		LEVEL5 = 4,
+		LEVEL6 = 5
 	};
 
 
@@ -160,6 +160,12 @@ private:
 	 * @brief 게임이 플레이 중인지 확인합니다.
 	 */
 	bool bIsPlaying_ = true;
+
+
+	/**
+	 * @brief 레벨에 대응하는 업데이트 시간입니다.
+	 */
+	std::unordered_map<ELevel, float> MappingLevelUpdateSteps_;
 
 
 	/**
