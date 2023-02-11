@@ -16,7 +16,7 @@ public:
 	 * @param Object 이 컴포넌트를 소유하는 오브젝트의 포인터 값입니다.
 	 * @param LTPosition 테트로미노의 왼쪽 상단 좌표입니다.
 	 * @param BlockSide 블럭의 크기입니다.
-	 * @param MoveLength 테트로미노가 한 번 움직일 떄의 거리입니다.
+	 * @param MoveLength 테트로미노가 한 번 움직일 때의 거리입니다.
 	 */
 	TetrominoPhysicComponent(
 		GameObject* Object, 
