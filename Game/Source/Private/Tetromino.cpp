@@ -65,12 +65,20 @@ void Tetromino::Tick(float DeltaSeconds)
 		GetComponent<TetrominoPhysicComponent>("Physic")->Tick();
 	}
 
-	GetComponent<TetrominoRenderComponent>("Renderer")->Tick();
+	if (State_ != EState::DONE)
+	{
+		GetComponent<TetrominoRenderComponent>("Renderer")->Tick();
+	}
 }
 
-bool Tetromino::Teleport(const Vec2f& LTPosition)
+bool Tetromino::CanTeleport(const Vec2f& LTPosition)
 {
-	return GetComponent<TetrominoPhysicComponent>("Physic")->Teleport(LTPosition);
+	return GetComponent<TetrominoPhysicComponent>("Physic")->CanTeleport(LTPosition);
+}
+
+void Tetromino::Teleport(const Vec2f& LTPosition)
+{
+	GetComponent<TetrominoPhysicComponent>("Physic")->Teleport(LTPosition);
 }
 
 void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side, const BlockComponent::EColor& Color, const EShape& Shape)

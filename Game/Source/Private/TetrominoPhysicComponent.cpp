@@ -53,25 +53,6 @@ void TetrominoPhysicComponent::Tick()
 	}
 }
 
-bool TetrominoPhysicComponent::Teleport(const Vec2f& LTPosition)
-{
-	std::array<BlockComponent*, 4>& Blocks = reinterpret_cast<Tetromino*>(GetGameObject())->GetBlocks();
-	Vec2f Center;
-
-	for (auto& Block : Blocks)
-	{
-		Center = Block->GetCenter();
-		Center -= LTPosition_;
-
-		Center += LTPosition;
-		Block->SetCenter(Center);
-	}
-
-	LTPosition_ = LTPosition;
-
-	return !IsCollision();
-}
-
 bool TetrominoPhysicComponent::IsCollision()
 {
 	Board* BoardObject = WorldManager::Get().GetGameObject<Board>("BOARD::PlayScene");
@@ -136,6 +117,35 @@ void TetrominoPhysicComponent::Move(
 		}
 		break;
 	}
+}
+
+bool TetrominoPhysicComponent::CanTeleport(const Vec2f& LTPosition)
+{
+	Vec2f OriginLTPosition = LTPosition_;
+	Vec2f TeleportPosition = LTPosition;
+
+	Teleport(TeleportPosition);
+	bool bCanTeleport = !IsCollision();
+	Teleport(OriginLTPosition);
+
+	return bCanTeleport;
+}
+
+void TetrominoPhysicComponent::Teleport(const Vec2f& TeleportPosition)
+{
+	std::array<BlockComponent*, 4>& Blocks = reinterpret_cast<Tetromino*>(GetGameObject())->GetBlocks();
+	Vec2f Center;
+
+	for (auto& Block : Blocks)
+	{
+		Center = Block->GetCenter();
+		Center -= LTPosition_;
+
+		Center += TeleportPosition;
+		Block->SetCenter(Center);
+	}
+
+	LTPosition_ = TeleportPosition;
 }
 
 bool TetrominoPhysicComponent::IsCollisionBlocks(const std::vector<BlockComponent*>& LhsBlocks, const std::array<BlockComponent*, 4>& RhsBlocks)

@@ -115,13 +115,23 @@ public:
 
 
 	/**
+	 * @brief 테트로미노를 특정 위치로 이동시킬 수 있는지 확인합니다.
+	 *
+	 * @param LTPosition 테트로미노를 이동 시킬 특정 위치입니다.
+	 *
+	 * @return 텔레포트시킨 위치에 충돌이 발생하지 않으면 true, 충돌이 발생하면 false를 반환합니다.
+	 */
+	bool CanTeleport(const Vec2f& LTPosition);
+
+
+	/**
 	 * @brief 테트로미노를 특정 위치로 이동시킵니다.
 	 * 
 	 * @param LPPosition 테트로미노를 이동 시킬 특정 위치입니다.
 	 * 
 	 * @return 텔레포트시킨 위치에 충돌이 발생하지 않으면 true, 충돌이 발생하면 false를 반환합니다. 
 	 */
-	bool Teleport(const Vec2f& LPPosition);
+	void Teleport(const Vec2f& LPPosition);
 
 
 	/**
