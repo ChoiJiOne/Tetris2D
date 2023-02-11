@@ -105,10 +105,10 @@ void Tetromino::CreateTetrominoBlocks(const Vec2f& LTPosition, const float& Side
 
 	case EShape::T:
 		Blocks_ = {
-			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
-			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
-			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
-			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 2.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("0", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 0.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("1", Vec2f(LTPosition.x + 0.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("2", Vec2f(LTPosition.x + 1.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
+			AddComponent<BlockComponent>("3", Vec2f(LTPosition.x + 2.0f * Side, LTPosition.y - 1.0f * Side), Side, Color, BlockComponent::EState::FILL),
 		};
 		break;
 
