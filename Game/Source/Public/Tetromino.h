@@ -184,7 +184,7 @@ public:
 	 * @param State 설정할 테트로미노의 상태입니다.
 	 */
 	void SetState(const EState& State) { State_ = State; }
-
+	
 
 	/**
 	 * @brief 테트로미노의 모양을 얻습니다.
