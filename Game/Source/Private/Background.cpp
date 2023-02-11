@@ -1,5 +1,5 @@
 #include "Background.h"
-#include "BackgroundAudioComponent.h"
+#include "GameAudioComponent.h"
 #include "BackgroundRenderComponent.h"
 
 Background::Background(
@@ -9,19 +9,19 @@ Background::Background(
 	bool bIsLooping
 ) : GameObject(Signature)
 {
-	AddComponent<BackgroundAudioComponent>("BackgroundAudio", AudioSignatire, bIsLooping);
+	AddComponent<GameAudioComponent>("BackgroundAudio", AudioSignatire, bIsLooping);
 	AddComponent<BackgroundRenderComponent>("BackgroundRenderer", TextureSignature);
 }
 
 void Background::Tick(float DeltaSeconds)
 {
-	GetComponent<BackgroundAudioComponent>("BackgroundAudio")->Tick();
+	GetComponent<GameAudioComponent>("BackgroundAudio")->Tick();
 	GetComponent<BackgroundRenderComponent>("BackgroundRenderer")->Tick();
 }
 
 void Background::ResetAudio()
 {
-	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	GameAudioComponent* BackgroundAudio = GetComponent<GameAudioComponent>("BackgroundAudio");
 	BackgroundAudio->Reset();
 }
 
@@ -29,7 +29,7 @@ void Background::PlayAudio()
 {
 	bIsActive_ = true;
 	
-	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	GameAudioComponent* BackgroundAudio = GetComponent<GameAudioComponent>("BackgroundAudio");
 	BackgroundAudio->Play();
 }
 
@@ -37,18 +37,18 @@ void Background::StopAudio()
 {
 	bIsActive_ = false;
 
-	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	GameAudioComponent* BackgroundAudio = GetComponent<GameAudioComponent>("BackgroundAudio");
 	BackgroundAudio->Stop();
 }
 
 void Background::Voluble()
 {
-	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	GameAudioComponent* BackgroundAudio = GetComponent<GameAudioComponent>("BackgroundAudio");
 	BackgroundAudio->SetVolume(1.0f);
 }
 
 void Background::Mute()
 {
-	BackgroundAudioComponent* BackgroundAudio = GetComponent<BackgroundAudioComponent>("BackgroundAudio");
+	GameAudioComponent* BackgroundAudio = GetComponent<GameAudioComponent>("BackgroundAudio");
 	BackgroundAudio->SetVolume(0.0f);
 }
