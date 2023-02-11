@@ -45,10 +45,42 @@ public:
 	virtual void Reset() override;
 
 
+	/**
+	 * @brief 유저의 플레이 정보를 설정합니다.
+	 * 
+	 * @param PlayTime 유저가 플레이한 시간입니다.
+	 * @param RemoveLine 유저가 삭제한 라인 수입니다.
+	 * @param Level 유저의 레벨입니다.
+	 */
+	void SetUserInfo(const float& PlayTime, const int32_t& RemoveLine, const int32_t& Level)
+	{
+		PlayTime_ = PlayTime;
+		RemoveLine_ = RemoveLine;
+		Level_ = Level;
+	}
+
+
 private:
 	/**
 	 * @brief 씬 내의 게임 오브젝트입니다.
 	 */
 	std::vector<GameObject*> SceneObjects_;
 
+
+	/**
+	 * @brief 유저의 플레이 시간입니다.
+	 */
+	float PlayTime_ = 0.0f;
+
+
+	/**
+	 * @brief 유저삭제한 라인 수입니다.
+	 */
+	int32_t RemoveLine_ = 0;
+
+
+	/**
+	 * @brief 유저의 레벨입니다.
+	 */
+	int32_t Level_ = 0;
 };
