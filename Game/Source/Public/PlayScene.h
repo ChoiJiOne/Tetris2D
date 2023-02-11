@@ -17,6 +17,14 @@ class PlayScene : public Scene
 public:
 	/**
 	 * @brief 유저의 레벨입니다.
+	 * 
+	 * @note
+	 * LEVEL1 => 업데이트 속도 1.0초
+	 * LEVEL2 => 업데이트 속도 0.8초
+	 * LEVEL3 => 업데이트 속도 0.6초
+	 * LEVEL4 => 업데이트 속도 0.4초
+	 * LEVEL5 => 업데이트 속도 0.2초
+	 * LEVEL6 => 업데이트 속도 0.1초
 	 */
 	enum class ELevel : int32_t
 	{
