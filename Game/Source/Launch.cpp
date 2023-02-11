@@ -59,6 +59,8 @@ public:
 		};
 		auto GameOverEvent = [&]() {
 			CurrentGameScene_ = GameOverScene_.get();
+
+			GameOverScene_->SetUserInfo(PlayScene_->GetUserPlayTime(), PlayScene_->GetUserRemoveLine(), PlayScene_->GetUserLevel());
 			CurrentGameScene_->Reset();
 		};
 
