@@ -64,13 +64,13 @@ public:
 	 * @param Signature 테트로미노의 식별자입니다.
 	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
 	 * @param Side 테트로미노 블럭의 크기입니다.
-	 * @param MoveStep 테트로미노가 한 번 움직일 때의 시간 입니다.
+	 * @param UpdateStep 테트로미노의 업데이트 시간 입니다.
 	 */
 	Tetromino(
 		const std::string& Signature,
 		const Vec2f& LTPosition,
 		const float& Side,
-		const float& MoveStep
+		const float& UpdateStep
 	);
 
 
@@ -81,7 +81,7 @@ public:
 	 * @param LTPosition 테트로미노의 왼쪽 상단의 좌표입니다.
 	 * @param Side 테트로미노 블럭의 크기입니다.
 	 * @param Color 테트로미노 블럭의 색상입니다.
-	 * @param MoveStep 테트로미노가 한 번 움직일 때의 시간 입니다.
+	 * @param UpdateStep 테트로미노의 업데이트 시간 입니다.
 	 * @param Shape 테트로미노의 모양입니다.
 	 */
 	Tetromino(
@@ -89,7 +89,7 @@ public:
 		const Vec2f& LTPosition,
 		const float& Side,
 		const BlockComponent::EColor& Color,
-		const float& MoveStep,
+		const float& UpdateStep,
 		const EShape& Shape
 	);
 
@@ -135,11 +135,19 @@ public:
 
 
 	/**
-	 * @brief 테트로미노가 스스로 움직이는 시간을 얻습니다.
+	 * @brief 테트로미노가 업데이트하는 시간을 얻습니다.
 	 *
-	 * @return 테트로미노가 스스로 움직이는 시간을 반환합니다.
+	 * @return 테트로미노가 업데이트하는 시간을 반환합니다.
 	 */
-	float GetMoveStep() const { return MoveStep_; }
+	float GetUpdateStep() const { return UpdateStep_; }
+
+
+	/**
+	 * @brief 테트로미노가 업데이트하는 시간을 설정합니다.
+	 * 
+	 * @param 설정할 테트로미노가 업데이트하는 시간입니다.
+	 */
+	void SetUpdateStep(const float& UpdateStep) { UpdateStep_ = UpdateStep; }
 
 
 	/**
@@ -205,9 +213,9 @@ private:
 
 private:
 	/**
-	 * @brief 테트로미노가 스스로 움직이는 시간입니다.
+	 * @brief 테트로미노가 업데이트하는 시간입니다.
 	 */
-	float MoveStep_ = 0.0f;
+	float UpdateStep_ = 0.0f;
 
 
 	/**

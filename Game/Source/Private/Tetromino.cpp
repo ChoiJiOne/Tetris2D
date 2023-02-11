@@ -1,4 +1,5 @@
 #include "Tetromino.h"
+#include "GameAudioComponent.h"
 #include "TetrominoRenderComponent.h"
 #include "TetrominoInputComponent.h"
 #include "TetrominoPhysicComponent.h"
@@ -25,13 +26,13 @@ static const std::array<BlockComponent::EColor, 8> BLOCKCOLORS = {
 	BlockComponent::EColor::YELLOW,
 };
 
-Tetromino::Tetromino(const std::string& Signature, const Vec2f& LTPosition, const float& Side, const float& MoveStep)
+Tetromino::Tetromino(const std::string& Signature, const Vec2f& LTPosition, const float& Side, const float& UpdateStep)
 	: Tetromino(
 		Signature,
 		LTPosition, 
 		Side, 
 		GetRandomElement<BlockComponent::EColor, 8>(BLOCKCOLORS),
-		MoveStep, 
+		UpdateStep, 
 		GetRandomElement<EShape, 7>(SHAPES)
 	) {}
 
@@ -40,15 +41,16 @@ Tetromino::Tetromino(
 	const Vec2f& LTPosition,
 	const float& Side,
 	const BlockComponent::EColor& Color,
-	const float& MoveStep,
+	const float& UpdateStep,
 	const EShape& Shape)
 	: GameObject(Signature)
-	, MoveStep_(MoveStep)
+	, UpdateStep_(UpdateStep)
 	, Shape_(Shape)
 {
 	AddComponent<TetrominoRenderComponent>("Renderer");
 	AddComponent<TetrominoInputComponent>("Input");
 	AddComponent<TetrominoPhysicComponent>("Physic", LTPosition, Side, Side);
+	AddComponent<GameAudioComponent>("Jump", "Jump", false);
 
 	CreateTetrominoBlocks(LTPosition, Side, Color, Shape_);
 }

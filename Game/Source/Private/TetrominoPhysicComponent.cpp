@@ -1,6 +1,7 @@
 #include "TetrominoPhysicComponent.h"
 #include "Board.h"
 #include "BlockComponent.h"
+#include "GameAudioComponent.h"
 #include "TetrominoInputComponent.h"
 #include "WorldManager.h"
 
@@ -25,6 +26,8 @@ void TetrominoPhysicComponent::Tick()
 		BoardObject->AddBlocks(Blocks);
 		BoardObject->SetState(Board::EState::ACTIVE);
 		Input->ResetAccrueFrameTime();
+
+		Object->GetComponent<GameAudioComponent>("Jump")->Play();
 	}
 	else
 	{
@@ -36,7 +39,7 @@ void TetrominoPhysicComponent::Tick()
 		}
 
 		float AccrueFrameTime = Input->GetAccrueFrameTime();
-		if (AccrueFrameTime >= Object->GetMoveStep())
+		if (AccrueFrameTime >= Object->GetUpdateStep())
 		{
 			Move(Tetromino::EDirection::DOWN, Object->GetShape(), Blocks);
 
