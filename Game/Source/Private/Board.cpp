@@ -2,6 +2,7 @@
 #include "BoardRenderComponent.h"
 #include "ContentManager.h"
 #include "GraphicsManager.h"
+#include "GameAudioComponent.h"
 #include "Shader.h"
 #include "Text.hpp"
 #include "Utility.hpp"
@@ -12,16 +13,18 @@ Board::Board(
 	const int32_t& RowBlockCount, 
 	const int32_t& ColBlockCount, 
 	const float& Side, 
-	const float& ClearStep
+	const float& UpdateStep
 ) : GameObject(Signature),
     LTPosition_(LTPosition),
     BlockSide_(Side),
     RowBlockCount_(RowBlockCount),
     ColBlockCount_(ColBlockCount),
-    ClearStep_(ClearStep),
+    UpdateStep_(UpdateStep),
 	Blocks_(RowBlockCount_ * ColBlockCount)
 {
 	AddComponent<BoardRenderComponent>("Renderer");
+	AddComponent<GameAudioComponent>("LevelUp", "LevelUp", false);
+	AddComponent<GameAudioComponent>("RemoveLine", "RemoveLine", false);
 
 	CreateBoardBlocks();
 }
@@ -36,7 +39,7 @@ void Board::Tick(float DeltaSeconds)
 	{
 		AccrueFrameTime_ += DeltaSeconds;
 
-		if (AccrueFrameTime_ >= ClearStep_)
+		if (AccrueFrameTime_ >= UpdateStep_)
 		{
 			AccrueFrameTime_ = 0.0f;
 
@@ -51,7 +54,16 @@ void Board::Tick(float DeltaSeconds)
 			{
 				RemoveRowLine(RemoveLine);
 				CountOfRemoveLine_++;
+				LevelRemoveLine_++;
+
+				GetComponent<GameAudioComponent>("RemoveLine")->Play();
 			}
+		}
+
+		if (LevelRemoveLine_ >= 10)
+		{
+			LevelRemoveLine_ = 0;
+			GetComponent<GameAudioComponent>("LevelUp")->Play();
 		}
 	}
 

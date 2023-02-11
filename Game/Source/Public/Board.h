@@ -45,7 +45,7 @@ public:
 	 * @param RowBlockCount 보드의 세로 블럭 수입니다.
 	 * @param ColBlockCount 보드의 가로 블럭 수입니다.
 	 * @param Side 보드 내의 블럭 크기입니다.
-	 * @param ClearStep 보드를 정리하는 시간입니다.
+	 * @param UpdateStep 보드의 업데이트 시간입니다.
 	 */
 	Board(
 		const std::string& Signature,
@@ -53,7 +53,7 @@ public:
 		const int32_t& RowBlockCount,
 		const int32_t& ColBlockCount,
 		const float& Side,
-		const float& ClearStep
+		const float& UpdateStep
 	);
 
 
@@ -94,6 +94,22 @@ public:
 
 
 	/**
+	 * @brief 보드의 업데이트 시간을 얻습니다.
+	 * 
+	 * @return 보드의 업데이트 시간을 반환합니다.
+	 */
+	float GetUpdateStep() const { return UpdateStep_; }
+
+
+	/**
+	 * @brief 보드의 업데이트 시간을 설정합니다.
+	 * 
+	 * @param UpdateStep 설정할 보드의 업데이트 시간입니다.
+	 */
+	void SetUpdateStep(const float& UpdateStep) { UpdateStep_ = UpdateStep; }
+
+
+	/**
 	 * @brief 보드의 블럭들을 얻습니다.
 	 * 
 	 * @note 이 메서드를 사용할 경우, 블럭을 변경할 수 없습니다.
@@ -101,6 +117,16 @@ public:
 	 * @return 보드의 블럭들을 반환합니다.
 	 */
 	const std::vector<BlockComponent*>& GetBlocks() const { return Blocks_; }
+
+
+	/**
+	 * @brief 보드의 블럭들을 얻습니다.
+	 * 
+	 * @note 이 메서드를 사용할 경우, 블럭을 변경할 수 있습니다.
+	 * 
+	 * @return 변경 가능한 보드의 블럭들을 반환합니다.
+	 */
+	std::vector<BlockComponent*>& GetBlocks() { return Blocks_; }
 
 
 	/**
@@ -260,15 +286,21 @@ private:
 
 
 	/**
+	 * @brief 레벨업에 필요한 라인 수입니다.
+	 */
+	int32_t LevelRemoveLine_ = 0;
+
+
+	/**
 	 * @brief 프레임 누적 시간입니다.
 	 */
 	float AccrueFrameTime_ = 0.0f;
 
 
 	/**
-	 * @brief 보드의 정리 시간입니다.
+	 * @brief 보드의 업데이트 시간입니다.
 	 */
-	float ClearStep_ = 0.0f;
+	float UpdateStep_ = 0.0f;
 
 
 	/**
