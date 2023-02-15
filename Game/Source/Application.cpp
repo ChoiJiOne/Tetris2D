@@ -1,5 +1,7 @@
 #include <windows.h>
 
+#include "Type.h"
+
 /**
  * @brief Windows 애플리케이션 진입점입니다.
  *
@@ -12,7 +14,7 @@
  *
  * @return 다른 프로그램에 전달할 수 있는 상태 코드를 반환합니다.
  */
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR CmdLine, int CmdShow)
+int32 WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR CmdLine, int32 CmdShow)
 {
 	return 0;
 }
