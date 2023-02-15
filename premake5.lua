@@ -80,6 +80,7 @@ workspace "Tetris2D"
                 "d3d11.lib",
                 "dxgi.lib",
                 "d3dcompiler.lib",
+                "xaudio2.lib",
             }
 
         filter "configurations:Release"
@@ -93,6 +94,7 @@ workspace "Tetris2D"
                 "d3d11.lib",
                 "dxgi.lib",
                 "d3dcompiler.lib",
+                "xaudio2.lib",
             }
 
         filter "configurations:Shipping"
@@ -106,6 +108,7 @@ workspace "Tetris2D"
                 "d3d11.lib",
                 "dxgi.lib",
                 "d3dcompiler.lib",
+                "xaudio2.lib",
             }
 
    -- 게임 프로젝트입니다.
