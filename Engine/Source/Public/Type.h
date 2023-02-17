@@ -29,5 +29,5 @@ using uint64 = unsigned long long;
 /**
  * @brief 문자열 자료형을 선언합니다.
  */
-using UTF8 = std::string;
-using UTF16 = std::wstring;
+using UTF8 = std::basic_string<int8, std::char_traits<int8>, std::allocator<int8>>;
+using UTF16 = std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>;
