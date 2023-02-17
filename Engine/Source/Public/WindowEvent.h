@@ -9,7 +9,7 @@
 /**
  * @brief 윈도우 이벤트 키 값입니다.
  */
-enum class EWindowEvent
+enum class EWindowEvent : int32
 {
 	NONE          = 0,
 	ACTIVE        = 1,
