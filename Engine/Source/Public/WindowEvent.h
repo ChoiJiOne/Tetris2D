@@ -28,3 +28,9 @@ enum class EWindowEvent
 	MAXHIDE       = 14, /* https://learn.microsoft.com/ko-kr/windows/win32/winmsg/wm-size */
 	MAXSHOW       = 15, /* https://learn.microsoft.com/ko-kr/windows/win32/winmsg/wm-size */
 };
+
+
+/**
+ * @brief 윈도우 메시지 핸들러의 함수 포인터입니다.
+ */
+using WindowMessageHandlerPtr = LRESULT(*)(HWND, uint32, WPARAM, LPARAM);
