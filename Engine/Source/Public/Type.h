@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 
 /**
  * @brief 크기가 명시된 정수 자료형을 선언합니다.
@@ -22,3 +24,10 @@ using uint8  = unsigned char;
 using uint16 = unsigned short;
 using uint32 = unsigned int;
 using uint64 = unsigned long long;
+
+
+/**
+ * @brief 문자열 자료형을 선언합니다.
+ */
+using UTF8 = std::string;
+using UTF16 = std::wstring;
