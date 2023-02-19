@@ -113,9 +113,8 @@ workspace "Tetris2D"
 
    -- 게임 프로젝트입니다.
    project "Game"
-
         -- 게임 프로젝트의 종류를 설정합니다.
-        kind "WindowedApp"
+        kind "ConsoleApp"
 
         -- 프로그래밍 언어를 설정합니다.
         language "C++"
