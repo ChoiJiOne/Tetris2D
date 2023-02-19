@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Type.h"
-
+#include <cstdint>
 #include <functional>
 #include <windows.h>
 
@@ -9,7 +8,7 @@
 /**
  * @brief 윈도우 이벤트 키 값입니다.
  */
-enum class EWindowEvent : int32
+enum class EWindowEvent : int32_t
 {
 	NONE          = 0,
 	ACTIVE        = 1,
@@ -33,7 +32,7 @@ enum class EWindowEvent : int32
 /**
  * @brief 윈도우 메시지 핸들러의 함수 포인터입니다.
  */
-using WindowMessageHandlerPtr = LRESULT(*)(HWND, uint32, WPARAM, LPARAM);
+using WindowMessageHandlerPtr = LRESULT(*)(HWND, uint32_t, WPARAM, LPARAM);
 
 
 /**

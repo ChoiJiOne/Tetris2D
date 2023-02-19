@@ -37,7 +37,7 @@ void ExecuteWindowCallbackEvent(const EWindowEvent& WindowEvent);
  *
  * @return 윈도우에 반환할 값입니다.
  */
-LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32 Message, WPARAM WParam, LPARAM LParam);
+LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
 
 
 WindowMessageHandlerPtr GetWindowMessageHandlerPtr()
@@ -74,7 +74,7 @@ void ExecuteWindowCallbackEvent(const EWindowEvent& WindowEvent)
 	}
 }
 
-LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32 Message, WPARAM WParam, LPARAM LParam)
+LRESULT CALLBACK WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
 	EWindowEvent WindowEvent = EWindowEvent::NONE;
 
