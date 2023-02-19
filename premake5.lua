@@ -127,9 +127,9 @@ workspace "Tetris2D"
 
         -- 명령행 인수를 설정합니다.
         debugargs {
-            "-Dump=%{game}..\\CrashDump\\",
-            "-Content=%{game}\\Content\\",
-            "-Shader=%{engine}\\Shader\\",
+            "-Dump=%{wks.location}..\\CrashDump\\",
+            "-Content=%{wks.location}Content\\",
+            "-Shader=%{wks.location}Engine\\Shader\\",
         }
 
         -- 게임의 소스 코드의 include 경로를 추가합니다.
