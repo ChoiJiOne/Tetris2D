@@ -40,6 +40,26 @@ CLASS& operator=(const CLASS&) = delete;
 
 
 /**
+ * @brief HRESULT 값을 검사하고 성공하지 못하면 C++ 표준 예외를 던집니다.
+ *
+ * @param EXPRESSION 검사할 HRESULT 값입니다.
+ * @param MESSAGE 평가식이 거짓으로 평가될 경우의 메시지입니다.
+ *
+ * @throws HRESULT 값이 성공으로 평가되지 못하면 C++ 표준 예외를 던집니다.
+ */
+#ifndef CHECK_HR
+#define CHECK_HR(EXPRESSION, MESSAGE)\
+{\
+	if(((HRESULT)(EXPRESSION)) < 0)\
+	{\
+		ErrorHandler::SetErrorInfo(__FILE__, __LINE__, MESSAGE);\
+		throw std::exception();\
+	}\
+}
+#endif
+
+
+/**
  * @brief COM 리소스를 할당 해제합니다.
  *
  * @param X 할당 해제할 COM 리소스입니다.
