@@ -25,16 +25,4 @@ public:
 	 * @brief 복사 생성자와 대입 연산자를 명시적으로 삭제합니다.
 	 */
 	DISALLOW_COPY_AND_ASSIGN(ISystem);
-
-
-	/**
-	 * @brief 시스템을 초기화합니다.
-	 */
-	virtual void Setup() = 0;
-
-
-	/**
-	 * @brief 시스템에 할당된 리소스를 정리합니다.
-	 */
-	virtual void Cleanup() = 0;
 };
