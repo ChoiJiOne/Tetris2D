@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ErrorHandler.h"
+
 
 /**
  * @brief 클래스의 복사 생성자 및 대입 연산자를 사용하지 못하도록 삭제합니다.
@@ -14,4 +16,24 @@ CLASS(CLASS&&) = delete;\
 CLASS(const CLASS&) = delete;\
 CLASS& operator=(CLASS&&) = delete;\
 CLASS& operator=(const CLASS&) = delete;
+#endif
+
+
+ /**
+ * @brief 평가식을 검사하고 거짓으로 평가되면 C++ 표준 예외를 던집니다.
+ *
+ * @param EXPRESSION 검사할 평가식입니다.
+ * @param MESSAGE 평가식이 거짓으로 평가될 경우의 메시지입니다.
+ *
+ * @throws 평가식이 거짓으로 평가될 경우, C++ 표준 예외를 던지고 크래시 덤프를 생성합니다.
+ */
+#ifndef CHECK
+#define CHECK(EXPRESSION, MESSAGE)\
+{\
+	if(!EXPRESSION)\
+	{\
+		ErrorHandler::SetErrorInfo(__FILE__, __LINE__, MESSAGE);\
+		throw std::exception();\
+	}\
+}
 #endif
