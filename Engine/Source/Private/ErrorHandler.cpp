@@ -72,7 +72,7 @@ void ErrorHandler::ShowErrorMessageBox()
 	std::string ShowErrorMessage = Format(
 		"FILE: %s\nLINE: %d\nMESSAGE: %s",
 		ErrorFileName_.c_str(),
-		std::to_string(ErrorLine_).c_str(),
+		ErrorLine_,
 		LastErrorMessage_.c_str()
 	);
 
