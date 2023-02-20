@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ErrorHandler.h"
+#include "Macro.h"
 
 #include <string>
 #include <vector>
@@ -101,3 +101,44 @@ inline std::vector<std::wstring> Split(const std::wstring& Text, const std::wstr
 	return Tokens;
 }
 
+
+/**
+ * @brief UTF-8 문자열을 UTF-16 문자열로 변환합니다.
+ * 
+ * @see https://learn.microsoft.com/ko-kr/windows/win32/api/stringapiset/nf-stringapiset-multibytetowidechar
+ *
+ * @param Text UTF-8 기반의 문자열입니다.
+ *
+ * @return 변환된 UTF-16 문자열을 반환합니다.
+ */
+inline std::wstring Convert(const std::string& Text)
+{
+	int32_t Size = MultiByteToWideChar(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), nullptr, 0);
+	CHECK((Size != 0), "failed to convert UTF-8 to UTF-16");
+
+	std::wstring ConvertText(Size, 0);
+	CHECK((MultiByteToWideChar(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), &ConvertText[0], Size) != 0), "failed to convert UTF-8 to UTF-16");
+
+	return ConvertText;
+}
+
+
+/**
+ * @brief UTF-16 문자열을 UTF-8 문자열로 변환합니다.
+ * 
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
+ *
+ * @param Text UTF-16 기반의 문자열입니다.
+ *
+ * @return 변환된 UTF-8 문자열을 반환합니다.
+ */
+inline std::string Convert(const std::wstring& Text)
+{
+	int32_t Size = WideCharToMultiByte(CP_ACP, 0, &Text[0], static_cast<int32_t>(Text.size()), nullptr, 0, nullptr, nullptr);
+	CHECK((Size != 0), "failed to convert UTF-16 to UTF-8");
+
+	std::string ConvertText(Size, 0);
+	CHECK((WideCharToMultiByte(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), &ConvertText[0], Size, nullptr, nullptr) != 0), "failed to convert UTF-16 to UTF-8");
+
+	return ConvertText;
+}
