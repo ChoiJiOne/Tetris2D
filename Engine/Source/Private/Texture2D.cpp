@@ -1,7 +1,5 @@
 #include "Texture2D.h"
 
-#include <array>
-
 // @third party code - BEGIN
 #include <stb/stb_image.h>
 #include <stb/stb_image_resize.h>

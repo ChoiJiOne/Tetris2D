@@ -2,10 +2,9 @@
 
 #include "Macro.h"
 
+#include <d3d11.h>
 #include <vector>
 #include <array>
-
-#include <d3d11.h>
 
 
 /**
