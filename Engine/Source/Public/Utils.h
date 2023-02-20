@@ -34,3 +34,18 @@ void ReadBufferFromFile(const std::string& Path, std::vector<uint8_t>& Buffer);
  * 파일 읽기에 실패하면 C++ 표준 예외를 던집니다.
  */
 void ReadBufferFromFile(const std::wstring& Path, std::vector<uint8_t>& Buffer);
+
+
+/**
+ * @brief 키 값에 대응하는 값이 존재하는지 확인합니다.
+ *
+ * @param Key 충돌하는지 확인할 키 값입니다.
+ * @param KeyValueResource 키-값 쌍의 자료구조입니다.
+ *
+ * @return 이미 키 값에 대응하는 값이 존재하면 true, 그렇지 않으면 false를 반환합니다.
+ */
+template<typename TKey, typename TValue>
+bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValueResource)
+{
+	return KeyValueResource.find(Key) != KeyValueResource.end();
+}
