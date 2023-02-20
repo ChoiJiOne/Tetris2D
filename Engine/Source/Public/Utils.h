@@ -49,3 +49,21 @@ bool IsExistKey(const TKey& Key, const std::unordered_map<TKey, TValue>& KeyValu
 {
 	return KeyValueResource.find(Key) != KeyValueResource.end();
 }
+
+
+/**
+ * @brief 키 값에 대응하는 값을 삭제합니다.
+ *
+ * @note 키 값에 대응하는 값이 존재하지 않는다면 아무 동작도 수행하지 않습니다.
+ *
+ * @param Key 삭제할 데이터의 키 값입니다.
+ * @param KeyValueResource 삭제할 키-값 쌍의 자료구조입니다.
+ */
+template <typename TKey, typename TValue>
+void RemoveValue(const TKey& Key, std::unordered_map<TKey, TValue>& KeyValueResource)
+{
+	if (IsExistKey<TKey, TValue>(Key, KeyValueResource))
+	{
+		KeyValueResource.erase(Key);
+	}
+}
