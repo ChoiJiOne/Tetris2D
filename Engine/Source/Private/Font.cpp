@@ -20,7 +20,7 @@ Font::Font(ID3D11Device* Device, const std::string& ResourcePath, int32_t BeginC
 		stbtt_GetFontOffsetForIndex(reinterpret_cast<const unsigned char*>(&Buffer[0]), 0)
 	) != 0), "failed to initialize stb_truetype");
 
-	std::shared_ptr<uint8_t[]> AtlasBitmap = GenerateTextureAtlasBitmap(Buffer, BeginCodePoint_, EndCodePoint_, FontSize, CharacterInfos_, AtlasSize_);
+	std::shared_ptr<uint8_t[]> AtlasBitmap = GenerateTextureAtlasBitmap(Buffer, BeginCodePoint_, EndCodePoint_, FontSize, Glyphs_, AtlasSize_);
 
 	CHECK_HR(CreateTextureAtlasFromBitmap(Device, AtlasBitmap, AtlasSize_), "failed to create texture atlas");
 }
@@ -31,11 +31,11 @@ Font::~Font()
 	SAFE_RELEASE(TextureAtlasView_);
 }
 
-const CharacterInfo& Font::GetCharacterInfo(int32_t CodePoint) const
+const Glyph& Font::GetGlyph(int32_t CodePoint) const
 {
 	CHECK(HasCodePointInRange(CodePoint), "code point is out of range");
 	int32_t Index = CodePoint - BeginCodePoint_;
-	return CharacterInfos_[Index];
+	return Glyphs_[Index];
 }
 
 bool Font::HasCodePointInRange(int32_t CodePoint) const
@@ -48,12 +48,12 @@ std::shared_ptr<uint8_t[]> Font::GenerateTextureAtlasBitmap(
 	int32_t BeginCodePoint, 
 	int32_t EndCodePoint, 
 	float FontSize, 
-	std::vector<CharacterInfo>& CharacterInfos, 
+	std::vector<Glyph>& Glyphs,
 	int32_t& AtlasSize
 )
 {
 	std::vector<stbtt_packedchar> Packedchars(EndCodePoint - BeginCodePoint + 1);
-	CharacterInfos.resize(EndCodePoint - BeginCodePoint + 1);
+	Glyphs.resize(EndCodePoint - BeginCodePoint + 1);
 
 	int32_t Success = 0;
 	stbtt_pack_context PackContext;
@@ -90,18 +90,18 @@ std::shared_ptr<uint8_t[]> Font::GenerateTextureAtlasBitmap(
 
 	for (std::size_t Index = 0; Index < Packedchars.size(); ++Index)
 	{
-		CharacterInfos[Index].CodePoint = static_cast<int32_t>(Index + BeginCodePoint);
+		Glyphs[Index].CodePoint = static_cast<int32_t>(Index + BeginCodePoint);
 
-		CharacterInfos[Index].Position0 = Vec2i(Packedchars[Index].x0, Packedchars[Index].y0);
-		CharacterInfos[Index].Position1 = Vec2i(Packedchars[Index].x1, Packedchars[Index].y1);
+		Glyphs[Index].Position0 = Vec2i(Packedchars[Index].x0, Packedchars[Index].y0);
+		Glyphs[Index].Position1 = Vec2i(Packedchars[Index].x1, Packedchars[Index].y1);
 
-		CharacterInfos[Index].XOffset = Packedchars[Index].xoff;
-		CharacterInfos[Index].YOffset = Packedchars[Index].yoff;
+		Glyphs[Index].XOffset = Packedchars[Index].xoff;
+		Glyphs[Index].YOffset = Packedchars[Index].yoff;
 
-		CharacterInfos[Index].XOffset2 = Packedchars[Index].xoff2;
-		CharacterInfos[Index].YOffset2 = Packedchars[Index].yoff2;
+		Glyphs[Index].XOffset2 = Packedchars[Index].xoff2;
+		Glyphs[Index].YOffset2 = Packedchars[Index].yoff2;
 
-		CharacterInfos[Index].XAdvance = Packedchars[Index].xadvance;
+		Glyphs[Index].XAdvance = Packedchars[Index].xadvance;
 	}
 
 	return Bitmap;

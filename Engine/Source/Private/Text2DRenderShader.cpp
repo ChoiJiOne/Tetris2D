@@ -44,7 +44,7 @@ void Text2DRenderShader::RenderText2D(ID3D11DeviceContext* Context, Font& FontRe
 
 	for (auto& Unicode : Text)
 	{
-		const CharacterInfo& UnicodeInfo = FontResource.GetCharacterInfo(static_cast<int32_t>(Unicode));
+		const Glyph& UnicodeInfo = FontResource.GetGlyph(static_cast<int32_t>(Unicode));
 
 		float UniucodeWidth = static_cast<float>(UnicodeInfo.Position1.x - UnicodeInfo.Position0.x);
 		float UniucodeHeight = static_cast<float>(UnicodeInfo.Position1.y - UnicodeInfo.Position0.y);

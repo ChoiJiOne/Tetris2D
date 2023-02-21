@@ -12,7 +12,7 @@
 /**
  * @brief 텍스처 아틀라스에 표시된 문자 정보입니다.
  */
-struct CharacterInfo
+struct Glyph
 {
 	int32_t CodePoint;
 	Vec2i Position0;
@@ -84,7 +84,7 @@ public:
 	 *
 	 * @return 코드 포인트에 대응하는 문자의 위치 및 크기 정보를 반환합니다.
 	 */
-	const CharacterInfo& GetCharacterInfo(int32_t CodePoint) const;
+	const Glyph& GetGlyph(int32_t CodePoint) const;
 
 
 	/**
@@ -122,7 +122,7 @@ public:
 
 		for (const auto& Unicode : Text)
 		{
-			const CharacterInfo& UnicodeInfo = GetCharacterInfo(static_cast<int32_t>(Unicode));
+			const Glyph& UnicodeInfo = GetGlyph(static_cast<int32_t>(Unicode));
 
 			int32_t CurrWidth = static_cast<int32_t>(UnicodeInfo.XAdvance);
 			int32_t CurrHeight = UnicodeInfo.Position1.y - UnicodeInfo.Position0.y;
@@ -150,7 +150,7 @@ private:
 	 * @param BeginCodePoint 문자 텍스처 아틀라스의 코드 포인트 시작점입니다.
 	 * @param EndCodePoint 문자 텍스처 아틀라스의 코드 포인트 끝점입니다.
 	 * @param FontSize 폰트의 크기입니다.
-	 * @param CharacterInfos[out] 텍스처 아틀라스 상의 코드 포인트에 대응하는 문자 위치 및 크기 정보입니다.
+	 * @param Glyphs[out] 텍스처 아틀라스 상의 코드 포인트에 대응하는 문자 위치 및 크기 정보입니다.
 	 * @param AtlasSize[out] 텍스처 아틀라스 크기입니다.
 	 *
 	 * @return 생성된 텍스처 아틀라스 비트맵을 반환합니다.
@@ -160,7 +160,7 @@ private:
 		int32_t BeginCodePoint,
 		int32_t EndCodePoint,
 		float FontSize,
-		std::vector<CharacterInfo>& CharacterInfos,
+		std::vector<Glyph>& Glyphs,
 		int32_t& AtlasSize
 	);
 
@@ -209,7 +209,7 @@ private:
 	/**
 	 * @brief 텍스처 아틀라스 상의 코드 포인트에 대응하는 문자 위치 및 크기 정보입니다.
 	 */
-	std::vector<CharacterInfo> CharacterInfos_;
+	std::vector<Glyph> Glyphs_;
 
 
 	/**
