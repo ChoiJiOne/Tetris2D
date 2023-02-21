@@ -3,6 +3,7 @@
 #include "Macro.h"
 #include "Color.h"
 
+#include <memory>
 #include <unordered_map>
 
 #include <d3d11.h>

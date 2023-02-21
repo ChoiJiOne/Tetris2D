@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Label.h"
 #include "InputManager.h"
+#include "Text.hpp"
 #include "WorldManager.h"
 
 GameOverScene::GameOverScene()

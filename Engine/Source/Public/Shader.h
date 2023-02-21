@@ -2,6 +2,7 @@
 
 #include "Macro.h"
 
+#include <vector>
 #include <d3d11.h>
 
 

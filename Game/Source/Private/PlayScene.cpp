@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "Sound.h"
 #include "Tetromino.h"
+#include "Text.hpp"
 #include "WorldManager.h"
 
 PlayScene::PlayScene()

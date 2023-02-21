@@ -2,6 +2,8 @@
 
 #include "Macro.h"
 
+#include <memory>
+
 class Window;
 
 

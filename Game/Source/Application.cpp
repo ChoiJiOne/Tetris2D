@@ -143,7 +143,7 @@ private:
 
 		for (const auto& WindowEvent : WindowEvents)
 		{
-			InputManager::Get().RegisterWindowEvent(WindowEvent.first, WindowEvent.second);
+			InputManager::Get().BindWindowEvent(WindowEvent.first, WindowEvent.second);
 		}
 	}
 
@@ -181,6 +181,16 @@ private:
 
 
 /**
+ * 
+ */
+void Run()
+{
+	auto Game = std::make_unique<Tetris>();
+	Game->Initialize();
+	Game->Run();
+}
+
+/**
  * @brief 애플리케이션의 진입점입니다.
  *
  * @param Argc 명령행 인자의 수입니다.
@@ -196,9 +206,7 @@ int32_t main(int32_t Argc, char** Argv)
 
 	__try
 	{
-		auto Game = std::make_unique<Tetris>();
-		Game->Initialize();
-		Game->Run();
+		Run();
 	}
 	__except (ErrorHandler::GenerateCrashDump(GetExceptionInformation()))
 	{

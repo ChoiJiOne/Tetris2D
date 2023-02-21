@@ -17,7 +17,7 @@
  */
 LRESULT CALLBACK WindowProc(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
-	return InputManager::Get().WindowMessageHandler(WindowHandle, Message, WParam, LParam);
+	return InputManager::Get().ProcessWindowMessage(WindowHandle, Message, WParam, LParam);
 }
 
 Window::Window(const WindowConstructorParam& ConstructorParam)

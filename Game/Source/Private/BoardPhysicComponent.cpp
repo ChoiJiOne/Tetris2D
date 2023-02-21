@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "GameAudioComponent.h"
 #include "Tetromino.h"
+#include "Text.hpp"
 
 BoardPhysicComponent::BoardPhysicComponent(
 	GameObject* Object,
