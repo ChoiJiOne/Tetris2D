@@ -9,7 +9,7 @@
 
 
 /**
- * @brief 키 값이 존재하는지 확인합니다.
+ * @brief 키 값에 대응하는 값이 존재하는지 확인합니다.
  *
  * @param Key 충돌하는지 확인할 키 값입니다.
  * @param KeyValueResource 키-값 쌍의 자료구조입니다.

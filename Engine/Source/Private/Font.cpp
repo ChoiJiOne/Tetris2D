@@ -1,5 +1,5 @@
 #include "Font.h"
-#include "Utility.hpp"
+#include "Utils.hpp"
 
 // @third party code - BEGIN
 #include <stb/stb_rect_pack.h>

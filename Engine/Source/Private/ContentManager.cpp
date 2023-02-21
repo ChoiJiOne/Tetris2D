@@ -6,7 +6,7 @@
 #include "Sound.h"
 #include "Shader.h"
 #include "Texture2D.h"
-#include "Utility.hpp"
+#include "Utils.hpp"
 
 // @third party code - BEGIN
 #include <miniaudio/miniaudio.h>

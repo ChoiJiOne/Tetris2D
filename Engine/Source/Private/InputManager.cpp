@@ -1,5 +1,5 @@
 #include "InputManager.h"
-#include "Utility.hpp"
+#include "Utils.hpp"
 
 LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {

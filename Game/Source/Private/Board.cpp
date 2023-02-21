@@ -6,7 +6,7 @@
 #include "GameAudioComponent.h"
 #include "Shader.h"
 #include "Text.hpp"
-#include "Utility.hpp"
+#include "Utils.hpp"
 
 Board::Board(
 	const std::string& Signature, 

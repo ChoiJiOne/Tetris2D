@@ -3,7 +3,7 @@
 #include "TetrominoRenderComponent.h"
 #include "TetrominoInputComponent.h"
 #include "TetrominoPhysicComponent.h"
-#include "Utility.hpp"
+#include "Utils.hpp"
 
 static const std::array<Tetromino::EShape, 7> SHAPES = {
 	Tetromino::EShape::I,
