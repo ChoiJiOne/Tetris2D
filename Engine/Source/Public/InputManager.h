@@ -279,26 +279,26 @@ public:
 	 *
 	 * @return 윈도우에 반환할 값입니다.
 	 */
-	LRESULT WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
+	LRESULT ProcessWindowMessage(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam);
 
 
 	/**
-	 * @brief 윈도우 이벤트를 등록합니다.
+	 * @brief 윈도우 이벤트에 대응하는 콜백을 바인딩합니다.
 	 * 
 	 * @note 이벤트에 대응하는 실행 루틴은 유일합니다. 새로운 루틴을 실행하려면 다시 등록해야 합니다.
 	 * 
 	 * @param WindowEvent 등록할 윈도우 이벤트 종류입니다.
 	 * @param EventCallback 이벤트 감지 시 실행할 루틴입니다.
 	 */
-	void RegisterWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback);
+	void BindWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback);
 
 
 	/**
-	 * @brief 윈도우 이벤트를 등록 해제합니다.
+	 * @brief 윈도우 이벤트를 바인딩 해제합니다.
 	 * 
-	 * @param WindowEvent 등록 해제할 윈도우 이벤트입니다.
+	 * @param WindowEvent 바인딩 해제할 윈도우 이벤트입니다.
 	 */
-	void UnregisterWindowEvent(const EWindowEvent& WindowEvent);
+	void UnbindWindowEvent(const EWindowEvent& WindowEvent);
 
 
 	/**

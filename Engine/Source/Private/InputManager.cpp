@@ -1,7 +1,7 @@
 #include "InputManager.h"
 #include "Utils.hpp"
 
-LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
+LRESULT InputManager::ProcessWindowMessage(HWND WindowHandle, uint32_t Message, WPARAM WParam, LPARAM LParam)
 {
 	EWindowEvent WindowEvent = EWindowEvent::NONE;
 
@@ -74,6 +74,7 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 		break;
 	
 	case WM_CLOSE:
+		DestroyWindow(WindowHandle_);
 		WindowEvent = EWindowEvent::CLOSE;
 		break;
 
@@ -89,12 +90,12 @@ LRESULT InputManager::WindowMessageHandler(HWND WindowHandle, uint32_t Message, 
 	return 0;
 }
 
-void InputManager::RegisterWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback)
+void InputManager::BindWindowEvent(const EWindowEvent& WindowEvent, const std::function<void()>& EventCallback)
 {
 	WindowEvents_.insert({ WindowEvent, EventCallback });
 }
 
-void InputManager::UnregisterWindowEvent(const EWindowEvent& WindowEvent)
+void InputManager::UnbindWindowEvent(const EWindowEvent& WindowEvent)
 {
 	RemoveValue<EWindowEvent, std::function<void()>>(WindowEvent, WindowEvents_);
 }
