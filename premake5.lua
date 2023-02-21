@@ -42,20 +42,24 @@ workspace "Tetris2D"
         -- 엔진 소스 코드의 include 경로를 추가합니다.
         includedirs {
             "%{engine}",
-            "%{engine}/Private",
-            "%{engine}/Public",
+            "%{engine}/Source",
+            "%{engine}/Source/Private",
+            "%{engine}/Source/Public",
             "%{engine}/Shader",
             "%{engine}/Script",
+
             "%{thirdparty}",
         }
 
         -- 엔진 소스 코드의 file을 추가합니다.
         files {
             "%{engine}/*",
-            "%{engine}/Private/*",
-            "%{engine}/Public/*",
+            "%{engine}/Source/*",
+            "%{engine}/Source/Private/*",
+            "%{engine}/Source/Public/*",
             "%{engine}/Shader/*",
             "%{engine}/Script/*",
+
             "%{thirdparty}/miniaudio/*",
             "%{thirdparty}/stb/*",
         }
@@ -109,7 +113,7 @@ workspace "Tetris2D"
    project "Game"
 
         -- 게임 프로젝트의 종류를 설정합니다.
-        kind "WindowedApp"
+        kind "ConsoleApp"
 
         -- 프로그래밍 언어를 설정합니다.
         language "C++"
@@ -122,15 +126,15 @@ workspace "Tetris2D"
 
         -- 명령행 인수를 설정합니다.
         debugargs {
-            "-Dump=%{game}..\\CrashDump\\",
-            "-Content=%{game}\\Content\\",
-            "-Shader=%{engine}\\Shader\\",
+            "-Dump=%{wks.location}..\\CrashDump\\",
+            "-Content=%{wks.location}..\\Game\\Content\\",
+            "-Shader=%{wks.location}..\\Engine\\Shader\\",
         }
 
         -- 게임의 소스 코드의 include 경로를 추가합니다.
         includedirs {
-            "%{engine}/Private",
-            "%{engine}/Public",
+            "%{engine}/Source/Private",
+            "%{engine}/Source/Public",
 
             "%{game}/Source/",
             "%{game}/Source/Private",
