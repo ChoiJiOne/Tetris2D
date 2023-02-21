@@ -1,7 +1,6 @@
 #include "GameEngine.h"
 #include "ContentManager.h"
 #include "Config.h"
-#include "Debug.h"
 #include "GraphicsManager.h"
 #include "Shader.h"
 #include "Window.h"
@@ -14,8 +13,6 @@ GameEngine::~GameEngine()
 
 void GameEngine::Initialize()
 {
-	SetUnhandledExceptionFilter(UnhandledExceptionHandler);
-
 	CreateWindowFromConfig();
 	GraphicsManager::Get().Init(Window_.get());
 
