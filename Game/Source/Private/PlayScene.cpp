@@ -16,7 +16,7 @@ PlayScene::PlayScene()
 	StartPosition_ = Vec2f(-60.0f, 300.0f);
 	WaitPosition_ = Vec2f(230.0f, 300.0f);
 
-	LevelUpCondition_ = 30;
+	LevelUpCondition_ = 15;
 	MappingLevelUpdateSteps_ = {
 		{ ELevel::LEVEL1, 1.0f },
 		{ ELevel::LEVEL2, 0.8f },
