@@ -181,14 +181,17 @@ private:
 
 
 /**
+ * @brief 애플케이션을 실행합니다.
  * 
+ * @throws 애플리케이션 실행 중 에러 발생 시 예외를 던집니다.
  */
-void Run()
+void RunApplication()
 {
 	auto Game = std::make_unique<Tetris>();
 	Game->Initialize();
 	Game->Run();
 }
+
 
 /**
  * @brief 애플리케이션의 진입점입니다.
@@ -206,7 +209,7 @@ int32_t main(int32_t Argc, char** Argv)
 
 	__try
 	{
-		Run();
+		RunApplication();
 	}
 	__except (ErrorHandler::GenerateCrashDump(GetExceptionInformation()))
 	{
