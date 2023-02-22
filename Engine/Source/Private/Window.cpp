@@ -80,6 +80,10 @@ Window::Window(const std::wstring& Title, int32_t PositionX, int32_t PositionY, 
 
 Window::~Window()
 {
+	if (WindowHandle_)
+	{
+		DestroyWindow(WindowHandle_);
+	}
 }
 
 void Window::RegisterWindowClass(const std::wstring& ClassTitle)
