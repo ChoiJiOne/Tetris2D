@@ -43,10 +43,8 @@ public:
 	 * @brief 게임 엔진를 실행합니다.
 	 * 
 	 * @note 가상 함수로, 반드시 하위 클래스에서 구현해야 합니다.
-	 * 
-	 * @return 다른 프로그램에 전달할 수 있는 상태 코드를 반환합니다.
 	 */
-	virtual int32_t Run() = 0;
+	virtual void Run() = 0;
 
 
 private:
