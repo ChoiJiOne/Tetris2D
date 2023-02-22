@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief 오디오 플레이 컴포넌트를 업데이트합니다.
 	 */
-	virtual void Tick() = 0;
+	virtual void Tick();
 
 
 	/**

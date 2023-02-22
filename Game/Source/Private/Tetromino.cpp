@@ -1,5 +1,5 @@
 #include "Tetromino.h"
-#include "GameAudioComponent.h"
+#include "AudioPlayComponent.h"
 #include "TetrominoRenderComponent.h"
 #include "TetrominoInputComponent.h"
 #include "TetrominoPhysicComponent.h"
@@ -50,7 +50,9 @@ Tetromino::Tetromino(
 	AddComponent<TetrominoRenderComponent>("Renderer");
 	AddComponent<TetrominoInputComponent>("Input");
 	AddComponent<TetrominoPhysicComponent>("Physic", LTPosition, Side, Side);
-	AddComponent<GameAudioComponent>("Jump", "Jump", false);
+	AddComponent<AudioPlayComponent>("Jump", "Jump");
+	
+	GetComponent<AudioPlayComponent>("Jump")->SetLooping(false);
 
 	CreateTetrominoBlocks(LTPosition, Side, Color, Shape_);
 }

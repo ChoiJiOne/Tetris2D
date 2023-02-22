@@ -1,6 +1,6 @@
 #include "BoardPhysicComponent.h"
 #include "Board.h"
-#include "GameAudioComponent.h"
+#include "AudioPlayComponent.h"
 #include "Tetromino.h"
 #include "Text.hpp"
 
@@ -52,13 +52,13 @@ void BoardPhysicComponent::Tick(float DeltaSeconds)
 			CountOfRemoveLine_++;
 			LevelRemoveLine_++;
 
-			GetGameObject()->GetComponent<GameAudioComponent>("RemoveLine")->Play();
+			GetGameObject()->GetComponent<AudioPlayComponent>("RemoveLine")->Play();
 		}
 	}
 
 	if (LevelRemoveLine_ >= LevelUpCondition_)
 	{
-		GetGameObject()->GetComponent<GameAudioComponent>("LevelUp")->Play();
+		GetGameObject()->GetComponent<AudioPlayComponent>("LevelUp")->Play();
 	}
 }
 

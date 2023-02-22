@@ -6,6 +6,10 @@ AudioPlayComponent::AudioPlayComponent(GameObject* Object, const std::string& Au
 	: AudioComponent(Object)
 	, AudioSignature_(AudioSignature) {}
 
+void AudioPlayComponent::Tick()
+{
+}
+
 void AudioPlayComponent::SetVolume(float Volume)
 {
 	ContentManager::Get().GetSound(AudioSignature_).SetVolume(Volume);

@@ -3,7 +3,7 @@
 #include "BoardPhysicComponent.h"
 #include "ContentManager.h"
 #include "GraphicsManager.h"
-#include "GameAudioComponent.h"
+#include "AudioPlayComponent.h"
 #include "Shader.h"
 #include "Text.hpp"
 #include "Utils.hpp"
@@ -21,8 +21,11 @@ Board::Board(
 {
 	AddComponent<BoardRenderComponent>("Renderer");
 	AddComponent<BoardPhysicComponent>("Physic", LTPosition, RowBlockCount, ColBlockCount, Side, UpdateStep, LevelUpCondition);
-	AddComponent<GameAudioComponent>("LevelUp", "LevelUp", false);
-	AddComponent<GameAudioComponent>("RemoveLine", "RemoveLine", false);
+	AddComponent<AudioPlayComponent>("LevelUp", "LevelUp");
+	AddComponent<AudioPlayComponent>("RemoveLine", "RemoveLine");
+
+	GetComponent<AudioPlayComponent>("LevelUp")->SetLooping(false);
+	GetComponent<AudioPlayComponent>("RemoveLine")->SetLooping(false);
 }
 
 Board::~Board()
