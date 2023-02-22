@@ -103,7 +103,7 @@ private:
 
 
 	/**
-	 * @brief UTF-16 기반의 초기화를 수행합니다. 
+	 * @brief UTF-8 기반의 초기화를 수행합니다. 
 	 */
 	void ParseCommandLineA();
 
