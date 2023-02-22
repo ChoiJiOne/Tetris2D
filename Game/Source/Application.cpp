@@ -87,7 +87,7 @@ public:
 	 * 
 	 * @return 다른 프로그램에 전달할 수 있는 상태 코드를 반환합니다.
 	 */
-	virtual int32_t Run() override
+	virtual void Run() override
 	{
 		Timer_.Reset();
 
@@ -102,8 +102,6 @@ public:
 
 			GraphicsManager::Get().Present();
 		}
-
-		return 0;
 	}
 
 
@@ -187,6 +185,10 @@ private:
  */
 void RunApplication()
 {
+#if defined(SHIPPING) // Shipping 모드 시 콘솔 창 가리기
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
+
 	auto Game = std::make_unique<Tetris>();
 	Game->Initialize();
 	Game->Run();
