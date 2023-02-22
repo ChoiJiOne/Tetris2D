@@ -84,7 +84,7 @@ workspace "Tetris2D"
             }
 
         filter "configurations:Release"
-            defines { "NDEBUG" }
+            defines { "NDEBUG", "RELEASE" }
             runtime "Release"
             optimize "On"
             symbols "On"
@@ -97,7 +97,7 @@ workspace "Tetris2D"
             }
 
         filter "configurations:Shipping"
-            defines { "NDEBUG" }
+            defines { "NDEBUG", "SHIPPING" }
             runtime "Release"
             optimize "Full"
             symbols "Off"
@@ -161,13 +161,13 @@ workspace "Tetris2D"
             symbols "On"
 
         filter "configurations:Release"
-            defines { "NDEBUG" }
+            defines { "NDEBUG", "RELEASE" }
             runtime "Release"
             optimize "On"
             symbols "On"
 
         filter "configurations:Shipping"
-            defines { "NDEBUG" }
+            defines { "NDEBUG", "SHIPPING" }
             runtime "Release"
             optimize "Full"
             symbols "Off"
