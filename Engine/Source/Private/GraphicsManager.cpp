@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <windows.h>
 
-void GraphicsManager::Init(Window* RenderTargetWindow)
+void GraphicsManager::Setup(Window* RenderTargetWindow)
 {
 	RenderTargetWindow_ = RenderTargetWindow;
 

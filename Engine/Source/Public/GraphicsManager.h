@@ -47,7 +47,7 @@ public:
 	 * 
 	 * @throws 내부 리소스 생성에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void Init(Window* RenderTargetWindow);
+	void Setup(Window* RenderTargetWindow);
 
 
 	/**

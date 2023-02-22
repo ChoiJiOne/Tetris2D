@@ -15,7 +15,7 @@ GameEngine::~GameEngine()
 void GameEngine::Initialize()
 {
 	CreateWindowFromConfig();
-	GraphicsManager::Get().Init(Window_.get());
+	GraphicsManager::Get().Setup(Window_.get());
 
 	LoadFontFromConfig();
 	LoadTextureFromConfig();
