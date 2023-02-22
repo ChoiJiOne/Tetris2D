@@ -69,12 +69,19 @@ LONG ErrorHandler::GenerateCrashDump(EXCEPTION_POINTERS* ExceptionInfo)
 
 void ErrorHandler::ShowErrorMessageBox()
 {
+#if defined(SHIPPING) // Shipping 모드 시 소스 코드에 대한 정보 유출 방지
+	std::string ShowErrorMessage = Format(
+		"MESSAGE: %s",
+		LastErrorMessage_.c_str()
+	);
+#else
 	std::string ShowErrorMessage = Format(
 		"FILE: %s\nLINE: %d\nMESSAGE: %s",
 		ErrorFileName_.c_str(),
 		ErrorLine_,
 		LastErrorMessage_.c_str()
 	);
+#endif
 
 	int32_t Successed = MessageBoxA(nullptr, ShowErrorMessage.c_str(), "Error Message", MB_OK);
 }
