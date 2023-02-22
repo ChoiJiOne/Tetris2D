@@ -84,4 +84,10 @@ void ErrorHandler::ShowErrorMessageBox()
 #endif
 
 	int32_t Successed = MessageBoxA(nullptr, ShowErrorMessage.c_str(), "Error Message", MB_OK);
+	if (!Successed)
+	{
+#if defined(DEBUG) || defined(_DEBUG)
+		OutputDebugStringA("failed to show message box");
+#endif
+	}
 }
