@@ -5,13 +5,13 @@
 
 ## Platform
 
-`Tetris2D v0.0`은 `Windows Platform`만 지원합니다.  
+`Tetris2D` *v0.0*은 `Windows Platform`만 지원합니다.  
 <br><br>
 
 
 ## Requirements
 
-`Tetris2D v0.0`를 유지 보수를 수행하기 위한 요구 사항은 다음과 같습니다.
+`Tetris2D` *v0.0*를 유지 보수를 수행하기 위한 요구 사항은 다음과 같습니다.
 - [git](https://git-scm.com/)
 - [Visual Studio 2019 이상](https://visualstudio.microsoft.com/)
 <br><br>
@@ -19,7 +19,7 @@
 
 ## Language
 
-`Tetris2D v0.0`은 `C++17` 으로 구현되었습니다.  
+`Tetris2D` *v0.0*은 `C++17` 으로 구현되었습니다.  
 > `Windows`에 특화된 코드도 존재하므로, `Linux`나 `MacOSX`에서는 빌드되지 않습니다.
 
 <br><br>
@@ -27,7 +27,7 @@
 
 ## Source
 
-`Tetris2D v0.0`의 소스코드를 얻기 위해서는 `CMD`에 다음 명령어를 입력하면 됩니다.
+`Tetris2D` *v0.0*의 소스코드를 얻기 위해서는 `CMD`에 다음 명령어를 입력하면 됩니다.
 ```
 git clone https://github.com/ChoiJiOne/Tetris2D -b v0.0
 ```
@@ -36,7 +36,7 @@ git clone https://github.com/ChoiJiOne/Tetris2D -b v0.0
 
 ## Structure
 
-`Tetris2D v0.0`의 프로젝트 구조는 다음과 같습니다.
+`Tetris2D` *v0.0*의 프로젝트 구조는 다음과 같습니다.
 ```
 ├─Engine
 │  ├─Bin
@@ -63,7 +63,7 @@ git clone https://github.com/ChoiJiOne/Tetris2D -b v0.0
 
 ## Generate Visual Studio Solution
 
-`Tetris2D v0.0`은 `Visual Studio Solution` 생성 자동화를 지원합니다.  
+`Tetris2D` *v0.0*은 `Visual Studio Solution` 생성 자동화를 지원합니다.  
 `GenerateProjectFiles.bat`를 실행하면 `Visual Studio Solution`을 얻을 수 있습니다.  
 만약, `Visual Studio 2022`로 진행하고 싶다면 다음과 같이 배치 스크립트를 수정합니다.  
 ```
@@ -76,7 +76,7 @@ Engine\\Script\\GenerateProjectFiles.bat Tetris2D vs2022 CrashDump
 
 ## Build Without Visual Studio Solution
 
-`Tetris2D v0.0`은 `Visual Studio Solution` 없이 빌드를 수행하는 기능을 지원합니다.
+`Tetris2D` *v0.0*은 `Visual Studio Solution` 없이 빌드를 수행하는 기능을 지원합니다.
 
 > `msbuild.exe` 경로를 반드시 환경 변수에 등록해야 합니다.
 
@@ -113,4 +113,3 @@ Engine\\Script\\Build.bat Tetris2D vs2022 %option%
 ## Download
 
 즉시 플레이 가능한 실행 파일은 [여기](https://github.com/ChoiJiOne/Tetris2D/releases/tag/v0.0)에서 받을 수 있습니다.
-<br><br>
