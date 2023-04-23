@@ -29,7 +29,7 @@
 
 `Tetris2D` *v0.0*의 소스코드를 얻기 위해서는 `CMD`에 다음 명령어를 입력하면 됩니다.
 ```
-git clone https://github.com/ChoiJiOne/Tetris2D -b v0.0
+git clone https://github.com/ChoiJiOne/Tetris2D --single-branch -b v0.0
 ```
 <br><br>
 
