@@ -9,5 +9,5 @@
 > *`v0.0` 버전은 프로젝트 관련 문서를 제공하지 않습니다.*
 
 ```
-> git clone https://github.com/ChoiJiOne/Tetris2D -b v0.0
+> git clone https://github.com/ChoiJiOne/Tetris2D --single-branch -b v0.0
 ```
