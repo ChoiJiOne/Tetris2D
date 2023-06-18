@@ -107,9 +107,3 @@ Engine\\Script\\GenerateProjectFiles.bat Tetris2D vs2022 CrashDump
 SET option=%1
 Engine\\Script\\Build.bat Tetris2D vs2022 %option%
 ```
-<br><br>
-
-
-## Download
-
-즉시 플레이 가능한 실행 파일은 [여기](https://github.com/ChoiJiOne/Tetris2D/releases/tag/v0.0)에서 받을 수 있습니다.
