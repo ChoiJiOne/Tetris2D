@@ -25,9 +25,10 @@
 <br><br>
 
 
-## Source
+## Clone
 
-`Tetris2D` *v0.0*의 소스코드를 얻기 위해서는 `CMD`에 다음 명령어를 입력하면 됩니다.
+`CMD` 에서 다음과 같이 수행하시면 *v0.0*의 저장소 복제본을 얻을 수 있습니다.
+
 ```
 git clone https://github.com/ChoiJiOne/Tetris2D --single-branch -b v0.0
 ```
