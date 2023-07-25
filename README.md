@@ -107,3 +107,9 @@ Engine\\Script\\GenerateProjectFiles.bat Tetris2D vs2022 CrashDump
 SET option=%1
 Engine\\Script\\Build.bat Tetris2D vs2022 %option%
 ```
+<br><br>
+
+
+## How to play
+
+`RunGame.bat`를 클릭해서 실행하면 시작화면에서 시작화면에서 `START`와 `QUIT` 버튼을 클릭할 수 있습니다. `START`를 클릭하면 게임을 시작하고 `QUIT` 버튼을 클릭하면 게임을 종료하게 되는데, 테트로미노 조작은 `LEFT`는 왼쪽, `RIGHT`는 오른쪽, `DOWN`은 아래쪽, `UP`은 회전, `SPACE`는 가장 아래로 이동할 수 있습니다. 게임 플레이 화면 왼쪽에서 사운드 관련 버튼을 클릭하면 제어할 수 있고, `ESC`키를 누르면 게임을 일시 중지시킬 수 있습니다.
